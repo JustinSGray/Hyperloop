@@ -1,0 +1,11 @@
+despmtr fan_radius 5
+despmtr inlet_radius 4
+despmtr inlet_radius2 4.5
+despmtr inlet_length 7
+
+skbeg 0 inlet_radius 0 
+spline 0 inlet_radius inlet_length/2
+spline 0 inlet_ inlet_length/2
+skend
+
+revolve 0 0 0 0 0 1 360 

@@ -1,0 +1,206 @@
+//---------------------------------------------------------------------------
+//                       OTAC Turbine V&V test case
+//                         based on TURBAN input
+//---------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------
+//                          SET THE THERMO PACKAGE
+//---------------------------------------------------------------------------
+setThermoPackage( "Janaf" );
+
+
+Element FlowStart tube {
+   W = 1.582 "kg/sec";
+   Pt = 99.0/0.5282 "Pa";
+   Tt = 292./0.8333 "K";
+   Fl_O.MN = 1.00;
+}
+
+Element Splitter tubeBypass {
+   BPRdes = 2.2285;
+   Fl_O1.MN = 1.0;
+   Fl_O2.MN = 1.0;
+} 
+
+Element FlowEnd endA { 
+} 
+
+Element Inlet inlet {
+   eRamBase = 1.000;
+   Fl_O.MN = 0.60;
+} 
+
+Element Compressor compressorA {
+   PRdes = 12.47;
+   effDes = 0.80;
+   Ndes = 1.000;
+   Fl_O.MN = 0.40;
+} 
+
+Element Duct intercoolerA {
+   dPqP_dmd = 0.0;
+   switchQ = "INPUT";
+   Q_in = -237.8;
+   Fl_O.MN = 0.40;
+   //void preexecute() {
+   //   Q_in = -steam.Qin;
+   //} 
+} 
+
+Element Splitter splitter {
+   BPRdes = 1.45;
+   Fl_O1.MN = 0.40;
+   Fl_O2.MN = 0.40;
+} 
+
+Element Nozzle nozzle {
+   switchType = "CON_DIV";
+   PsExhName = "tube.Fl_O.Ps";
+}
+
+Element FlowEnd endB {
+} 
+
+Element Compressor compressorB {
+   PRdes = 5.00;
+   effDes = 0.8000;
+   Ndes = 1.000;
+   Fl_O.MN = 0.40;
+} 
+/*
+Element FlowStart steam {
+   W = 0.14 "kg/sec";
+   Pt = 101000. "Pa";
+   Tt = 292. "K";
+   Fl_O.MN = 0.40;
+   
+   // constituency = "H2O"
+   WAR = 1.0;  // why is WAR limit = 1 ????
+
+   // real Qin, delHvap = 2257.0 kJ/kg, 970.99 BTU/lb @ Tboiling
+   real Qin;
+   real dHvap = 2257.0; dHvap.units = "kJ/kg";
+   // Q in = mdot*heatOfVaporization, water @ Pstd, Tstd
+   void postexecute() {
+      Qin = Fl_O.W * dHvap;
+   } 
+
+} 
+
+Element HeatExchanger intercoolerB {
+} 
+*/
+Element Duct intercoolerB {
+   dPqP_dmd = 0.0;
+   switchQ = "INPUT";
+   Q_in = -22.;
+   Fl_O.MN = 0.40;
+} 
+
+Element Duct toAirBearings {
+   dPqP_dmd = 0.0;
+   Fl_O.MN = 0.40;
+}
+/*
+Element Duct toSteamTank {
+   dPqP_dmd = 0.0;
+}
+
+Element FlowEnd endD {
+} 
+*/
+Element FlowEnd endC {
+} 
+
+
+Element Shaft shaftA {
+   ShaftInputPort Sh_CA;
+   Nmech = 5000.;
+} 
+
+Element Shaft shaftB {
+   ShaftInputPort Sh_CB;
+   Nmech = 20000.;
+}
+
+
+
+linkPorts( "tube.Fl_O",         "tubeBypass.Fl_I",   "FS1"  );
+linkPorts( "tubeBypass.Fl_O2",  "endA.Fl_I",         "FS2"  );
+linkPorts( "tubeBypass.Fl_O1",  "inlet.Fl_I",        "FS3"  );
+linkPorts( "inlet.Fl_O",        "compressorA.Fl_I",  "FS4"  );
+linkPorts( "compressorA.Fl_O",  "intercoolerA.Fl_I", "FS5"  );
+linkPorts( "intercoolerA.Fl_O", "splitter.Fl_I",     "FS6"  );
+linkPorts( "splitter.Fl_O2",    "nozzle.Fl_I",       "FS7"  );
+linkPorts( "splitter.Fl_O1",    "compressorB.Fl_I",  "FS8"  );
+linkPorts( "nozzle.Fl_O",       "endB.Fl_I",         "FS9"  );
+linkPorts( "compressorB.Fl_O",  "intercoolerB.Fl_I", "FS10" );
+//linkPorts( "steam.Fl_O",        "intercoolerB.Fl_I1","FS11" );
+//linkPorts( "intercoolerB.Fl_O1","toSteamTank.Fl_I",  "FS12" );
+linkPorts( "intercoolerB.Fl_O", "toAirBearings.Fl_I","FS13" );
+//linkPorts( "toSteamTank.Fl_O",  "endD.Fl_I",         "FS14" );
+linkPorts( "toAirBearings.Fl_O","endC.Fl_I",         "FS15" );
+
+linkPorts( "shaftA.Sh_CA",      "compressorA.Sh_O",  "CAmech" );
+linkPorts( "shaftB.Sh_CB",      "compressorB.Sh_O",  "CBmech" );
+
+#include <hyper.view_page>
+
+
+
+Independent ind_QfluxA { 
+   varName = "intercoolerA.Q_in";
+   autoSetup = TRUE;
+} 
+
+Independent ind_QfluxB { 
+   varName = "intercoolerB.Q_in";
+   autoSetup = TRUE;
+} 
+
+Dependent dep_stationTemp1 {
+   eq_lhs = "intercoolerA.Fl_O.Tt";
+   eq_rhs = "300.*1.8";  // degree K to degree R
+   autoSetup = TRUE;
+}
+
+Dependent dep_stationTemp2 {
+   eq_lhs = "intercoolerB.Fl_O.Tt";
+   eq_rhs = "400.*1.8";  // degree K to degree R
+   autoSetup = TRUE;
+}
+
+Independent ind_PR1 { 
+   varName = "compressorA.PRdes";
+   autoSetup = TRUE;
+} 
+
+Dependent dep_stationPressure1 {
+   eq_lhs = "compressorA.Fl_O.Ps";
+   eq_rhs = "2100./6894.7";  // Pa to psi
+   autoSetup = TRUE;
+}
+
+
+Independent ind_PR2 { 
+   varName = "compressorB.PRdes";
+   autoSetup = TRUE;
+} 
+
+Dependent dep_stationPressure2 {
+   eq_lhs = "toAirBearings.Fl_O.Ps";
+   eq_rhs = "11000./6894.7";  // Pa to psi
+   autoSetup = TRUE;
+}
+
+
+
+autoSolverSetup();
+solver.removeDependent( "shaftA.integrate_Nmech" );
+solver.removeDependent( "shaftB.integrate_Nmech" );
+
+run();
+page.display();
+
+

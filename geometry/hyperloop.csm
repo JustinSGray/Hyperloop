@@ -5,7 +5,7 @@ despmtr inlet_length 7
 
 skbeg 0 inlet_radius 0 
 spline 0 inlet_radius inlet_length/2
-spline 0 inlet_ inlet_length/2
+spline 0 inlet_radius inlet_length/2
+spline 0 fan_radius length
 skend
 
-revolve 0 0 0 0 0 1 360 

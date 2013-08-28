@@ -33,12 +33,12 @@ revolve 0 0 0 0 0 1 360
 #fillet inlet_h1/2
 
 #outer nacelle
-#cylinder 0 0 0 0 0 pod_length r_pod
-#translate 0 0 inlet_z3
+cylinder 0 0 0 0 0 pod_length r_pod
+translate 0 0 inlet_z3
 
 #passenger pod
-box -pod_width/2 -pod_height/2 0 pod_width pod_height pod_length
-translate 0 0 inlet_z3
+#box -pod_width/2 -pod_height/2 0 pod_width pod_height pod_length
+#translate 0 0 inlet_z3
 
 #nozzle 
 mark

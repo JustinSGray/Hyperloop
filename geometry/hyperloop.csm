@@ -1,13 +1,32 @@
-despmtr fan_radius 5
-despmtr inlet_radius 4
-despmtr inlet_radius2 4.3
-despmtr inlet_length 7
+despmtr r_pod 10
+despmtr r_fan 8
+despmtr r_inlet 6
 
-skbeg 0 inlet_radius 0 
-    spline 0 inlet_radius2 inlet_length/2
-    spline 0 fan_radius inlet_length
-    linseg 0 inlet_radius inlet_length
-    linseg 0 inlet_radius 0
+despmtr inlet_h1 1
+
+despmtr inlet_r2 8
+despmtr inlet_z2 5
+despmtr inlet_h2 1
+
+despmtr inlet_z3 10
+
+despmtr inlet_tip .5
+despmtr inlet_sharpness 1
+
+set sharp_factor inlet_sharpness/100
+
+#inlet profile
+skbeg 0 r_pod inlet_z3 #end of top surface
+    linseg 0 r_fan inlet_z3 #start of bottom surface
+    spline 0 inlet_r2-inlet_h2 inlet_z2 
+    spline 0 r_inlet 0 #end of bottom surface
+    spline 0 (r_inlet+inlet_tip/2)*(1-sharp_factor) -inlet_tip #inlet nose
+    spline 0 (r_inlet+inlet_tip/2)*(1+sharp_factor) -inlet_tip #inlet nose
+
+    spline 0 r_inlet+inlet_h1 0 #start of top surface
+    spline 0 inlet_r2+inlet_h2 inlet_z2
+    spline 0 r_pod inlet_z3
 skend
-
 revolve 0 0 0 0 0 1 360 
+
+#passenger compartment

@@ -1,32 +1,61 @@
-despmtr r_pod 10
-despmtr r_fan 8
-despmtr r_inlet 6
+despmtr r_pod 1
+despmtr r_fan .736
+despmtr r_inlet .62
 
-despmtr inlet_h1 1
+despmtr inlet_h1 .1
 
-despmtr inlet_r2 8
-despmtr inlet_z2 5
-despmtr inlet_h2 1
+despmtr inlet_r2 .7
+despmtr inlet_z2 .5
+despmtr inlet_h2 .2
 
-despmtr inlet_z3 10
+despmtr inlet_z3 1
 
-despmtr inlet_tip .5
-despmtr inlet_sharpness 1
+despmtr pod_width 1.35
+despmtr pod_height 1.1
+despmtr pod_length 4
 
-set sharp_factor inlet_sharpness/100
+despmtr nozzle_r1 .65
+despmtr nozzle_z1 .5
 
-#inlet profile
+despmtr nozzle_r2 .232
+despmtr nozzle_z2 1.5
+
+##inlet profile
 skbeg 0 r_pod inlet_z3 #end of top surface
     linseg 0 r_fan inlet_z3 #start of bottom surface
     spline 0 inlet_r2-inlet_h2 inlet_z2 
     spline 0 r_inlet 0 #end of bottom surface
-    spline 0 (r_inlet+inlet_tip/2)*(1-sharp_factor) -inlet_tip #inlet nose
-    spline 0 (r_inlet+inlet_tip/2)*(1+sharp_factor) -inlet_tip #inlet nose
-
-    spline 0 r_inlet+inlet_h1 0 #start of top surface
+    linseg 0 r_inlet+inlet_h1 0 
     spline 0 inlet_r2+inlet_h2 inlet_z2
-    spline 0 r_pod inlet_z3
+   spline 0 r_pod inlet_z3
 skend
 revolve 0 0 0 0 0 1 360 
+#fillet inlet_h1/2
 
-#passenger compartment
+#outer nacelle
+#cylinder 0 0 0 0 0 pod_length r_pod
+#translate 0 0 inlet_z3
+
+#passenger pod
+box -pod_width/2 -pod_height/2 0 pod_width pod_height pod_length
+translate 0 0 inlet_z3
+
+#nozzle 
+mark
+skbeg 0 r_pod 0
+    cirarc -r_pod 0 0  0 -r_pod 0
+    cirarc r_pod 0 0  0 r_pod 0
+skend
+
+skbeg 0 nozzle_r1 nozzle_z1
+    cirarc -nozzle_r1 0 nozzle_z1 0 -nozzle_r1 nozzle_z1
+    cirarc nozzle_r1 0 nozzle_z1 0 nozzle_r1 nozzle_z1
+skend
+
+skbeg 0 nozzle_r2 nozzle_z2
+    cirarc -nozzle_r2 0 nozzle_z2 0 -nozzle_r2 nozzle_z2
+    cirarc nozzle_r2 0 nozzle_z2 0 nozzle_r2 nozzle_z2
+skend
+loft 1
+
+translate 0 0 inlet_z3+pod_length

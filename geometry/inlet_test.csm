@@ -1,0 +1,81 @@
+despmtr r_pod 1
+despmtr r_fan .736
+despmtr r_inlet .62
+
+despmtr inlet_h1 .1
+
+despmtr inlet_r2 .8
+despmtr inlet_z2 .5
+despmtr inlet_h2 .1
+
+despmtr inlet_z3 2
+
+despmtr scarf_ang 15
+despmtr scarf_offset1 -.3
+despmtr scarf_offset2 -.15
+
+
+#nacelle
+mark
+set r r_inlet+inlet_h1
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 scarf_offset1 0 
+
+set r r_inlet+inlet_h1
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 scarf_offset1 0 
+
+set r inlet_r2+inlet_h2
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 scarf_offset2 inlet_z2
+
+set r r_pod
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 0 inlet_z3
+loft 1
+
+
+#inlet void 
+mark
+set r r_inlet #inlet entrace
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 scarf_offset1 0 
+
+set r inlet_r2-inlet_h2
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 scarf_offset2 inlet_z2
+
+set r r_fan #fan face
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 0 inlet_z3
+loft 1
+
+subtract #remove void from solid nacelle plug
+
+
+#scarfing
+set h 5*r_pod #cutting plane for scarf
+box -h/2 -h/2 0 h h -2
+rotatex scarf_ang -(r_inlet+inlet_h1)+scarf_offset1 0 
+subtract

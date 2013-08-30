@@ -43,7 +43,7 @@ despmtr nozzle_scarf_offset 1
 #Air Bearings
 despmtr bearing_height .1
 despmtr bearing_sweep_angle 20
-despmtr bearing_length 2.8
+despmtr bearing_length 1.4
 despmtr n_bearings 6
 despmtr bearing_rotation 20 #angle rotation off vertical for each bearing pad
 
@@ -104,8 +104,9 @@ skbeg 0 r 0
     cirarc -r 0 0   0 -r 0
     cirarc  r 0 0   0  r 0
 skend
-set scarf_offset inlet_scarf_offset*(-r_pod+r)+inlet_h1
+set scarf_offset inlet_scarf_offset*(-r_pod+r+inlet_h1)
 translate 0 scarf_offset 0
+
 
 set r inlet_r2-inlet_h2
 skbeg 0 r 0
@@ -132,6 +133,9 @@ rotatex inlet_scarf_ang -(r_inlet+inlet_h1)+scarf_offset_1 0
 subtract
 
 
+
+end 
+
 ###########################################################################################
 #Utility Capsule for Batteries and Steam
 ###########################################################################################
@@ -144,7 +148,7 @@ set z_pos inlet_z3+1
 set utility_end z_pos+length
 box -width/2 -height/2 0 width height length
 translate 0 0 z_pos
-fillet .4
+#fillet .4
 
 ###########################################################################################
 #Passenger Capsule
@@ -158,7 +162,7 @@ set z_pos utility_end+1
 set passenger_end z_pos+length
 box -width/2 -height/2 0 width height length
 translate 0 0 z_pos
-fillet .4
+#fillet .4
 
 ###########################################################################################
 #Pod Outer Wall

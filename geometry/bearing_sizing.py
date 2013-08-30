@@ -26,8 +26,8 @@ class BearingSizing(Component):
         req_total_length = req_area/arc_length
 
         self.total_area = req_area
-        self.length_per_bearing = req_total_length/self.n_bearings
-        self.area_per_bearing = req_area/self.n_bearings
+        self.length_per_bearing = req_total_length/self.n_bearings/2
+        self.area_per_bearing = req_area/self.n_bearings/2
 
 if __name__ == "__main__": 
 

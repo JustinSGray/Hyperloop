@@ -24,12 +24,13 @@ class BearingSizing(Component):
         sweep_radians = self.sweep_angle*pi/180
         arc_length = self.tube_radius*sweep_radians
 
-        req_total_length = req_area/arc_length
+        
 
         self.total_area = req_area
         self.bearing_width = 2*self.tube_radius*sin(sweep_radians/2)
 
         #divide by two because there are two parallel skis
+        req_total_length = req_area/arc_length/2
         self.length_per_bearing = req_total_length/self.n_bearings/2
         self.area_per_bearing = req_area/self.n_bearings/2
 

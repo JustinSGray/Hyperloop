@@ -1,0 +1,256 @@
+
+#All units in meters unless otherwise specified
+###########################################################################################
+# Design Variables
+###########################################################################################
+#inlet
+despmtr r_fan .736
+despmtr r_inlet .62
+
+despmtr inlet_h1 .1
+
+despmtr inlet_r2 .8
+despmtr inlet_z2 .5
+despmtr inlet_h2 .1
+
+despmtr inlet_z3 1.5
+
+#inlet scarfing
+despmtr inlet_scarf_ang 0
+despmtr inlet_scarf_offset 1
+
+#pod & tube
+despmtr r_bypass 1
+despmtr bypass_z 1
+despmtr r_tube 4
+
+despmtr utility_length 5
+
+despmtr capsule_width 1.35
+despmtr capsule_height 1.1
+despmtr capsule_fillet .2
+despmtr n_seat_rows 14
+despmtr length_per_seat_row 1.5
+
+#nozzle
+despmtr nozzle_r1 .65
+despmtr nozzle_z1 .75
+
+despmtr nozzle_r2 .232
+despmtr nozzle_z2 2
+
+despmtr nozzle_scarf_offset 1
+
+#Air Bearings
+despmtr bearing_height .15
+despmtr bearing_width .55
+despmtr bearing_length 3
+despmtr n_bearings 7
+despmtr bearing_x_spacing .1 #distance between left and right skis
+
+
+
+
+###########################################################################################
+# Revolved Inlet
+###########################################################################################
+#inlet profile
+#skbeg 0 r_bypass inlet_z3 #end of top surface
+#    linseg 0 r_fan inlet_z3 #start of bottom surface
+#    spline 0 inlet_r2-inlet_h2 inlet_z2 
+#    spline 0 r_inlet 0 #end of bottom surface
+#    linseg 0 r_inlet+inlet_h1 0 
+#    spline 0 inlet_r2+inlet_h2 inlet_z2
+#   spline 0 r_bypass inlet_z3
+#skend
+#revolve 0 0 0 0 0 1 360 
+#fillet inlet_h1/2
+###########################################################################################
+
+###########################################################################################
+#Scarfed Inlet
+###########################################################################################
+#nacelle
+mark
+ 
+set r r_inlet+inlet_h1
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_bypass+r)
+set scarf_offset_1 inlet_scarf_offset*(-r_bypass+r) #used later, so save it here
+translate 0 scarf_offset 0
+
+set r inlet_r2+inlet_h2
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_bypass+r)
+translate 0 scarf_offset inlet_z2
+
+set r r_bypass
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 0 inlet_z3
+loft 1
+
+#inlet void 
+mark
+set r r_inlet #inlet entrace
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_bypass+r+inlet_h1)
+translate 0 scarf_offset 0
+
+
+set r inlet_r2-inlet_h2
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_bypass+r)+inlet_h2
+translate 0 scarf_offset inlet_z2
+
+set r r_fan #fan face
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 0 inlet_z3
+loft 1
+
+subtract #remove void from solid nacelle plug
+
+#scarfing
+set h 5*r_bypass #cutting plane for scarf
+box -h/2 -h/2 0 h h -2
+rotatex inlet_scarf_ang -(r_inlet+inlet_h1)+scarf_offset_1 0 
+subtract
+
+###########################################################################################
+#Bypass Outer Wall
+###########################################################################################
+
+#outer nacelle
+set pod_length inlet_z3+bypass_z
+cylinder 0 0 0 0 0 pod_length r_bypass
+cylinder 0 0 0 0 0 pod_length r_fan
+subtract
+translate 0 0 inlet_z3
+
+###########################################################################################
+# Nozzle
+###########################################################################################
+#nozzle 
+mark
+skbeg 0 r_bypass 0
+    cirarc -r_bypass 0 0  0 -r_bypass 0
+    cirarc r_bypass 0 0  0 r_bypass 0
+skend
+
+skbeg 0 nozzle_r1 nozzle_z1
+    cirarc -nozzle_r1 0 nozzle_z1 0 -nozzle_r1 nozzle_z1
+    cirarc nozzle_r1 0 nozzle_z1 0 nozzle_r1 nozzle_z1
+skend
+set scarf -1*nozzle_scarf_offset*(-r_bypass+nozzle_r1)
+translate 0 scarf 0
+
+skbeg 0 nozzle_r2 nozzle_z2
+    cirarc -nozzle_r2 0 nozzle_z2 0 -nozzle_r2 nozzle_z2
+    cirarc nozzle_r2 0 nozzle_z2 0 nozzle_r2 nozzle_z2
+skend
+set scarf -1*nozzle_scarf_offset*(-r_bypass+nozzle_r2)
+translate 0 scarf 0
+
+loft 1
+translate 0 0 2*inlet_z3+bypass_z
+
+
+
+###########################################################################################
+#Utility Capsule for Batteries and Steam
+###########################################################################################
+
+#utilitiy container
+set length utility_length
+set width capsule_width
+set height capsule_height
+set z_pos inlet_z3+1
+set utility_end z_pos+length
+box -width/2 -height/2 0 width height length
+translate 0 -r_bypass+(height/2) z_pos
+fillet .2
+
+###########################################################################################
+#Passenger Capsule
+###########################################################################################
+ 
+#passenger pressure vessel 
+set length n_seat_rows*length_per_seat_row
+set width capsule_width
+set height capsule_height
+set z_pos utility_end+1
+set passenger_end z_pos+length
+box -width/2 -height/2 0 width height length
+translate 0 -r_bypass+(height/2) z_pos
+fillet capsule_fillet
+
+
+###########################################################################################
+#Capsule Faring
+###########################################################################################
+
+set length passenger_end-inlet_z3-1
+set capsule_length passenger_end-inlet_z3-1
+set width capsule_width
+set height capsule_height
+set z_pos passenger_end
+box -width/2 -height/2 0 width height length
+translate 0 -r_bypass+(height/2) inlet_z3+1
+fillet capsule_fillet
+
+
+
+###########################################################################################
+# Air Bearings
+###########################################################################################
+
+#ski
+set  dead_space ((capsule_length-2*capsule_fillet)-(n_bearings*bearing_length))/(n_bearings-1)
+set  bearing_z_spacing (capsule_length-2*capsule_fillet-(n_bearings*bearing_length))/(n_bearings-1)
+set  effective_length bearing_length+dead_space
+set  delta_y r_tube-r_bypass-bearing_height
+
+
+set width bearing_width 
+set height bearing_height
+set length bearing_length
+patbeg i n_bearings
+    set width bearing_width 
+    set height bearing_height
+    set length bearing_length
+    set start (inlet_z3+capsule_fillet+1)+(i-1)*effective_length
+    set stop (inlet_z3+capsule_fillet+1)+(i-1)*effective_length+length
+    
+    box 0 0 start width height stop
+    translate bearing_x_spacing/2 -r_tube 0
+    cylinder 0 0 start 0 0 stop r_tube
+    intersect
+    translate 0 delta_y 0
+    
+    box 0 0 start width height stop
+    translate -bearing_x_spacing/2-width -r_tube 0
+    cylinder 0 0 start 0 0 stop r_tube
+    intersect
+    translate 0 delta_y 0
+patend
+
+
+end 
+

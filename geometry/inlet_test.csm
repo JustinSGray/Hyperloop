@@ -1,81 +1,74 @@
+
+#Air Bearings
+despmtr bearing_height .3
+despmtr bearing_sweep_angle 20
+despmtr bearing_length 5
+despmtr bearing_spacing .5
+despmtr n_bearings 4
+despmtr bearing_rotation 45
+
+#pod 
 despmtr r_pod 1
-despmtr r_fan .736
-despmtr r_inlet .62
+despmtr r_tube 4
 
-despmtr inlet_h1 .1
+###########################################################################################
+# Air Bearings
+###########################################################################################
 
-despmtr inlet_r2 .8
-despmtr inlet_z2 .5
-despmtr inlet_h2 .1
+#skid 1
+patbeg i n_bearings
 
-despmtr inlet_z3 2
+    set r_top r_pod
+    set r_bottom 3*r_pod
 
-despmtr scarf_ang 15
-despmtr scarf_offset1 -.3
-despmtr scarf_offset2 -.15
+    set alpha bearing_sweep_angle #arc size
+    set theta (180-alpha)/2 #outside angle
+    skbeg r_top*cosd(360-theta) r_top*sind(360-theta) 0 
+        cirarc r_top*cosd(270) r_top*sind(270) 0 r_top*cosd(180+theta) r_top*sind(180+theta) 0
+        linseg r_bottom*cosd(180+theta) r_bottom*sind(180+theta) 0
+        cirarc r_bottom*cosd(270) r_bottom*sind(270) 0 r_bottom*cosd(360-theta) r_bottom*sind(360-theta) 0
+        linseg r_top*cosd(360-theta) r_top*sind(360-theta) 0 
+    skend
+    extrude 0 0 bearing_length
 
+    skbeg 0 r_tube 0
+        cirarc -r_tube 0 0  0 -r_tube 0
+        cirarc r_tube 0 0  0 r_tube 0
+    skend
+    translate 0 r_tube-r_top-bearing_height 0
+    extrude 0 0 bearing_length
 
-#nacelle
-mark
-set r r_inlet+inlet_h1
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 scarf_offset1 0 
+    intersect
+    rotatez bearing_rotation 0 0 
 
-set r r_inlet+inlet_h1
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 scarf_offset1 0 
+    translate 0 0 i*(bearing_length+bearing_spacing)
+patend
 
-set r inlet_r2+inlet_h2
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 scarf_offset2 inlet_z2
+#skid 2
+patbeg i n_bearings
 
-set r r_pod
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 0 inlet_z3
-loft 1
+    set r_top r_pod
+    set r_bottom 3*r_pod
 
+    set alpha bearing_sweep_angle #arc size
+    set theta (180-alpha)/2 #outside angle
+    skbeg r_top*cosd(360-theta) r_top*sind(360-theta) 0 
+        cirarc r_top*cosd(270) r_top*sind(270) 0 r_top*cosd(180+theta) r_top*sind(180+theta) 0
+        linseg r_bottom*cosd(180+theta) r_bottom*sind(180+theta) 0
+        cirarc r_bottom*cosd(270) r_bottom*sind(270) 0 r_bottom*cosd(360-theta) r_bottom*sind(360-theta) 0
+        linseg r_top*cosd(360-theta) r_top*sind(360-theta) 0 
+    skend
+    extrude 0 0 bearing_length
 
-#inlet void 
-mark
-set r r_inlet #inlet entrace
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 scarf_offset1 0 
+    skbeg 0 r_tube 0
+        cirarc -r_tube 0 0  0 -r_tube 0
+        cirarc r_tube 0 0  0 r_tube 0
+    skend
+    translate 0 r_tube-r_top-bearing_height 0
+    extrude 0 0 bearing_length
 
-set r inlet_r2-inlet_h2
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 scarf_offset2 inlet_z2
+    intersect
+    rotatez -bearing_rotation 0 0
 
-set r r_fan #fan face
-skbeg 0 r 0
-    cirarc -r 0 0   0 -r 0
-    cirarc  r 0 0   0  r 0
-skend
-translate 0 0 inlet_z3
-loft 1
-
-subtract #remove void from solid nacelle plug
-
-
-#scarfing
-set h 5*r_pod #cutting plane for scarf
-box -h/2 -h/2 0 h h -2
-rotatex scarf_ang -(r_inlet+inlet_h1)+scarf_offset1 0 
-subtract
+    translate 0 0 i*(bearing_length+bearing_spacing)
+patend

@@ -1,14 +1,25 @@
-despmtr r_pod 1
+
+###########################################################################################
+# Design Variables
+###########################################################################################
+#inlet
 despmtr r_fan .736
 despmtr r_inlet .62
 
 despmtr inlet_h1 .1
 
-despmtr inlet_r2 .7
+despmtr inlet_r2 .8
 despmtr inlet_z2 .5
-despmtr inlet_h2 .2
+despmtr inlet_h2 .1
 
-despmtr inlet_z3 1
+despmtr inlet_z3 1.5
+
+#inlet scarfing
+despmtr inlet_scarf_ang 0
+despmtr inlet_scarf_offset 1
+
+#pod 
+despmtr r_pod 1
 
 despmtr utility_length 10 
 
@@ -17,55 +28,139 @@ despmtr capsule_height 1.1
 despmtr n_seat_rows 14
 despmtr length_per_seat_row 1.5
 
+
+#nozzle
 despmtr nozzle_r1 .65
-despmtr nozzle_z1 .5
+despmtr nozzle_z1 .75
 
 despmtr nozzle_r2 .232
-despmtr nozzle_z2 1.5
+despmtr nozzle_z2 2
 
-##inlet profile
-skbeg 0 r_pod inlet_z3 #end of top surface
-    linseg 0 r_fan inlet_z3 #start of bottom surface
-    spline 0 inlet_r2-inlet_h2 inlet_z2 
-    spline 0 r_inlet 0 #end of bottom surface
-    linseg 0 r_inlet+inlet_h1 0 
-    spline 0 inlet_r2+inlet_h2 inlet_z2
-   spline 0 r_pod inlet_z3
-skend
-revolve 0 0 0 0 0 1 360 
+despmtr nozzle_scarf_offset 1
+
+###########################################################################################
+# Revolved Inlet
+###########################################################################################
+#inlet profile
+#skbeg 0 r_pod inlet_z3 #end of top surface
+#    linseg 0 r_fan inlet_z3 #start of bottom surface
+#    spline 0 inlet_r2-inlet_h2 inlet_z2 
+#    spline 0 r_inlet 0 #end of bottom surface
+#    linseg 0 r_inlet+inlet_h1 0 
+#    spline 0 inlet_r2+inlet_h2 inlet_z2
+#   spline 0 r_pod inlet_z3
+#skend
+#revolve 0 0 0 0 0 1 360 
 #fillet inlet_h1/2
+###########################################################################################
+
+###########################################################################################
+#Scarfed Inlet
+###########################################################################################
+#nacelle
+mark
+ 
+set r r_inlet+inlet_h1
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_pod+r)
+set scarf_offset_1 inlet_scarf_offset*(-r_pod+r) #used later, so save it here
+translate 0 scarf_offset 0
+
+set r inlet_r2+inlet_h2
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_pod+r)
+translate 0 scarf_offset inlet_z2
+
+set r r_pod
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 0 inlet_z3
+loft 1
+
+#inlet void 
+mark
+set r r_inlet #inlet entrace
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_pod+r)+inlet_h1
+translate 0 scarf_offset 0
+
+set r inlet_r2-inlet_h2
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+set scarf_offset inlet_scarf_offset*(-r_pod+r)+inlet_h2
+translate 0 scarf_offset inlet_z2
+
+set r r_fan #fan face
+skbeg 0 r 0
+    cirarc -r 0 0   0 -r 0
+    cirarc  r 0 0   0  r 0
+skend
+translate 0 0 inlet_z3
+loft 1
+
+subtract #remove void from solid nacelle plug
+
+#scarfing
+set h 5*r_pod #cutting plane for scarf
+box -h/2 -h/2 0 h h -2
+rotatex inlet_scarf_ang -(r_inlet+inlet_h1)+scarf_offset_1 0 
+subtract
 
 
-
+###########################################################################################
+#Utility Capsule for Batteries and Steam
+###########################################################################################
 
 #utilitiy container
 set length utility_length
 set width capsule_width
 set height capsule_height
 set z_pos inlet_z3+1
-set utility_end z_pos + length
+set utility_end z_pos+length
 box -width/2 -height/2 0 width height length
 translate 0 0 z_pos
 fillet .4
 
+###########################################################################################
+#Passenger Capsule
+###########################################################################################
+ 
 #passenger pressure vessel 
 set length n_seat_rows*length_per_seat_row
 set width capsule_width
 set height capsule_height
 set z_pos utility_end+1
-set passenger_end z_pos + length
+set passenger_end z_pos+length
 box -width/2 -height/2 0 width height length
 translate 0 0 z_pos
 fillet .4
 
-end
+###########################################################################################
+#Pod Outer Wall
+###########################################################################################
 
 #outer nacelle
 set pod_length passenger_end
-#cylinder 0 0 0 0 0 pod_length r_pod
-#translate 0 0 inlet_z3
+cylinder 0 0 0 0 0 pod_length r_pod
+translate 0 0 inlet_z3
 
 
+###########################################################################################
+# Nozzle
+###########################################################################################
 #nozzle 
 mark
 skbeg 0 r_pod 0
@@ -77,11 +172,16 @@ skbeg 0 nozzle_r1 nozzle_z1
     cirarc -nozzle_r1 0 nozzle_z1 0 -nozzle_r1 nozzle_z1
     cirarc nozzle_r1 0 nozzle_z1 0 nozzle_r1 nozzle_z1
 skend
+set scarf nozzle_scarf_offset*(-r_pod+nozzle_r1)
+translate 0 scarf 0
 
 skbeg 0 nozzle_r2 nozzle_z2
     cirarc -nozzle_r2 0 nozzle_z2 0 -nozzle_r2 nozzle_z2
     cirarc nozzle_r2 0 nozzle_z2 0 nozzle_r2 nozzle_z2
 skend
+set scarf nozzle_scarf_offset*(-r_pod+nozzle_r2)
+translate 0 scarf 0
+
 loft 1
 translate 0 0 inlet_z3+passenger_end
 

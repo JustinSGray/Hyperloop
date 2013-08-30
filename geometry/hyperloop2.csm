@@ -43,10 +43,10 @@ despmtr nozzle_scarf_offset 1
 
 #Air Bearings
 despmtr bearing_height .15
-despmtr bearing_width .55
+despmtr bearing_width .279
 despmtr bearing_length 3
 despmtr n_bearings 7
-despmtr bearing_x_spacing .1 #distance between left and right skis
+despmtr bearing_x_spacing .25 #distance between left and right skis
 
 
 

@@ -10,7 +10,7 @@ class BearingSizing(Component):
     capsule_mass = Float(15000, iotype="in", units="kg", desc="mass of capsule")
     pressure = Float(9.4, iotype="in", units="kPa", desc="air injection pressure for bearings")
     n_bearings = Int(7, iotype="in", desc="number of rows of bearing pads") 
-    sweep_angle = Float(8, iotype="in", units="deg", desc="sweep angle of a single bearing pad on tube wall")
+    sweep_angle = Float(4, iotype="in", units="deg", desc="sweep angle of a single bearing pad on tube wall")
 
     total_area = Float(iotype="out", units="m**2", desc="total required bearing area")
     area_per_bearing = Float(iotype="out", units="m**2", desc="required area per bearing")

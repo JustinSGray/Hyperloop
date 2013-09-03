@@ -4,7 +4,7 @@ from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float, Int
 
 
-class BearingSizing(Component): 
+class AirBearing(Component): 
 
     tube_radius = Float(4, iotype="in", units="m", desc="radius of the tube")
     capsule_mass = Float(15000, iotype="in", units="kg", desc="mass of capsule")

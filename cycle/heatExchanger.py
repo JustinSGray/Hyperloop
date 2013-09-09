@@ -122,17 +122,29 @@ class heatExchanger(Component):
 
         
         #Determine the Prandtl Number
+        #Nu = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
+        #Pr << 1 means thermal diffusivity dominates
+        #Pr >> 1 means momentum diffusivity dominates
+        Pr_a = cp_a*dvis_a/kvisc_a
+        Pr_w = cp_w*dvis_w/kvisc_w
+
+        #Determine the Nusselt Number
         #Pr = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
         #Pr << 1 means thermal diffusivity dominates
         #Pr >> 1 means momentum diffusivity dominates
-        Pr_a = 
-        Pr_w = 
+        Nu_a = 
+        Nu_w = 
+
+        #Determine h
+        # h = Nu * k/ D
+
+        h_a
+        h_w 
+
 
 
         #Determine Overall Heat Transfer Coefficient
-        #1) Calculate Reynolds Number
-        #2) Calculate Prandtl Number
-        #3) Calculate Nusselt Number
+        # eq...
 
 
         #Determine LMTD
@@ -150,11 +162,15 @@ class heatExchanger(Component):
 
 
         #Determine the required length of the heat exchanger
+        # Q = U * A * LMTD
 
+
+        #Multi-Pass Corrections
+        #lookup table
 
 
         #Assume fouling losses
-
-
+        #lookup
 
         #Assume pipe minor losses
+        #function of length and number of passes

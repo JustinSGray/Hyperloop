@@ -24,7 +24,7 @@ NTU (effectiveness) Method
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float
 
-from math import log, pi
+from math import log, pi, sqrt
 
 
 class heatExchanger(Component):
@@ -45,6 +45,7 @@ class heatExchanger(Component):
     Di_tube = Float(0.0, units = 'm', iotype='out', desc='Tube pipe (inner) Diameter')
 
     cooled = Bool(value = 'True', desc= 'Boolean true if fluid is cooled, false if heated')
+    coFlow = Bool(value = 'False', desc= 'Boolean true if co-flow, false if coutner-flow')
 
     #Assumed Constant Properties
     rho_w = Float(0.0, units = 'kg/m**3', iotype='in', desc='density of water')
@@ -58,6 +59,8 @@ class heatExchanger(Component):
     k_w = Float(0.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
     k_a = Float(0.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
     k_p = Float(0.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
+    R_w = Float(0.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of city water')
+    R_a = Float(0.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of air')
 
     #--Outputs--
     #Intermediate Variables
@@ -161,7 +164,6 @@ class heatExchanger(Component):
             n = 0.3
         else:
             n = 0.4
-        end
 
         Nu_a = 0.023*(Re_a**4/5)*(Pr_a**n)
         Nu_w = 0.023*(Re_w**4/5)*(Pr_w**n)
@@ -177,7 +179,13 @@ class heatExchanger(Component):
         # U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]
         # (simplified)
         # U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]
-        U_o
+        U_o = 1/ [(Do_tube/Di_tube*h_a)+((Do_tube*log((Do_tube/Di_tube),e))/(2*k_p))+(1/h_w)]
+
+        #Assume fouling losses
+        #lookup R_w, R_a
+        U_oF = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)+(R_w+R_a)]
+
+
 
         #Determine LMTD
         LMTD = self.LMTD #Log Mean Temp Diff
@@ -186,23 +194,46 @@ class heatExchanger(Component):
         Th_out = self.T_aout
         Tc_out = self.T_wout
 
-        dT1 = (Th_out - Th_in) #Change in T1 (delta T1)
-        dT2 = (Tc_out-Tc_in) #Change in T2 (delta T2)
+        #if(coFlow):
+            #dT1 = (Th_in - Tc_in) #Change in T1 (delta T1)
+            #dT2 = (Th_out-Tc_out) #Change in T2 (delta T2)
+        #else: #counter-flow
+        dT1 = (Th_in - Tc_out) #Change in T1 (delta T1)
+        dT2 = (Th_out-Tc_in) #Change in T2 (delta T2)
 
-        self.LMTD = (dT1 - dT2)/(log(dT1/(dT2), e)) #take natural log (base e)
-
-
+        self.LMTD = (dT2 - dT1)/(log((dT2/dT1), e)) #take natural log (base e)
 
         #Determine the required length of the heat exchanger
         # Q = U * A * LMTD
-
+        # Q = U*pi*D*L*LMTD
+        # L = Q/(U*pi*D*LMTD)
+        L = q_a/(U_oF*pi*Do_tube*LMTD)
 
         #Multi-Pass Corrections
-        #lookup table
+        #Calc P, R  (Table lookup or equation parameters)
+        P = (Tc_out-Tc_in)/(Th_out-Tc_in)
+        R = (Th_in - Th_out)/(Tc_out-Tc_in)
+
+        #Calc X
+        X1 = ((R*(P-1))/(P-1))**(1/n)
+        X_num = 1 - X1
+        X_denom = R - X1
+        X = X_num/X_denom
+
+        #Calc F  (Equation fitted to empirical data)
+        F_sqr = sqrt(R**2 + 1)
+        F_num = (F_sqr/(R-1))*log(((1-X)/1-RX),e)
+        F_denom1 = (2/X)-1-R + F_sqr
+        F_denom2 = (2/X)-1-R - F_sqr
+        F_denom = log(F_denom1/F_denom2,e)
+        F = F_num / F_denom 
 
 
-        #Assume fouling losses
-        #lookup
 
         #Assume pipe minor losses
         #function of length and number of passes
+        #Head losses
+        #Developed from Bernoulli eq, with zero velocity change and viscous terms included in apparent height
+        # H = (k + f*(L/D)*v_avg^2)/2g
+        # delP = rho*g*H
+        # Also consider bends in tube

@@ -44,6 +44,8 @@ class heatExchanger(Component):
     Do_tube = Float(0.0, units = 'm', iotype='out', desc='Tube pipe (outer) Diameter')
     Di_tube = Float(0.0, units = 'm', iotype='out', desc='Tube pipe (inner) Diameter')
 
+    cooled = Bool(value = 'True', desc= 'Boolean true if fluid is cooled, false if heated')
+
     #Assumed Constant Properties
     rho_w = Float(0.0, units = 'kg/m**3', iotype='in', desc='density of water')
     rho_a = Float(0.0, units = 'kg/m**3', iotype='in', desc='density of air ')
@@ -66,17 +68,17 @@ class heatExchanger(Component):
     #Calculated Variables
     V_w = Float(0.0, units= 'm/s', iotype='out', desc='flow velocity of water')
     V_a = Float(0.0, units= 'm/s', iotype='out', desc='flow velocity of air')
-    h_w = Float(0.0, iotype ='out', desc='heat transfer of water')
-    h_a = Float(0.0, units = 'W/(m**2)*K', iotype='out', desc='heat transfer of air')
+    h_w = Float(0.0, units = 'W/m', iotype ='out', desc='heat transfer of water')
+    h_a = Float(0.0, units = 'W/m', iotype='out', desc='heat transfer of air')
     q_w = Float(0.0, units = 'W', iotype='out', desc='heat flow of water')
     q_a = Float(0.0, units = 'W', iotype='out', desc='heat flow of air')
+    U_o = Float(0.0, units = 'W/(m**2)*K', iotype='out', desc='Overall Heat Transfer Coefficient')
     
     #Size/Volume Considerations
     Vol_water = Float(0.0, units= 'm**3', iotype='out', desc='Volume of input water tank')
     Vol_steam = Float(0.0, units= 'm**3', iotype='out', desc='Volume of output steam tank')
     Mass_water = Float(0.0, units= 'kg', iotype='out', desc='Mass of input water tank')
     Mass_steam = Float(0.0, units= 'kg', iotype='out', desc='Mass of output steam tank')
-
 
 
     def execute(self):
@@ -129,23 +131,53 @@ class heatExchanger(Component):
         Pr_w = cp_w*dvis_w/kvisc_w
 
         #Determine the Nusselt Number
-        #Pr = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
-        #Pr << 1 means thermal diffusivity dominates
-        #Pr >> 1 means momentum diffusivity dominates
-        Nu_a = 
-        Nu_w = 
+        #Nu = convecive heat transfer / conductive heat transfer
+        #Nu = hL / k = (convective coeff * characteristic length) / conductive coeff
+
+        #Dittus-Boelter equation: valid for smooth pipes with small temp difference across fluid
+        #Nu = 0.023*(Re^4/5)*(Pr^n)  where 'n' = 0.4 if heated or = 0.3 if cooled
+        #Valid for 0.6 <= Pr <=160
+        #and              Re >= 10,000
+        #and    L/D >= 10
+
+        #Sieder-Tate correlation
+        #Nu = 0.027*(Re^4/5)*(Pr^1/3)*((u/u_s)^0.14)
+        #where u = fluid viscosity at the bulk fluid temp
+        #where u_s = fluid viscosity at the heat-transfer boundary surface temp
+        #(More accurate than Dittus-Boelter, but requires iterative process)
+        #(Viscosity factor will change as the Nusselt Number changes)
+        #Valid for 0.7 <= Pr <= 16,700
+        #and              Re >= 10,000
+        #and    L/D >= 10
+
+        #Gnielinski correlation: valid for turbulent flow tubes
+        #Nu = ((f/8)*(Re-1000)*Pr)/(1+12.7((f/8)^0.5)*((Pr^2/3)-1))
+        #f is the Darcy Friction Factor (obtained from Moody Chart)
+        #or f = (0.79*ln(Re) - 1.64)^-2   for smooth tubes
+        #Valid for 0.5<= Pr <=2000
+        #and      3000<= Re <= 5*(10^6)
+
+        if (cooled):
+            n = 0.3
+        else:
+            n = 0.4
+        end
+
+        Nu_a = 0.023*(Re_a**4/5)*(Pr_a**n)
+        Nu_w = 0.023*(Re_w**4/5)*(Pr_w**n)
 
         #Determine h
         # h = Nu * k/ D
 
-        h_a
-        h_w 
-
+        h_a = Nu_a*k_a/Da_e
+        h_w = Nu_w*k_w/Dw_e
 
 
         #Determine Overall Heat Transfer Coefficient
-        # eq...
-
+        # U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]
+        # (simplified)
+        # U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]
+        U_o
 
         #Determine LMTD
         LMTD = self.LMTD #Log Mean Temp Diff

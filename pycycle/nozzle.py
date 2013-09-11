@@ -1,7 +1,7 @@
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float, VarTree
 
-from pyflowstation.pyflowstation import FlowStation, CanteraFlowStation
+from pyflowstation.pyflowstation import FlowStation
 
 
 

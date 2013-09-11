@@ -16,7 +16,7 @@ despmtr inlet_h2 .1
 despmtr inlet_z3 1.5
 
 #inlet scarfing
-despmtr inlet_scarf_ang 0
+despmtr inlet_scarf_ang .05
 despmtr inlet_scarf_offset 1
 
 #pod & tube
@@ -48,24 +48,6 @@ despmtr bearing_length 3
 despmtr n_bearings 7
 despmtr bearing_x_spacing .25 #distance between left and right skis
 
-
-
-
-###########################################################################################
-# Revolved Inlet
-###########################################################################################
-#inlet profile
-#skbeg 0 r_bypass inlet_z3 #end of top surface
-#    linseg 0 r_fan inlet_z3 #start of bottom surface
-#    spline 0 inlet_r2-inlet_h2 inlet_z2 
-#    spline 0 r_inlet 0 #end of bottom surface
-#    linseg 0 r_inlet+inlet_h1 0 
-#    spline 0 inlet_r2+inlet_h2 inlet_z2
-#   spline 0 r_bypass inlet_z3
-#skend
-#revolve 0 0 0 0 0 1 360 
-#fillet inlet_h1/2
-###########################################################################################
 
 ###########################################################################################
 #Scarfed Inlet
@@ -132,6 +114,8 @@ set h 5*r_bypass #cutting plane for scarf
 box -h/2 -h/2 0 h h -2
 rotatex inlet_scarf_ang -(r_inlet+inlet_h1)+scarf_offset_1 0 
 subtract
+
+fillet inlet_h1/2.1
 
 ###########################################################################################
 #Bypass Outer Wall

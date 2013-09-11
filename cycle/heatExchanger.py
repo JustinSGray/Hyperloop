@@ -1,15 +1,14 @@
 """
     heatExchanger.py - 
-        Performs basic heat exchanger calculations for a single pass
-        counter-flow shell and tube heat exchanger
+        Performs basic heat exchanger calculations for a single or multipass
+        counter-flow or co-flow shell and tube heat exchanger
         
 Logarithmic Mean Temperature Difference (LMTD) Method
     Design a heat exchanger to meet prescribed heat transfer requirements
 
     LMTD Limitations
-    1) Restricted to single pass heat exchanger
-    - Multipass exchangers can be designed using empirical correction factor 'F'
-    2) Both starting and final temperature parameters must be known
+    -Both starting and final temperature parameters must be known
+    
 
 NTU (effectiveness) Method
     Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.

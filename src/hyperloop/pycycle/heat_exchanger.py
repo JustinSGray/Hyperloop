@@ -1,7 +1,7 @@
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float, VarTree
 
-from pyflowstation.pyflowstation import FlowStation, CanteraFlowStation
+from pyflowstation.pyflowstation import FlowStation
 
 
 
@@ -12,6 +12,8 @@ class HeatExchanger(Component):
 
     air_in = FlowStation(iotype="in", desc="incoming air stream")
     air_out = FlowStation(iotype="out", desc="outgoing air stream")
+
+
 
 
     def execute(self): 

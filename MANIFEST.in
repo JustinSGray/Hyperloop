@@ -1,0 +1,7 @@
+graft src/hyperloop/sphinx_build/html
+recursive-include src/hyperloop/test *.py
+recursive-include src/pycycle/test *.py
+recursive-include src/geometry/test *.py
+
+
+

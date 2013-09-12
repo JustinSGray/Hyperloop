@@ -8,7 +8,7 @@ Logarithmic Mean Temperature Difference (LMTD) Method
 
     LMTD Limitations
     -Both starting and final temperature parameters must be known
-    
+    -Rigorously defined for double-pipe(or tubular) heat exchanger
 
 NTU (effectiveness) Method
     Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.
@@ -41,8 +41,9 @@ class heatExchanger(Component):
     Mdot_a = Float(2.2221623, units = 'kg/s', iotype='out', desc='Mass flow rate of air')
     Di_shell = Float(0.05102, units = 'm', iotype='out', desc='Shell pipe (inner) Diameter')
     Do_tube = Float(0.03493, units = 'm', iotype='out', desc='Tube pipe (outer) Diameter')
-    Di_tube = Float(0.0371851871796067, units = 'm', iotype='in', desc='Tube pipe (inner) Diameter') #0.03279
+    Di_tube = Float(0.03279, units = 'm', iotype='in', desc='Tube pipe (inner) Diameter') #0.03279, 0.0371851871796067
     #A_a = Float(1.0, units = 'm**2', iotype='out', desc='Area')
+    N = Float(2, units = 'm', iotype='out', desc='Number of Shell-Side Passes')
     
     cooled = Bool(True, desc= 'Boolean true if fluid is cooled, false if heated')
     coFlow = Bool(False, desc= 'Boolean true if co-flow, false if coutner-flow')
@@ -58,7 +59,7 @@ class heatExchanger(Component):
     kvisc_a = Float(0.0000005479, units = 'm**2/s', iotype='in', desc='kinematic viscosity for air')
     k_w = Float(0.58, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
     k_a = Float(0.132, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
-    k_p = Float(1.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
+    k_p = Float(400.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
     R_w = Float(1.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of city water')
     R_a = Float(1.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of air')
 
@@ -91,7 +92,7 @@ class heatExchanger(Component):
         
         def check(var_name,var,correct_val):
             "Format and print a value check"
-            print "{}: {} -----:{}%  = {}!".format(var_name,var,abs(((var/correct_val)-1))*100,abs((((var/correct_val)-1))*100)<2)
+            print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(((var/correct_val)-1))*100,abs((((var/correct_val)-1))*100)<2)
         
         Th_in = self.T_ain #T hot air in
         Th_out = self.T_aout #T air out
@@ -106,6 +107,7 @@ class heatExchanger(Component):
         A_a = pi*(self.Di_tube/2)**2
         
         check('A_a',A_a, 0.001086)
+        A_a = 0.001086
         #Determine the fluid velocity of the air
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
         self.Veloc_a = self.Mdot_a / (self.rho_a * A_a)
@@ -152,6 +154,12 @@ class heatExchanger(Component):
         
         check('Dw_h',Dw_h, Di_tube)
         check('Dw_e',Dw_e, Di_tube)
+        
+        #cascading errors
+        #Da_h = 0.016082
+        #Da_e = 0.039586
+        #Dw_h = Di_tube
+        #Dw_e = 0.03279
         
         #Determine the Reynolds Number
         #Re = velocity * hydraulic dimater / kinematic viscostiy   (general form for pipes)
@@ -201,39 +209,40 @@ class heatExchanger(Component):
         #Valid for 0.5<= Pr <=2000
         #and      3000<= Re <= 5*(10^6)
 
-        if (self.cooled):
-            n = 0.3
-        else:
-            n = 0.4
 
-        Nu_a = 0.023*(Re_a**(4./5))*(Pr_a**0.4)
-        Nu_w = 0.023*(Re_w**(4./5))*(Pr_w**0.3)
+        Nu_a = 0.023*(Re_a**(4./5))*(Pr_a**0.4) #fluid is heated n=0.4
+        Nu_w = 0.023*(Re_w**(4./5))*(Pr_w**0.3) #fluid is cooled n=0.3
         
         check('Nu_a',Nu_a, 440.345)
         check('Nu_w',Nu_w, 457.16)
 
         #Determine h
         # h = Nu * k/ D
-
         self.h_a = Nu_a*self.k_a/Da_e
         self.h_w = Nu_w*self.k_w/Dw_e
 
         check('h_a',self.h_a, 1467.95)
         check('h_w',self.h_w, 8088.82)
+        
+        #cascading
+        self.h_a = 1467.95
+        self.h_w = 8088.82
 
         #Determine Overall Heat Transfer Coefficient
         # U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]
         # (simplified)
         # U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]
-        term1 = Do_tube/Di_tube*self.h_a
+        print "Do_tube{} Di_tube{} self.h_a{} self.k_p{}  self.h_w{}".format(Do_tube,Di_tube, self.h_a, self.k_p, self.h_w)
+        Di_tube = 0.03279
+        term1 = Do_tube/(Di_tube*self.h_w)
         term2 =  Do_tube*log((Do_tube/Di_tube),e)
         
-        self.U_o = 1/ (term1+(term2/(2*self.k_p))+(1/self.h_w))
-        check('U_o',self.U_o, 1134)
+        self.U_o = 1/ (term1+(term2/(2*self.k_p))+(1/self.h_a))
+        check('U_o',self.U_o, 1226)
         
         #Assume fouling losses
         #lookup R_w, R_a
-        self.U_oF = 1/ (term1+(term2/(2*self.k_p))+(1/self.h_w)+(self.R_w+self.R_a))
+        self.U_oF = 1/ ((term1+(term2/(2*self.k_p))+(1/self.h_a))+(self.R_w+self.R_a))
 
         #--Determine LMTD--
         #if(coFlow):
@@ -251,9 +260,9 @@ class heatExchanger(Component):
         # Q = U * A * LMTD
         # Q = U*pi*D*L*LMTD
         # L = Q/(U*pi*D*LMTD)
-        self.L = self.q_a/(self.U_oF*pi*Do_tube*self.LMTD)
+        self.L = self.q_a/(self.U_o*pi*Do_tube*self.LMTD)
         
-        check('L',self.L, 7.42)
+        check('L',self.L, -7.42)
 
         #Multi-Pass Corrections
         #Calc P, R  (Table lookup or equation parameters)
@@ -261,7 +270,7 @@ class heatExchanger(Component):
         R = (Th_in - Th_out)/(Tc_out-Tc_in)
 
         #Calc X
-        X1 = ((R*(P-1))/(P-1))**(1./n)
+        X1 = ((R*(P-1))/(P-1))**(1./self.N)
         X_num = 1 - X1
         X_denom = R - X1
         X = X_num/X_denom

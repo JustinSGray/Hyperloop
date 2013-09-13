@@ -1,6 +1,6 @@
 """
     heatExchanger.py - 
-        Performs basic heat exchanger calculations for a single or multipass
+        Performs basic heat exchanger calculations for a multi-tube double pass
         counter-flow or co-flow shell and tube heat exchanger
         
 Logarithmic Mean Temperature Difference (LMTD) Method
@@ -31,10 +31,10 @@ class heatExchanger(Component):
 
     #--Inputs--
     #Boundary Temperatures
-    T_win = Float(368, units = 'K', iotype='in', desc='Temp of water into heat exchanger')
-    T_wout = Float(358, units = 'K', iotype='in', desc='Temp of water out of heat exchanger')
-    T_ain = Float(297, units = 'K', iotype='in', desc='Temp of air into heat exchanger')
-    T_aout = Float(308, units = 'K', iotype='in', desc='Temp of air out of heat exchanger')
+    T_win = Float(368, units = 'K', iotype='in', desc='Temp of water into heat exchanger') #368 , 110
+    T_wout = Float(358, units = 'K', iotype='in', desc='Temp of water out of heat exchanger') #358 , 190
+    T_ain = Float(297, units = 'K', iotype='in', desc='Temp of air into heat exchanger') #297, 400
+    T_aout = Float(308, units = 'K', iotype='in', desc='Temp of air out of heat exchanger') #308, 170
 
     #Design Variables
     Mdot_w = Float(1.0, units = 'kg/s', iotype='in', desc='Mass flow rate of water pumped through system')
@@ -43,7 +43,7 @@ class heatExchanger(Component):
     Do_tube = Float(0.03493, units = 'm', iotype='out', desc='Tube pipe (outer) Diameter')
     Di_tube = Float(0.03279, units = 'm', iotype='in', desc='Tube pipe (inner) Diameter') #0.03279, 0.0371851871796067
     #A_a = Float(1.0, units = 'm**2', iotype='out', desc='Area')
-    N = Float(10, units = 'm', iotype='out', desc='Number of Shell-Side Passes')
+    N = Float(1, units = 'm', iotype='out', desc='Number of Tube Passes')
     
     cooled = Bool(True, desc= 'Boolean true if fluid is cooled, false if heated')
     coFlow = Bool(False, desc= 'Boolean true if co-flow, false if coutner-flow')
@@ -68,7 +68,8 @@ class heatExchanger(Component):
     Asurf_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
     Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
     De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
-
+    A_a = Float(1.0, units= 'm**2', iotype='out', desc='area of air')
+    A_w = Float(1.0, units= 'm**2', iotype='out', desc='area of water')
     #Calculated Variables
     Veloc_w = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of water')
     Veloc_a = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of air')
@@ -107,15 +108,15 @@ class heatExchanger(Component):
         Di_tube = self.Di_tube
 
         #Determine the area of the air tube
-        A_a = pi*(self.Di_tube/2)**2
+        self.A_a = pi*(self.Di_tube/2)**2
         
-        check('A_a',A_a, 0.0008444)
+        check('A_a',self.A_a, 0.0008444)
         #prevent cascading errors (switch areas)
-        A_a = 0.001086
-        A_w = 0.0008444
+        self.A_a = 0.001086
+        self.A_w = 0.0008444
         #Determine the fluid velocity of the air
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
-        self.Veloc_a = self.Mdot_a / (self.rho_a * A_a)
+        self.Veloc_a = self.Mdot_a / (self.rho_a * self.A_a)
         
         check('Veloc_a',self.Veloc_a, 2.803)
         #Determine q
@@ -134,13 +135,13 @@ class heatExchanger(Component):
         check('Mdot_w',self.Mdot_w, 1.45)
         
         #Determine the Water Cross sectional Area 
-        A_w = (pi*(Di_shell/2)**2)- pi*((Do_tube/2)**2)
-        check('A_w',A_w, 0.001086)
+        self.A_w = (pi*(Di_shell/2)**2)- pi*((Do_tube/2)**2)
+        check('A_w',self.A_w, 0.001086)
         
         
         #Determin flow velocity of the water, from Mdot and Area
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
-        self.Veloc_w = self.Mdot_w / (self.rho_w * A_w)
+        self.Veloc_w = self.Mdot_w / (self.rho_w * self.A_w)
         check('Veloc_w',self.Veloc_w, 1.71)
         #prevent cascading
         self.Veloc_w = 1.71
@@ -274,13 +275,16 @@ class heatExchanger(Component):
             #Calc P, R  (Table lookup or equation parameters)
             P = (Tc_out-Tc_in)/(Th_out-Tc_in)
             R = (Th_in - Th_out)/(Tc_out-Tc_in)
+            #P = (Th_out-Th_in)/(Tc_out-Th_in)
+            #R = (Tc_in - Tc_out)/(Th_out-Th_in)
 
             #Calc X
-            X1 = ((R*(P-1))/(P-1))**(1./self.N)
+            X1 = ((R*P-1)/(P-1))**(1./self.N)
             X_num = 1 - X1
             X_denom = R - X1
             X = X_num/X_denom
 
+            
             #Calc F  (Equation fitted to empirical data)
             F_sqr = sqrt(R**2. + 1)
             
@@ -325,17 +329,18 @@ if __name__ == "__main__":
     test.run()
     print "-----Completed Heat Exchanger Sizing---"
     print ""
-    print "Heat Exchanger Length: {} meters, with {} shell-side pass(es)".format(test.L,test.N)
+    print "Heat Exchanger Length: {} meters, with {} tube pass(es)".format(test.L/2,test.N)
     
     m2ft = 3.28084 #meter to feet conversion
     
     #sqrt(#passes * tube area * packing factor)
-    #assumes shell magically becomes rectangular and changes packing factor
-    x = ((test.N * pi*((test.Do_tube/2)**2)*1.54)**0.5)*m2ft
+    #assumes shell magically becomes rectangular but keeps packing factor
+    packing_factor =  (test.A_a/(test.A_a + test.A_w)) + 1
+    x = ((test.N * pi*((test.Do_tube/2)**2)*packing_factor)**0.5)*m2ft
     y = 2*x #height of a double pass
  
     tot_vol = (x*(y) * (test.L *m2ft))
     
-    print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format(test.L*m2ft,x,y)
+    print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format((test.L/2)*m2ft,x,y)
     print "Heat Exchanger Volume: {} ft^3".format( tot_vol)
 

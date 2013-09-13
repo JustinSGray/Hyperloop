@@ -8,6 +8,7 @@ Logarithmic Mean Temperature Difference (LMTD) Method
 
     LMTD Limitations
     -Both starting and final temperature parameters must be known
+    -Temperature change across cannot be so large that Cp changes significantly
     -Rigorously defined for double-pipe(or tubular) heat exchanger
 
 NTU (effectiveness) Method

@@ -43,7 +43,7 @@ class heatExchanger(Component):
     Do_tube = Float(0.03493, units = 'm', iotype='out', desc='Tube pipe (outer) Diameter')
     Di_tube = Float(0.03279, units = 'm', iotype='in', desc='Tube pipe (inner) Diameter') #0.03279, 0.0371851871796067
     #A_a = Float(1.0, units = 'm**2', iotype='out', desc='Area')
-    N = Float(2, units = 'm', iotype='out', desc='Number of Shell-Side Passes')
+    N = Float(10, units = 'm', iotype='out', desc='Number of Shell-Side Passes')
     
     cooled = Bool(True, desc= 'Boolean true if fluid is cooled, false if heated')
     coFlow = Bool(False, desc= 'Boolean true if co-flow, false if coutner-flow')
@@ -92,8 +92,11 @@ class heatExchanger(Component):
         
         def check(var_name,var,correct_val):
             "Format and print a value check"
-            print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(((var/correct_val)-1))*100,abs((((var/correct_val)-1))*100)<2)
-        
+            if (abs((((var/correct_val)-1))*100)<2):
+                print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Passed")
+            else:
+                print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Failed :(")
+                
         Th_in = self.T_ain #T hot air in
         Th_out = self.T_aout #T air out
         Tc_in = self.T_win #T cold water in
@@ -106,8 +109,10 @@ class heatExchanger(Component):
         #Determine the area of the air tube
         A_a = pi*(self.Di_tube/2)**2
         
-        check('A_a',A_a, 0.001086)
+        check('A_a',A_a, 0.0008444)
+        #prevent cascading errors (switch areas)
         A_a = 0.001086
+        A_w = 0.0008444
         #Determine the fluid velocity of the air
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
         self.Veloc_a = self.Mdot_a / (self.rho_a * A_a)
@@ -130,13 +135,14 @@ class heatExchanger(Component):
         
         #Determine the Water Cross sectional Area 
         A_w = (pi*(Di_shell/2)**2)- pi*((Do_tube/2)**2)
-        check('A_w',A_w, 0.0008444)
-        A_w = 0.0008444
+        check('A_w',A_w, 0.001086)
+        
         
         #Determin flow velocity of the water, from Mdot and Area
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
         self.Veloc_w = self.Mdot_w / (self.rho_w * A_w)
         check('Veloc_w',self.Veloc_w, 1.71)
+        #prevent cascading
         self.Veloc_w = 1.71
 
         #Hydraulic Diameter (aka characteristic length)
@@ -208,7 +214,12 @@ class heatExchanger(Component):
         #or f = (0.79*ln(Re) - 1.64)^-2   for smooth tubes
         #Valid for 0.5<= Pr <=2000
         #and      3000<= Re <= 5*(10^6)
-
+        if ((Re_a >10000) and (Re_w > 10000) and (0.6 < Pr_a < 160) and (0.6 < Pr_w < 160)):
+            print ""
+            print "   Dittus-Boelter Equation Valid. Calculating Nusselt Number   "
+        else:
+            print ""
+            print "!!!** Dittus-Boelter Equation not valid. Use alternate method  **!!!"
 
         Nu_a = 0.023*(Re_a**(4./5))*(Pr_a**0.4) #fluid is heated n=0.4
         Nu_w = 0.023*(Re_w**(4./5))*(Pr_w**0.3) #fluid is cooled n=0.3
@@ -232,7 +243,8 @@ class heatExchanger(Component):
         # U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]
         # (simplified)
         # U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]
-        print "Do_tube{} Di_tube{} self.h_a{} self.k_p{}  self.h_w{}".format(Do_tube,Di_tube, self.h_a, self.k_p, self.h_w)
+        
+        #print "Do_tube{} Di_tube{} self.h_a{} self.k_p{}  self.h_w{}".format(Do_tube,Di_tube, self.h_a, self.k_p, self.h_w)
         Di_tube = 0.03279
         term1 = Do_tube/(Di_tube*self.h_w)
         term2 =  Do_tube*log((Do_tube/Di_tube),e)
@@ -252,39 +264,46 @@ class heatExchanger(Component):
         dT1 = (Th_in - Tc_out) #Change in T1 (delta T1)
         dT2 = (Th_out-Tc_in) #Change in T2 (delta T2)
 
-        self.LMTD = (dT2 - dT1)/(log((dT2/dT1), e)) #take natural log (base e)
+        self.LMTD = abs((dT1- dT2)/(log((dT1/dT2), e))) #take natural log (base e)
         
-        check('LMTD',self.LMTD, -60.49)
+        check('LMTD',self.LMTD, 60.49)
 
+        print ""
+        if (self.N>1):
+            #Multi-Pass Corrections
+            #Calc P, R  (Table lookup or equation parameters)
+            P = (Tc_out-Tc_in)/(Th_out-Tc_in)
+            R = (Th_in - Th_out)/(Tc_out-Tc_in)
+
+            #Calc X
+            X1 = ((R*(P-1))/(P-1))**(1./self.N)
+            X_num = 1 - X1
+            X_denom = R - X1
+            X = X_num/X_denom
+
+            #Calc F  (Equation fitted to empirical data)
+            F_sqr = sqrt(R**2. + 1)
+            
+            F_num = (F_sqr/(R-1))*log(((1-X)/(1-R*X)),e)
+            F_denom1 = (2/X)-1-R + F_sqr
+            F_denom2 = (2/X)-1-R - F_sqr
+            F_denom = log(F_denom1/F_denom2,e)
+            self.F = F_num / F_denom 
+            
+            print "   {} pass design, correction factor calculated to be: {}".format(self.N,self.F)
+        else:
+            print "   Single Pass Design, no correction factor"
+            self.F = 1
         #Determine the required length of the heat exchanger
         # Q = U * A * LMTD
         # Q = U*pi*D*L*LMTD
         # L = Q/(U*pi*D*LMTD)
-        self.L = self.q_a/(self.U_o*pi*Do_tube*self.LMTD)
+        self.L = self.q_a/(self.U_o*pi*self.F*Do_tube*self.LMTD)
+        self.L = self.L / self.N #divide by number of passes
         
-        check('L',self.L, -7.42)
-
-        #Multi-Pass Corrections
-        #Calc P, R  (Table lookup or equation parameters)
-        P = (Tc_out-Tc_in)/(Th_out-Tc_in)
-        R = (Th_in - Th_out)/(Tc_out-Tc_in)
-
-        #Calc X
-        X1 = ((R*(P-1))/(P-1))**(1./self.N)
-        X_num = 1 - X1
-        X_denom = R - X1
-        X = X_num/X_denom
-
-        #Calc F  (Equation fitted to empirical data)
-        F_sqr = sqrt(R**2. + 1)
+        if (self.N < 2): #only check single pass case
+            check('L',self.L, 7.42)
         
-        F_num = (F_sqr/(R-1))*log(((1-X)/(1-R*X)),e)
-        F_denom1 = (2/X)-1-R + F_sqr
-        F_denom2 = (2/X)-1-R - F_sqr
-        F_denom = log(F_denom1/F_denom2,e)
-        self.F = F_num / F_denom 
-
-
 
         #Assume pipe minor losses
         #function of length and number of passes
@@ -294,7 +313,29 @@ class heatExchanger(Component):
         # delP = rho*g*H
         # Also consider bends in tube
         
-        
-#debug output
-test = heatExchanger()  
-test.run()
+       
+       
+#run stand-alone component
+if __name__ == "__main__":
+
+    from openmdao.main.api import set_as_top
+    test = heatExchanger()  
+    set_as_top(test)
+    print ""
+    test.run()
+    print "-----Completed Heat Exchanger Sizing---"
+    print ""
+    print "Heat Exchanger Length: {} meters, with {} shell-side pass(es)".format(test.L,test.N)
+    
+    m2ft = 3.28084 #meter to feet conversion
+    
+    #sqrt(#passes * tube area * packing factor)
+    #assumes shell magically becomes rectangular and changes packing factor
+    x = ((test.N * pi*((test.Do_tube/2)**2)*1.54)**0.5)*m2ft
+    y = 2*x #height of a double pass
+ 
+    tot_vol = (x*(y) * (test.L *m2ft))
+    
+    print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format(test.L*m2ft,x,y)
+    print "Heat Exchanger Volume: {} ft^3".format( tot_vol)
+

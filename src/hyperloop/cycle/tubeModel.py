@@ -1,21 +1,7 @@
 """
-    heatExchanger.py - 
-        Performs basic heat exchanger calculations for a multi-tube double pass
-        counter-flow or co-flow shell and tube heat exchanger
-        
-Logarithmic Mean Temperature Difference (LMTD) Method
-    Design a heat exchanger to meet prescribed heat transfer requirements
-
-    LMTD Limitations
-    -Both starting and final temperature parameters must be known
-    -Temperature change across cannot be so large that Cp changes significantly
-    -Rigorously defined for double-pipe(or tubular) heat exchanger
-
-NTU (effectiveness) Method
-    Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.
-
-    NTU Limitations
-    1) Effectiveness of the chosen heat exchanger must be known (empirical)
+    tubeModel.py - 
+        Calculates Q released by hyperloop tube due to:
+        Internal Convection, Tube Conduction, Ambient Natural Convection, Radiation In/Out
 
     Compatible with OpenMDAO v0.8.1
 """
@@ -23,71 +9,44 @@ NTU (effectiveness) Method
 
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float, Bool
+from openmdao.main.api import convert_units as cu
 
 from math import log, pi, sqrt, e
 
 
-class heatExchanger(Component):
+class tubeModel(Component):
     """ Main Component """
 
     #--Inputs--
-    #Boundary Temperatures
-    T_win = Float(368, units = 'K', iotype='in', desc='Temp of water into heat exchanger') #368 , 110
-    T_wout = Float(358, units = 'K', iotype='in', desc='Temp of water out of heat exchanger') #358 , 190
-    T_ain = Float(297, units = 'K', iotype='in', desc='Temp of air into heat exchanger') #297, 400
-    T_aout = Float(308, units = 'K', iotype='in', desc='Temp of air out of heat exchanger') #308, 170
-
-    #Design Variables
-    Mdot_w = Float(1.0, units = 'kg/s', iotype='in', desc='Mass flow rate of water pumped through system')
-    Mdot_a = Float(2.2221623, units = 'kg/s', iotype='out', desc='Mass flow rate of air')
-    Di_shell = Float(0.05102, units = 'm', iotype='out', desc='Shell pipe (inner) Diameter')
-    Do_tube = Float(0.03493, units = 'm', iotype='out', desc='Tube pipe (outer) Diameter')
-    Di_tube = Float(0.03279, units = 'm', iotype='in', desc='Tube pipe (inner) Diameter') #0.03279, 0.0371851871796067
-    #A_a = Float(1.0, units = 'm**2', iotype='out', desc='Area')
-    N = Float(1, units = 'm', iotype='out', desc='Number of Tube Passes')
+    #Hyperloop Parameters
+    airTube = Float(0., units = 'kg', iotype='in', desc='Total air in tube') #
+    airRho = Float(0., units = 'kg/m**3', iotype='in', desc='density of air in the tube')
+    tubeID = Float(2.23, units = 'm', iotype='in', desc='Tube inner diameter') #
+    tubeOD = Float(2.33, units = 'm', iotype='in', desc='Tube out diameter') #
+    tubeLength = Float(0., units = 'm', iotype='in', desc='Length of entire Hyperloop') #
+    tubeK = Float(0., units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the tube (conduction)')
+    podCp = Float(1006., units = 'J/(kg*K)', iotype='in', desc='specific heat of hot pod air')
+    tubeCp = Float(1.1221, units = 'J/(kg*K)', iotype='in', desc='specific heat of tube air')
     
-    cooled = Bool(True, desc= 'Boolean true if fluid is cooled, false if heated')
-    coFlow = Bool(False, desc= 'Boolean true if co-flow, false if coutner-flow')
-
-    #Assumed Constant Properties
-    rho_w = Float(1000.0, units = 'kg/m**3', iotype='in', desc='density of water')
-    rho_a = Float(730., units = 'kg/m**3', iotype='in', desc='density of air ')
-    cp_w = Float(4208., units = 'J/(kg*K)', iotype='in', desc='specific heat of water')
-    cp_a = Float(2470., units = 'J/(kg*K)', iotype='in', desc='specific heat of air')
-    dvisc_w = Float(0.00031, units = 'kg/(m*s)', iotype='in', desc='dynamic viscosity for water')
-    dvisc_a = Float(0.0004, units = 'kg/(m*s)', iotype='in', desc='dynamic viscosity for air')
-    kvisc_w = Float(0.000000326, units = 'm**2/s', iotype='in', desc='kinematic viscosity for water')
-    kvisc_a = Float(0.0000005479, units = 'm**2/s', iotype='in', desc='kinematic viscosity for air')
-    k_w = Float(0.58, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
-    k_a = Float(0.132, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
-    k_p = Float(400.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
-    R_w = Float(1.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of city water')
-    R_a = Float(1.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of air')
-
+    #Design Variables
+    podTemp = Float(406.6, units = 'K', iotype='in', desc='Temperature Released by each pod') #
+    podMdot = Float(406.6, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
+    podFreq = Float(406.6, units = 'K', iotype='in', desc='Frequency Pods travel down tube') #
+    
     #--Outputs--
     #Intermediate Variables
+    tubeTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     Asurf_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
     Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
     De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
-    A_a = Float(1.0, units= 'm**2', iotype='out', desc='area of air')
-    A_w = Float(1.0, units= 'm**2', iotype='out', desc='area of water')
+
     #Calculated Variables
-    Veloc_w = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of water')
     Veloc_a = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of air')
-    h_w = Float(1.0, units = 'W/m', iotype ='out', desc='heat transfer of water')
-    h_a = Float(1.0, units = 'W/m', iotype='out', desc='heat transfer of air')
-    q_w = Float(1.0, units = 'W', iotype='out', desc='heat flow of water')
+    h_a = Float(1.0, units = 'W/m', iotype='out', desc='heat transfer of air (convection)')
     q_a = Float(1.0, units = 'W', iotype='out', desc='heat flow of air')
     U_o = Float(1.0, units = 'W/(m**2)*K', iotype='out', desc='Overall Heat Transfer Coefficient')
-    L = Float(1.0, units = 'm', iotype='out', desc='Heat Exchanger Length')
-    F = Float(1.0, iotype='out', desc='Multi-pass correction factor')
-    
-    #Size/Volume Considerations
-    Vol_water = Float(1.0, units= 'm**3', iotype='out', desc='Volume of input water tank')
-    Vol_steam = Float(1.0, units= 'm**3', iotype='out', desc='Volume of output steam tank')
-    Mass_water = Float(1.0, units= 'kg', iotype='out', desc='Mass of input water tank')
-    Mass_steam = Float(1.0, units= 'kg', iotype='out', desc='Mass of output steam tank')
 
+    
 
     def execute(self):
         """Calculate Various Paramters"""
@@ -98,6 +57,27 @@ class heatExchanger(Component):
                 print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Passed")
             else:
                 print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Failed :(")
+        
+        #Determine heat added by pods coming through
+        #Q = mdot * cp * deltaT
+        Qpod = podMdot * podCp * (podTemp-tubeTemp)
+        
+        #Determine the thermal resistance of the tube via convection
+        #calculate h based on Re, Pr, Nu
+
+        
+        #Determine thermal resistance of the tube (conduction)
+        #
+
+        #Determine thermal resistance of outside via Natural Convection or forced convection
+        #
+        
+        
+        #Determine heat incoming via Sun radiation
+        
+        
+        #Determine heat released via radiation
+        
         
         
         Th_in = self.T_ain #T hot air in
@@ -114,8 +94,8 @@ class heatExchanger(Component):
         
         check('A_a',self.A_a, 0.0008444)
         #prevent cascading errors (switch areas)
-        self.A_a = 0.001086
-        self.A_w = 0.0008444
+        #self.A_a = 0.001086
+        #self.A_w = 0.0008444
         #Determine the fluid velocity of the air
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
         self.Veloc_a = self.Mdot_a / (self.rho_a * self.A_a)
@@ -123,7 +103,7 @@ class heatExchanger(Component):
         check('Veloc_a',self.Veloc_a, 2.803)
         #Determine q
         #q = mdot * cp * deltaT
-        self.q_a = self.Mdot_a* self.cp_a * (Th_out - Th_in)
+        self.q_a = self.Mdot_a* self.cp_a * -(Th_out - Th_in)
 
         #Energy Balance: Q_water must equal Q_air
         self.q_w = self.q_a
@@ -132,7 +112,7 @@ class heatExchanger(Component):
 
         #Determine water Mdot
         #q = mdot * cp * deltaT
-        self.Mdot_w = self.q_w / (self.cp_w * (Tc_in - Tc_out))
+        self.Mdot_w = self.q_w / (self.cp_w * -(Tc_in - Tc_out))
 
         check('Mdot_w',self.Mdot_w, 1.45)
         
@@ -146,7 +126,7 @@ class heatExchanger(Component):
         self.Veloc_w = self.Mdot_w / (self.rho_w * self.A_w)
         check('Veloc_w',self.Veloc_w, 1.71)
         #prevent cascading
-        self.Veloc_w = 1.71
+        #self.Veloc_w = 1.71
 
         #Hydraulic Diameter (aka characteristic length)
         #D_h = (4*Af)/(Pflow) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi*(Di_shell - Do_tube) = Di_shell - Do_tube
@@ -179,7 +159,7 @@ class heatExchanger(Component):
 
         check('Re_a',Re_a, 82317)
         check('Re_w',Re_w, 174215)
-        Re_w = 174215
+        #Re_w = 174215
  
         #Determine the Prandtl Number
         #Nu = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
@@ -190,6 +170,7 @@ class heatExchanger(Component):
 
         check('Pr_a',Pr_a, 7.48)
         check('Pr_w',Pr_w, 2.25)
+        Pr_a = 0.68
 
         #Determine the Nusselt Number
         #Nu = convecive heat transfer / conductive heat transfer
@@ -239,8 +220,8 @@ class heatExchanger(Component):
         check('h_w',self.h_w, 8088.82)
         
         #cascading
-        self.h_a = 1467.95
-        self.h_w = 8088.82
+        #self.h_a = 1467.95
+        #self.h_w = 8088.82
 
         #Determine Overall Heat Transfer Coefficient
         # U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]
@@ -248,7 +229,7 @@ class heatExchanger(Component):
         # U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]
         
         #print "Do_tube{} Di_tube{} self.h_a{} self.k_p{}  self.h_w{}".format(Do_tube,Di_tube, self.h_a, self.k_p, self.h_w)
-        Di_tube = 0.03279
+        #Di_tube = 0.03279
         term1 = Do_tube/(Di_tube*self.h_w)
         term2 =  Do_tube*log((Do_tube/Di_tube),e)
         

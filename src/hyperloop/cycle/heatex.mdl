@@ -43,7 +43,7 @@ Element HeatEx HX {
    Mh = 0.49;    // kg or kg/s
    Cph = 1.006;  // 1.006 kJ/kg-K
    Th_in = 791.; // = 1404. R
-   Mc = 0.65;    // kg or kg/s
+   Mc = 0.45;    // kg or kg/s
    Cpc = 4.186;  // 4.186 kJ/kg-K
    Tc_in = 288.15; // = 518.67 R
    effectiveness = 0.90;

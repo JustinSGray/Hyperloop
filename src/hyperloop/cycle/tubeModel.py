@@ -1,7 +1,9 @@
 """
     tubeModel.py - 
-        Calculates Q released by hyperloop tube due to:
-        Internal Convection, Tube Conduction, Ambient Natural Convection, Radiation In/Out
+        Calculates Q released/absorbed by hyperloop tube due to:
+        Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In, Radiation Out
+        
+    -written by Jeff Berton ported and extended by Jeff Chin
 
     Compatible with OpenMDAO v0.8.1
 """
@@ -33,9 +35,39 @@ class tubeModel(Component):
     podMdot = Float(406.6, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
     podFreq = Float(406.6, units = 'K', iotype='in', desc='Frequency Pods travel down tube') #
     
+    
+    tubeWallTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    ambientTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
+    Solar_constant = Float(1366., units = 'K', iotype='in', desc='Average Temperature of the outside air') #
+    Solar_insolation = Float(1000., units = 'K', iotype='in', desc='Average Temperature of the outside air') #
+    nnIncidenceF = Float(0.7, iotype='in', desc='Non-normal incidence factor') #
+    Surface_reflectance = Float(0.5, iotype='in', desc='Average Temperature of the outside air') #
+    solarHeat = Float(350., units = 'W/m**2', iotype='in', desc='Solar Heat Absorbed per Area') #
+    solarHeatTotal = Float(0., units = 'W', iotype='in', desc='Solar Heat Absorbed by Tube') #
+    
+    SBconst = Float(0., units = 'W', iotype='in', desc='Stefan-Boltzmann Constant') #
+    radArea = Float(0., units = 'W', iotype='in', desc='Tube Radiating Area') #
+    tubeEmissivity = Float(0., units = 'W', iotype='in', desc='Emmissivity of the Tube') #
+    qRad = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    qRadTot = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    
+    
+    GrDelTL3 = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    Pr = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    Gr = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    Ra = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    Nu = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    k = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    h = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    convectionArea = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    naturalConvection = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    naturalConvectionTot = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
+    
+    
+    
     #--Outputs--
     #Intermediate Variables
-    tubeTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    #tubeTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     Asurf_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
     Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
     De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
@@ -59,6 +91,25 @@ class tubeModel(Component):
                 print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Failed :(")
         
         #Determine heat added by pods coming through
+        Mach
+        
+        compInletTt = ambTubeT*(1+0.2*(Mach**2))
+        
+        
+        compInletPt = ambTubeP*(1+0.2*(podMdot**2))**3.5
+        
+        compExitPt = compInletPt * PR
+        
+        compExitTt = (compInletTt*(PR)^(1/3.5)-compInletTt)/adEff + compInletTt
+        
+        if( compExitTt < 400)
+            cp = 990.8*(compExitTt**(0.00316))
+        else
+            cp = 299.4*(compExitTt**(0.1962))
+            
+        singleCapsule = cp*compExitTt*podMdot
+        allCapsules = singleCapsule*podFreq
+        
         #Q = mdot * cp * deltaT
         Qpod = podMdot * podCp * (podTemp-tubeTemp)
         
@@ -70,235 +121,50 @@ class tubeModel(Component):
         #
 
         #Determine thermal resistance of outside via Natural Convection or forced convection
-        #
+        if(ambT < 400)
+            GrDelTL3 = 10040000000000000000*(ambTR**(-4.639))
+        else
+            GrDelTL3 = 972600000000000000*(ambTR**(-4.284)))
+            
+        if(ambT < 400)
+            Pr = 1.23*(ambT**(-0.09685))
+        else
+            Pr = 0.59*(ambT**(0.0239))
+            
+        Gr = GrDelTL3*(tubeWallTemp-ambientTemp)*(tubeOD**3)
         
+        Ra = Pr * Gr
         
-        #Determine heat incoming via Sun radiation
+        Nu = (0.6 + 0.387*(Ra**(1/6))/(1 + (0.559/Pr)**(9/16))**(8/27))**2
         
+        if(ambT < 400)
+            k = 0.0001423*(ambT**(0.9138))
+        else
+            k = 0.0002494*(ambT**(0.8152))
+        
+        h = k * Nu/tubeOD
+        
+        convArea = pi * tubeLength * tubeOD
+        
+        naturalConvection = h*(tubeWallTemp-ambientTemp)
+        
+        naturalConvectionTot = naturalConvection * convArea
+        #Determine heat incoming via Sun radiation (Incidence Flux)
+
+        ViewingArea = tubeLength * tubeOD
+        solarHeat = (1-Surface_reflectance)* nnIncidenceF * Solar_insolation
+        solarHeatTotal = solarHeat * ViewingArea
         
         #Determine heat released via radiation
+        radArea = convArea
+        
+        qRad = SBconst*tubeEmissivity*((tubeWallTemp**4) - (ambientTemp**4))
+        qRadTot = radArea * qRad
         
         
         
-        Th_in = self.T_ain #T hot air in
-        Th_out = self.T_aout #T air out
-        Tc_in = self.T_win #T cold water in
-        Tc_out = self.T_wout #T water out
-
-        Di_shell = self.Di_shell
-        Do_tube = self.Do_tube
-        Di_tube = self.Di_tube
-
-        #Determine the area of the air tube
-        self.A_a = pi*(self.Di_tube/2)**2
         
-        check('A_a',self.A_a, 0.0008444)
-        #prevent cascading errors (switch areas)
-        #self.A_a = 0.001086
-        #self.A_w = 0.0008444
-        #Determine the fluid velocity of the air
-        #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
-        self.Veloc_a = self.Mdot_a / (self.rho_a * self.A_a)
-        
-        check('Veloc_a',self.Veloc_a, 2.803)
-        #Determine q
-        #q = mdot * cp * deltaT
-        self.q_a = self.Mdot_a* self.cp_a * -(Th_out - Th_in)
-
-        #Energy Balance: Q_water must equal Q_air
-        self.q_w = self.q_a
-        
-        check('q_a',self.q_a, 60377.8)
-
-        #Determine water Mdot
-        #q = mdot * cp * deltaT
-        self.Mdot_w = self.q_w / (self.cp_w * -(Tc_in - Tc_out))
-
-        check('Mdot_w',self.Mdot_w, 1.45)
-        
-        #Determine the Water Cross sectional Area 
-        self.A_w = (pi*(Di_shell/2)**2)- pi*((Do_tube/2)**2)
-        check('A_w',self.A_w, 0.001086)
-        
-        
-        #Determin flow velocity of the water, from Mdot and Area
-        #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
-        self.Veloc_w = self.Mdot_w / (self.rho_w * self.A_w)
-        check('Veloc_w',self.Veloc_w, 1.71)
-        #prevent cascading
-        #self.Veloc_w = 1.71
-
-        #Hydraulic Diameter (aka characteristic length)
-        #D_h = (4*Af)/(Pflow) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi*(Di_shell - Do_tube) = Di_shell - Do_tube
-        #D_e = (4*Af)/(PheatTransfer) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi* Do_tube = (Di_shell^2 - Do_tube^2)/Do_tube
-
-        Da_h = Di_shell - Do_tube
-        Da_e = (Di_shell**2 - Do_tube**2)/Do_tube
-
-        check('Da_h',Da_h, 0.016082)
-        check('Da_e',Da_e, 0.039586)
-        
-        Dw_h = Di_tube
-        Dw_e = Di_tube
-        
-        check('Dw_h',Dw_h, Di_tube)
-        check('Dw_e',Dw_e, Di_tube)
-        
-        #cascading errors
-        #Da_h = 0.016082
-        #Da_e = 0.039586
-        #Dw_h = Di_tube
-        #Dw_e = 0.03279
-        
-        #Determine the Reynolds Number
-        #Re = velocity * hydraulic dimater / kinematic viscostiy   (general form for pipes)
-        #Re = inertial forces/ viscous forces
-        Re_a = self.Veloc_a*Da_h/self.kvisc_a
-        
-        Re_w = self.Veloc_w*Dw_h/self.kvisc_w
-
-        check('Re_a',Re_a, 82317)
-        check('Re_w',Re_w, 174215)
-        #Re_w = 174215
- 
-        #Determine the Prandtl Number
-        #Nu = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
-        #Pr << 1 means thermal diffusivity dominates
-        #Pr >> 1 means momentum diffusivity dominates
-        Pr_a = self.cp_a*self.dvisc_a/self.k_a
-        Pr_w = self.cp_w*self.dvisc_w/self.k_w
-
-        check('Pr_a',Pr_a, 7.48)
-        check('Pr_w',Pr_w, 2.25)
-        Pr_a = 0.68
-
-        #Determine the Nusselt Number
-        #Nu = convecive heat transfer / conductive heat transfer
-        #Nu = hL / k = (convective coeff * characteristic length) / conductive coeff
-
-        #Dittus-Boelter equation: valid for smooth pipes with small temp difference across fluid
-        #Nu = 0.023*(Re^4/5)*(Pr^n)  where 'n' = 0.4 if heated or = 0.3 if cooled
-        #Valid for 0.6 <= Pr <=160
-        #and              Re >= 10,000
-        #and    L/D >= 10
-
-        #Sieder-Tate correlation
-        #Nu = 0.027*(Re^4/5)*(Pr^1/3)*((u/u_s)^0.14)
-        #where u = fluid viscosity at the bulk fluid temp
-        #where u_s = fluid viscosity at the heat-transfer boundary surface temp
-        #(More accurate than Dittus-Boelter, but requires iterative process)
-        #(Viscosity factor will change as the Nusselt Number changes)
-        #Valid for 0.7 <= Pr <= 16,700
-        #and              Re >= 10,000
-        #and    L/D >= 10
-
-        #Gnielinski correlation: valid for turbulent flow tubes
-        #Nu = ((f/8)*(Re-1000)*Pr)/(1+12.7((f/8)^0.5)*((Pr^2/3)-1))
-        #f is the Darcy Friction Factor (obtained from Moody Chart)
-        #or f = (0.79*ln(Re) - 1.64)^-2   for smooth tubes
-        #Valid for 0.5<= Pr <=2000
-        #and      3000<= Re <= 5*(10^6)
-        if ((Re_a >10000) and (Re_w > 10000) and (0.6 < Pr_a < 160) and (0.6 < Pr_w < 160)):
-            print ""
-            print "   Dittus-Boelter Equation Valid. Calculating Nusselt Number   "
-        else:
-            print ""
-            print "!!!** Dittus-Boelter Equation not valid. Use alternate method  **!!!"
-
-        Nu_a = 0.023*(Re_a**(4./5))*(Pr_a**0.4) #fluid is heated n=0.4
-        Nu_w = 0.023*(Re_w**(4./5))*(Pr_w**0.3) #fluid is cooled n=0.3
-        
-        check('Nu_a',Nu_a, 440.345)
-        check('Nu_w',Nu_w, 457.16)
-
-        #Determine h
-        # h = Nu * k/ D
-        self.h_a = Nu_a*self.k_a/Da_e
-        self.h_w = Nu_w*self.k_w/Dw_e
-
-        check('h_a',self.h_a, 1467.95)
-        check('h_w',self.h_w, 8088.82)
-        
-        #cascading
-        #self.h_a = 1467.95
-        #self.h_w = 8088.82
-
-        #Determine Overall Heat Transfer Coefficient
-        # U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]
-        # (simplified)
-        # U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]
-        
-        #print "Do_tube{} Di_tube{} self.h_a{} self.k_p{}  self.h_w{}".format(Do_tube,Di_tube, self.h_a, self.k_p, self.h_w)
-        #Di_tube = 0.03279
-        term1 = Do_tube/(Di_tube*self.h_w)
-        term2 =  Do_tube*log((Do_tube/Di_tube),e)
-        
-        self.U_o = 1/ (term1+(term2/(2*self.k_p))+(1/self.h_a))
-        check('U_o',self.U_o, 1226)
-        
-        #Assume fouling losses
-        #lookup R_w, R_a
-        self.U_oF = 1/ ((term1+(term2/(2*self.k_p))+(1/self.h_a))+(self.R_w+self.R_a))
-
-        #--Determine LMTD--
-        #if(coFlow):
-            #dT1 = (Th_in - Tc_in) #Change in T1 (delta T1)
-            #dT2 = (Th_out-Tc_out) #Change in T2 (delta T2)
-        #else: #counter-flow
-        dT1 = (Th_in - Tc_out) #Change in T1 (delta T1)
-        dT2 = (Th_out-Tc_in) #Change in T2 (delta T2)
-
-        self.LMTD = abs((dT1- dT2)/(log((dT1/dT2), e))) #take natural log (base e)
-        
-        check('LMTD',self.LMTD, 60.49)
-
-        print ""
-        if (self.N>1):
-            #Multi-Pass Corrections
-            #Calc P, R  (Table lookup or equation parameters)
-            P = (Tc_out-Tc_in)/(Th_out-Tc_in)
-            R = (Th_in - Th_out)/(Tc_out-Tc_in)
-            #P = (Th_out-Th_in)/(Tc_out-Th_in)
-            #R = (Tc_in - Tc_out)/(Th_out-Th_in)
-
-            #Calc X
-            X1 = ((R*P-1)/(P-1))**(1./self.N)
-            X_num = 1 - X1
-            X_denom = R - X1
-            X = X_num/X_denom
-
-            
-            #Calc F  (Equation fitted to empirical data)
-            F_sqr = sqrt(R**2. + 1)
-            
-            F_num = (F_sqr/(R-1))*log(((1-X)/(1-R*X)),e)
-            F_denom1 = (2/X)-1-R + F_sqr
-            F_denom2 = (2/X)-1-R - F_sqr
-            F_denom = log(F_denom1/F_denom2,e)
-            self.F = F_num / F_denom 
-            
-            print "   {} pass design, correction factor calculated to be: {}".format(self.N,self.F)
-        else:
-            print "   Single Pass Design, no correction factor"
-            self.F = 1
-        #Determine the required length of the heat exchanger
-        # Q = U * A * LMTD
-        # Q = U*pi*D*L*LMTD
-        # L = Q/(U*pi*D*LMTD)
-        self.L = self.q_a/(self.U_o*pi*self.F*Do_tube*self.LMTD)
-        self.L = self.L / self.N #divide by number of passes
-        
-        if (self.N < 2): #only check single pass case
-            check('L',self.L, 7.42)
-        
-
-        #Assume pipe minor losses
-        #function of length and number of passes
-        #Head losses
-        #Developed from Bernoulli eq, with zero velocity change and viscous terms included in apparent height
-        # H = (k + f*(L/D)*v_avg^2)/2g
-        # delP = rho*g*H
-        # Also consider bends in tube
+        #------------
         
        
        

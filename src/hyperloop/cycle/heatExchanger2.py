@@ -1,5 +1,5 @@
 """
-    heatExchanger.py - 
+    heatExchanger2.py -  (This one is for water and air)
         Performs basic heat exchanger calculations for a multi-tube double pass
         counter-flow or co-flow shell and tube heat exchanger
         
@@ -190,7 +190,9 @@ class heatExchanger(Component):
 
         check('Pr_a',Pr_a, 7.48)
         check('Pr_w',Pr_w, 2.25)
-        Pr_a = 0.68
+        
+        #Override Pr calculation based on better information @ 300 degree C 
+        Pr_a = 0.68 #http://www.engineeringtoolbox.com/air-properties-d_156.html
 
         #Determine the Nusselt Number
         #Nu = convecive heat transfer / conductive heat transfer

@@ -21,62 +21,80 @@ class tubeModel(Component):
 
     #--Inputs--
     #Hyperloop Parameters
-    airTube = Float(0., units = 'kg', iotype='in', desc='Total air in tube') #
-    airRho = Float(0., units = 'kg/m**3', iotype='in', desc='density of air in the tube')
-    tubeID = Float(2.23, units = 'm', iotype='in', desc='Tube inner diameter') #
-    tubeOD = Float(2.33, units = 'm', iotype='in', desc='Tube out diameter') #
-    tubeLength = Float(0., units = 'm', iotype='in', desc='Length of entire Hyperloop') #
-    tubeK = Float(0., units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the tube (conduction)')
-    podCp = Float(1006., units = 'J/(kg*K)', iotype='in', desc='specific heat of hot pod air')
-    tubeCp = Float(1.1221, units = 'J/(kg*K)', iotype='in', desc='specific heat of tube air')
+    #airTube = Float(0., units = 'kg', iotype='in', desc='Total air in tube') #
+    #airRho = Float(0., units = 'kg/m**3', iotype='in', desc='density of air in the tube')
+    #tubeID = Float(2.23, units = 'm', iotype='in', desc='Tube inner diameter') #
+    tubeOD = Float(2.22504, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
+    tubeLength = Float(482803., units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles
+    #tubeK = Float(0., units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the tube (conduction)')
     
     #Design Variables
-    podTemp = Float(406.6, units = 'K', iotype='in', desc='Temperature Released by each pod') #
-    podMdot = Float(406.6, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
-    podFreq = Float(406.6, units = 'K', iotype='in', desc='Frequency Pods travel down tube') #
+    #podTemp = Float(406.6, units = 'K', iotype='in', desc='Temperature Released by each pod') #
+    podMdot = Float(0.49, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
+    podFreq = Float(34., units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
+    podMn = Float(0.91, units = 'K', iotype='in', desc='Pod Mach Number') #
     
+    tubeWallTemp = Float(315, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    ambientTemp = Float(305.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
     
-    tubeWallTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the tube') #
-    ambientTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
+    compInletTt = Float(367., units = 'K', iotype='in', desc='Compressor Inlet Total Temperature') #
+    compInletPt = Float(169., units = 'Pa', iotype='in', desc='Compressor Inlet Total Pressure') #
+    
+    PR = Float(12.4, iotype='in', desc='Compressor Pressure Ratio') #
+    adiabaticEff = Float(0.69, iotype='in', desc='Adiabatic Efficiency of the Compressor') #
+    
+    #constants
     Solar_constant = Float(1366., units = 'K', iotype='in', desc='Average Temperature of the outside air') #
     Solar_insolation = Float(1000., units = 'K', iotype='in', desc='Average Temperature of the outside air') #
     nnIncidenceF = Float(0.7, iotype='in', desc='Non-normal incidence factor') #
     Surface_reflectance = Float(0.5, iotype='in', desc='Average Temperature of the outside air') #
     solarHeat = Float(350., units = 'W/m**2', iotype='in', desc='Solar Heat Absorbed per Area') #
     solarHeatTotal = Float(0., units = 'W', iotype='in', desc='Solar Heat Absorbed by Tube') #
-    
-    SBconst = Float(0., units = 'W', iotype='in', desc='Stefan-Boltzmann Constant') #
-    radArea = Float(0., units = 'W', iotype='in', desc='Tube Radiating Area') #
-    tubeEmissivity = Float(0., units = 'W', iotype='in', desc='Emmissivity of the Tube') #
-    qRad = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    qRadTot = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    
-    
-    GrDelTL3 = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    Pr = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    Gr = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    Ra = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    Nu = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    k = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    h = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    convectionArea = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    naturalConvection = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    naturalConvectionTot = Float(0., units = 'W', iotype='in', desc='Heat Radiated to the outside') #
-    
+    tubeEmissivity = Float(0.5, units = 'W', iotype='in', desc='Emmissivity of the Tube') #
+    SBconst = Float(0.00000005670373, units = 'W/((m**2)*(K**4))', iotype='in', desc='Stefan-Boltzmann Constant') #
     
     
     #--Outputs--
+    
+    podCp = Float(1144., units = 'J/(kg*K)', iotype='out', desc='specific heat of hot pod air')
+    radArea = Float(337486.1, units = 'm**2', iotype='out', desc='Tube Radiating Area') #
+    
+    qRad = Float(31.6, units = 'W/(m**2)', iotype='out', desc='Heat Radiated to the outside') #
+    qRadTot = Float(106761066.5, units = 'W', iotype='out', desc='Heat Radiated to the outside') #
+    
+     #tubeCp = Float(1.1221, units = 'J/(kg*K)', iotype='in', desc='specific heat of tube air')
+    podQ = Float(519763, units = 'W', iotype='out', desc='Heating Due to a Single Pods') #
+    podQTot = Float(17671942., units = 'W', iotype='out', desc='Heating Due to a All Pods') #
+    
+    
+    
+    compExitTt = Float(927., units = 'K', iotype='out', desc='Compressor Exit Total Temperature') #
+    compExitPt = Float(2099., units = 'Pa', iotype='out', desc='Compressor Exit Total Pressure') #
+    
+    
+    GrDelTL3 = Float(1946216.7., units = '1/((ft**3)*F)', iotype='out', desc='Heat Radiated to the outside') #
+    Pr = Float(0.707, iotype='out', desc='Heat Radiated to the outside') #
+    Gr = Float(12730351223., iotype='out', desc='Heat Radiated to the outside') #
+    Ra = Float(8996312085., iotype='out', desc='Heat Radiated to the outside') #
+    Nu = Float(232.4543713, iotype='out', desc='Heat Radiated to the outside') #
+    k = Float(0.02655, units = 'W/(m*K)', iotype='out', desc='Heat Radiated to the outside') #
+    h = Float(0.845464094, units = 'W/((m**2)*K)', iotype='out', desc='Heat Radiated to the outside') #
+    convectionArea = Float(3374876.115, units = 'W', iotype='out', desc='Heat Radiated to the outside') #
+    naturalConvection = Float(7.9, units = 'W/(m**2)', iotype='out', desc='Heat Radiated to the outside') #
+    naturalConvectionTot = Float(286900419., units = 'W', iotype='out', desc='Heat Radiated to the outside') #
+    
+
     #Intermediate Variables
     #tubeTemp = Float(406.6, units = 'K', iotype='in', desc='Average Temperature of the tube') #
-    Asurf_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
-    Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
-    De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
+    #surfA_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
+    #Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
+    #De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
 
     #Calculated Variables
-    Veloc_a = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of air')
-    h_a = Float(1.0, units = 'W/m', iotype='out', desc='heat transfer of air (convection)')
-    q_a = Float(1.0, units = 'W', iotype='out', desc='heat flow of air')
-    U_o = Float(1.0, units = 'W/(m**2)*K', iotype='out', desc='Overall Heat Transfer Coefficient')
+    #Veloc_a = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of air')
+    #h_a = Float(1.0, units = 'W/m', iotype='out', desc='heat transfer of air (convection)')
+    #q_a = Float(1.0, units = 'W', iotype='out', desc='heat flow of air')
+    #U_o = Float(1.0, units = 'W/(m**2)*K', iotype='out', desc='Overall Heat Transfer Coefficient')
 
     
 
@@ -91,27 +109,24 @@ class tubeModel(Component):
                 print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Failed :(")
         
         #Determine heat added by pods coming through
-        Mach
+        self.compInletTt = self.ambTubeT*(1+0.2*(self.podMn**2))
         
-        compInletTt = ambTubeT*(1+0.2*(Mach**2))
+        self.compInletPt = self.ambTubeP*(1+0.2*(self.podMdot**2))**3.5
         
+        self.compExitPt = self.compInletPt * self.PR
         
-        compInletPt = ambTubeP*(1+0.2*(podMdot**2))**3.5
-        
-        compExitPt = compInletPt * PR
-        
-        compExitTt = (compInletTt*(PR)^(1/3.5)-compInletTt)/adEff + compInletTt
+        self.compExitTt = (self.compInletTt*(self.PR)^(1/3.5)-self.compInletTt)/self.adiabaticEff + self.compInletTt
         
         if( compExitTt < 400)
-            cp = 990.8*(compExitTt**(0.00316))
+            self.podCp = 990.8*(self.compExitTt**(0.00316))
         else
-            cp = 299.4*(compExitTt**(0.1962))
+            self.podCp = 299.4*(self.compExitTt**(0.1962))
             
-        singleCapsule = cp*compExitTt*podMdot
-        allCapsules = singleCapsule*podFreq
+        self.podQ = self.podCp*self.compExitTt*self.podMdot
+        self.podQTot = self.podQ*self.podFreq
         
         #Q = mdot * cp * deltaT
-        Qpod = podMdot * podCp * (podTemp-tubeTemp)
+        #Qpod = podMdot * podCp * (podTemp-tubeTemp)
         
         #Determine the thermal resistance of the tube via convection
         #calculate h based on Re, Pr, Nu
@@ -121,49 +136,47 @@ class tubeModel(Component):
         #
 
         #Determine thermal resistance of outside via Natural Convection or forced convection
-        if(ambT < 400)
-            GrDelTL3 = 10040000000000000000*(ambTR**(-4.639))
+        if(self.ambientTemp < 400)
+            self.GrDelTL3 = 10040000000000000000*(self.ambientTempR**(-4.639))
         else
-            GrDelTL3 = 972600000000000000*(ambTR**(-4.284)))
+            self.GrDelTL3 = 972600000000000000*(self.ambientTempR**(-4.284)))
             
-        if(ambT < 400)
-            Pr = 1.23*(ambT**(-0.09685))
+        if(self.ambientTemp < 400)
+            self.Pr = 1.23*(self.ambientTemp**(-0.09685))
         else
-            Pr = 0.59*(ambT**(0.0239))
+            self.Pr = 0.59*(self.ambientTemp**(0.0239))
             
-        Gr = GrDelTL3*(tubeWallTemp-ambientTemp)*(tubeOD**3)
+        self.Gr = GrDelTL3*(tubeWallTemp-ambientTemp)*(tubeOD**3)
         
-        Ra = Pr * Gr
+        self.Ra = self.Pr * self.Gr
         
-        Nu = (0.6 + 0.387*(Ra**(1/6))/(1 + (0.559/Pr)**(9/16))**(8/27))**2
+        self.Nu = (0.6 + 0.387*(self.Ra**(1/6))/(1 + (0.559/self.Pr)**(9/16))**(8/27))**2
         
-        if(ambT < 400)
-            k = 0.0001423*(ambT**(0.9138))
+        if(self.ambientTemp < 400)
+            self.k = 0.0001423*(self.ambientTemp**(0.9138))
         else
-            k = 0.0002494*(ambT**(0.8152))
+            self.k = 0.0002494*(self.ambientTemp**(0.8152))
         
-        h = k * Nu/tubeOD
+        self.h = self.k * self.Nu/self.tubeOD
         
-        convArea = pi * tubeLength * tubeOD
+        self.convArea = pi * self.tubeLength * self.tubeOD
         
-        naturalConvection = h*(tubeWallTemp-ambientTemp)
+        self.naturalConvection = self.h*(self.tubeWallTemp-self.ambientTemp)
         
-        naturalConvectionTot = naturalConvection * convArea
+        self.naturalConvectionTot = self.naturalConvection * self.convArea
         #Determine heat incoming via Sun radiation (Incidence Flux)
 
-        ViewingArea = tubeLength * tubeOD
-        solarHeat = (1-Surface_reflectance)* nnIncidenceF * Solar_insolation
-        solarHeatTotal = solarHeat * ViewingArea
+        self.ViewingArea = self.tubeLength * self.tubeOD
+        self.solarHeat = (1-self.Surface_reflectance)* self.nnIncidenceF * self.Solar_insolation
+        self.solarHeatTotal = self.solarHeat * self.ViewingArea
         
         #Determine heat released via radiation
-        radArea = convArea
+        self.radArea = self.convArea
         
-        qRad = SBconst*tubeEmissivity*((tubeWallTemp**4) - (ambientTemp**4))
-        qRadTot = radArea * qRad
+        self.qRad = self.SBconst*self.tubeEmissivity*((self.tubeWallTemp**4) - (self.ambientTemp**4))
+        self.qRadTot = self.radArea * self.qRad
         
-        
-        
-        
+
         #------------
         
        
@@ -172,24 +185,11 @@ class tubeModel(Component):
 if __name__ == "__main__":
 
     from openmdao.main.api import set_as_top
-    test = heatExchanger()  
+    test = tubeModel()  
     set_as_top(test)
     print ""
     test.run()
-    print "-----Completed Heat Exchanger Sizing---"
+    print "-----Completed tubeModel calculations---"
     print ""
-    print "Heat Exchanger Length: {} meters, with {} tube pass(es)".format(test.L/2,test.N)
+    print "Equilibrium Wall Temperature: {} k".format(tubeWallTemp)
     
-    m2ft = 3.28084 #meter to feet conversion
-    
-    #sqrt(#passes * tube area * packing factor)
-    #assumes shell magically becomes rectangular but keeps packing factor
-    packing_factor =  (test.A_a/(test.A_a + test.A_w)) + 1
-    x = ((test.N * pi*((test.Do_tube/2)**2)*packing_factor)**0.5)*m2ft
-    y = 2*x #height of a double pass
- 
-    tot_vol = (x*(y) * (test.L *m2ft))
-    
-    print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format((test.L/2)*m2ft,x,y)
-    print "Heat Exchanger Volume: {} ft^3".format( tot_vol)
-

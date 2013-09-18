@@ -1,5 +1,5 @@
 """
-    heatExchanger.py - 
+    heatExchanger.py -  (This one is for validation with water and kerosene)
         Performs basic heat exchanger calculations for a multi-tube double pass
         counter-flow or co-flow shell and tube heat exchanger
         

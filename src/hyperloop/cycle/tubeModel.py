@@ -34,8 +34,8 @@ class tubeModel(Component):
     #airTube = Float(0., units = 'kg', iotype='in', desc='Total air in tube') #
     #airRho = Float(0., units = 'kg/m**3', iotype='in', desc='density of air in the tube')
     #tubeID = Float(2.23, units = 'm', iotype='in', desc='Tube inner diameter') #
-    tubeOD = Float(7.3, units = 'ft', iotype='in', desc='Tube out diameter') #2.22504m
-    tubeLength = Float(1584000, units = 'ft', iotype='in', desc='Length of entire Hyperloop') #300 miles, 482803.m
+    tubeOD = Float(2.22504, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
+    tubeLength = Float(482803., units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     #tubeK = Float(0., units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the tube (conduction)')
     #podTemp = Float(406.6, units = 'K', iotype='in', desc='Temperature Released by each pod') #
     podMdot = Float(0.49, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
@@ -119,12 +119,12 @@ class tubeModel(Component):
         check('compExitTt',self.compExitTt,972.)
         
         if (self.compExitTt < 400):
-            self.podCp = 990.8*(self.compExitTt**(0.00316))
+            self.podCp = 990.8*(self.compExitTt**(0.00316)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         else:
-            self.podCp = 299.4*(self.compExitTt**(0.1962))
+            self.podCp = 299.4*(self.compExitTt**(0.1962)) #SI units
         check('podCp',self.podCp,1144.)
-        #Q = mdot * cp * deltaT    ??#Qpod = podMdot * podCp * (podTemp-tubeTemp)??
-        self.podQ = self.podCp*self.compExitTt*self.podMdot
+        #Q = mdot * cp * deltaT 
+        self.podQ = self.podMdot * self.podCp * (self.compExitTt-self.tubeWallTemp)
         check('podQ',self.podQ,549618.)
         #Total Q = Q * (number of pods)
         self.podQTot = self.podQ*self.podFreq
@@ -139,16 +139,16 @@ class tubeModel(Component):
         
         #Determine thermal resistance of outside via Natural Convection or forced convection
         if(self.ambientTemp < 400):
-            self.GrDelTL3 = 10040000000000000000*((self.ambientTemp*1.8)**(-4.639)) ##need to convert to rankine
+            self.GrDelTL3 = 41780000000000000000*((self.ambientTemp)**(-4.639)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         else:
-            self.GrDelTL3 = 972600000000000000*((self.ambientTemp*1.8)**(-4.284)) ##need to convert to rankine
+            self.GrDelTL3 = 4985000000000000000*((self.ambientTemp)**(-4.284)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         check('GrDelTL3',self.GrDelTL3,1946216.7)
         #Prandtl Number
         #Pr = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
         #Pr << 1 means thermal diffusivity dominates
         #Pr >> 1 means momentum diffusivity dominates
         if (self.ambientTemp < 400):
-            self.Pr = 1.23*(self.ambientTemp**(-0.09685))
+            self.Pr = 1.23*(self.ambientTemp**(-0.09685)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         else:
             self.Pr = 0.59*(self.ambientTemp**(0.0239))
         check('Pr',self.Pr,0.707)
@@ -156,28 +156,31 @@ class tubeModel(Component):
         #Relationship between buoyancy and viscosity
         #Laminar = Gr < 10^8
         #Turbulent = Gr > 10^9
-        self.Gr = self.GrDelTL3*(convert_units(self.tubeWallTemp,'degK','degF')-
-                    convert_units(self.ambientTemp,'degK','degF'))*(self.tubeOD**3)
+        self.Gr = self.GrDelTL3*(self.tubeWallTemp-self.ambientTemp)*(self.tubeOD**3)
         check('Gr',self.Gr,33242489559.)
         #Rayleigh Number 
         #Buoyancy driven flow (natural convection)
         self.Ra = self.Pr * self.Gr
         check('Ra',self.Ra,23491874286.)
-        
-        self.Nu = (0.6 + 0.387*self.Ra**(1./6.)/(1 + (0.559/self.Pr)**(9./16.))**(8./27.))**2
-        check('Nu',self.Nu,316.38856)
+        #Nusselt Number
+        #Nu = convecive heat transfer / conductive heat transfer
+        if (self.Ra<=10**12): #valid in specific flow regime
+            self.Nu = (0.6 + 0.387*self.Ra**(1./6.)/(1 + (0.559/self.Pr)**(9./16.))**(8./27.))**2 #3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465
+            check('Nu',self.Nu,316.38856)
+        else:
+            print "Flow Regime Not Valid"
         
         if(self.ambientTemp < 400):
-            self.k = 0.0001423*(self.ambientTemp**(0.9138))
+            self.k = 0.0001423*(self.ambientTemp**(0.9138)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         else:
             self.k = 0.0002494*(self.ambientTemp**(0.8152))
         check('k',self.k,0.02655)
         
         #h = k*Nu/Characteristic Length
-        self.h = self.k * self.Nu/self.tubeOD
+        self.h = (self.k * self.Nu)/ self.tubeOD
         check('h',self.h,1.1507427)
         #Convection Area = Surface Area
-        self.convArea = pi * convert_units(self.tubeLength,'ft','m') * convert_units(self.tubeOD,'ft','m') 
+        self.convArea = pi * self.tubeLength * self.tubeOD 
         check('convArea',self.convArea,3374876)
         #Determine heat radiated per square meter (Q)
         self.naturalConvection = self.h*(self.tubeWallTemp-self.ambientTemp)
@@ -188,7 +191,7 @@ class tubeModel(Component):
         
         #Determine heat incoming via Sun radiation (Incidence Flux)
         #Sun hits an effective rectangular cross section
-        self.ViewingArea = convert_units(self.tubeLength,'ft','m') * convert_units(self.tubeOD,'ft','m') 
+        self.ViewingArea = self.tubeLength* self.tubeOD
         check('ViewingArea',self.ViewingArea,1074256.)
         
         self.solarHeat = (1-self.Surface_reflectance)* self.nnIncidenceF * self.Solar_insolation
@@ -207,6 +210,7 @@ class tubeModel(Component):
         #P = A * (P/A)
         self.qRadTot = self.radArea * self.qRad
         check('qRadTot',self.qRadTot,299941229.5)
+        
         #------------
         #Sum Up
         self.Qout = self.qRadTot + self.naturalConvectionTot

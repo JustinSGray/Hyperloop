@@ -125,10 +125,10 @@ class tubeModel(Component):
         check('podCp',self.podCp,1144.)
         #Q = mdot * cp * deltaT 
         self.podQ = self.podMdot * self.podCp * (self.compExitTt-self.tubeWallTemp)
-        check('podQ',self.podQ,362812.)
+        check('podQ',self.podQ,353244.)
         #Total Q = Q * (number of pods)
         self.podQTot = self.podQ*self.podFreq
-        check('podQTot',self.podQTot,12335599.)
+        check('podQTot',self.podQTot,12010290.)
 
         #Determine the thermal resistance of the tube via convection
         #calculate h based on Re, Pr, Nu

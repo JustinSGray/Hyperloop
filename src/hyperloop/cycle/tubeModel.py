@@ -20,7 +20,7 @@ def check(var_name,var,correct_val):
     #check('<variable_name>',<variable>,<correct value>)
     "Format and print the results of a value comparison, (crude tests for verification purposes)"
     error = (correct_val - var)/correct_val
-    if (abs(error*100)<1): #determine percent error, if greater than 1%
+    if (abs(error*100)<3): #determine percent error, if greater than 1%
         print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(error)*100,"Test Passed")
     else: #comparison fails, print error output
         print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(error)*100,"Test Failed :(")
@@ -41,7 +41,7 @@ class tubeModel(Component):
     podMdot = Float(0.49, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
     podFreq = Float(34., units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
     podMN = Float(0.91, units = 'K', iotype='in', desc='Pod Mach Number') #
-    tubeWallTemp = Float(330, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    tubeWallTemp = Float(322.361, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     tubeAmbientPressure = Float(99., units = 'Pa', iotype='in', desc='Average Temperature of the tube') #
     ambientTemp = Float(305.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
     compInletTt = Float(367., units = 'K', iotype='in', desc='Compressor Inlet Total Temperature') #
@@ -107,7 +107,7 @@ class tubeModel(Component):
         #Determine heat added by pods coming through
         #Tt = Ts * (1 + [(gam-1)/2]*(MN^2)
         self.compInletTt = self.tubeWallTemp*(1+((self.gammaAir-1)/2)*(self.podMN**2))
-        check('compInletTt',self.compInletTt,385.)
+        check('compInletTt',self.compInletTt,375.96)
         #Pt = Ps * (Tt/Ts)^(gam/gam-1)
         self.compInletPt = self.tubeAmbientPressure*(1+((self.gammaAir-1)/2)*(self.podMN**2))**(self.gammaAir/(self.gammaAir-1))
         check('compInletPt',self.compInletPt,169.)
@@ -116,7 +116,7 @@ class tubeModel(Component):
         check('compExitPt',self.compExitPt,2099.)
         #Tt_exit = Tt_inlet + ([Tt_inlet * PR^(gam-1/gam)]-Tt_inlet)/adiabatic_efficiency
         self.compExitTt = self.compInletTt + (self.compInletTt*(self.PR)**((self.gammaAir-1)/self.gammaAir)-self.compInletTt)/self.adiabaticEff
-        check('compExitTt',self.compExitTt,972.)
+        check('compExitTt',self.compExitTt,950.)
         
         if (self.compExitTt < 400):
             self.podCp = 990.8*(self.compExitTt**(0.00316)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
@@ -125,10 +125,10 @@ class tubeModel(Component):
         check('podCp',self.podCp,1144.)
         #Q = mdot * cp * deltaT 
         self.podQ = self.podMdot * self.podCp * (self.compExitTt-self.tubeWallTemp)
-        check('podQ',self.podQ,549618.)
+        check('podQ',self.podQ,362812.)
         #Total Q = Q * (number of pods)
         self.podQTot = self.podQ*self.podFreq
-        check('podQTot',self.podQTot,18687012.)
+        check('podQTot',self.podQTot,12335599.)
 
         #Determine the thermal resistance of the tube via convection
         #calculate h based on Re, Pr, Nu
@@ -142,7 +142,7 @@ class tubeModel(Component):
             self.GrDelTL3 = 41780000000000000000*((self.ambientTemp)**(-4.639)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         else:
             self.GrDelTL3 = 4985000000000000000*((self.ambientTemp)**(-4.284)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
-        check('GrDelTL3',self.GrDelTL3,1946216.7)
+        check('GrDelTL3',self.GrDelTL3,123775609)
         #Prandtl Number
         #Pr = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
         #Pr << 1 means thermal diffusivity dominates
@@ -157,16 +157,16 @@ class tubeModel(Component):
         #Laminar = Gr < 10^8
         #Turbulent = Gr > 10^9
         self.Gr = self.GrDelTL3*(self.tubeWallTemp-self.ambientTemp)*(self.tubeOD**3)
-        check('Gr',self.Gr,33242489559.)
+        check('Gr',self.Gr,23163846280.)
         #Rayleigh Number 
         #Buoyancy driven flow (natural convection)
         self.Ra = self.Pr * self.Gr
-        check('Ra',self.Ra,23491874286.)
+        check('Ra',self.Ra,16369476896.)
         #Nusselt Number
         #Nu = convecive heat transfer / conductive heat transfer
         if (self.Ra<=10**12): #valid in specific flow regime
             self.Nu = (0.6 + 0.387*self.Ra**(1./6.)/(1 + (0.559/self.Pr)**(9./16.))**(8./27.))**2 #3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465
-            check('Nu',self.Nu,316.38856)
+            check('Nu',self.Nu,281.6714) #http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html
         else:
             print "Flow Regime Not Valid"
         
@@ -178,16 +178,16 @@ class tubeModel(Component):
         
         #h = k*Nu/Characteristic Length
         self.h = (self.k * self.Nu)/ self.tubeOD
-        check('h',self.h,1.1507427)
+        check('h',self.h,3.3611)
         #Convection Area = Surface Area
         self.convArea = pi * self.tubeLength * self.tubeOD 
         check('convArea',self.convArea,3374876)
         #Determine heat radiated per square meter (Q)
         self.naturalConvection = self.h*(self.tubeWallTemp-self.ambientTemp)
-        check('naturalConvection',self.naturalConvection,28.07)
+        check('naturalConvection',self.naturalConvection,57.10)
         #Determine total heat radiated over entire tube (Qtotal)
         self.naturalConvectionTot = self.naturalConvection * self.convArea
-        check('naturalConvectionTot',self.naturalConvectionTot,94732134.6)
+        check('naturalConvectionTot',self.naturalConvectionTot,192710349)
         
         #Determine heat incoming via Sun radiation (Incidence Flux)
         #Sun hits an effective rectangular cross section
@@ -206,10 +206,10 @@ class tubeModel(Component):
         check('radArea',self.radArea,3374876.115)
         #P/A = SB*emmisitivity*(T^4 - To^4)
         self.qRad = self.SBconst*self.tubeEmissivity*((self.tubeWallTemp**4) - (self.ambientTemp**4))
-        check('qRad',self.qRad,88.9)
+        check('qRad',self.qRad,59.7)
         #P = A * (P/A)
         self.qRadTot = self.radArea * self.qRad
-        check('qRadTot',self.qRadTot,299941229.5)
+        check('qRadTot',self.qRadTot,201533208)
         
         #------------
         #Sum Up
@@ -227,6 +227,7 @@ if __name__ == "__main__":
     test.run()
     print "-----Completed Tube Heat Flux Model Calculations---"
     print ""
-    print "Equilibrium Wall Temperature: {} K".format(test.tubeWallTemp)
+    print "Equilibrium Wall Temperature: {} K or {} F".format(test.tubeWallTemp, convert_units(test.tubeWallTemp,'degK','degF'))
+    print "Ambient Temperature:          {} K or {} F".format(test.ambientTemp, convert_units(test.ambientTemp,'degK','degF'))
     print "Q Out = {} W  ==>  Q In = {} W ==> Error: {}%".format(test.Qout,test.Qin,((test.Qout-test.Qin)/test.Qout)*100)
     

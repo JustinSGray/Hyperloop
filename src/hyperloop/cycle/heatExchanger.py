@@ -26,6 +26,15 @@ from openmdao.lib.datatypes.api import Float, Bool
 
 from math import log, pi, sqrt, e
 
+def check(var_name,var,correct_val):
+    #check('<variable_name>',<variable>,<correct value>)
+    "Format and print the results of a value comparison, (crude tests for verification purposes)"
+    error = (correct_val - var)/correct_val
+    if (abs(error*100)<2): #determine percent error, if greater than 1%
+        print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(error)*100,"Test Passed")
+    else: #comparison fails, print error output
+        print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(error)*100,"Test Failed :(")
+
 
 class heatExchanger(Component):
     """ Main Component """
@@ -91,15 +100,7 @@ class heatExchanger(Component):
 
     def execute(self):
         """Calculate Various Paramters"""
-        
-        def check(var_name,var,correct_val):
-            "Format and print a value check"
-            if (abs((((var/correct_val)-1))*100)<2):
-                print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Passed")
-            else:
-                print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(((var/correct_val)-1))*100,"Test Failed :(")
-        
-        
+
         Th_in = self.T_ain #T hot air in
         Th_out = self.T_aout #T air out
         Tc_in = self.T_win #T cold water in

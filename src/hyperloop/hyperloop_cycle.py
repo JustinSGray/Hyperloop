@@ -52,8 +52,6 @@ class HyperloopCycle(Assembly):
         to_bearings.Q_dot = -24.138
         to_bearings.dPqP = 0 #no losses
 
-
-
         #Component Connections
         self.connect('tube.Fl_O','tube_bypass.Fl_I')
         self.connect('tube_bypass.Fl_O2', 'inlet.Fl_I')
@@ -67,23 +65,9 @@ class HyperloopCycle(Assembly):
 
 
         #driver setup
-        self.driver.workflow = SequentialWorkflow()
-        design = self.add('design', Run_Once())
-
-
-        doe = self.add('doe', DOEdriver())
-        doe.DOEgenerator = FullFactorial(5)
-        doe.add_parameter('tube.Mach',low=.85,high=1.0)
-        doe.case_outputs = ['comp1.pwr+comp2.pwr','nozzle.Fl_O.W','tube.Fl_O.Pt','inlet.Fl_O.Mach','comp1.PR']
-        doe.recorders = [DumpCaseRecorder()]
-
-
-        off_design = self.add('off_design', BroydenSolver())
-        off_design.add_parameter('tube.W', low=-1e15, high=1e15)
-        off_design.add_constraint('nozzle.WqAexit=nozzle.WqAexit_dmd')
-
-        off_design.add_parameter('tube.Pt', low=-1e15, high=1e15)
-        off_design.add_constraint('tube.Fl_O.Ps=0.0144')
+        #self.driver.workflow = SequentialWorkflow()
+        #design = self.add('design', Run_Once())
+        design = self.driver
 
         #workflow definition
 
@@ -91,21 +75,8 @@ class HyperloopCycle(Assembly):
             'duct1', 'split', 'nozzle', 'comp2', 'to_bearings']
 
         design.workflow.add(comp_list)
-        design.add_event('tube.design')
-        design.add_event('tube_bypass.design')
-        design.add_event('inlet.design')  
-        design.add_event('comp1.design')
-        design.add_event('duct1.design')
-        design.add_event('split.design')
-        design.add_event('nozzle.design')
-        design.add_event('comp2.design')
-        design.add_event('to_bearings.design')
-
-        off_design.workflow.add(comp_list)
-
-
-        doe.workflow.add('off_design')
-        self.driver.workflow.add(['design','doe'])
+        for comp_name in comp_list: 
+            design.add_event('%s.design'%comp_name)
 
 
 if __name__ == "__main__": 

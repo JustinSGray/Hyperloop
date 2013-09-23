@@ -2,29 +2,43 @@ from openmdao.main.api import Assembly, set_as_top, Run_Once, SequentialWorkflow
 from openmdao.lib.drivers.api import BroydenSolver, DOEdriver
 from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
-from openmdao.lib.datatyes.api import Float
+from openmdao.lib.datatypes.api import Float
 
-from pycycle.api import (FlowStart, Splitter, Inlet, Compressor, Duct, Splitter,
+from pycycle.api import (FlowStartStatic, Splitter, Inlet, Compressor, Duct, Splitter,
     Nozzle, )
 
 
 class HyperloopCycle(Assembly): 
 
-    Mach = Float(1.0, iotype="in", desc="travel speed of the capsule")
-    tube_P = Float(99, iotype="in", desc="pressure in the tube", units="kPa") 
+    #I/O Variables accessible on the boundary of the assembly 
+    #NOTE: Some unit conversions to metric also happen here
+    pod_Mach = Float(1.0, iotype="in", desc="travel Mach of the pod")
+    tube_P = Float(99, iotype="in", desc="pressure in the tube", units="Pa") 
+    tube_radius = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
+    c1_entrance_Mach = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
+    c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")
+    c1_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the first compressor stage", units="kW")
+    c2_PR_des = Float(5, iotype="in", desc="pressure ratio of second compressor at design conditions")
+    c2_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the second compressor stage", units="kW")
 
-    def configure(self): 
+    bypass_flow_area = Float(iotype="out", desc="flow area required for the air bypassing the pod", units="cm**2")
+    c1_flow_area = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
+    nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
 
-        tube = self.add('tube', FlowStart())
+    def configure(self):
+
+        MN_DESIGN = 1 #Mach at the design condition
+
+        tube = self.add('tube', FlowStartStatic())
         tube.W = 3.488
-        tube.Pt = .0272
-        tube.Tt = 630.75
-        tube.Mach = 1.0
+        tube.Ps = 0.01436
+        tube.Ts = 525.6
+        tube.Mach = MN_DESIGN
 
         tube_bypass = self.add('tube_bypass', Splitter())
         tube_bypass.BPR_des = 2.2285
-        tube_bypass.MNexit1_des = 1.0
-        tube_bypass.MNexit2_des = 1.0
+        tube_bypass.MNexit1_des = MN_DESIGN
+        tube_bypass.MNexit2_des = MN_DESIGN
 
         inlet = self.add('inlet', Inlet())
         inlet.ram_recovery = 1.0
@@ -68,16 +82,20 @@ class HyperloopCycle(Assembly):
         self.connect('comp2.Fl_O','to_bearings.Fl_I')
 
         #variable pass_throughs to the assembly boundary
-        self.connect('Mach', 'tube.Mach')
-        self.connect('tube_P', 'tube.Pt')
+        self.connect('pod_Mach', 'tube.Mach')
+        self.connect('c1_entrance_Mach', 'inlet.MNexit_des')
+        self.connect('c1_PR_des','comp1.PR_des')
+        self.connect('c2_PR_des','comp2.PR_des')
 
+        self.connect('tube_bypass.Fl_O1.area','bypass_flow_area')
+        self.connect('inlet.Fl_O.area', 'c1_flow_area')
+        self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
 
         #driver setup
-        #self.driver.workflow = SequentialWorkflow()
-        #design = self.add('design', Run_Once())
         design = self.driver
-
-        #workflow definition
+        design = self.add('driver', BroydenSolver())
+        design.add_parameter('tube.W', low=-1e15, high=1e15)
+        design.add_constraint('tube.Fl_O.area=(3.14159*tube_radius**2)*.394**2') #holds the radius of the tube constant
 
         comp_list = ['tube','tube_bypass','inlet','comp1',
             'duct1', 'split', 'nozzle', 'comp2', 'to_bearings']
@@ -88,11 +106,16 @@ class HyperloopCycle(Assembly):
 
 
 if __name__ == "__main__": 
+    from math import pi
 
     hlc = set_as_top(HyperloopCycle())
-
+    hlc.pod_Mach = 1
     hlc.run()
 
     print "pwr: ", hlc.comp1.pwr+hlc.comp1.pwr
+    print "tube area:", hlc.tube.Fl_O.area 
+    print "tube Ps", hlc.tube.Fl_O.Ps, hlc.tube.Fl_O.Pt
+    print "tube W", hlc.tube.W
+    print "tube rad: ", (hlc.tube.Fl_O.area/pi)**.5
  
 

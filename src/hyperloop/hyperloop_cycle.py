@@ -2,12 +2,16 @@ from openmdao.main.api import Assembly, set_as_top, Run_Once, SequentialWorkflow
 from openmdao.lib.drivers.api import BroydenSolver, DOEdriver
 from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
+from openmdao.lib.datatyes.api import Float
 
 from pycycle.api import (FlowStart, Splitter, Inlet, Compressor, Duct, Splitter,
     Nozzle, )
 
 
 class HyperloopCycle(Assembly): 
+
+    Mach = Float(1.0, iotype="in", desc="travel speed of the capsule")
+    tube_P = Float(99, iotype="in", desc="pressure in the tube", units="kPa") 
 
     def configure(self): 
 
@@ -63,6 +67,10 @@ class HyperloopCycle(Assembly):
         self.connect('split.Fl_O1', 'comp2.Fl_I')
         self.connect('comp2.Fl_O','to_bearings.Fl_I')
 
+        #variable pass_throughs to the assembly boundary
+        self.connect('Mach', 'tube.Mach')
+        self.connect('tube_P', 'tube.Pt')
+
 
         #driver setup
         #self.driver.workflow = SequentialWorkflow()
@@ -75,7 +83,7 @@ class HyperloopCycle(Assembly):
             'duct1', 'split', 'nozzle', 'comp2', 'to_bearings']
 
         design.workflow.add(comp_list)
-        for comp_name in comp_list: 
+        for comp_name in comp_list: #need to put everything in design mode
             design.add_event('%s.design'%comp_name)
 
 

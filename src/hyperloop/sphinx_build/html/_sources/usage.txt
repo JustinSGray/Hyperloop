@@ -39,45 +39,37 @@ must fit into the area between the pod and the tube wall. If you assume
 a circular cross section for the pod, then the area for the air to 
 travel through is given by 
 
-.. math:: A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
+.. math:: area_{bypass} = \pi*(r_{tube}**2-r_{pod}**2)
 
-Given the conditions in the tube, we know the density of air to be 
-0.00118 :math:`\frac{kg}{m^3}`. The mass flow rate of the air 
-bypassing the pod is then given by
+Based on the given tempreature and pressure of the air in the tube, 
+we can find it’s density:
 
-.. math:: \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
+rho_air = xxxxx units 
 
-Since :math:`\rho_{air}` and :math:`A_{tube}` are both constant for given tube size 
-and pressure, mass flow rate grows linearly with the velocity of the pod. 
+The mass flow rate of the air bypassing the pod is then given by
 
+W_bypass = rho_air*tube_area*V_pod
+
+This mass flow rate grows linearly with the velocity of the pod. 
 For any given flow there is a physical limitation to how the amount of 
 flow you can pass through a given area. The maximum flow rate occurs when 
-the velocity reaches Mach 1. For the hyperloop concept, all the air must fit 
-through the area between the pod and the tube, called :math:`A_{bypass}`. When 
-the air going through :math:`A_{bypass}` reaches Mach 1, no additional flow can pass through. 
-This is called the Kantrowitz limit. 
+the velocity reaches Mach 1. This is kantrowitz limit. For the hyperloop 
+concept, all the air must fit through the bypass_area, so the kantrowitz 
+limit bounds the amount of air that can be passed around the pod. 
 
-.. math:: \dot{W}_{kantrowitz} = \rho_{air} A_{bypass} V_{Mach 1} 
+W_kantrowitz = rho_air*bypass_area*V_mach1 
 
-If the required  :math:`\dot{W}_{kantrowitz}` exceeds the kantrowitz limit, then the pod will 
+If the required bypass_flow exceeds the kantrowitz limit, then the pod will 
 act like a piston in a tube and start the increase the air pressure in front 
 of it and lower the pressure behind it. For the baseline hyperloop design, 
 the Kantrowitz limit speed is 120 meters/sec, or Mach .35, as shown in the 
 figure below. The limit is reached when the required tube mass flow equals 
 the kantrowitz limit flow. 
 
-.. figure:: images/kantrowitz_limit.png
-   :align: center
-   :alt: kantrowitz limit for hyperloop
-
-   The Kantrowitz limit for the baseline hyperloop concept
-
 Such low speeds would not allow the hyperloop concept to significantly reduce 
 travel times between Los Angeles and San Francisco. To reach higher speeds, 
 a compression system is needed to help push additional air around the pod 
-to enable higher travel speeds. However it serves as a nice saftey margin 
-that, even if the pod lost power to its compression system, the hyperloop 
-could still travel at a lower speed. 
+to enable higher travel speeds. 
 
 
 -----------------------------

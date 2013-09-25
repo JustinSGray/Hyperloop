@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Source Documentation &mdash; hyperloop 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="hyperloop 0.1 documentation" href="index.html" />
+    <link rel="next" title="Package Metadata" href="pkgdocs.html" />
+    <link rel="prev" title="Introduction" href="usage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pkgdocs.html" title="Package Metadata"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">hyperloop 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="source-documentation">
+<span id="hyperloop-src-label"></span><h1>Source Documentation<a class="headerlink" href="#source-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="heatexchanger-py">
+<span id="hyperloop-cycle-heatexchanger-py"></span><span id="index-0"></span><h2>heatExchanger.py<a class="headerlink" href="#heatexchanger-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="heatexchanger2-py">
+<span id="hyperloop-cycle-heatexchanger2-py"></span><span id="index-1"></span><h2>heatExchanger2.py<a class="headerlink" href="#heatexchanger2-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="hyperassembly-py">
+<span id="hyperloop-cycle-hyperassembly-py"></span><span id="index-2"></span><h2>hyperAssembly.py<a class="headerlink" href="#hyperassembly-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="npss-wrapper-py">
+<span id="hyperloop-cycle-npss-wrapper-py"></span><span id="index-3"></span><h2>npss_wrapper.py<a class="headerlink" href="#npss-wrapper-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="tubemodel-py">
+<span id="hyperloop-cycle-tubemodel-py"></span><span id="index-4"></span><h2>tubeModel.py<a class="headerlink" href="#tubemodel-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-hyperloop.geometry.air_bearing">
+<span id="air-bearing-py"></span><span id="hyperloop-geometry-air-bearing-py"></span><span id="index-5"></span><h2>air_bearing.py<a class="headerlink" href="#module-hyperloop.geometry.air_bearing" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hyperloop.geometry.air_bearing.AirBearing">
+<em class="property">class </em><tt class="descclassname">hyperloop.geometry.air_bearing.</tt><tt class="descname">AirBearing</tt><a class="reference internal" href="_modules/hyperloop/geometry/air_bearing.html#AirBearing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.air_bearing.AirBearing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>capsule_mass</strong></dt>
+<dd><p class="first">mass of capsule</p>
+<ul class="last simple">
+<li>default:  &#8216;15000.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Int</em> <strong>n_bearings</strong></dt>
+<dd><p class="first">number of rows of bearing pads</p>
+<ul class="last simple">
+<li>default:  &#8216;7&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>pressure</strong></dt>
+<dd><p class="first">air injection pressure for bearings</p>
+<ul class="last simple">
+<li>default:  &#8216;9.4&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kPa&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>sweep_angle</strong></dt>
+<dd><p class="first">sweep angle of a single bearing pad on tube wall</p>
+<ul class="last simple">
+<li>default:  &#8216;4.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;deg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tube_radius</strong></dt>
+<dd><p class="first">radius of the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;4.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>area_per_bearing</strong></dt>
+<dd><p class="first">required area per bearing</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>bearing_width</strong></dt>
+<dd><p class="first">lienar width of bearing</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>length_per_bearing</strong></dt>
+<dd><p class="first">required length per bearing</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>total_area</strong></dt>
+<dd><p class="first">total required bearing area</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.geometry.air_bearing.AirBearing.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/air_bearing.html#AirBearing.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.air_bearing.AirBearing.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-hyperloop.geometry.battery">
+<span id="battery-py"></span><span id="hyperloop-geometry-battery-py"></span><span id="index-6"></span><h2>battery.py<a class="headerlink" href="#module-hyperloop.geometry.battery" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hyperloop.geometry.battery.Battery">
+<em class="property">class </em><tt class="descclassname">hyperloop.geometry.battery.</tt><tt class="descname">Battery</tt><a class="reference internal" href="_modules/hyperloop/geometry/battery.html#Battery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.battery.Battery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>cross_sectional_area</strong></dt>
+<dd><p class="first">available cross section for battery pack</p>
+<ul class="last simple">
+<li>default:  &#8216;1.3&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>energy</strong></dt>
+<dd><p class="first">total energy requirement for mission</p>
+<ul class="last simple">
+<li>default:  &#8216;160.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kW*h&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>length</strong></dt>
+<dd><p class="first">required length of battery pack</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>mass</strong></dt>
+<dd><p class="first">total mass of the batteries</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>volume</strong></dt>
+<dd><p class="first">total volume of the batteries</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.geometry.battery.Battery.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/battery.html#Battery.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.battery.Battery.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-hyperloop.geometry.bypass_duct">
+<span id="bypass-duct-py"></span><span id="hyperloop-geometry-bypass-duct-py"></span><span id="index-7"></span><h2>bypass_duct.py<a class="headerlink" href="#module-hyperloop.geometry.bypass_duct" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hyperloop.geometry.bypass_duct.Tube">
+<em class="property">class </em><tt class="descclassname">hyperloop.geometry.bypass_duct.</tt><tt class="descname">Tube</tt><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#Tube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.Tube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>bypass_flow_area</strong></dt>
+<dd><p class="first">required flow area for the fan</p>
+<ul class="last simple">
+<li>default:  &#8216;845.5&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>c1_flow_area</strong></dt>
+<dd><p class="first">amount of area blocked by the passenger capsule</p>
+<ul class="last simple">
+<li>default:  &#8216;14850.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>inlet_wall_thickness</strong></dt>
+<dd><p class="first">thickness of the inlet wall</p>
+<ul class="last simple">
+<li>default:  &#8216;5.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>inlet_radius</strong></dt>
+<dd><p class="first">radius of the inlet at it&#8217;s largest point</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tube_radius</strong></dt>
+<dd><p class="first">required radius for the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.geometry.bypass_duct.Tube.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#Tube.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.Tube.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-hyperloop.geometry.fan">
+<span id="fan-py"></span><span id="hyperloop-geometry-fan-py"></span><span id="index-8"></span><h2>fan.py<a class="headerlink" href="#module-hyperloop.geometry.fan" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hyperloop.geometry.fan.Fan">
+<em class="property">class </em><tt class="descclassname">hyperloop.geometry.fan.</tt><tt class="descname">Fan</tt><a class="reference internal" href="_modules/hyperloop/geometry/fan.html#Fan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.fan.Fan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>flow_area</strong></dt>
+<dd><p class="first">required flow area for the fan</p>
+<ul class="last simple">
+<li>default:  &#8216;0.4&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>hub_to_tip</strong></dt>
+<dd><p class="first">hub to tip ratio for the fan</p>
+<ul class="last simple">
+<li>default:  &#8216;0.4&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>hub_radius</strong></dt>
+<dd><p class="first">hub radius for the fan</p>
+<ul class="last simple">
+<li>default:  &#8216;0.4&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tip_radius</strong></dt>
+<dd><p class="first">tip radius for the fan</p>
+<ul class="last simple">
+<li>default:  &#8216;0.4&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.geometry.fan.Fan.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/fan.html#Fan.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.fan.Fan.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="hyperloop-cycle-py">
+<span id="hyperloop-hyperloop-cycle-py"></span><span id="index-9"></span><h2>hyperloop_cycle.py<a class="headerlink" href="#hyperloop-cycle-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="hyperloop-sim-py">
+<span id="hyperloop-hyperloop-sim-py"></span><span id="index-10"></span><h2>hyperloop_sim.py<a class="headerlink" href="#hyperloop-sim-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="kantrowitz-limit-py">
+<span id="hyperloop-kantrowitz-limit-py"></span><span id="index-11"></span><h2>kantrowitz_limit.py<a class="headerlink" href="#kantrowitz-limit-py" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Source Documentation</a><ul>
+<li><a class="reference internal" href="#heatexchanger-py">heatExchanger.py</a></li>
+<li><a class="reference internal" href="#heatexchanger2-py">heatExchanger2.py</a></li>
+<li><a class="reference internal" href="#hyperassembly-py">hyperAssembly.py</a></li>
+<li><a class="reference internal" href="#npss-wrapper-py">npss_wrapper.py</a></li>
+<li><a class="reference internal" href="#tubemodel-py">tubeModel.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.geometry.air_bearing">air_bearing.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.geometry.battery">battery.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.geometry.bypass_duct">bypass_duct.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.geometry.fan">fan.py</a></li>
+<li><a class="reference internal" href="#hyperloop-cycle-py">hyperloop_cycle.py</a></li>
+<li><a class="reference internal" href="#hyperloop-sim-py">hyperloop_sim.py</a></li>
+<li><a class="reference internal" href="#kantrowitz-limit-py">kantrowitz_limit.py</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pkgdocs.html"
+                        title="next chapter">Package Metadata</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/srcdocs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pkgdocs.html" title="Package Metadata"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Introduction"
+             >previous</a> |</li>
+        <li><a href="index.html">hyperloop 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright .
+      Last updated on Sep 25, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

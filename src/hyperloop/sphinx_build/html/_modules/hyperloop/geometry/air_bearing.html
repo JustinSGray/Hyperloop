@@ -1,0 +1,144 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hyperloop.geometry.air_bearing &mdash; hyperloop 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="hyperloop 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">hyperloop 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hyperloop.geometry.air_bearing</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span>
+
+<span class="kn">from</span> <span class="nn">openmdao.main.api</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">openmdao.lib.datatypes.api</span> <span class="kn">import</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span>
+
+
+<div class="viewcode-block" id="AirBearing"><a class="viewcode-back" href="../../../srcdocs.html#hyperloop.geometry.air_bearing.AirBearing">[docs]</a><span class="k">class</span> <span class="nc">AirBearing</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span> 
+
+    <span class="n">tube_radius</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&quot;in&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;m&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;radius of the tube&quot;</span><span class="p">)</span>
+    <span class="n">capsule_mass</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">15000</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&quot;in&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;kg&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;mass of capsule&quot;</span><span class="p">)</span>
+    <span class="n">pressure</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">9.4</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&quot;in&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;kPa&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;air injection pressure for bearings&quot;</span><span class="p">)</span>
+    <span class="n">n_bearings</span> <span class="o">=</span> <span class="n">Int</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&quot;in&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;number of rows of bearing pads&quot;</span><span class="p">)</span> 
+    <span class="n">sweep_angle</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&quot;in&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;deg&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;sweep angle of a single bearing pad on tube wall&quot;</span><span class="p">)</span>
+
+    <span class="n">total_area</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="n">iotype</span><span class="o">=</span><span class="s">&quot;out&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;m**2&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;total required bearing area&quot;</span><span class="p">)</span>
+    <span class="n">area_per_bearing</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="n">iotype</span><span class="o">=</span><span class="s">&quot;out&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;m**2&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;required area per bearing&quot;</span><span class="p">)</span>
+    <span class="n">length_per_bearing</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="n">iotype</span><span class="o">=</span><span class="s">&quot;out&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;m&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;required length per bearing&quot;</span><span class="p">)</span>
+    <span class="n">bearing_width</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="n">iotype</span><span class="o">=</span><span class="s">&quot;out&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&quot;m&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&quot;lienar width of bearing&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AirBearing.execute"><a class="viewcode-back" href="../../../srcdocs.html#hyperloop.geometry.air_bearing.AirBearing.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+
+        <span class="n">req_area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">capsule_mass</span><span class="o">*</span><span class="mf">9.81</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressure</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span> <span class="c">#convert to Pa from kPa</span>
+        <span class="n">req_area</span> <span class="o">*=</span> <span class="mf">1.5</span> <span class="c">#dirty hack to account for pressure gradient under bearing</span>
+        <span class="n">sweep_radians</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_angle</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+        <span class="n">arc_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tube_radius</span><span class="o">*</span><span class="n">sweep_radians</span>
+
+        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_area</span> <span class="o">=</span> <span class="n">req_area</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bearing_width</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">tube_radius</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">sweep_radians</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c">#divide by two because there are two parallel skis</span>
+        <span class="n">req_total_length</span> <span class="o">=</span> <span class="n">req_area</span><span class="o">/</span><span class="n">arc_length</span><span class="o">/</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length_per_bearing</span> <span class="o">=</span> <span class="n">req_total_length</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bearings</span><span class="o">/</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area_per_bearing</span> <span class="o">=</span> <span class="n">req_area</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">n_bearings</span><span class="o">/</span><span class="mi">2</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span> 
+
+    <span class="kn">from</span> <span class="nn">openmdao.main.api</span> <span class="kn">import</span> <span class="n">set_as_top</span>
+
+    <span class="n">comp</span> <span class="o">=</span> <span class="n">set_as_top</span><span class="p">(</span><span class="n">BearingSizing</span><span class="p">())</span>
+    <span class="n">comp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+
+    <span class="k">print</span> <span class="s">&quot;total_area (m**2): </span><span class="si">%f</span><span class="s">&quot;</span><span class="o">%</span><span class="n">comp</span><span class="o">.</span><span class="n">total_area</span>
+    <span class="k">print</span> <span class="s">&quot;area_per_bearing (m**2): </span><span class="si">%f</span><span class="s">&quot;</span><span class="o">%</span><span class="n">comp</span><span class="o">.</span><span class="n">area_per_bearing</span>
+    <span class="k">print</span> <span class="s">&quot;length_per_bearing (m): </span><span class="si">%f</span><span class="s">&quot;</span><span class="o">%</span><span class="n">comp</span><span class="o">.</span><span class="n">length_per_bearing</span>
+    <span class="k">print</span> <span class="s">&quot;bearing_width (m): </span><span class="si">%f</span><span class="s">&quot;</span><span class="o">%</span><span class="n">comp</span><span class="o">.</span><span class="n">bearing_width</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">hyperloop 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright .
+      Last updated on Sep 25, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

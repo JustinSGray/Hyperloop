@@ -116,6 +116,7 @@ if __name__ == "__main__":
     print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 
     print "tube area:", hlc.tube.Fl_O.area 
     print "tube Ps", hlc.tube.Fl_O.Ps, hlc.tube.Fl_O.Pt
+    print "tube Rhos", hlc.tube.Fl_O.rhos
     print "tube W", hlc.tube.W
     print "inlet W", hlc.inlet.Fl_I.W
     print "tube rad: ", (hlc.tube.Fl_O.area/pi)**.5

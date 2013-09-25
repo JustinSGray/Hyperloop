@@ -1,5 +1,5 @@
 =======================
-hyperloop Documentation
+Hyperloop Documentation
 =======================
 
 Contents:

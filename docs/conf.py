@@ -26,7 +26,7 @@ _sys_path_add(['geometry', 'images', 'src', 'src/hyperloop', 'src/hyperloop/cycl
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 
               'sphinx.ext.doctest', 'sphinx.ext.todo','openmdao.util.doctools', 
-              'sphinx.ext.viewcode'
+              'sphinx.ext.viewcode','sphinx.ext.mathjax'
       ]
 
 # Add any paths that contain templates here, relative to this directory.

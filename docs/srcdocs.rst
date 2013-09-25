@@ -124,6 +124,19 @@ fan.py
    :show-inheritance:
 
         
+.. index:: hyperloop_cycle.py
+
+.. _hyperloop.hyperloop_cycle.py:
+
+hyperloop_cycle.py
+------------------
+
+.. automodule:: hyperloop.hyperloop_cycle
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
 .. index:: hyperloop_sim.py
 
 .. _hyperloop.hyperloop_sim.py:
@@ -137,79 +150,14 @@ hyperloop_sim.py
    :show-inheritance:
 
         
-.. index:: compressor.py
+.. index:: kantrowitz_limit.py
 
-.. _hyperloop.pycycle.compressor.py:
+.. _hyperloop.kantrowitz_limit.py:
 
-compressor.py
--------------
+kantrowitz_limit.py
+-------------------
 
-.. automodule:: hyperloop.pycycle.compressor
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
-.. index:: heat_exchanger.py
-
-.. _hyperloop.pycycle.heat_exchanger.py:
-
-heat_exchanger.py
------------------
-
-.. automodule:: hyperloop.pycycle.heat_exchanger
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
-.. index:: inlet.py
-
-.. _hyperloop.pycycle.inlet.py:
-
-inlet.py
---------
-
-.. automodule:: hyperloop.pycycle.inlet
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
-.. index:: nozzle.py
-
-.. _hyperloop.pycycle.nozzle.py:
-
-nozzle.py
----------
-
-.. automodule:: hyperloop.pycycle.nozzle
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
-.. index:: splitter.py
-
-.. _hyperloop.pycycle.splitter.py:
-
-splitter.py
------------
-
-.. automodule:: hyperloop.pycycle.splitter
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
-.. index:: start.py
-
-.. _hyperloop.pycycle.start.py:
-
-start.py
---------
-
-.. automodule:: hyperloop.pycycle.start
+.. automodule:: hyperloop.kantrowitz_limit
    :members:
    :undoc-members:
    :show-inheritance:

@@ -13,7 +13,8 @@ class HyperloopCycle(Assembly):
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
     pod_Mach = Float(1.0, iotype="in", desc="travel Mach of the pod")
-    tube_P = Float(99, iotype="in", desc="pressure in the tube", units="Pa") 
+    tube_P = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
+    tube_T = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     tube_radius = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
     c1_entrance_Mach = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")
@@ -50,11 +51,11 @@ class HyperloopCycle(Assembly):
         comp1.eff_des = .80
 
         duct1 = self.add('duct1', Duct())
-        duct1.Q_dot = -0
+        duct1.Q_dot = -237
         duct1.dPqP = 0 #no losses
 
         split = self.add('split', Splitter())
-        split.BPR_des = 2.2285
+        split.BPR_des = 1.45
         split.MNexit1_des = 1.0
         split.MNexit2_des = 1.0
 
@@ -72,7 +73,7 @@ class HyperloopCycle(Assembly):
 
         #Component Connections
         self.connect('tube.Fl_O','tube_bypass.Fl_I')
-        self.connect('tube_bypass.Fl_O2', 'inlet.Fl_I')
+        self.connect('tube_bypass.Fl_O1', 'inlet.Fl_I')
         self.connect('inlet.Fl_O','comp1.Fl_I')
         self.connect('comp1.Fl_O', 'duct1.Fl_I')
         self.connect('duct1.Fl_O', 'split.Fl_I')
@@ -93,9 +94,9 @@ class HyperloopCycle(Assembly):
 
         #driver setup
         design = self.driver
-        design = self.add('driver', BroydenSolver())
-        design.add_parameter('tube.W', low=-1e15, high=1e15)
-        design.add_constraint('tube.Fl_O.area=(3.14159*tube_radius**2)*.394**2') #holds the radius of the tube constant
+        #design = self.add('driver', BroydenSolver())
+        #design.add_parameter('tube.W', low=-1e15, high=1e15)
+        #design.add_constraint('tube.Fl_O.area=(3.14159*tube_radius**2)*.394**2') #holds the radius of the tube constant
 
         comp_list = ['tube','tube_bypass','inlet','comp1',
             'duct1', 'split', 'nozzle', 'comp2', 'to_bearings']
@@ -112,10 +113,19 @@ if __name__ == "__main__":
     hlc.pod_Mach = 1
     hlc.run()
 
-    print "pwr: ", hlc.comp1.pwr+hlc.comp1.pwr
+    print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 
     print "tube area:", hlc.tube.Fl_O.area 
     print "tube Ps", hlc.tube.Fl_O.Ps, hlc.tube.Fl_O.Pt
     print "tube W", hlc.tube.W
+    print "inlet W", hlc.inlet.Fl_I.W
     print "tube rad: ", (hlc.tube.Fl_O.area/pi)**.5
- 
+    print "tube V: ", hlc.tube.Fl_O.Vflow, hlc.tube.Fl_O.Mach
+
+    fs = hlc.tube.Fl_O
+
+    print "Kantrowitz Limit: ", fs.rhot*hlc.tube_bypass.Fl_O1.area*fs.Vflow
+    l =  hlc.tube_bypass.Fl_O1.area*fs.Vflow/fs.area
+    print "Limit Speed: ", l, l/fs.Vflow 
+
+
 

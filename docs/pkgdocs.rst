@@ -18,32 +18,24 @@ Package Metadata
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
     heatExchanger2.heatExchanger=heatExchanger2:heatExchanger
     hyperloop.hyperloop_sim.Geometry=hyperloop.hyperloop_sim:Geometry
-    hyperloop.pycycle.inlet.Inlet=hyperloop.pycycle.inlet:Inlet
     hyperAssembly.hyperTop=hyperAssembly:hyperTop
-    hyperloop.pycycle.compressor.Compressor=hyperloop.pycycle.compressor:Compressor
     heatExchanger.heatExchanger=heatExchanger:heatExchanger
-    hyperloop.pycycle.heat_exchanger.HeatExchanger=hyperloop.pycycle.heat_exchanger:HeatExchanger
-    hyperloop.pycycle.start.FlowStart=hyperloop.pycycle.start:FlowStart
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
-    hyperloop.pycycle.nozzle.Nozzle=hyperloop.pycycle.nozzle:Nozzle
     hyperloop.geometry.bypass_duct.Tube=hyperloop.geometry.bypass_duct:Tube
-    hyperloop.pycycle.splitter.Splitter=hyperloop.pycycle.splitter:Splitter
+    hyperloop.hyperloop_cycle.HyperloopCycle=hyperloop.hyperloop_cycle:HyperloopCycle
+    hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
     [openmdao.container]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
     tubeModel.tubeModel=tubeModel:tubeModel
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
     heatExchanger2.heatExchanger=heatExchanger2:heatExchanger
     hyperloop.hyperloop_sim.Geometry=hyperloop.hyperloop_sim:Geometry
-    hyperloop.pycycle.inlet.Inlet=hyperloop.pycycle.inlet:Inlet
     hyperAssembly.hyperTop=hyperAssembly:hyperTop
-    hyperloop.pycycle.compressor.Compressor=hyperloop.pycycle.compressor:Compressor
     heatExchanger.heatExchanger=heatExchanger:heatExchanger
-    hyperloop.pycycle.heat_exchanger.HeatExchanger=hyperloop.pycycle.heat_exchanger:HeatExchanger
-    hyperloop.pycycle.start.FlowStart=hyperloop.pycycle.start:FlowStart
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
-    hyperloop.pycycle.nozzle.Nozzle=hyperloop.pycycle.nozzle:Nozzle
     hyperloop.geometry.bypass_duct.Tube=hyperloop.geometry.bypass_duct:Tube
-    hyperloop.pycycle.splitter.Splitter=hyperloop.pycycle.splitter:Splitter
+    hyperloop.hyperloop_cycle.HyperloopCycle=hyperloop.hyperloop_cycle:HyperloopCycle
+    hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
 
 - **keywords:** openmdao
 

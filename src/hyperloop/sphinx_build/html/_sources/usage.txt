@@ -102,8 +102,7 @@ an inlet, two compressors, two heat exchangers, a nozzle, and a duct to air bear
 The compression systems is modeled as a 1-D cycle, representing components as a 
 thermodynamic processes which are chained together. These models predict the instantaneous 
 power consumption of the compression system for a given set of design variable values. The 
-compression system is defined by 8 design variables, shown below with baseline 
-design values. 
+compression system is defined by 8 design variables, shown below. 
 
 ========================  ====================================================  ========  ===============  ===============  ===============
 Variable                  Description                                           Units     Baseline Value          Min.             Max.
@@ -126,9 +125,8 @@ Variable                  Description                                           
 ========================  ====================================================  ========  ===============  ===============  ===============
 
 
-
-For the baseline design, at a travel speed of Mach 1, calculate the total power consumption 
-from the compressors to be about 270 kW (362 horsepower).
+For the baseline design, at a travel speed of Mach 1, the total power consumption 
+from the compressors to be about 339 kW (455 horsepower). 
 
 
 -----------------------------

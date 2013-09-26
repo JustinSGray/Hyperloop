@@ -12,7 +12,7 @@ class HyperloopCycle(Assembly):
 
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
-    pod_Mach = Float(1.0, iotype="in", desc="travel Mach of the pod")
+    Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
     tube_P = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     tube_T = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     tube_radius = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
@@ -83,7 +83,7 @@ class HyperloopCycle(Assembly):
         self.connect('comp2.Fl_O','duct2.Fl_I')
 
         #variable pass_throughs to the assembly boundary
-        self.connect('pod_Mach', 'tube.Mach')
+        self.connect('Mach_pod', 'tube.Mach')
         self.connect('c1_entrance_Mach', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     from math import pi
 
     hlc = set_as_top(HyperloopCycle())
-    hlc.pod_Mach = 1
+    hlc.Mach_pod = 1
     hlc.run()
 
     print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 

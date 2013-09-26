@@ -10,34 +10,36 @@ from pycycle.flowstation import CanteraFlowStation, secant
 
 class KantrowitzLimit(Component): 
     """finds the Kantrowitz limit velocity for a body traveling through a tube"""
-
-    tube_radius = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")    
-    inlet_radius = Float(73.7, iotype="in", units="cm", desc="radius of the inlet at it's largest point")
-    pod_radius = Float()
-    Ps = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
-    Ts = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
+    radius_tube = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")    
+    radius_inlets = Float(73.7, iotype="in", units="cm", desc="radius of the inlet at it's largest point")
+    Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
+    Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
+    Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
 
     limit_speed = Float(iotype="out", desc="pod travel speed where flow choking occurs", units="m/s")
     limit_Mach = Float(iotype="out", desc="pod travel Mach number where flow choking occurs")
+    W_excess = Float(iotype="out", desc="excess tube mass flow above the Kantrowitz limit", units="kg/s")
+    W_tube = Float(iotype="out", desc="Tube demand flow", units="kg/s")
+    W_kant = Float(iotype="out", desc="Kantrowitz limit flow", units="kg/s")
+
     def execute(self):
 
-    	fs_tube = CanteraFlowStation()
-        fs_kant = CanteraFlowStation()
+    	fs_tube = self.fs_tube = CanteraFlowStation()
 
-        MN = []
-        W_tube = []
-        W_kant = []
+        tube_rad = self.radius_tube*0.0328084 #convert to ft
+        inlet_rad = self.radius_inlets*0.0328084
 
-        tube_rad = self.tube_radius*0.0328084 #convert to ft
-        inlet_rad = self.inlet_radius*0.0328084
+        self._tube_area  = pi*(tube_rad**2) #ft**2
+        self._bypass_area = pi*(tube_rad**2-inlet_rad**2)
 
-        tube_area = pi*(tube_rad**2) #ft**2
-        bypass_area = pi*(tube_rad**2-inlet_rad**2)
+        self._Ts = self.Ts_tube*1.8 #convert to R
+        self._Ps = self.Ps_tube*0.000145037738 #convert to psi
 
-        area_ratio_target = tube_area/bypass_area
+
+        area_ratio_target = self._tube_area/self._bypass_area
 
         def f(m_guess): 
-            fs_tube.setStaticTsPsMN(self.Ts*1.8, self.Ps*0.000145037738, m_guess)
+            fs_tube.setStaticTsPsMN(self._Ts, self._Ps , m_guess)
             gam = fs_tube.gamt
             g_exp = (gam+1)/(2*(gam-1))
             ar = ((gam+1)/2)**(-1*g_exp)*((1+ (gam-1)/2*m_guess**2)**g_exp)/m_guess
@@ -45,47 +47,43 @@ class KantrowitzLimit(Component):
 
         self.limit_Mach = secant(f, .1, x_min=0, x_max=1)
         self.limit_speed = fs_tube.Vflow*0.3048 #convert to meters
-
         
 
-        for m in np.arange(.1,1.1,.1): 
-            MN.append(m)
-            fs_tube.setStaticTsPsMN(self.Ts*1.8, self.Ps*0.000145037738, m)
 
-            w_tube = fs_tube.rhos*fs_tube.Vflow*tube_area
-            fs_tube.W = w_tube
-            #W_tube.append(w_tube*0.45359237)
-            W_tube.append(w_tube)
-           
-            fs_tube.W = w_tube
-            fs_tube.Mach = 1
+        #excess mass flow calculation
+        fs_tube.setStaticTsPsMN(self._Ts, self._Ps, self.Mach_pod)
+        self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area
 
-            #print fs_tube.area, (bypass_area*144)
-            #exit()
+        fs_tube.Mach = 1 #Kantrowitz flow is at these total conditions, but with Mach 1
+        self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area
+        
+        self.W_excess = self.W_tube - self.W_kant
 
-            def f(w_guess):
-                fs_tube.W = w_guess
-                return fs_tube.area - (bypass_area*144) #convert to inch**2
 
-            w_kant = secant(f, w_tube, x_min=0.)
-            #print w_kant, w_tube, fs_tube.area, bypass_area*144
-            #print w_kant, w_tube
-            #W_kant.append(w_kant*0.45359237)
-            W_kant.append(w_kant)
+def plot_data():
+    """utility function to make the Kantrowitz Limit Plot""" 
+    from openmdao.main.api import set_as_top
+    comp = set_as_top(KantrowitzLimit())
 
-        self.MN = MN
-        self.W_kant = W_kant
-        self.W_tube = W_tube
-            
+    MN = []
+    W_tube = []
+    W_kant = []
 
-    def plot_data(self):
-        p.plot(self.MN,self.W_tube, label="Required Tube Flow", lw=5)
-        p.plot(self.MN,self.W_kant, label="Kantrowitz Limit",   lw=5)
-        p.legend(loc="best")
-        p.xlabel('Pod Mach Number')
-        p.ylabel('Mass Flow Rate (kg/sec)')
-        p.title('Kantrowitz Limit Flow')
-        p.show()
+    for m in np.arange(.1,1.1,.1): 
+        comp.Mach_pod = m
+        comp.run()
+
+        MN.append(m)
+        W_kant.append(comp.W_kant)
+        W_tube.append(comp.W_tube)
+
+    p.plot(MN,W_tube, label="Required Tube Flow", lw=5)
+    p.plot(MN,W_kant, label="Kantrowitz Limit",   lw=5)
+    p.legend(loc="best")
+    p.xlabel('Pod Mach Number')
+    p.ylabel('Mass Flow Rate (kg/sec)')
+    p.title('Kantrowitz Limit Flow')
+    p.show()
 
         
 
@@ -94,11 +92,11 @@ if __name__ == "__main__":
 
     from openmdao.main.api import set_as_top
     comp = set_as_top(KantrowitzLimit())
-    #comp.tube_radius = 200
+    #comp.radius_tube = 200
     comp.run()
     print comp.limit_speed, comp.limit_Mach
     #print comp.MN[-1]
     #print comp.W_tube[-1]
     #print comp.W_kant[-1]
-    print "excess mass flow at Mach %1.1f: %f"%(comp.MN[-1], comp.W_tube[-1]-comp.W_kant[-1])
-    #comp.plot_data()
+    plot_data()
+    print comp.W_excess

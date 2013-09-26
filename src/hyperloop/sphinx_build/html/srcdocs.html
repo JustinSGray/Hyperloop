@@ -57,131 +57,11 @@
             
   <div class="section" id="source-documentation">
 <span id="hyperloop-src-label"></span><h1>Source Documentation<a class="headerlink" href="#source-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-hyperloop.api">
-<span id="api-py"></span><span id="hyperloop-api-py"></span><span id="index-0"></span><h2>api.py<a class="headerlink" href="#module-hyperloop.api" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#hyperloop-cycle-compression-system-py"><em>CompressionSystem</em></a></p>
-<p><a class="reference internal" href="#hyperloop-geometry-inlet-py"><em>InletGeom</em></a></p>
-<p><a class="reference internal" href="#hyperloop-kantrowitz-limit-py"><em>KantrowitzLimit</em></a></p>
+<div class="section" id="api-py">
+<span id="hyperloop-api-py"></span><span id="index-0"></span><h2>api.py<a class="headerlink" href="#api-py" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-hyperloop.cycle.compression_system">
-<span id="compression-system-py"></span><span id="hyperloop-cycle-compression-system-py"></span><span id="index-1"></span><h2>compression_system.py<a class="headerlink" href="#module-hyperloop.cycle.compression_system" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="hyperloop.cycle.compression_system.CompressionSystem">
-<em class="property">class </em><tt class="descclassname">hyperloop.cycle.compression_system.</tt><tt class="descname">CompressionSystem</tt><a class="reference internal" href="_modules/hyperloop/cycle/compression_system.html#CompressionSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.compression_system.CompressionSystem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.assembly.Assembly</span></tt></p>
-<dl class="docutils">
-<dt><em>Float</em> <strong>Mach_c1_in</strong></dt>
-<dd><p class="first">Mach number at entrance to the first compressor at design conditions</p>
-<ul class="last simple">
-<li>default:  &#8216;0.6&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Mach_pod</strong></dt>
-<dd><p class="first">travel Mach of the pod at design conditions</p>
-<ul class="last simple">
-<li>default:  &#8216;1.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Ps_tube</strong></dt>
-<dd><p class="first">static pressure in the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;99.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;Pa&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Ts_tube</strong></dt>
-<dd><p class="first">static temperature in the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;292.1&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;degK&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c1_PR_des</strong></dt>
-<dd><p class="first">pressure ratio of first compressor at design conditions</p>
-<ul class="last simple">
-<li>default:  &#8216;12.47&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c1_q_dot</strong></dt>
-<dd><p class="first">heat extracted from the flow after the first compressor stage</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;kW&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c2_PR_des</strong></dt>
-<dd><p class="first">pressure ratio of second compressor at design conditions</p>
-<ul class="last simple">
-<li>default:  &#8216;5.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c2_q_dot</strong></dt>
-<dd><p class="first">heat extracted from the flow after the second compressor stage</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;kW&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>radius_tube</strong></dt>
-<dd><p class="first">radius of the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;111.5&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>area_bypass</strong></dt>
-<dd><p class="first">flow area required for the air bypassing the pod</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>area_c1_in</strong></dt>
-<dd><p class="first">flow area required for the first compressor</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>nozzle_flow_area</strong></dt>
-<dd><p class="first">flow area required for the nozzle exit</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="hyperloop.cycle.compression_system.CompressionSystem.configure">
-<tt class="descname">configure</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/compression_system.html#CompressionSystem.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.compression_system.CompressionSystem.configure" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="compression-system-py">
+<span id="hyperloop-cycle-compression-system-py"></span><span id="index-1"></span><h2>compression_system.py<a class="headerlink" href="#compression-system-py" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="heatexchanger-py">
 <span id="hyperloop-cycle-heatexchanger-py"></span><span id="index-2"></span><h2>heatExchanger.py<a class="headerlink" href="#heatexchanger-py" title="Permalink to this headline">¶</a></h2>
@@ -1578,51 +1458,8 @@ Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In,
 </dd></dl>
 
 </div>
-<div class="section" id="module-hyperloop.geometry.bypass_duct">
-<span id="bypass-duct-py"></span><span id="hyperloop-geometry-bypass-duct-py"></span><span id="index-9"></span><h2>bypass_duct.py<a class="headerlink" href="#module-hyperloop.geometry.bypass_duct" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="hyperloop.geometry.bypass_duct.InletGeom">
-<em class="property">class </em><tt class="descclassname">hyperloop.geometry.bypass_duct.</tt><tt class="descname">InletGeom</tt><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#InletGeom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.InletGeom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
-<dl class="docutils">
-<dt><em>Float</em> <strong>area_c1_in</strong></dt>
-<dd><p class="first">amount of area blocked by the passenger capsule</p>
-<ul class="last simple">
-<li>default:  &#8216;14850.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>inlet_wall_thickness</strong></dt>
-<dd><p class="first">thickness of the inlet wall</p>
-<ul class="last simple">
-<li>default:  &#8216;5.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>inlet_radius</strong></dt>
-<dd><p class="first">radius of the inlet at it&#8217;s largest point</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="hyperloop.geometry.bypass_duct.InletGeom.execute">
-<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#InletGeom.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.InletGeom.execute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="module-hyperloop.geometry.fan">
-<span id="fan-py"></span><span id="hyperloop-geometry-fan-py"></span><span id="index-10"></span><h2>fan.py<a class="headerlink" href="#module-hyperloop.geometry.fan" title="Permalink to this headline">¶</a></h2>
+<span id="fan-py"></span><span id="hyperloop-geometry-fan-py"></span><span id="index-9"></span><h2>fan.py<a class="headerlink" href="#module-hyperloop.geometry.fan" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hyperloop.geometry.fan.Fan">
 <em class="property">class </em><tt class="descclassname">hyperloop.geometry.fan.</tt><tt class="descname">Fan</tt><a class="reference internal" href="_modules/hyperloop/geometry/fan.html#Fan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.fan.Fan" title="Permalink to this definition">¶</a></dt>
@@ -1673,7 +1510,7 @@ Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In,
 
 </div>
 <div class="section" id="module-hyperloop.geometry.inlet">
-<span id="inlet-py"></span><span id="hyperloop-geometry-inlet-py"></span><span id="index-11"></span><h2>inlet.py<a class="headerlink" href="#module-hyperloop.geometry.inlet" title="Permalink to this headline">¶</a></h2>
+<span id="inlet-py"></span><span id="hyperloop-geometry-inlet-py"></span><span id="index-10"></span><h2>inlet.py<a class="headerlink" href="#module-hyperloop.geometry.inlet" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hyperloop.geometry.inlet.InletGeom">
 <em class="property">class </em><tt class="descclassname">hyperloop.geometry.inlet.</tt><tt class="descname">InletGeom</tt><a class="reference internal" href="_modules/hyperloop/geometry/inlet.html#InletGeom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.inlet.InletGeom" title="Permalink to this definition">¶</a></dt>
@@ -1734,169 +1571,13 @@ Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In,
 
 </div>
 <div class="section" id="pod-py">
-<span id="hyperloop-geometry-pod-py"></span><span id="index-12"></span><h2>pod.py<a class="headerlink" href="#pod-py" title="Permalink to this headline">¶</a></h2>
+<span id="hyperloop-geometry-pod-py"></span><span id="index-11"></span><h2>pod.py<a class="headerlink" href="#pod-py" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-hyperloop.hyperloop_sim">
-<span id="hyperloop-sim-py"></span><span id="hyperloop-hyperloop-sim-py"></span><span id="index-13"></span><h2>hyperloop_sim.py<a class="headerlink" href="#module-hyperloop.hyperloop_sim" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="hyperloop.hyperloop_sim.Hyperloop">
-<em class="property">class </em><tt class="descclassname">hyperloop.hyperloop_sim.</tt><tt class="descname">Hyperloop</tt><a class="reference internal" href="_modules/hyperloop/hyperloop_sim.html#Hyperloop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.hyperloop_sim.Hyperloop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.assembly.Assembly</span></tt></p>
-<dl class="docutils">
-<dt><em>Float</em> <strong>Mach_pod</strong></dt>
-<dd><p class="first">travel Mach of the pod</p>
-<ul class="last simple">
-<li>default:  &#8216;1.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Ps_tube</strong></dt>
-<dd><p class="first">static pressure in the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;99.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;Pa&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Ts_tube</strong></dt>
-<dd><p class="first">static temperature in the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;292.1&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;degK&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>radius_tube</strong></dt>
-<dd><p class="first">required radius for the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;111.5&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="hyperloop.hyperloop_sim.Hyperloop.configure">
-<tt class="descname">configure</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/hyperloop_sim.html#Hyperloop.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.hyperloop_sim.Hyperloop.configure" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="hyperloop-sim-py">
+<span id="hyperloop-hyperloop-sim-py"></span><span id="index-12"></span><h2>hyperloop_sim.py<a class="headerlink" href="#hyperloop-sim-py" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="module-hyperloop.kantrowitz_limit">
-<span id="kantrowitz-limit-py"></span><span id="hyperloop-kantrowitz-limit-py"></span><span id="index-14"></span><h2>kantrowitz_limit.py<a class="headerlink" href="#module-hyperloop.kantrowitz_limit" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="hyperloop.kantrowitz_limit.KantrowitzLimit">
-<em class="property">class </em><tt class="descclassname">hyperloop.kantrowitz_limit.</tt><tt class="descname">KantrowitzLimit</tt><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#KantrowitzLimit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.KantrowitzLimit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
-<p>finds the Kantrowitz limit velocity for a body traveling through a tube</p>
-<dl class="docutils">
-<dt><em>Float</em> <strong>Mach_pod</strong></dt>
-<dd><p class="first">travel Mach of the pod</p>
-<ul class="last simple">
-<li>default:  &#8216;1.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Ps_tube</strong></dt>
-<dd><p class="first">static pressure in the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;99.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;Pa&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>Ts_tube</strong></dt>
-<dd><p class="first">static temperature in the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;292.1&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;degK&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>radius_inlet</strong></dt>
-<dd><p class="first">radius of the inlet at it&#8217;s largest point</p>
-<ul class="last simple">
-<li>default:  &#8216;73.7&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>radius_tube</strong></dt>
-<dd><p class="first">required radius for the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;111.5&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>W_excess</strong></dt>
-<dd><p class="first">excess tube mass flow above the Kantrowitz limit</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;kg/s&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>W_kant</strong></dt>
-<dd><p class="first">Kantrowitz limit flow</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;kg/s&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>W_tube</strong></dt>
-<dd><p class="first">Tube demand flow</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;kg/s&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>limit_Mach</strong></dt>
-<dd><p class="first">pod travel Mach number where flow choking occurs</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>limit_speed</strong></dt>
-<dd><p class="first">pod travel speed where flow choking occurs</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;m/s&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="hyperloop.kantrowitz_limit.KantrowitzLimit.execute">
-<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#KantrowitzLimit.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.KantrowitzLimit.execute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="hyperloop.kantrowitz_limit.plot_data">
-<tt class="descclassname">hyperloop.kantrowitz_limit.</tt><tt class="descname">plot_data</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#plot_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.plot_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>utility function to make the Kantrowitz Limit Plot</p>
-</dd></dl>
-
+<div class="section" id="kantrowitz-limit-py">
+<span id="hyperloop-kantrowitz-limit-py"></span><span id="index-13"></span><h2>kantrowitz_limit.py<a class="headerlink" href="#kantrowitz-limit-py" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -1909,8 +1590,8 @@ Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In,
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Source Documentation</a><ul>
-<li><a class="reference internal" href="#module-hyperloop.api">api.py</a></li>
-<li><a class="reference internal" href="#module-hyperloop.cycle.compression_system">compression_system.py</a></li>
+<li><a class="reference internal" href="#api-py">api.py</a></li>
+<li><a class="reference internal" href="#compression-system-py">compression_system.py</a></li>
 <li><a class="reference internal" href="#heatexchanger-py">heatExchanger.py</a></li>
 <li><a class="reference internal" href="#heatexchanger2-py">heatExchanger2.py</a></li>
 <li><a class="reference internal" href="#hyperassembly-py">hyperAssembly.py</a></li>
@@ -1918,12 +1599,11 @@ Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In,
 <li><a class="reference internal" href="#module-hyperloop.cycle.tubeModel">tubeModel.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.air_bearing">air_bearing.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.battery">battery.py</a></li>
-<li><a class="reference internal" href="#module-hyperloop.geometry.bypass_duct">bypass_duct.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.fan">fan.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.inlet">inlet.py</a></li>
 <li><a class="reference internal" href="#pod-py">pod.py</a></li>
-<li><a class="reference internal" href="#module-hyperloop.hyperloop_sim">hyperloop_sim.py</a></li>
-<li><a class="reference internal" href="#module-hyperloop.kantrowitz_limit">kantrowitz_limit.py</a></li>
+<li><a class="reference internal" href="#hyperloop-sim-py">hyperloop_sim.py</a></li>
+<li><a class="reference internal" href="#kantrowitz-limit-py">kantrowitz_limit.py</a></li>
 </ul>
 </li>
 </ul>

@@ -20,7 +20,6 @@ Package Metadata
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
     hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
     hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
-    hyperloop.geometry.bypass_duct.InletGeom=hyperloop.geometry.bypass_duct:InletGeom
     hyperloop.cycle.heatExchanger2.heatExchanger=hyperloop.cycle.heatExchanger2:heatExchanger
     hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
     hyperloop.cycle.hyperAssembly.hyperTop=hyperloop.cycle.hyperAssembly:hyperTop
@@ -34,7 +33,6 @@ Package Metadata
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
     hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
     hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
-    hyperloop.geometry.bypass_duct.InletGeom=hyperloop.geometry.bypass_duct:InletGeom
     hyperloop.cycle.heatExchanger2.heatExchanger=hyperloop.cycle.heatExchanger2:heatExchanger
     hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
     hyperloop.cycle.hyperAssembly.hyperTop=hyperloop.cycle.hyperAssembly:hyperTop

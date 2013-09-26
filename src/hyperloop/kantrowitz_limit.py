@@ -94,8 +94,8 @@ if __name__ == "__main__":
     comp = set_as_top(KantrowitzLimit())
     #comp.radius_tube = 200
     comp.run()
-    print comp.limit_speed, comp.limit_Mach
+    print comp.limit_speed, comp.limit_Mach, comp.W_excess
     #print comp.MN[-1]
     #print comp.W_tube[-1]
     #print comp.W_kant[-1]
-    plot_data()
+    #plot_data()

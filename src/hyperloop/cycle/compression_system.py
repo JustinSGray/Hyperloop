@@ -1,5 +1,5 @@
 from openmdao.main.api import Assembly, set_as_top, Run_Once, SequentialWorkflow
-from openmdao.lib.drivers.api import BroydenSolver, DOEdriver
+from openmdao.lib.drivers.api import NewtonKrylov, DOEdriver
 from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
@@ -22,28 +22,21 @@ class CompressionSystem(Assembly):
     c2_PR_des = Float(5, iotype="in", desc="pressure ratio of second compressor at design conditions")
     c2_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the second compressor stage", units="kW")
 
-    area_bypass = Float(iotype="out", desc="flow area required for the air bypassing the pod", units="cm**2")
     area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
 
     def configure(self):
 
-        MN_DESIGN = 1 #Mach at the design condition
+      
 
         tube = self.add('tube', FlowStartStatic())
-        tube.W = 3.488
+        tube.W = 1.521
         tube.Ps = 0.01436
         tube.Ts = 525.6
-        tube.Mach = MN_DESIGN
-
-        tube_bypass = self.add('tube_bypass', Splitter())
-        tube_bypass.BPR_des = 2.2285
-        tube_bypass.MNexit1_des = MN_DESIGN
-        tube_bypass.MNexit2_des = MN_DESIGN
 
         inlet = self.add('inlet', Inlet())
         inlet.ram_recovery = 1.0
-        inlet.MNexit_des = .6
+        #inlet.MNexit_des = .6
 
         comp1 = self.add('comp1', Compressor())
         comp1.PR_des = 12.47
@@ -72,8 +65,7 @@ class CompressionSystem(Assembly):
         duct2.dPqP = 0 #no losses
 
         #Component Connections
-        self.connect('tube.Fl_O','tube_bypass.Fl_I')
-        self.connect('tube_bypass.Fl_O1', 'inlet.Fl_I')
+        self.connect('tube.Fl_O', 'inlet.Fl_I')
         self.connect('inlet.Fl_O','comp1.Fl_I')
         self.connect('comp1.Fl_O', 'duct1.Fl_I')
         self.connect('duct1.Fl_O', 'split.Fl_I')
@@ -90,19 +82,18 @@ class CompressionSystem(Assembly):
         self.connect('-.94782*c1_q_dot', 'duct1.Q_dot') #negative q is heat out, convert from kW to btu/s
         self.connect('-.94782*c2_q_dot', 'duct2.Q_dot') #negative q is heat out, convert from kW to btu/s
 
-        self.connect('tube_bypass.Fl_O1.area','area_bypass')
         self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
 
         #driver setup
-        #design = self.driver
-        design = self.add('driver', BroydenSolver())
-        design.add_parameter('tube.W', low=-1e15, high=1e15)
-        design.add_constraint('tube.Fl_O.area=(3.14159*radius_tube**2)*.394**2') #holds the radius of the tube constant    
-        design.add_parameter('tube_bypass.BPR_des', low=-1e15, high=1e15)
-        design.add_constraint('area_bypass+area_c1_in=tube.Fl_O.area') #holds the radius of the tube constant
+        design = self.driver
+        #design = self.add('driver', NewtonKrylov())
+        #design.add_parameter('tube.W', low=-1e15, high=1e15)
+        #design.add_constraint('tube.Fl_O.area=(3.14159*radius_tube**2)*.394**2') #holds the radius of the tube constant    
+        #design.add_parameter('tube_bypass.BPR_des', low=-1e15, high=1e15)
+        #design.add_constraint('tube_bypass.Fl_O1.area+inlet.Fl_O.area=tube.Fl_O.area') #holds the radius of the tube constant
 
-        comp_list = ['tube','tube_bypass','inlet','comp1',
+        comp_list = ['tube','inlet','comp1',
             'duct1', 'split', 'nozzle', 'comp2', 'duct2']
 
         design.workflow.add(comp_list)
@@ -114,7 +105,7 @@ if __name__ == "__main__":
     from math import pi
 
     hlc = set_as_top(CompressionSystem())
-    hlc.Mach_pod = .9
+    hlc.Mach_pod = 1
     hlc.run()
 
     print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 

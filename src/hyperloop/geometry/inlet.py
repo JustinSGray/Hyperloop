@@ -17,7 +17,6 @@ class InletGeom(Component):
     def execute(self): 
 
         print self.area_inlet 
-        exit()
         self.radius_inner = (self.area_inlet/pi)**2
         self.radius_outer = self.radius_inner+self.inlet_wall_thickness
         self.blockage = pi*(self.radius_outer)**2

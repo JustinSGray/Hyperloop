@@ -4,3 +4,4 @@
 *.xml
 openmdao_log.txt
 
+src/hyperloop/sphinx_build/

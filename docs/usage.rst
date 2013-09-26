@@ -171,7 +171,7 @@ Given:
 
 -For simplicity, only a single heat exchanger is designed (to cool down the air coming off the second compressor stage)
 
--Sized as a classic shell and tube heat exchanger
+-Sized as a classic shell and tube heat exchanger!
 
 Method Assumptions:
 

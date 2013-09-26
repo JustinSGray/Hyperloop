@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hyperloop.cycle.heatExchanger &mdash; hyperloop 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="hyperloop 0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">hyperloop 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hyperloop.cycle.heatExchanger</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    heatExchanger.py -  (This one is for validation with water and kerosene)</span>
+<span class="sd">        Performs basic heat exchanger calculations for a multi-tube double pass</span>
+<span class="sd">        counter-flow or co-flow shell and tube heat exchanger</span>
+<span class="sd">        </span>
+<span class="sd">Logarithmic Mean Temperature Difference (LMTD) Method</span>
+<span class="sd">    Design a heat exchanger to meet prescribed heat transfer requirements</span>
+
+<span class="sd">    LMTD Limitations</span>
+<span class="sd">    -Both starting and final temperature parameters must be known</span>
+<span class="sd">    -Temperature change across cannot be so large that Cp changes significantly</span>
+<span class="sd">    -Rigorously defined for double-pipe(or tubular) heat exchanger</span>
+
+<span class="sd">NTU (effectiveness) Method</span>
+<span class="sd">    Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.</span>
+
+<span class="sd">    NTU Limitations</span>
+<span class="sd">    1) Effectiveness of the chosen heat exchanger must be known (empirical)</span>
+
+<span class="sd">    Compatible with OpenMDAO v0.8.1</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">openmdao.main.api</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">openmdao.lib.datatypes.api</span> <span class="kn">import</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Bool</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">e</span>
+
+<div class="viewcode-block" id="check"><a class="viewcode-back" href="../../../srcdocs.html#hyperloop.cycle.heatExchanger.check">[docs]</a><span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="n">correct_val</span><span class="p">):</span>
+    <span class="c">#check(&#39;&lt;variable_name&gt;&#39;,&lt;variable&gt;,&lt;correct value&gt;)</span>
+    <span class="s">&quot;Format and print the results of a value comparison, (crude tests for verification purposes)&quot;</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">correct_val</span> <span class="o">-</span> <span class="n">var</span><span class="p">)</span><span class="o">/</span><span class="n">correct_val</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">error</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">):</span> <span class="c">#determine percent error, if greater than 1%</span>
+        <span class="k">print</span> <span class="s">&quot;{}: {} ........{}%  --&gt; {}!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="s">&quot;Test Passed&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c">#comparison fails, print error output</span>
+        <span class="k">print</span> <span class="s">&quot; ===&gt; {}: {} ........{}%  --&gt; {} ?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span><span class="n">var</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="s">&quot;Test Failed :(&quot;</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="heatExchanger"><a class="viewcode-back" href="../../../srcdocs.html#hyperloop.cycle.heatExchanger.heatExchanger">[docs]</a><span class="k">class</span> <span class="nc">heatExchanger</span><span class="p">(</span><span class="n">Component</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Main Component &quot;&quot;&quot;</span>
+
+    <span class="c">#--Inputs--</span>
+    <span class="c">#Boundary Temperatures</span>
+    <span class="n">T_win</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">368</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Temp of water into heat exchanger&#39;</span><span class="p">)</span> <span class="c">#368 , 110</span>
+    <span class="n">T_wout</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">358</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Temp of water out of heat exchanger&#39;</span><span class="p">)</span> <span class="c">#358 , 190</span>
+    <span class="n">T_ain</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">297</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Temp of air into heat exchanger&#39;</span><span class="p">)</span> <span class="c">#297, 400</span>
+    <span class="n">T_aout</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">308</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;K&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Temp of air out of heat exchanger&#39;</span><span class="p">)</span> <span class="c">#308, 170</span>
+
+    <span class="c">#Design Variables</span>
+    <span class="n">Mdot_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;kg/s&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Mass flow rate of water pumped through system&#39;</span><span class="p">)</span>
+    <span class="n">Mdot_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">2.2221623</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;kg/s&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Mass flow rate of air&#39;</span><span class="p">)</span>
+    <span class="n">Di_shell</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.05102</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Shell pipe (inner) Diameter&#39;</span><span class="p">)</span>
+    <span class="n">Do_tube</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.03493</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Tube pipe (outer) Diameter&#39;</span><span class="p">)</span>
+    <span class="n">Di_tube</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.03279</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Tube pipe (inner) Diameter&#39;</span><span class="p">)</span> <span class="c">#0.03279, 0.0371851871796067</span>
+    <span class="c">#A_a = Float(1.0, units = &#39;m**2&#39;, iotype=&#39;out&#39;, desc=&#39;Area&#39;)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Number of Tube Passes&#39;</span><span class="p">)</span>
+    
+    <span class="n">cooled</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span> <span class="s">&#39;Boolean true if fluid is cooled, false if heated&#39;</span><span class="p">)</span>
+    <span class="n">coFlow</span> <span class="o">=</span> <span class="n">Bool</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span> <span class="s">&#39;Boolean true if co-flow, false if coutner-flow&#39;</span><span class="p">)</span>
+
+    <span class="c">#Assumed Constant Properties</span>
+    <span class="n">rho_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;kg/m**3&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;density of water&#39;</span><span class="p">)</span>
+    <span class="n">rho_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">730.</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;kg/m**3&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;density of air &#39;</span><span class="p">)</span>
+    <span class="n">cp_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">4208.</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;J/(kg*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;specific heat of water&#39;</span><span class="p">)</span>
+    <span class="n">cp_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">2470.</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;J/(kg*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;specific heat of air&#39;</span><span class="p">)</span>
+    <span class="n">dvisc_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.00031</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;kg/(m*s)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;dynamic viscosity for water&#39;</span><span class="p">)</span>
+    <span class="n">dvisc_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.0004</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;kg/(m*s)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;dynamic viscosity for air&#39;</span><span class="p">)</span>
+    <span class="n">kvisc_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.000000326</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m**2/s&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;kinematic viscosity for water&#39;</span><span class="p">)</span>
+    <span class="n">kvisc_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.0000005479</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m**2/s&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;kinematic viscosity for air&#39;</span><span class="p">)</span>
+    <span class="n">k_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.58</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/(m*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;thermal conductivity for water&#39;</span><span class="p">)</span>
+    <span class="n">k_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">0.132</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/(m*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;thermal conductivity for air&#39;</span><span class="p">)</span>
+    <span class="n">k_p</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">400.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/(m*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;thermal conductivity of the pipe&#39;</span><span class="p">)</span>
+    <span class="n">R_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/(m*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;fouling factor of city water&#39;</span><span class="p">)</span>
+    <span class="n">R_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/(m*K)&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;in&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;fouling factor of air&#39;</span><span class="p">)</span>
+
+    <span class="c">#--Outputs--</span>
+    <span class="c">#Intermediate Variables</span>
+    <span class="n">Asurf_pipe</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m**2&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Surface Area of the Pipe&#39;</span><span class="p">)</span>
+    <span class="n">Dh</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Hyrdraulic Diameter of the shell (annulus) for fluid flow&#39;</span><span class="p">)</span>
+    <span class="n">De</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Hyrdraulic Diameter of the shell (annulus) for heat flow&#39;</span><span class="p">)</span>
+    <span class="n">A_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m**2&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;area of air&#39;</span><span class="p">)</span>
+    <span class="n">A_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m**2&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;area of water&#39;</span><span class="p">)</span>
+    <span class="c">#Calculated Variables</span>
+    <span class="n">Veloc_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m/s&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;flow velocity of water&#39;</span><span class="p">)</span>
+    <span class="n">Veloc_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m/s&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;flow velocity of air&#39;</span><span class="p">)</span>
+    <span class="n">h_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/m&#39;</span><span class="p">,</span> <span class="n">iotype</span> <span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;heat transfer of water&#39;</span><span class="p">)</span>
+    <span class="n">h_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;heat transfer of air&#39;</span><span class="p">)</span>
+    <span class="n">q_w</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;heat flow of water&#39;</span><span class="p">)</span>
+    <span class="n">q_a</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;heat flow of air&#39;</span><span class="p">)</span>
+    <span class="n">U_o</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;W/(m**2)*K&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Overall Heat Transfer Coefficient&#39;</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Heat Exchanger Length&#39;</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Multi-pass correction factor&#39;</span><span class="p">)</span>
+    
+    <span class="c">#Size/Volume Considerations</span>
+    <span class="n">Vol_water</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m**3&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Volume of input water tank&#39;</span><span class="p">)</span>
+    <span class="n">Vol_steam</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;m**3&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Volume of output steam tank&#39;</span><span class="p">)</span>
+    <span class="n">Mass_water</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;kg&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Mass of input water tank&#39;</span><span class="p">)</span>
+    <span class="n">Mass_steam</span> <span class="o">=</span> <span class="n">Float</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span> <span class="s">&#39;kg&#39;</span><span class="p">,</span> <span class="n">iotype</span><span class="o">=</span><span class="s">&#39;out&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Mass of output steam tank&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="heatExchanger.execute"><a class="viewcode-back" href="../../../srcdocs.html#hyperloop.cycle.heatExchanger.heatExchanger.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate Various Paramters&quot;&quot;&quot;</span>
+
+        <span class="n">Th_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_ain</span> <span class="c">#T hot air in</span>
+        <span class="n">Th_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_aout</span> <span class="c">#T air out</span>
+        <span class="n">Tc_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_win</span> <span class="c">#T cold water in</span>
+        <span class="n">Tc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_wout</span> <span class="c">#T water out</span>
+
+        <span class="n">Di_shell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Di_shell</span>
+        <span class="n">Do_tube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Do_tube</span>
+        <span class="n">Di_tube</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Di_tube</span>
+
+        <span class="c">#Determine the area of the air tube</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_a</span> <span class="o">=</span> <span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Di_tube</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;A_a&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">A_a</span><span class="p">,</span> <span class="mf">0.0008444</span><span class="p">)</span>
+        <span class="c">#prevent cascading errors (switch areas)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_a</span> <span class="o">=</span> <span class="mf">0.001086</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_w</span> <span class="o">=</span> <span class="mf">0.0008444</span>
+        <span class="c">#Determine the fluid velocity of the air</span>
+        <span class="c">#Rearrange Mdot = rho * Area * Velocity --&gt; Velocity = Mdot/(rho*Area)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Veloc_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mdot_a</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho_a</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">A_a</span><span class="p">)</span>
+        
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Veloc_a&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Veloc_a</span><span class="p">,</span> <span class="mf">2.803</span><span class="p">)</span>
+        <span class="c">#Determine q</span>
+        <span class="c">#q = mdot * cp * deltaT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mdot_a</span><span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cp_a</span> <span class="o">*</span> <span class="p">(</span><span class="n">Th_out</span> <span class="o">-</span> <span class="n">Th_in</span><span class="p">)</span>
+
+        <span class="c">#Energy Balance: Q_water must equal Q_air</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_a</span>
+        
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;q_a&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">q_a</span><span class="p">,</span> <span class="mf">60377.8</span><span class="p">)</span>
+
+        <span class="c">#Determine water Mdot</span>
+        <span class="c">#q = mdot * cp * deltaT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Mdot_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_w</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cp_w</span> <span class="o">*</span> <span class="p">(</span><span class="n">Tc_in</span> <span class="o">-</span> <span class="n">Tc_out</span><span class="p">))</span>
+
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Mdot_w&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Mdot_w</span><span class="p">,</span> <span class="mf">1.45</span><span class="p">)</span>
+        
+        <span class="c">#Determine the Water Cross sectional Area </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A_w</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">Di_shell</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span> <span class="n">pi</span><span class="o">*</span><span class="p">((</span><span class="n">Do_tube</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;A_w&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">A_w</span><span class="p">,</span> <span class="mf">0.001086</span><span class="p">)</span>
+        
+        
+        <span class="c">#Determin flow velocity of the water, from Mdot and Area</span>
+        <span class="c">#Rearrange Mdot = rho * Area * Velocity --&gt; Velocity = Mdot/(rho*Area)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Veloc_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mdot_w</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rho_w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">A_w</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Veloc_w&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Veloc_w</span><span class="p">,</span> <span class="mf">1.71</span><span class="p">)</span>
+        <span class="c">#prevent cascading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Veloc_w</span> <span class="o">=</span> <span class="mf">1.71</span>
+
+        <span class="c">#Hydraulic Diameter (aka characteristic length)</span>
+        <span class="c">#D_h = (4*Af)/(Pflow) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi*(Di_shell - Do_tube) = Di_shell - Do_tube</span>
+        <span class="c">#D_e = (4*Af)/(PheatTransfer) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi* Do_tube = (Di_shell^2 - Do_tube^2)/Do_tube</span>
+
+        <span class="n">Da_h</span> <span class="o">=</span> <span class="n">Di_shell</span> <span class="o">-</span> <span class="n">Do_tube</span>
+        <span class="n">Da_e</span> <span class="o">=</span> <span class="p">(</span><span class="n">Di_shell</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">Do_tube</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">Do_tube</span>
+
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Da_h&#39;</span><span class="p">,</span><span class="n">Da_h</span><span class="p">,</span> <span class="mf">0.016082</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Da_e&#39;</span><span class="p">,</span><span class="n">Da_e</span><span class="p">,</span> <span class="mf">0.039586</span><span class="p">)</span>
+        
+        <span class="n">Dw_h</span> <span class="o">=</span> <span class="n">Di_tube</span>
+        <span class="n">Dw_e</span> <span class="o">=</span> <span class="n">Di_tube</span>
+        
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Dw_h&#39;</span><span class="p">,</span><span class="n">Dw_h</span><span class="p">,</span> <span class="n">Di_tube</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Dw_e&#39;</span><span class="p">,</span><span class="n">Dw_e</span><span class="p">,</span> <span class="n">Di_tube</span><span class="p">)</span>
+        
+        <span class="c">#cascading errors</span>
+        <span class="c">#Da_h = 0.016082</span>
+        <span class="c">#Da_e = 0.039586</span>
+        <span class="c">#Dw_h = Di_tube</span>
+        <span class="c">#Dw_e = 0.03279</span>
+        
+        <span class="c">#Determine the Reynolds Number</span>
+        <span class="c">#Re = velocity * hydraulic dimater / kinematic viscostiy   (general form for pipes)</span>
+        <span class="c">#Re = inertial forces/ viscous forces</span>
+        <span class="n">Re_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Veloc_a</span><span class="o">*</span><span class="n">Da_h</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">kvisc_a</span>
+        
+        <span class="n">Re_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Veloc_w</span><span class="o">*</span><span class="n">Dw_h</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">kvisc_w</span>
+
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Re_a&#39;</span><span class="p">,</span><span class="n">Re_a</span><span class="p">,</span> <span class="mi">82317</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Re_w&#39;</span><span class="p">,</span><span class="n">Re_w</span><span class="p">,</span> <span class="mi">174215</span><span class="p">)</span>
+        <span class="n">Re_w</span> <span class="o">=</span> <span class="mi">174215</span>
+ 
+        <span class="c">#Determine the Prandtl Number</span>
+        <span class="c">#Nu = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity</span>
+        <span class="c">#Pr &lt;&lt; 1 means thermal diffusivity dominates</span>
+        <span class="c">#Pr &gt;&gt; 1 means momentum diffusivity dominates</span>
+        <span class="n">Pr_a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cp_a</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dvisc_a</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">k_a</span>
+        <span class="n">Pr_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cp_w</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dvisc_w</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">k_w</span>
+
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Pr_a&#39;</span><span class="p">,</span><span class="n">Pr_a</span><span class="p">,</span> <span class="mf">7.48</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Pr_w&#39;</span><span class="p">,</span><span class="n">Pr_w</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">)</span>
+
+        <span class="c">#Determine the Nusselt Number</span>
+        <span class="c">#Nu = convecive heat transfer / conductive heat transfer</span>
+        <span class="c">#Nu = hL / k = (convective coeff * characteristic length) / conductive coeff</span>
+
+        <span class="c">#Dittus-Boelter equation: valid for smooth pipes with small temp difference across fluid</span>
+        <span class="c">#Nu = 0.023*(Re^4/5)*(Pr^n)  where &#39;n&#39; = 0.4 if heated or = 0.3 if cooled</span>
+        <span class="c">#Valid for 0.6 &lt;= Pr &lt;=160</span>
+        <span class="c">#and              Re &gt;= 10,000</span>
+        <span class="c">#and    L/D &gt;= 10</span>
+
+        <span class="c">#Sieder-Tate correlation</span>
+        <span class="c">#Nu = 0.027*(Re^4/5)*(Pr^1/3)*((u/u_s)^0.14)</span>
+        <span class="c">#where u = fluid viscosity at the bulk fluid temp</span>
+        <span class="c">#where u_s = fluid viscosity at the heat-transfer boundary surface temp</span>
+        <span class="c">#(More accurate than Dittus-Boelter, but requires iterative process)</span>
+        <span class="c">#(Viscosity factor will change as the Nusselt Number changes)</span>
+        <span class="c">#Valid for 0.7 &lt;= Pr &lt;= 16,700</span>
+        <span class="c">#and              Re &gt;= 10,000</span>
+        <span class="c">#and    L/D &gt;= 10</span>
+
+        <span class="c">#Gnielinski correlation: valid for turbulent flow tubes</span>
+        <span class="c">#Nu = ((f/8)*(Re-1000)*Pr)/(1+12.7((f/8)^0.5)*((Pr^2/3)-1))</span>
+        <span class="c">#f is the Darcy Friction Factor (obtained from Moody Chart)</span>
+        <span class="c">#or f = (0.79*ln(Re) - 1.64)^-2   for smooth tubes</span>
+        <span class="c">#Valid for 0.5&lt;= Pr &lt;=2000</span>
+        <span class="c">#and      3000&lt;= Re &lt;= 5*(10^6)</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">Re_a</span> <span class="o">&gt;</span><span class="mi">10000</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">Re_w</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mf">0.6</span> <span class="o">&lt;</span> <span class="n">Pr_a</span> <span class="o">&lt;</span> <span class="mi">160</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mf">0.6</span> <span class="o">&lt;</span> <span class="n">Pr_w</span> <span class="o">&lt;</span> <span class="mi">160</span><span class="p">)):</span>
+            <span class="k">print</span> <span class="s">&quot;&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;   Dittus-Boelter Equation Valid. Calculating Nusselt Number   &quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;!!!** Dittus-Boelter Equation not valid. Use alternate method  **!!!&quot;</span>
+
+        <span class="n">Nu_a</span> <span class="o">=</span> <span class="mf">0.023</span><span class="o">*</span><span class="p">(</span><span class="n">Re_a</span><span class="o">**</span><span class="p">(</span><span class="mf">4.</span><span class="o">/</span><span class="mi">5</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">Pr_a</span><span class="o">**</span><span class="mf">0.4</span><span class="p">)</span> <span class="c">#fluid is heated n=0.4</span>
+        <span class="n">Nu_w</span> <span class="o">=</span> <span class="mf">0.023</span><span class="o">*</span><span class="p">(</span><span class="n">Re_w</span><span class="o">**</span><span class="p">(</span><span class="mf">4.</span><span class="o">/</span><span class="mi">5</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">Pr_w</span><span class="o">**</span><span class="mf">0.3</span><span class="p">)</span> <span class="c">#fluid is cooled n=0.3</span>
+        
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Nu_a&#39;</span><span class="p">,</span><span class="n">Nu_a</span><span class="p">,</span> <span class="mf">440.345</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;Nu_w&#39;</span><span class="p">,</span><span class="n">Nu_w</span><span class="p">,</span> <span class="mf">457.16</span><span class="p">)</span>
+
+        <span class="c">#Determine h</span>
+        <span class="c"># h = Nu * k/ D</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_a</span> <span class="o">=</span> <span class="n">Nu_a</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k_a</span><span class="o">/</span><span class="n">Da_e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_w</span> <span class="o">=</span> <span class="n">Nu_w</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k_w</span><span class="o">/</span><span class="n">Dw_e</span>
+
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;h_a&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h_a</span><span class="p">,</span> <span class="mf">1467.95</span><span class="p">)</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;h_w&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h_w</span><span class="p">,</span> <span class="mf">8088.82</span><span class="p">)</span>
+        
+        <span class="c">#cascading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_a</span> <span class="o">=</span> <span class="mf">1467.95</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h_w</span> <span class="o">=</span> <span class="mf">8088.82</span>
+
+        <span class="c">#Determine Overall Heat Transfer Coefficient</span>
+        <span class="c"># U_o = 1 / [(Ao/Ai*hi)+(Ao*ln(ro/ri)/2*pi*k*L)+(1/ho)]</span>
+        <span class="c"># (simplified)</span>
+        <span class="c"># U_o = 1/ [(Do/Di*hi)+(Do*ln(Do/Di)/2*k)+(1/ho)]</span>
+        
+        <span class="c">#print &quot;Do_tube{} Di_tube{} self.h_a{} self.k_p{}  self.h_w{}&quot;.format(Do_tube,Di_tube, self.h_a, self.k_p, self.h_w)</span>
+        <span class="n">Di_tube</span> <span class="o">=</span> <span class="mf">0.03279</span>
+        <span class="n">term1</span> <span class="o">=</span> <span class="n">Do_tube</span><span class="o">/</span><span class="p">(</span><span class="n">Di_tube</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">h_w</span><span class="p">)</span>
+        <span class="n">term2</span> <span class="o">=</span>  <span class="n">Do_tube</span><span class="o">*</span><span class="n">log</span><span class="p">((</span><span class="n">Do_tube</span><span class="o">/</span><span class="n">Di_tube</span><span class="p">),</span><span class="n">e</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">U_o</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span> <span class="p">(</span><span class="n">term1</span><span class="o">+</span><span class="p">(</span><span class="n">term2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k_p</span><span class="p">))</span><span class="o">+</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">h_a</span><span class="p">))</span>
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;U_o&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">U_o</span><span class="p">,</span> <span class="mi">1226</span><span class="p">)</span>
+        
+        <span class="c">#Assume fouling losses</span>
+        <span class="c">#lookup R_w, R_a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">U_oF</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span> <span class="p">((</span><span class="n">term1</span><span class="o">+</span><span class="p">(</span><span class="n">term2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">k_p</span><span class="p">))</span><span class="o">+</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">h_a</span><span class="p">))</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R_w</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">R_a</span><span class="p">))</span>
+
+        <span class="c">#--Determine LMTD--</span>
+        <span class="c">#if(coFlow):</span>
+            <span class="c">#dT1 = (Th_in - Tc_in) #Change in T1 (delta T1)</span>
+            <span class="c">#dT2 = (Th_out-Tc_out) #Change in T2 (delta T2)</span>
+        <span class="c">#else: #counter-flow</span>
+        <span class="n">dT1</span> <span class="o">=</span> <span class="p">(</span><span class="n">Th_in</span> <span class="o">-</span> <span class="n">Tc_out</span><span class="p">)</span> <span class="c">#Change in T1 (delta T1)</span>
+        <span class="n">dT2</span> <span class="o">=</span> <span class="p">(</span><span class="n">Th_out</span><span class="o">-</span><span class="n">Tc_in</span><span class="p">)</span> <span class="c">#Change in T2 (delta T2)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">LMTD</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">dT1</span><span class="o">-</span> <span class="n">dT2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">log</span><span class="p">((</span><span class="n">dT1</span><span class="o">/</span><span class="n">dT2</span><span class="p">),</span> <span class="n">e</span><span class="p">)))</span> <span class="c">#take natural log (base e)</span>
+        
+        <span class="n">check</span><span class="p">(</span><span class="s">&#39;LMTD&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">LMTD</span><span class="p">,</span> <span class="mf">60.49</span><span class="p">)</span>
+
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c">#Multi-Pass Corrections</span>
+            <span class="c">#Calc P, R  (Table lookup or equation parameters)</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="p">(</span><span class="n">Tc_out</span><span class="o">-</span><span class="n">Tc_in</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Th_out</span><span class="o">-</span><span class="n">Tc_in</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="n">Th_in</span> <span class="o">-</span> <span class="n">Th_out</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">Tc_out</span><span class="o">-</span><span class="n">Tc_in</span><span class="p">)</span>
+            <span class="c">#P = (Th_out-Th_in)/(Tc_out-Th_in)</span>
+            <span class="c">#R = (Tc_in - Tc_out)/(Th_out-Th_in)</span>
+
+            <span class="c">#Calc X</span>
+            <span class="n">X1</span> <span class="o">=</span> <span class="p">((</span><span class="n">R</span><span class="o">*</span><span class="n">P</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">P</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">X_num</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">X1</span>
+            <span class="n">X_denom</span> <span class="o">=</span> <span class="n">R</span> <span class="o">-</span> <span class="n">X1</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">X_num</span><span class="o">/</span><span class="n">X_denom</span>
+
+            
+            <span class="c">#Calc F  (Equation fitted to empirical data)</span>
+            <span class="n">F_sqr</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">R</span><span class="o">**</span><span class="mf">2.</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            
+            <span class="n">F_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">F_sqr</span><span class="o">/</span><span class="p">(</span><span class="n">R</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="n">log</span><span class="p">(((</span><span class="mi">1</span><span class="o">-</span><span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">R</span><span class="o">*</span><span class="n">X</span><span class="p">)),</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">F_denom1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="n">X</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">R</span> <span class="o">+</span> <span class="n">F_sqr</span>
+            <span class="n">F_denom2</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="n">X</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">R</span> <span class="o">-</span> <span class="n">F_sqr</span>
+            <span class="n">F_denom</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">F_denom1</span><span class="o">/</span><span class="n">F_denom2</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">F_num</span> <span class="o">/</span> <span class="n">F_denom</span> 
+            
+            <span class="k">print</span> <span class="s">&quot;   {} pass design, correction factor calculated to be: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;   Single Pass Design, no correction factor&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c">#Determine the required length of the heat exchanger</span>
+        <span class="c"># Q = U * A * LMTD</span>
+        <span class="c"># Q = U*pi*D*L*LMTD</span>
+        <span class="c"># L = Q/(U*pi*D*LMTD)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">q_a</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U_o</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="o">*</span><span class="n">Do_tube</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">LMTD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="c">#divide by number of passes</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span> <span class="c">#only check single pass case</span>
+            <span class="n">check</span><span class="p">(</span><span class="s">&#39;L&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="mf">7.42</span><span class="p">)</span>
+        
+
+        <span class="c">#Assume pipe minor losses</span>
+        <span class="c">#function of length and number of passes</span>
+        <span class="c">#Head losses</span>
+        <span class="c">#Developed from Bernoulli eq, with zero velocity change and viscous terms included in apparent height</span>
+        <span class="c"># H = (k + f*(L/D)*v_avg^2)/2g</span>
+        <span class="c"># delP = rho*g*H</span>
+        <span class="c"># Also consider bends in tube</span>
+        
+       
+       
+<span class="c">#run stand-alone component</span></div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">openmdao.main.api</span> <span class="kn">import</span> <span class="n">set_as_top</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">heatExchanger</span><span class="p">()</span>  
+    <span class="n">set_as_top</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;&quot;</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;-----Completed Heat Exchanger Sizing---&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;&quot;</span>
+    <span class="k">print</span> <span class="s">&quot;Heat Exchanger Length: {} meters, with {} tube pass(es)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">test</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+    
+    <span class="n">m2ft</span> <span class="o">=</span> <span class="mf">3.28084</span> <span class="c">#meter to feet conversion</span>
+    
+    <span class="c">#sqrt(#passes * tube area * packing factor)</span>
+    <span class="c">#assumes shell magically becomes rectangular but keeps packing factor</span>
+    <span class="n">packing_factor</span> <span class="o">=</span>  <span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">A_a</span><span class="o">/</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">A_a</span> <span class="o">+</span> <span class="n">test</span><span class="o">.</span><span class="n">A_w</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">((</span><span class="n">test</span><span class="o">.</span><span class="n">N</span> <span class="o">*</span> <span class="n">pi</span><span class="o">*</span><span class="p">((</span><span class="n">test</span><span class="o">.</span><span class="n">Do_tube</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">packing_factor</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">m2ft</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="c">#height of a double pass</span>
+ 
+    <span class="n">tot_vol</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">L</span> <span class="o">*</span><span class="n">m2ft</span><span class="p">))</span>
+    
+    <span class="k">print</span> <span class="s">&quot;Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">((</span><span class="n">test</span><span class="o">.</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">m2ft</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Heat Exchanger Volume: {} ft^3&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span> <span class="n">tot_vol</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">hyperloop 0.1 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright .
+      Last updated on Sep 26, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

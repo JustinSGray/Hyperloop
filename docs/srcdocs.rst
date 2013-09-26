@@ -124,19 +124,6 @@ battery.py
    :show-inheritance:
 
         
-.. index:: bypass_duct.py
-
-.. _hyperloop.geometry.bypass_duct.py:
-
-bypass_duct.py
---------------
-
-.. automodule:: hyperloop.geometry.bypass_duct
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
 .. index:: fan.py
 
 .. _hyperloop.geometry.fan.py:

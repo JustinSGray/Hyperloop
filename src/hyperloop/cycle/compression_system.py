@@ -1,11 +1,24 @@
-from openmdao.main.api import Assembly, set_as_top, Run_Once, SequentialWorkflow
+from openmdao.main.api import Assembly, Component
 from openmdao.lib.drivers.api import NewtonKrylov, DOEdriver
 from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
 from pycycle.api import (FlowStartStatic, Splitter, Inlet, Compressor, Duct, Splitter,
-    Nozzle, )
+    Nozzle, CycleComponent )
+
+
+class PwrSum(CycleComponent): 
+
+    C1_pwr = Float(0, iotype='in', units='hp')
+    C2_pwr = Float(0, iotype='in', units='hp')
+
+    pwr = Float(0, iotype='out', units='hp')
+
+    def execute(self): 
+
+        self.pwr = self.C1_pwr + self.C2_pwr
+
 
 
 class CompressionSystem(Assembly): 
@@ -13,6 +26,7 @@ class CompressionSystem(Assembly):
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
     Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod at design conditions")
+    W_in = Float(.69, iotype="in", desc="mass flow rate into the compression system", units="kg/s")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     radius_tube = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
@@ -24,13 +38,14 @@ class CompressionSystem(Assembly):
 
     area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
+    pwr_req = Float(iotype="out", desc="pwr required to drivr the compression system", units="kW")
 
     def configure(self):
 
       
 
         tube = self.add('tube', FlowStartStatic())
-        tube.W = 1.521
+        #tube.W = 1.521
         tube.Ps = 0.01436
         tube.Ts = 525.6
 
@@ -64,6 +79,8 @@ class CompressionSystem(Assembly):
         duct2.Q_dot = -24.138
         duct2.dPqP = 0 #no losses
 
+        pwr_sum = self.add('pwr_sum', PwrSum())
+
         #Component Connections
         self.connect('tube.Fl_O', 'inlet.Fl_I')
         self.connect('inlet.Fl_O','comp1.Fl_I')
@@ -73,6 +90,8 @@ class CompressionSystem(Assembly):
         self.connect('tube.Fl_O', 'nozzle.Fl_ref')
         self.connect('split.Fl_O1', 'comp2.Fl_I')
         self.connect('comp2.Fl_O','duct2.Fl_I')
+        self.connect('comp1.pwr','pwr_sum.C1_pwr')
+        self.connect('comp2.pwr','pwr_sum.C2_pwr')
 
         #variable pass_throughs to the assembly boundary
         self.connect('Mach_pod', 'tube.Mach')
@@ -84,17 +103,12 @@ class CompressionSystem(Assembly):
 
         self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
+        self.connect('pwr_sum.pwr*0.74569', 'pwr_req') #convert hp to kW
 
         #driver setup
         design = self.driver
-        #design = self.add('driver', NewtonKrylov())
-        #design.add_parameter('tube.W', low=-1e15, high=1e15)
-        #design.add_constraint('tube.Fl_O.area=(3.14159*radius_tube**2)*.394**2') #holds the radius of the tube constant    
-        #design.add_parameter('tube_bypass.BPR_des', low=-1e15, high=1e15)
-        #design.add_constraint('tube_bypass.Fl_O1.area+inlet.Fl_O.area=tube.Fl_O.area') #holds the radius of the tube constant
-
         comp_list = ['tube','inlet','comp1',
-            'duct1', 'split', 'nozzle', 'comp2', 'duct2']
+            'duct1', 'split', 'nozzle', 'comp2', 'duct2', 'pwr_sum']
 
         design.workflow.add(comp_list)
         for comp_name in comp_list: #need to put everything in design mode

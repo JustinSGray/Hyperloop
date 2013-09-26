@@ -49,13 +49,12 @@ class KantrowitzLimit(Component):
         self.limit_speed = fs_tube.Vflow*0.3048 #convert to meters
         
 
-
         #excess mass flow calculation
         fs_tube.setStaticTsPsMN(self._Ts, self._Ps, self.Mach_pod)
-        self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area
+        self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area*0.45359
 
         fs_tube.Mach = 1 #Kantrowitz flow is at these total conditions, but with Mach 1
-        self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area
+        self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area*0.45359
 
         self.W_excess = self.W_tube - self.W_kant
 

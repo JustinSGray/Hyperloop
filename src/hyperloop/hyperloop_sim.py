@@ -1,7 +1,8 @@
 from openmdao.main.api import Assembly 
 from openmdao.lib.datatypes.api import Float
+from openmdao.lib.drivers.api import BroydenSolver
 
-from hyperloop.api import KantrowitzLimit, CompressionSystem, InletGeom
+from hyperloop.api import KantrowitzLimit, CompressionSystem, InletGeom, Battery
 
 class Hyperloop(Assembly): 
 
@@ -12,13 +13,6 @@ class Hyperloop(Assembly):
 
     def configure(self):
 
-        kant = self.add('kant', KantrowitzLimit())
-
-        self.connect('Mach_pod', 'kant.Mach_pod')
-        self.connect('radius_tube', 'kant.radius_tube')
-        self.connect('Ps_tube', 'kant.Ps_tube')
-        self.connect('Ts_tube', 'kant.Ts_tube')
-
         compress = self.add('compress', CompressionSystem())
         self.connect('Mach_pod', 'compress.Mach_pod')
         self.connect('radius_tube', 'compress.radius_tube')
@@ -28,8 +22,30 @@ class Hyperloop(Assembly):
 
         inlet_geom = self.add('inlet_geom', InletGeom())
         self.connect('compress.area_c1_in', 'inlet_geom.area_inlet')
-        self.connect('inlet_geom.radius_outer','kant.radius_inlet')
 
+        kant = self.add('kant', KantrowitzLimit())
+        self.connect('Mach_pod', 'kant.Mach_pod')
+        self.connect('radius_tube', 'kant.radius_tube')
+        self.connect('Ps_tube', 'kant.Ps_tube')
+        self.connect('Ts_tube', 'kant.Ts_tube')
+        self.connect('inlet_geom.radius_outer', 'kant.radius_inlet')
+
+        battery = self.add('battery', Battery())
+
+        driver = self.add('driver',BroydenSolver())
+        driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
+        driver.add_constraint('compress.W_in=kant.W_excess')
+        driver.workflow.add(['compress','inlet_geom','kant'])
+
+
+if __name__=="__main__": 
+
+    hl = Hyperloop()
+    print hl.compress.W_in
+    hl.Mach_pod = .9
+    hl.run()
+
+    
 
 
 

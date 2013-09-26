@@ -62,7 +62,7 @@ This is called the Kantrowitz limit.
 If the required  :math:`\dot{W}_{kantrowitz}` exceeds the kantrowitz limit, then the pod will 
 act like a piston in a tube and start the increase the air pressure in front 
 of it and lower the pressure behind it. For the baseline hyperloop design, 
-the Kantrowitz limit speed is 120 meters/sec, or Mach .35, as shown in the 
+the Kantrowitz limit speed is 120 :math:`\frac{m}{s}`, or Mach .35, as shown in the 
 figure below. The limit is reached when the required tube mass flow equals 
 the kantrowitz limit flow. 
 
@@ -75,14 +75,59 @@ the kantrowitz limit flow.
 Such low speeds would not allow the hyperloop concept to significantly reduce 
 travel times between Los Angeles and San Francisco. To reach higher speeds, 
 a compression system is needed to help push additional air around the pod 
-to enable higher travel speeds. However it serves as a nice saftey margin 
-that, even if the pod lost power to its compression system, the hyperloop 
-could still travel at a lower speed. 
-
+to enable higher travel speeds. The amount of air that the compression system needs 
+to move is equal to the difference between the required tube flow (the blue line) 
+and the Kantrowitz limit (the green line). As speed increases, the flow demands on the 
+compression system increase as well. 
 
 -----------------------------
 Compression System
 -----------------------------
+
+The compression system performs two functions on the hyperloop concept. 
+  #. Pressurizes some of the air, increasing its density, to provide a means of exceeding 
+     the Kantrowitz limit. 
+  #. Provides a source of high pressure air to the air bearing system. 
+
+Each of these functions requires that the compressors move a certain amount of air, which 
+combine to define the total airflow for the whole sub-system. The system is comprised of 
+an inlet, two compressors, two heat exchangers, a nozzle, and a duct to air bearings. 
+
+.. figure:: images/compressor_schematic.png
+   :align: center
+   :alt: compressor system flow diagram
+
+   Schematic flow diagram of the compressor system
+
+The compression systems is modeled as a 1-D cycle, representing components as a 
+thermodynamic processes which are chained together. These models predict the instantaneous 
+power consumption of the compression system for a given set of design variable values. The 
+compression system is defined by 8 design variables, shown below. 
+
+========================  ====================================================  ========  ===============  ===============  ===============
+Variable                  Description                                           Units     Baseline Value          Min.             Max.
+========================  ====================================================  ========  ===============  ===============  ===============
+:math:`Mach_{pod}`        Maximum travel speed of the pod                                   1.0            .5               1.0
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`P_{tube}`          Static pressure in the tube                           Pa          99             99                300
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`Radius_{tube}`     Inner radius of the tube                              cm          111.5          100               200
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`Mach_{C1 in}`      Mach number at the entrance to the first compressor               .6             .5                .8
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`PR_{C1}`           Pressure ratio of the first compressor                            12.47          7                 20
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`\dot{Q}_{C1}`      Heat transfer from air after the first compressor     kW          0              0                 300
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`PR_{C1}`           Pressure ratio of the second compressor                           5              3                 20
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+:math:`\dot{Q}_{C2}`      Heat transfer from air after the second compressor    kW          0              0                 40
+========================  ====================================================  ========  ===============  ===============  ===============
+
+
+For the baseline design, at a travel speed of Mach 1, the total power consumption 
+from the compressors to be about 339 kW (455 horsepower). 
+
 
 -----------------------------
 Battery Pack
@@ -98,11 +143,11 @@ pod cause an additional slight temperature rise as it passes, which could potent
 hyperloop system to excessive temperatures. In the original proposal, to combat this effect, it was 
 proposed that water-to-air heat exchangers could be added to the compression system. These would use 
 water stored in tanks in the pod to cool the air by converting it to steam. The steam could then be 
-stored in an additional tank, and offloaded once the pod reached it’s destination. According to our 
+stored in an additional tank, and offloaded once the pod reached its destination. According to our 
 initial calculations, using water for cooling is not an ideal design for two reasons: 
 
  1) The flow rate of water needed to remove the heat added by the compressors is very large, and 
- storing the resulting steam would result in an unreasonably large pod (over 200m long). 
+ storing the resulting steam would result in an unreasonably large pod (over 200 meters long). 
 
  2) The heat addition from each pod moving through the tube is fairly low, even when compared to 
  radiative solar heating of the steel tube. Even with no active cooling solution, the tube temperatures

@@ -21,6 +21,7 @@ src/hyperloop/sphinx_build/html/search.html
 src/hyperloop/sphinx_build/html/searchindex.js
 src/hyperloop/sphinx_build/html/srcdocs.html
 src/hyperloop/sphinx_build/html/usage.html
+src/hyperloop/sphinx_build/html/_images/kantrowitz_limit.png
 src/hyperloop/sphinx_build/html/_modules/index.html
 src/hyperloop/sphinx_build/html/_modules/hyperloop/geometry/air_bearing.html
 src/hyperloop/sphinx_build/html/_modules/hyperloop/geometry/battery.html

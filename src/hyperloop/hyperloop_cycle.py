@@ -51,7 +51,7 @@ class HyperloopCycle(Assembly):
         comp1.eff_des = .80
 
         duct1 = self.add('duct1', Duct())
-        duct1.Q_dot = -237
+        duct1.Q_dot = 0#-237
         duct1.dPqP = 0 #no losses
 
         split = self.add('split', Splitter())
@@ -67,9 +67,9 @@ class HyperloopCycle(Assembly):
         comp2.MNexit_des = .4
         comp2.eff_des = .80
 
-        to_bearings = self.add('to_bearings', Duct())
-        to_bearings.Q_dot = -24.138
-        to_bearings.dPqP = 0 #no losses
+        duct2 = self.add('duct2', Duct())
+        duct2.Q_dot = -24.138
+        duct2.dPqP = 0 #no losses
 
         #Component Connections
         self.connect('tube.Fl_O','tube_bypass.Fl_I')
@@ -80,13 +80,15 @@ class HyperloopCycle(Assembly):
         self.connect('split.Fl_O2', 'nozzle.Fl_I')
         self.connect('tube.Fl_O', 'nozzle.Fl_ref')
         self.connect('split.Fl_O1', 'comp2.Fl_I')
-        self.connect('comp2.Fl_O','to_bearings.Fl_I')
+        self.connect('comp2.Fl_O','duct2.Fl_I')
 
         #variable pass_throughs to the assembly boundary
         self.connect('pod_Mach', 'tube.Mach')
         self.connect('c1_entrance_Mach', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
+        self.connect('-.94782*c1_q_dot', 'duct1.Q_dot') #negative q is heat out, convert from kW to btu/s
+        self.connect('-.94782*c2_q_dot', 'duct2.Q_dot') #negative q is heat out, convert from kW to btu/s
 
         self.connect('tube_bypass.Fl_O1.area','bypass_flow_area')
         self.connect('inlet.Fl_O.area', 'c1_flow_area')
@@ -99,7 +101,7 @@ class HyperloopCycle(Assembly):
         #design.add_constraint('tube.Fl_O.area=(3.14159*tube_radius**2)*.394**2') #holds the radius of the tube constant
 
         comp_list = ['tube','tube_bypass','inlet','comp1',
-            'duct1', 'split', 'nozzle', 'comp2', 'to_bearings']
+            'duct1', 'split', 'nozzle', 'comp2', 'duct2']
 
         design.workflow.add(comp_list)
         for comp_name in comp_list: #need to put everything in design mode

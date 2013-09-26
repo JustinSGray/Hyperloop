@@ -97,6 +97,8 @@ if __name__ == "__main__":
     #comp.tube_radius = 200
     comp.run()
     print comp.limit_speed, comp.limit_Mach
-    #print comp.MN
-    #print comp.W_tube
-    comp.plot_data()
+    #print comp.MN[-1]
+    #print comp.W_tube[-1]
+    #print comp.W_kant[-1]
+    print "excess mass flow at Mach %1.1f: %f"%(comp.MN[-1], comp.W_tube[-1]-comp.W_kant[-1])
+    #comp.plot_data()

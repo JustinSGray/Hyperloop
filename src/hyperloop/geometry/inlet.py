@@ -8,14 +8,19 @@ class InletGeom(Component):
 
 
     inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
-    radius_inner = Float(iotype="in", units="cm", desc="inner radius of the inlet")
+    area_inlet = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")
 
+    radius_inner = Float(iotype="out", units="cm", desc="inner radius of the inlet")
     radius_outer = Float(iotype="out", units="cm", desc="outer radius of the inlet")
     blockage_area = Float(iotype="out", units="cm", desc="total area blocked by the inlet")
 
     def execute(self): 
+
+        print self.area_inlet 
+        exit()
+        self.radius_inner = (self.area_inlet/pi)**2
         self.radius_outer = self.radius_inner+self.inlet_wall_thickness
-        self.blockage = pi*(self.radius_inner+self.inlet_wall_thickness)**2
+        self.blockage = pi*(self.radius_outer)**2
 
 if __name__ == "__main__": 
 

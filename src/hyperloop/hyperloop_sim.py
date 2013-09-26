@@ -1,7 +1,7 @@
 from openmdao.main.api import Assembly 
 from openmdao.lib.datatypes.api import Float
 
-from hyperloop.api import KantrowitzLimit, CompressionSystem
+from hyperloop.api import KantrowitzLimit, CompressionSystem, InletGeom
 
 class Hyperloop(Assembly): 
 
@@ -26,7 +26,9 @@ class Hyperloop(Assembly):
         self.connect('Ts_tube', 'compress.Ts_tube')
         self.create_passthrough('compress.Mach_c1_in')
 
-
+        inlet_geom = self.add('inlet_geom', InletGeom())
+        self.connect('compress.area_c1_in', 'inlet_geom.area_inlet')
+        self.connect('inlet_geom.radius_outer','kant.radius_inlet')
 
 
 

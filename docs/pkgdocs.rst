@@ -14,28 +14,32 @@ Package Metadata
 
     [openmdao.component]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
-    tubeModel.tubeModel=tubeModel:tubeModel
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
-    heatExchanger2.heatExchanger=heatExchanger2:heatExchanger
-    hyperloop.hyperloop_sim.Geometry=hyperloop.hyperloop_sim:Geometry
-    hyperAssembly.hyperTop=hyperAssembly:hyperTop
-    heatExchanger.heatExchanger=heatExchanger:heatExchanger
+    hyperloop.cycle.heatExchanger.heatExchanger=hyperloop.cycle.heatExchanger:heatExchanger
+    hyperloop.cycle.tubeModel.tubeModel=hyperloop.cycle.tubeModel:tubeModel
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
-    hyperloop.geometry.bypass_duct.Tube=hyperloop.geometry.bypass_duct:Tube
-    hyperloop.hyperloop_cycle.HyperloopCycle=hyperloop.hyperloop_cycle:HyperloopCycle
+    hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
+    hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
+    hyperloop.geometry.bypass_duct.InletGeom=hyperloop.geometry.bypass_duct:InletGeom
+    hyperloop.cycle.heatExchanger2.heatExchanger=hyperloop.cycle.heatExchanger2:heatExchanger
+    hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
+    hyperloop.cycle.hyperAssembly.hyperTop=hyperloop.cycle.hyperAssembly:hyperTop
     hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
+    hyperloop.cycle.compression_system.CompressionSystem=hyperloop.cycle.compression_system:CompressionSystem
     [openmdao.container]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
-    tubeModel.tubeModel=tubeModel:tubeModel
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
-    heatExchanger2.heatExchanger=heatExchanger2:heatExchanger
-    hyperloop.hyperloop_sim.Geometry=hyperloop.hyperloop_sim:Geometry
-    hyperAssembly.hyperTop=hyperAssembly:hyperTop
-    heatExchanger.heatExchanger=heatExchanger:heatExchanger
+    hyperloop.cycle.heatExchanger.heatExchanger=hyperloop.cycle.heatExchanger:heatExchanger
+    hyperloop.cycle.tubeModel.tubeModel=hyperloop.cycle.tubeModel:tubeModel
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
-    hyperloop.geometry.bypass_duct.Tube=hyperloop.geometry.bypass_duct:Tube
-    hyperloop.hyperloop_cycle.HyperloopCycle=hyperloop.hyperloop_cycle:HyperloopCycle
+    hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
+    hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
+    hyperloop.geometry.bypass_duct.InletGeom=hyperloop.geometry.bypass_duct:InletGeom
+    hyperloop.cycle.heatExchanger2.heatExchanger=hyperloop.cycle.heatExchanger2:heatExchanger
+    hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
+    hyperloop.cycle.hyperAssembly.hyperTop=hyperloop.cycle.hyperAssembly:hyperTop
     hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
+    hyperloop.cycle.compression_system.CompressionSystem=hyperloop.cycle.compression_system:CompressionSystem
 
 - **keywords:** openmdao
 

@@ -12,7 +12,7 @@ class CompressionSystem(Assembly):
 
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
-    Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
+    Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod at design conditions")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     radius_tube = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
@@ -23,7 +23,7 @@ class CompressionSystem(Assembly):
     c2_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the second compressor stage", units="kW")
 
     area_bypass = Float(iotype="out", desc="flow area required for the air bypassing the pod", units="cm**2")
-    c1_flow_area = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
+    area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
 
     def configure(self):
@@ -91,14 +91,16 @@ class CompressionSystem(Assembly):
         self.connect('-.94782*c2_q_dot', 'duct2.Q_dot') #negative q is heat out, convert from kW to btu/s
 
         self.connect('tube_bypass.Fl_O1.area','area_bypass')
-        self.connect('inlet.Fl_O.area', 'c1_flow_area')
+        self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
 
         #driver setup
-        design = self.driver
-        #design = self.add('driver', BroydenSolver())
-        #design.add_parameter('tube.W', low=-1e15, high=1e15)
-        #design.add_constraint('tube.Fl_O.area=(3.14159*radius_tube**2)*.394**2') #holds the radius of the tube constant
+        #design = self.driver
+        design = self.add('driver', BroydenSolver())
+        design.add_parameter('tube.W', low=-1e15, high=1e15)
+        design.add_constraint('tube.Fl_O.area=(3.14159*radius_tube**2)*.394**2') #holds the radius of the tube constant    
+        design.add_parameter('tube_bypass.BPR_des', low=-1e15, high=1e15)
+        design.add_constraint('area_bypass+area_c1_in=tube.Fl_O.area') #holds the radius of the tube constant
 
         comp_list = ['tube','tube_bypass','inlet','comp1',
             'duct1', 'split', 'nozzle', 'comp2', 'duct2']
@@ -111,8 +113,8 @@ class CompressionSystem(Assembly):
 if __name__ == "__main__": 
     from math import pi
 
-    hlc = set_as_top(HyperloopCycle())
-    hlc.Mach_pod = 1
+    hlc = set_as_top(CompressionSystem())
+    hlc.Mach_pod = .9
     hlc.run()
 
     print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 
@@ -126,9 +128,6 @@ if __name__ == "__main__":
 
     fs = hlc.tube.Fl_O
 
-    print "Kantrowitz Limit: ", fs.rhot*hlc.tube_bypass.Fl_O1.area*fs.Vflow
-    l =  hlc.tube_bypass.Fl_O1.area*fs.Vflow/fs.area
-    print "Limit Speed: ", l, l/fs.Vflow 
 
 
 

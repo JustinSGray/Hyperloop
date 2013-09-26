@@ -57,23 +57,1373 @@
             
   <div class="section" id="source-documentation">
 <span id="hyperloop-src-label"></span><h1>Source Documentation<a class="headerlink" href="#source-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-hyperloop.api">
+<span id="api-py"></span><span id="hyperloop-api-py"></span><span id="index-0"></span><h2>api.py<a class="headerlink" href="#module-hyperloop.api" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#hyperloop-cycle-compression-system-py"><em>CompressionSystem</em></a></p>
+<p><a class="reference internal" href="#hyperloop-geometry-inlet-py"><em>InletGeom</em></a></p>
+<p><a class="reference internal" href="#hyperloop-kantrowitz-limit-py"><em>KantrowitzLimit</em></a></p>
+</div>
+<div class="section" id="module-hyperloop.cycle.compression_system">
+<span id="compression-system-py"></span><span id="hyperloop-cycle-compression-system-py"></span><span id="index-1"></span><h2>compression_system.py<a class="headerlink" href="#module-hyperloop.cycle.compression_system" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hyperloop.cycle.compression_system.CompressionSystem">
+<em class="property">class </em><tt class="descclassname">hyperloop.cycle.compression_system.</tt><tt class="descname">CompressionSystem</tt><a class="reference internal" href="_modules/hyperloop/cycle/compression_system.html#CompressionSystem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.compression_system.CompressionSystem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.assembly.Assembly</span></tt></p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>Mach_c1_in</strong></dt>
+<dd><p class="first">Mach number at entrance to the first compressor at design conditions</p>
+<ul class="last simple">
+<li>default:  &#8216;0.6&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mach_pod</strong></dt>
+<dd><p class="first">travel Mach of the pod at design conditions</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Ps_tube</strong></dt>
+<dd><p class="first">static pressure in the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;99.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;Pa&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Ts_tube</strong></dt>
+<dd><p class="first">static temperature in the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;292.1&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;degK&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>c1_PR_des</strong></dt>
+<dd><p class="first">pressure ratio of first compressor at design conditions</p>
+<ul class="last simple">
+<li>default:  &#8216;12.47&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>c1_q_dot</strong></dt>
+<dd><p class="first">heat extracted from the flow after the first compressor stage</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kW&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>c2_PR_des</strong></dt>
+<dd><p class="first">pressure ratio of second compressor at design conditions</p>
+<ul class="last simple">
+<li>default:  &#8216;5.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>c2_q_dot</strong></dt>
+<dd><p class="first">heat extracted from the flow after the second compressor stage</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kW&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>radius_tube</strong></dt>
+<dd><p class="first">radius of the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;111.5&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>area_bypass</strong></dt>
+<dd><p class="first">flow area required for the air bypassing the pod</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>area_c1_in</strong></dt>
+<dd><p class="first">flow area required for the first compressor</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>nozzle_flow_area</strong></dt>
+<dd><p class="first">flow area required for the nozzle exit</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.cycle.compression_system.CompressionSystem.configure">
+<tt class="descname">configure</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/compression_system.html#CompressionSystem.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.compression_system.CompressionSystem.configure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="heatexchanger-py">
-<span id="hyperloop-cycle-heatexchanger-py"></span><span id="index-0"></span><h2>heatExchanger.py<a class="headerlink" href="#heatexchanger-py" title="Permalink to this headline">¶</a></h2>
+<span id="hyperloop-cycle-heatexchanger-py"></span><span id="index-2"></span><h2>heatExchanger.py<a class="headerlink" href="#heatexchanger-py" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Logarithmic Mean Temperature Difference (LMTD) Method</dt>
+<dd><p class="first">Design a heat exchanger to meet prescribed heat transfer requirements</p>
+<p class="last">LMTD Limitations
+-Both starting and final temperature parameters must be known
+-Temperature change across cannot be so large that Cp changes significantly
+-Rigorously defined for double-pipe(or tubular) heat exchanger</p>
+</dd>
+<dt>NTU (effectiveness) Method</dt>
+<dd><p class="first">Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.</p>
+<p>NTU Limitations
+1) Effectiveness of the chosen heat exchanger must be known (empirical)</p>
+<p class="last">Compatible with OpenMDAO v0.8.1</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="hyperloop.cycle.heatExchanger.heatExchanger">
+<em class="property">class </em><tt class="descclassname">hyperloop.cycle.heatExchanger.</tt><tt class="descname">heatExchanger</tt><a class="reference internal" href="_modules/hyperloop/cycle/heatExchanger.html#heatExchanger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.heatExchanger.heatExchanger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<p>Main Component</p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>Di_tube</strong></dt>
+<dd><p class="first">Tube pipe (inner) Diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;0.03279&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mdot_w</strong></dt>
+<dd><p class="first">Mass flow rate of water pumped through system</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>R_a</strong></dt>
+<dd><p class="first">fouling factor of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>R_w</strong></dt>
+<dd><p class="first">fouling factor of city water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_ain</strong></dt>
+<dd><p class="first">Temp of air into heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;297.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_aout</strong></dt>
+<dd><p class="first">Temp of air out of heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;308.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_win</strong></dt>
+<dd><p class="first">Temp of water into heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;368.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_wout</strong></dt>
+<dd><p class="first">Temp of water out of heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;358.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>cp_a</strong></dt>
+<dd><p class="first">specific heat of air</p>
+<ul class="last simple">
+<li>default:  &#8216;2470.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;J/(kg*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>cp_w</strong></dt>
+<dd><p class="first">specific heat of water</p>
+<ul class="last simple">
+<li>default:  &#8216;4208.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;J/(kg*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>dvisc_a</strong></dt>
+<dd><p class="first">dynamic viscosity for air</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0004&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/(m*s)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>dvisc_w</strong></dt>
+<dd><p class="first">dynamic viscosity for water</p>
+<ul class="last simple">
+<li>default:  &#8216;0.00031&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/(m*s)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k_a</strong></dt>
+<dd><p class="first">thermal conductivity for air</p>
+<ul class="last simple">
+<li>default:  &#8216;0.132&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k_p</strong></dt>
+<dd><p class="first">thermal conductivity of the pipe</p>
+<ul class="last simple">
+<li>default:  &#8216;400.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k_w</strong></dt>
+<dd><p class="first">thermal conductivity for water</p>
+<ul class="last simple">
+<li>default:  &#8216;0.58&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>kvisc_a</strong></dt>
+<dd><p class="first">kinematic viscosity for air</p>
+<ul class="last simple">
+<li>default:  &#8216;5.479e-07&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m**2/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>kvisc_w</strong></dt>
+<dd><p class="first">kinematic viscosity for water</p>
+<ul class="last simple">
+<li>default:  &#8216;3.26e-07&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m**2/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>rho_a</strong></dt>
+<dd><p class="first">density of air</p>
+<ul class="last simple">
+<li>default:  &#8216;730.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>rho_w</strong></dt>
+<dd><p class="first">density of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1000.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>A_a</strong></dt>
+<dd><p class="first">area of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>A_w</strong></dt>
+<dd><p class="first">area of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Asurf_pipe</strong></dt>
+<dd><p class="first">Surface Area of the Pipe</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>De</strong></dt>
+<dd><p class="first">Hyrdraulic Diameter of the shell (annulus) for heat flow</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Dh</strong></dt>
+<dd><p class="first">Hyrdraulic Diameter of the shell (annulus) for fluid flow</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Di_shell</strong></dt>
+<dd><p class="first">Shell pipe (inner) Diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;0.05102&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Do_tube</strong></dt>
+<dd><p class="first">Tube pipe (outer) Diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;0.03493&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>F</strong></dt>
+<dd><p class="first">Multi-pass correction factor</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>L</strong></dt>
+<dd><p class="first">Heat Exchanger Length</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mass_steam</strong></dt>
+<dd><p class="first">Mass of output steam tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mass_water</strong></dt>
+<dd><p class="first">Mass of input water tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mdot_a</strong></dt>
+<dd><p class="first">Mass flow rate of air</p>
+<ul class="last simple">
+<li>default:  &#8216;2.2221623&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>N</strong></dt>
+<dd><p class="first">Number of Tube Passes</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>U_o</strong></dt>
+<dd><p class="first">Overall Heat Transfer Coefficient</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/(m**2)*K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Veloc_a</strong></dt>
+<dd><p class="first">flow velocity of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Veloc_w</strong></dt>
+<dd><p class="first">flow velocity of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Vol_steam</strong></dt>
+<dd><p class="first">Volume of output steam tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Vol_water</strong></dt>
+<dd><p class="first">Volume of input water tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>h_a</strong></dt>
+<dd><p class="first">heat transfer of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>h_w</strong></dt>
+<dd><p class="first">heat transfer of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>q_a</strong></dt>
+<dd><p class="first">heat flow of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>q_w</strong></dt>
+<dd><p class="first">heat flow of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Bool</em> <strong>coFlow</strong></dt>
+<dd><p class="first">Boolean true if co-flow, false if coutner-flow</p>
+<ul class="last simple">
+<li>default:  &#8216;False&#8217;</li>
+<li>vartypename:  &#8216;Bool&#8217;</li>
+</ul>
+</dd>
+<dt><em>Bool</em> <strong>cooled</strong></dt>
+<dd><p class="first">Boolean true if fluid is cooled, false if heated</p>
+<ul class="last simple">
+<li>default:  &#8216;True&#8217;</li>
+<li>vartypename:  &#8216;Bool&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.cycle.heatExchanger.heatExchanger.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/heatExchanger.html#heatExchanger.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.heatExchanger.heatExchanger.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Various Paramters</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="hyperloop.cycle.heatExchanger.check">
+<tt class="descclassname">hyperloop.cycle.heatExchanger.</tt><tt class="descname">check</tt><big>(</big><em>var_name</em>, <em>var</em>, <em>correct_val</em><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/heatExchanger.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.heatExchanger.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format and print the results of a value comparison, (crude tests for verification purposes)</p>
+</dd></dl>
+
 </div>
 <div class="section" id="heatexchanger2-py">
-<span id="hyperloop-cycle-heatexchanger2-py"></span><span id="index-1"></span><h2>heatExchanger2.py<a class="headerlink" href="#heatexchanger2-py" title="Permalink to this headline">¶</a></h2>
+<span id="hyperloop-cycle-heatexchanger2-py"></span><span id="index-3"></span><h2>heatExchanger2.py<a class="headerlink" href="#heatexchanger2-py" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Logarithmic Mean Temperature Difference (LMTD) Method</dt>
+<dd><p class="first">Design a heat exchanger to meet prescribed heat transfer requirements</p>
+<p class="last">LMTD Limitations
+-Both starting and final temperature parameters must be known
+-Temperature change across cannot be so large that Cp changes significantly
+-Rigorously defined for double-pipe(or tubular) heat exchanger</p>
+</dd>
+<dt>NTU (effectiveness) Method</dt>
+<dd><p class="first">Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.</p>
+<p>NTU Limitations
+1) Effectiveness of the chosen heat exchanger must be known (empirical)</p>
+<p class="last">Compatible with OpenMDAO v0.8.1</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="hyperloop.cycle.heatExchanger2.heatExchanger">
+<em class="property">class </em><tt class="descclassname">hyperloop.cycle.heatExchanger2.</tt><tt class="descname">heatExchanger</tt><a class="reference internal" href="_modules/hyperloop/cycle/heatExchanger2.html#heatExchanger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.heatExchanger2.heatExchanger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<p>Main Component</p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>Di_tube</strong></dt>
+<dd><p class="first">Tube pipe (inner) Diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;0.03279&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mdot_w</strong></dt>
+<dd><p class="first">Mass flow rate of water pumped through system</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>R_a</strong></dt>
+<dd><p class="first">fouling factor of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>R_w</strong></dt>
+<dd><p class="first">fouling factor of city water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_ain</strong></dt>
+<dd><p class="first">Temp of air into heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;791.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_aout</strong></dt>
+<dd><p class="first">Temp of air out of heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;338.4&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_win</strong></dt>
+<dd><p class="first">Temp of water into heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;288.1&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>T_wout</strong></dt>
+<dd><p class="first">Temp of water out of heat exchanger</p>
+<ul class="last simple">
+<li>default:  &#8216;406.6&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>cp_a</strong></dt>
+<dd><p class="first">specific heat of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1006.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;J/(kg*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>cp_w</strong></dt>
+<dd><p class="first">specific heat of water</p>
+<ul class="last simple">
+<li>default:  &#8216;4186.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;J/(kg*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>dvisc_a</strong></dt>
+<dd><p class="first">dynamic viscosity for air</p>
+<ul class="last simple">
+<li>default:  &#8216;2e-05&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/(m*s)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>dvisc_w</strong></dt>
+<dd><p class="first">dynamic viscosity for water</p>
+<ul class="last simple">
+<li>default:  &#8216;0.00031&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/(m*s)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k_a</strong></dt>
+<dd><p class="first">thermal conductivity for air</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0454&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k_p</strong></dt>
+<dd><p class="first">thermal conductivity of the pipe</p>
+<ul class="last simple">
+<li>default:  &#8216;400.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k_w</strong></dt>
+<dd><p class="first">thermal conductivity for water</p>
+<ul class="last simple">
+<li>default:  &#8216;0.58&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>kvisc_a</strong></dt>
+<dd><p class="first">kinematic viscosity for air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.568e-05&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m**2/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>kvisc_w</strong></dt>
+<dd><p class="first">kinematic viscosity for water</p>
+<ul class="last simple">
+<li>default:  &#8216;3.26e-07&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m**2/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>rho_a</strong></dt>
+<dd><p class="first">density of air</p>
+<ul class="last simple">
+<li>default:  &#8216;0.616&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>rho_w</strong></dt>
+<dd><p class="first">density of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1000.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>A_a</strong></dt>
+<dd><p class="first">area of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>A_w</strong></dt>
+<dd><p class="first">area of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Asurf_pipe</strong></dt>
+<dd><p class="first">Surface Area of the Pipe</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>De</strong></dt>
+<dd><p class="first">Hyrdraulic Diameter of the shell (annulus) for heat flow</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Dh</strong></dt>
+<dd><p class="first">Hyrdraulic Diameter of the shell (annulus) for fluid flow</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Di_shell</strong></dt>
+<dd><p class="first">Shell pipe (inner) Diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;0.05102&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Do_tube</strong></dt>
+<dd><p class="first">Tube pipe (outer) Diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;0.03493&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>F</strong></dt>
+<dd><p class="first">Multi-pass correction factor</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>L</strong></dt>
+<dd><p class="first">Heat Exchanger Length</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mass_steam</strong></dt>
+<dd><p class="first">Mass of output steam tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mass_water</strong></dt>
+<dd><p class="first">Mass of input water tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Mdot_a</strong></dt>
+<dd><p class="first">Mass flow rate of air</p>
+<ul class="last simple">
+<li>default:  &#8216;0.49&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>N</strong></dt>
+<dd><p class="first">Number of Tube Passes</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>U_o</strong></dt>
+<dd><p class="first">Overall Heat Transfer Coefficient</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/(m**2)*K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Veloc_a</strong></dt>
+<dd><p class="first">flow velocity of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Veloc_w</strong></dt>
+<dd><p class="first">flow velocity of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Vol_steam</strong></dt>
+<dd><p class="first">Volume of output steam tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Vol_water</strong></dt>
+<dd><p class="first">Volume of input water tank</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**3&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>h_a</strong></dt>
+<dd><p class="first">heat transfer of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>h_w</strong></dt>
+<dd><p class="first">heat transfer of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>q_a</strong></dt>
+<dd><p class="first">heat flow of air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>q_w</strong></dt>
+<dd><p class="first">heat flow of water</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Bool</em> <strong>coFlow</strong></dt>
+<dd><p class="first">Boolean true if co-flow, false if coutner-flow</p>
+<ul class="last simple">
+<li>default:  &#8216;False&#8217;</li>
+<li>vartypename:  &#8216;Bool&#8217;</li>
+</ul>
+</dd>
+<dt><em>Bool</em> <strong>cooled</strong></dt>
+<dd><p class="first">Boolean true if fluid is cooled, false if heated</p>
+<ul class="last simple">
+<li>default:  &#8216;True&#8217;</li>
+<li>vartypename:  &#8216;Bool&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.cycle.heatExchanger2.heatExchanger.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/heatExchanger2.html#heatExchanger.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.heatExchanger2.heatExchanger.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Various Paramters</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="hyperloop.cycle.heatExchanger2.check">
+<tt class="descclassname">hyperloop.cycle.heatExchanger2.</tt><tt class="descname">check</tt><big>(</big><em>var_name</em>, <em>var</em>, <em>correct_val</em><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/heatExchanger2.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.heatExchanger2.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format and print the results of a value comparison, (crude tests for verification purposes)</p>
+</dd></dl>
+
 </div>
 <div class="section" id="hyperassembly-py">
-<span id="hyperloop-cycle-hyperassembly-py"></span><span id="index-2"></span><h2>hyperAssembly.py<a class="headerlink" href="#hyperassembly-py" title="Permalink to this headline">¶</a></h2>
+<span id="hyperloop-cycle-hyperassembly-py"></span><span id="index-4"></span><h2>hyperAssembly.py<a class="headerlink" href="#hyperassembly-py" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="npss-wrapper-py">
-<span id="hyperloop-cycle-npss-wrapper-py"></span><span id="index-3"></span><h2>npss_wrapper.py<a class="headerlink" href="#npss-wrapper-py" title="Permalink to this headline">¶</a></h2>
+<span id="hyperloop-cycle-npss-wrapper-py"></span><span id="index-5"></span><h2>npss_wrapper.py<a class="headerlink" href="#npss-wrapper-py" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="tubemodel-py">
-<span id="hyperloop-cycle-tubemodel-py"></span><span id="index-4"></span><h2>tubeModel.py<a class="headerlink" href="#tubemodel-py" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-hyperloop.cycle.tubeModel">
+<span id="tubemodel-py"></span><span id="hyperloop-cycle-tubemodel-py"></span><span id="index-6"></span><h2>tubeModel.py<a class="headerlink" href="#module-hyperloop.cycle.tubeModel" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>tubeModel.py - </dt>
+<dd>Calculates Q released/absorbed by hyperloop tube due to:
+Internal Convection, Tube Conduction, Ambient Natural Convection, Solar Flux In, Radiation Out</dd>
+</dl>
+<p>-original calculations from Jeff Berton, ported and extended by Jeff Chin</p>
+<p>Compatible with OpenMDAO v0.8.1</p>
+<dl class="class">
+<dt id="hyperloop.cycle.tubeModel.tubeModel">
+<em class="property">class </em><tt class="descclassname">hyperloop.cycle.tubeModel.</tt><tt class="descname">tubeModel</tt><a class="reference internal" href="_modules/hyperloop/cycle/tubeModel.html#tubeModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.tubeModel.tubeModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
+<p>Main Component</p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>PR</strong></dt>
+<dd><p class="first">Compressor Pressure Ratio</p>
+<ul class="last simple">
+<li>default:  &#8216;12.4&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>adiabaticEff</strong></dt>
+<dd><p class="first">Adiabatic Efficiency of the Compressor</p>
+<ul class="last simple">
+<li>default:  &#8216;0.69&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>ambientTemp</strong></dt>
+<dd><p class="first">Average Temperature of the outside air</p>
+<ul class="last simple">
+<li>default:  &#8216;305.6&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>compInletPt</strong></dt>
+<dd><p class="first">Compressor Inlet Total Pressure</p>
+<ul class="last simple">
+<li>default:  &#8216;169.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;Pa&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>compInletTt</strong></dt>
+<dd><p class="first">Compressor Inlet Total Temperature</p>
+<ul class="last simple">
+<li>default:  &#8216;367.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>podFreq</strong></dt>
+<dd><p class="first">Number of Pods in the Tube at a given time</p>
+<ul class="last simple">
+<li>default:  &#8216;34.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>podMN</strong></dt>
+<dd><p class="first">Pod Mach Number</p>
+<ul class="last simple">
+<li>default:  &#8216;0.91&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>podMdot</strong></dt>
+<dd><p class="first">Amount of air released by each pod</p>
+<ul class="last simple">
+<li>default:  &#8216;0.49&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tubeAmbientPressure</strong></dt>
+<dd><p class="first">Average Temperature of the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;99.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;Pa&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tubeLength</strong></dt>
+<dd><p class="first">Length of entire Hyperloop</p>
+<ul class="last simple">
+<li>default:  &#8216;482803.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tubeOD</strong></dt>
+<dd><p class="first">Tube out diameter</p>
+<ul class="last simple">
+<li>default:  &#8216;2.22504&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;m&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tubeWallTemp</strong></dt>
+<dd><p class="first">Average Temperature of the tube</p>
+<ul class="last simple">
+<li>default:  &#8216;322.361&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Gr</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;12730351223.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>GrDelTL3</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;1946216.7&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;1/((ft**3)*F)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Nu</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;232.4543713&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Pr</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;0.707&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Qin</strong></dt>
+<dd><p class="first">Total Heat Absorbed/Added via Pods and Solar Absorption</p>
+<ul class="last simple">
+<li>default:  &#8216;286900419.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Qout</strong></dt>
+<dd><p class="first">Total Heat Released via Radiation and Natural Convection</p>
+<ul class="last simple">
+<li>default:  &#8216;286900419.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Ra</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;8996312085.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>compExitPt</strong></dt>
+<dd><p class="first">Compressor Exit Total Pressure</p>
+<ul class="last simple">
+<li>default:  &#8216;2099.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;Pa&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>compExitTt</strong></dt>
+<dd><p class="first">Compressor Exit Total Temperature</p>
+<ul class="last simple">
+<li>default:  &#8216;927.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>convectionArea</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;3374876.115&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>h</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;0.845464094&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/((m**2)*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>k</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;0.02655&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/(m*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>naturalConvection</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;7.9&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/(m**2)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>naturalConvectionTot</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;286900419.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>podCp</strong></dt>
+<dd><p class="first">specific heat of hot pod air</p>
+<ul class="last simple">
+<li>default:  &#8216;1144.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;J/(kg*K)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>podQ</strong></dt>
+<dd><p class="first">Heating Due to a Single Pods</p>
+<ul class="last simple">
+<li>default:  &#8216;519763.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>podQTot</strong></dt>
+<dd><p class="first">Heating Due to a All Pods</p>
+<ul class="last simple">
+<li>default:  &#8216;17671942.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>qRad</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;31.6&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W/(m**2)&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>qRadTot</strong></dt>
+<dd><p class="first">Heat Radiated to the outside</p>
+<ul class="last simple">
+<li>default:  &#8216;106761066.5&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>radArea</strong></dt>
+<dd><p class="first">Tube Radiating Area</p>
+<ul class="last simple">
+<li>default:  &#8216;337486.1&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>viewingAngle</strong></dt>
+<dd><p class="first">Effective Area hit by Sun</p>
+<ul class="last simple">
+<li>default:  &#8216;1074256.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>SBconst</strong></dt>
+<dd><p class="first">Stefan-Boltzmann Constant</p>
+<ul class="last simple">
+<li>default:  &#8216;5.670373e-08&#8217;</li>
+<li>units: &#8216;W/((m**2)*(K**4))&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Solar_constant</strong></dt>
+<dd><p class="first">Average Temperature of the outside air</p>
+<ul class="last simple">
+<li>default:  &#8216;1366.0&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Solar_insolation</strong></dt>
+<dd><p class="first">Average Temperature of the outside air</p>
+<ul class="last simple">
+<li>default:  &#8216;1000.0&#8217;</li>
+<li>units: &#8216;K&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Surface_reflectance</strong></dt>
+<dd><p class="first">Average Temperature of the outside air</p>
+<ul class="last simple">
+<li>default:  &#8216;0.5&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>gammaAir</strong></dt>
+<dd><p class="first">Heat Capacity of Air</p>
+<ul class="last simple">
+<li>default:  &#8216;1.4&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>nnIncidenceF</strong></dt>
+<dd><p class="first">Non-normal incidence factor</p>
+<ul class="last simple">
+<li>default:  &#8216;0.7&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>solarHeat</strong></dt>
+<dd><p class="first">Solar Heat Absorbed per Area</p>
+<ul class="last simple">
+<li>default:  &#8216;350.0&#8217;</li>
+<li>units: &#8216;W/m**2&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>solarHeatTotal</strong></dt>
+<dd><p class="first">Solar Heat Absorbed by Tube</p>
+<ul class="last simple">
+<li>default:  &#8216;375989751.0&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>tubeEmissivity</strong></dt>
+<dd><p class="first">Emmissivity of the Tube</p>
+<ul class="last simple">
+<li>default:  &#8216;0.5&#8217;</li>
+<li>units: &#8216;W&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.cycle.tubeModel.tubeModel.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/tubeModel.html#tubeModel.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.tubeModel.tubeModel.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Various Paramters</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="hyperloop.cycle.tubeModel.check">
+<tt class="descclassname">hyperloop.cycle.tubeModel.</tt><tt class="descname">check</tt><big>(</big><em>var_name</em>, <em>var</em>, <em>correct_val</em><big>)</big><a class="reference internal" href="_modules/hyperloop/cycle/tubeModel.html#check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.cycle.tubeModel.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format and print the results of a value comparison, (crude tests for verification purposes)</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-hyperloop.geometry.air_bearing">
-<span id="air-bearing-py"></span><span id="hyperloop-geometry-air-bearing-py"></span><span id="index-5"></span><h2>air_bearing.py<a class="headerlink" href="#module-hyperloop.geometry.air_bearing" title="Permalink to this headline">¶</a></h2>
+<span id="air-bearing-py"></span><span id="hyperloop-geometry-air-bearing-py"></span><span id="index-7"></span><h2>air_bearing.py<a class="headerlink" href="#module-hyperloop.geometry.air_bearing" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hyperloop.geometry.air_bearing.AirBearing">
 <em class="property">class </em><tt class="descclassname">hyperloop.geometry.air_bearing.</tt><tt class="descname">AirBearing</tt><a class="reference internal" href="_modules/hyperloop/geometry/air_bearing.html#AirBearing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.air_bearing.AirBearing" title="Permalink to this definition">¶</a></dt>
@@ -168,7 +1518,7 @@
 
 </div>
 <div class="section" id="module-hyperloop.geometry.battery">
-<span id="battery-py"></span><span id="hyperloop-geometry-battery-py"></span><span id="index-6"></span><h2>battery.py<a class="headerlink" href="#module-hyperloop.geometry.battery" title="Permalink to this headline">¶</a></h2>
+<span id="battery-py"></span><span id="hyperloop-geometry-battery-py"></span><span id="index-8"></span><h2>battery.py<a class="headerlink" href="#module-hyperloop.geometry.battery" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hyperloop.geometry.battery.Battery">
 <em class="property">class </em><tt class="descclassname">hyperloop.geometry.battery.</tt><tt class="descname">Battery</tt><a class="reference internal" href="_modules/hyperloop/geometry/battery.html#Battery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.battery.Battery" title="Permalink to this definition">¶</a></dt>
@@ -229,22 +1579,13 @@
 
 </div>
 <div class="section" id="module-hyperloop.geometry.bypass_duct">
-<span id="bypass-duct-py"></span><span id="hyperloop-geometry-bypass-duct-py"></span><span id="index-7"></span><h2>bypass_duct.py<a class="headerlink" href="#module-hyperloop.geometry.bypass_duct" title="Permalink to this headline">¶</a></h2>
+<span id="bypass-duct-py"></span><span id="hyperloop-geometry-bypass-duct-py"></span><span id="index-9"></span><h2>bypass_duct.py<a class="headerlink" href="#module-hyperloop.geometry.bypass_duct" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="hyperloop.geometry.bypass_duct.Tube">
-<em class="property">class </em><tt class="descclassname">hyperloop.geometry.bypass_duct.</tt><tt class="descname">Tube</tt><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#Tube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.Tube" title="Permalink to this definition">¶</a></dt>
+<dt id="hyperloop.geometry.bypass_duct.InletGeom">
+<em class="property">class </em><tt class="descclassname">hyperloop.geometry.bypass_duct.</tt><tt class="descname">InletGeom</tt><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#InletGeom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.InletGeom" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
 <dl class="docutils">
-<dt><em>Float</em> <strong>bypass_flow_area</strong></dt>
-<dd><p class="first">required flow area for the fan</p>
-<ul class="last simple">
-<li>default:  &#8216;845.5&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c1_flow_area</strong></dt>
+<dt><em>Float</em> <strong>area_c1_in</strong></dt>
 <dd><p class="first">amount of area blocked by the passenger capsule</p>
 <ul class="last simple">
 <li>default:  &#8216;14850.0&#8217;</li>
@@ -271,26 +1612,17 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>tube_radius</strong></dt>
-<dd><p class="first">required radius for the tube</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
 </dl>
 <dl class="method">
-<dt id="hyperloop.geometry.bypass_duct.Tube.execute">
-<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#Tube.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.Tube.execute" title="Permalink to this definition">¶</a></dt>
+<dt id="hyperloop.geometry.bypass_duct.InletGeom.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/bypass_duct.html#InletGeom.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.bypass_duct.InletGeom.execute" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </div>
 <div class="section" id="module-hyperloop.geometry.fan">
-<span id="fan-py"></span><span id="hyperloop-geometry-fan-py"></span><span id="index-8"></span><h2>fan.py<a class="headerlink" href="#module-hyperloop.geometry.fan" title="Permalink to this headline">¶</a></h2>
+<span id="fan-py"></span><span id="hyperloop-geometry-fan-py"></span><span id="index-10"></span><h2>fan.py<a class="headerlink" href="#module-hyperloop.geometry.fan" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hyperloop.geometry.fan.Fan">
 <em class="property">class </em><tt class="descclassname">hyperloop.geometry.fan.</tt><tt class="descname">Fan</tt><a class="reference internal" href="_modules/hyperloop/geometry/fan.html#Fan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.fan.Fan" title="Permalink to this definition">¶</a></dt>
@@ -340,56 +1672,78 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-hyperloop.hyperloop_cycle">
-<span id="hyperloop-cycle-py"></span><span id="hyperloop-hyperloop-cycle-py"></span><span id="index-9"></span><h2>hyperloop_cycle.py<a class="headerlink" href="#module-hyperloop.hyperloop_cycle" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-hyperloop.geometry.inlet">
+<span id="inlet-py"></span><span id="hyperloop-geometry-inlet-py"></span><span id="index-11"></span><h2>inlet.py<a class="headerlink" href="#module-hyperloop.geometry.inlet" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="hyperloop.hyperloop_cycle.HyperloopCycle">
-<em class="property">class </em><tt class="descclassname">hyperloop.hyperloop_cycle.</tt><tt class="descname">HyperloopCycle</tt><a class="reference internal" href="_modules/hyperloop/hyperloop_cycle.html#HyperloopCycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.hyperloop_cycle.HyperloopCycle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.assembly.Assembly</span></tt></p>
+<dt id="hyperloop.geometry.inlet.InletGeom">
+<em class="property">class </em><tt class="descclassname">hyperloop.geometry.inlet.</tt><tt class="descname">InletGeom</tt><a class="reference internal" href="_modules/hyperloop/geometry/inlet.html#InletGeom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.inlet.InletGeom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
 <dl class="docutils">
-<dt><em>Float</em> <strong>c1_PR_des</strong></dt>
-<dd><p class="first">pressure ratio of first compressor at design conditions</p>
-<ul class="last simple">
-<li>default:  &#8216;12.47&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c1_entrance_Mach</strong></dt>
-<dd><p class="first">Mach number at entrance to the first compressor at design conditions</p>
-<ul class="last simple">
-<li>default:  &#8216;0.6&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c1_q_dot</strong></dt>
-<dd><p class="first">heat extracted from the flow after the first compressor stage</p>
+<dt><em>Float</em> <strong>area_inlet</strong></dt>
+<dd><p class="first">flow area required at the back of the inlet</p>
 <ul class="last simple">
 <li>default:  &#8216;0.0&#8217;</li>
 <li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;kW&#8217;</li>
+<li>units: &#8216;cm**2&#8217;</li>
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>c2_PR_des</strong></dt>
-<dd><p class="first">pressure ratio of second compressor at design conditions</p>
+<dt><em>Float</em> <strong>inlet_wall_thickness</strong></dt>
+<dd><p class="first">thickness of the inlet wall</p>
 <ul class="last simple">
 <li>default:  &#8216;5.0&#8217;</li>
 <li>iotype:  &#8216;in&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>c2_q_dot</strong></dt>
-<dd><p class="first">heat extracted from the flow after the second compressor stage</p>
+<dt><em>Float</em> <strong>blockage_area</strong></dt>
+<dd><p class="first">total area blocked by the inlet</p>
 <ul class="last simple">
 <li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;in&#8217;</li>
-<li>units: &#8216;kW&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>pod_Mach</strong></dt>
+<dt><em>Float</em> <strong>radius_inner</strong></dt>
+<dd><p class="first">inner radius of the inlet</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>radius_outer</strong></dt>
+<dd><p class="first">outer radius of the inlet</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hyperloop.geometry.inlet.InletGeom.execute">
+<tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/geometry/inlet.html#InletGeom.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.geometry.inlet.InletGeom.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="pod-py">
+<span id="hyperloop-geometry-pod-py"></span><span id="index-12"></span><h2>pod.py<a class="headerlink" href="#pod-py" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-hyperloop.hyperloop_sim">
+<span id="hyperloop-sim-py"></span><span id="hyperloop-hyperloop-sim-py"></span><span id="index-13"></span><h2>hyperloop_sim.py<a class="headerlink" href="#module-hyperloop.hyperloop_sim" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hyperloop.hyperloop_sim.Hyperloop">
+<em class="property">class </em><tt class="descclassname">hyperloop.hyperloop_sim.</tt><tt class="descname">Hyperloop</tt><a class="reference internal" href="_modules/hyperloop/hyperloop_sim.html#Hyperloop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.hyperloop_sim.Hyperloop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.assembly.Assembly</span></tt></p>
+<dl class="docutils">
+<dt><em>Float</em> <strong>Mach_pod</strong></dt>
 <dd><p class="first">travel Mach of the pod</p>
 <ul class="last simple">
 <li>default:  &#8216;1.0&#8217;</li>
@@ -397,7 +1751,7 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>tube_P</strong></dt>
+<dt><em>Float</em> <strong>Ps_tube</strong></dt>
 <dd><p class="first">static pressure in the tube</p>
 <ul class="last simple">
 <li>default:  &#8216;99.0&#8217;</li>
@@ -406,7 +1760,7 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>tube_T</strong></dt>
+<dt><em>Float</em> <strong>Ts_tube</strong></dt>
 <dd><p class="first">static temperature in the tube</p>
 <ul class="last simple">
 <li>default:  &#8216;292.1&#8217;</li>
@@ -415,8 +1769,8 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>tube_radius</strong></dt>
-<dd><p class="first">radius of the tube</p>
+<dt><em>Float</em> <strong>radius_tube</strong></dt>
+<dd><p class="first">required radius for the tube</p>
 <ul class="last simple">
 <li>default:  &#8216;111.5&#8217;</li>
 <li>iotype:  &#8216;in&#8217;</li>
@@ -424,54 +1778,32 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>bypass_flow_area</strong></dt>
-<dd><p class="first">flow area required for the air bypassing the pod</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>c1_flow_area</strong></dt>
-<dd><p class="first">flow area required for the first compressor</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
-<dt><em>Float</em> <strong>nozzle_flow_area</strong></dt>
-<dd><p class="first">flow area required for the nozzle exit</p>
-<ul class="last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>iotype:  &#8216;out&#8217;</li>
-<li>units: &#8216;cm**2&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
 </dl>
 <dl class="method">
-<dt id="hyperloop.hyperloop_cycle.HyperloopCycle.configure">
-<tt class="descname">configure</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/hyperloop_cycle.html#HyperloopCycle.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.hyperloop_cycle.HyperloopCycle.configure" title="Permalink to this definition">¶</a></dt>
+<dt id="hyperloop.hyperloop_sim.Hyperloop.configure">
+<tt class="descname">configure</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/hyperloop_sim.html#Hyperloop.configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.hyperloop_sim.Hyperloop.configure" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="hyperloop-sim-py">
-<span id="hyperloop-hyperloop-sim-py"></span><span id="index-10"></span><h2>hyperloop_sim.py<a class="headerlink" href="#hyperloop-sim-py" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="module-hyperloop.kantrowitz_limit">
-<span id="kantrowitz-limit-py"></span><span id="hyperloop-kantrowitz-limit-py"></span><span id="index-11"></span><h2>kantrowitz_limit.py<a class="headerlink" href="#module-hyperloop.kantrowitz_limit" title="Permalink to this headline">¶</a></h2>
+<span id="kantrowitz-limit-py"></span><span id="hyperloop-kantrowitz-limit-py"></span><span id="index-14"></span><h2>kantrowitz_limit.py<a class="headerlink" href="#module-hyperloop.kantrowitz_limit" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hyperloop.kantrowitz_limit.KantrowitzLimit">
 <em class="property">class </em><tt class="descclassname">hyperloop.kantrowitz_limit.</tt><tt class="descname">KantrowitzLimit</tt><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#KantrowitzLimit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.KantrowitzLimit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">openmdao.main.component.Component</span></tt></p>
 <p>finds the Kantrowitz limit velocity for a body traveling through a tube</p>
 <dl class="docutils">
-<dt><em>Float</em> <strong>Ps</strong></dt>
+<dt><em>Float</em> <strong>Mach_pod</strong></dt>
+<dd><p class="first">travel Mach of the pod</p>
+<ul class="last simple">
+<li>default:  &#8216;1.0&#8217;</li>
+<li>iotype:  &#8216;in&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>Ps_tube</strong></dt>
 <dd><p class="first">static pressure in the tube</p>
 <ul class="last simple">
 <li>default:  &#8216;99.0&#8217;</li>
@@ -480,7 +1812,7 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>Ts</strong></dt>
+<dt><em>Float</em> <strong>Ts_tube</strong></dt>
 <dd><p class="first">static temperature in the tube</p>
 <ul class="last simple">
 <li>default:  &#8216;292.1&#8217;</li>
@@ -489,7 +1821,7 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>inlet_radius</strong></dt>
+<dt><em>Float</em> <strong>radius_inlet</strong></dt>
 <dd><p class="first">radius of the inlet at it&#8217;s largest point</p>
 <ul class="last simple">
 <li>default:  &#8216;73.7&#8217;</li>
@@ -498,12 +1830,39 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>tube_radius</strong></dt>
+<dt><em>Float</em> <strong>radius_tube</strong></dt>
 <dd><p class="first">required radius for the tube</p>
 <ul class="last simple">
 <li>default:  &#8216;111.5&#8217;</li>
 <li>iotype:  &#8216;in&#8217;</li>
 <li>units: &#8216;cm&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>W_excess</strong></dt>
+<dd><p class="first">excess tube mass flow above the Kantrowitz limit</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>W_kant</strong></dt>
+<dd><p class="first">Kantrowitz limit flow</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
+<li>vartypename:  &#8216;Float&#8217;</li>
+</ul>
+</dd>
+<dt><em>Float</em> <strong>W_tube</strong></dt>
+<dd><p class="first">Tube demand flow</p>
+<ul class="last simple">
+<li>default:  &#8216;0.0&#8217;</li>
+<li>iotype:  &#8216;out&#8217;</li>
+<li>units: &#8216;kg/s&#8217;</li>
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
@@ -524,23 +1883,18 @@
 <li>vartypename:  &#8216;Float&#8217;</li>
 </ul>
 </dd>
-<dt><em>Float</em> <strong>pod_radius</strong></dt>
-<dd><ul class="first last simple">
-<li>default:  &#8216;0.0&#8217;</li>
-<li>vartypename:  &#8216;Float&#8217;</li>
-</ul>
-</dd>
 </dl>
 <dl class="method">
 <dt id="hyperloop.kantrowitz_limit.KantrowitzLimit.execute">
 <tt class="descname">execute</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#KantrowitzLimit.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.KantrowitzLimit.execute" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="hyperloop.kantrowitz_limit.KantrowitzLimit.plot_data">
-<tt class="descname">plot_data</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#KantrowitzLimit.plot_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.KantrowitzLimit.plot_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+</dd></dl>
 
+<dl class="function">
+<dt id="hyperloop.kantrowitz_limit.plot_data">
+<tt class="descclassname">hyperloop.kantrowitz_limit.</tt><tt class="descname">plot_data</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hyperloop/kantrowitz_limit.html#plot_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hyperloop.kantrowitz_limit.plot_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>utility function to make the Kantrowitz Limit Plot</p>
 </dd></dl>
 
 </div>
@@ -555,17 +1909,20 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Source Documentation</a><ul>
+<li><a class="reference internal" href="#module-hyperloop.api">api.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.cycle.compression_system">compression_system.py</a></li>
 <li><a class="reference internal" href="#heatexchanger-py">heatExchanger.py</a></li>
 <li><a class="reference internal" href="#heatexchanger2-py">heatExchanger2.py</a></li>
 <li><a class="reference internal" href="#hyperassembly-py">hyperAssembly.py</a></li>
 <li><a class="reference internal" href="#npss-wrapper-py">npss_wrapper.py</a></li>
-<li><a class="reference internal" href="#tubemodel-py">tubeModel.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.cycle.tubeModel">tubeModel.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.air_bearing">air_bearing.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.battery">battery.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.bypass_duct">bypass_duct.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.geometry.fan">fan.py</a></li>
-<li><a class="reference internal" href="#module-hyperloop.hyperloop_cycle">hyperloop_cycle.py</a></li>
-<li><a class="reference internal" href="#hyperloop-sim-py">hyperloop_sim.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.geometry.inlet">inlet.py</a></li>
+<li><a class="reference internal" href="#pod-py">pod.py</a></li>
+<li><a class="reference internal" href="#module-hyperloop.hyperloop_sim">hyperloop_sim.py</a></li>
 <li><a class="reference internal" href="#module-hyperloop.kantrowitz_limit">kantrowitz_limit.py</a></li>
 </ul>
 </li>

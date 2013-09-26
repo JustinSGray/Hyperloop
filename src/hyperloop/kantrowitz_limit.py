@@ -11,7 +11,7 @@ from pycycle.flowstation import CanteraFlowStation, secant
 class KantrowitzLimit(Component): 
     """finds the Kantrowitz limit velocity for a body traveling through a tube"""
     radius_tube = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")    
-    radius_inlets = Float(73.7, iotype="in", units="cm", desc="radius of the inlet at it's largest point")
+    radius_inlet = Float(73.7, iotype="in", units="cm", desc="radius of the inlet at it's largest point")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
@@ -27,7 +27,7 @@ class KantrowitzLimit(Component):
     	fs_tube = self.fs_tube = CanteraFlowStation()
 
         tube_rad = self.radius_tube*0.0328084 #convert to ft
-        inlet_rad = self.radius_inlets*0.0328084
+        inlet_rad = self.radius_inlet*0.0328084
 
         self._tube_area  = pi*(tube_rad**2) #ft**2
         self._bypass_area = pi*(tube_rad**2-inlet_rad**2)
@@ -56,7 +56,7 @@ class KantrowitzLimit(Component):
 
         fs_tube.Mach = 1 #Kantrowitz flow is at these total conditions, but with Mach 1
         self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area
-        
+
         self.W_excess = self.W_tube - self.W_kant
 
 
@@ -99,4 +99,3 @@ if __name__ == "__main__":
     #print comp.W_tube[-1]
     #print comp.W_kant[-1]
     plot_data()
-    print comp.W_excess

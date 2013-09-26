@@ -8,21 +8,21 @@ from pycycle.api import (FlowStartStatic, Splitter, Inlet, Compressor, Duct, Spl
     Nozzle, )
 
 
-class HyperloopCycle(Assembly): 
+class CompressionSystem(Assembly): 
 
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
     Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
-    tube_P = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
-    tube_T = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
-    tube_radius = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
-    c1_entrance_Mach = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
+    Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
+    Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
+    radius_tube = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
+    Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")
     c1_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the first compressor stage", units="kW")
     c2_PR_des = Float(5, iotype="in", desc="pressure ratio of second compressor at design conditions")
     c2_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the second compressor stage", units="kW")
 
-    bypass_flow_area = Float(iotype="out", desc="flow area required for the air bypassing the pod", units="cm**2")
+    area_bypass = Float(iotype="out", desc="flow area required for the air bypassing the pod", units="cm**2")
     c1_flow_area = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
 
@@ -84,13 +84,13 @@ class HyperloopCycle(Assembly):
 
         #variable pass_throughs to the assembly boundary
         self.connect('Mach_pod', 'tube.Mach')
-        self.connect('c1_entrance_Mach', 'inlet.MNexit_des')
+        self.connect('Mach_c1_in', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
         self.connect('-.94782*c1_q_dot', 'duct1.Q_dot') #negative q is heat out, convert from kW to btu/s
         self.connect('-.94782*c2_q_dot', 'duct2.Q_dot') #negative q is heat out, convert from kW to btu/s
 
-        self.connect('tube_bypass.Fl_O1.area','bypass_flow_area')
+        self.connect('tube_bypass.Fl_O1.area','area_bypass')
         self.connect('inlet.Fl_O.area', 'c1_flow_area')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
 
@@ -98,7 +98,7 @@ class HyperloopCycle(Assembly):
         design = self.driver
         #design = self.add('driver', BroydenSolver())
         #design.add_parameter('tube.W', low=-1e15, high=1e15)
-        #design.add_constraint('tube.Fl_O.area=(3.14159*tube_radius**2)*.394**2') #holds the radius of the tube constant
+        #design.add_constraint('tube.Fl_O.area=(3.14159*radius_tube**2)*.394**2') #holds the radius of the tube constant
 
         comp_list = ['tube','tube_bypass','inlet','comp1',
             'duct1', 'split', 'nozzle', 'comp2', 'duct2']

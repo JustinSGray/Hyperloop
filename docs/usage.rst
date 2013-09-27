@@ -169,7 +169,7 @@ where :math:`{Q}_{max} = (T_{hot,in} - T_{cold,in})` multiplied by the lowest pr
 
 In order to satisfy the energy balance :math:`{Q}_{released}  = {Q}_{absorbed}` , the following must be true,
 
-.. math::      \dot{m}_{air} * C_{p, air} * (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} * C_{p,water} * (T_{out, water} - T_{in, water})
+.. math::      \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
 
 where the :math:`T_{out}` of each fluid is unknown. Through iteration, the :math:`T_{out}` of each fluid can be found. 
 Valid effectiveness levels for heat exchangers can be determined based on the E- `NTU method.`__. 
@@ -211,9 +211,7 @@ Given:
 
 -For simplicity, only a single heat exchanger is designed (to cool down the air coming off the second compressor stage)
 
--Sized as a classic shell and tube heat exchanger!
-
-Method Assumptions:
+-Sized as a classic shell and tube heat exchanger
 
 -Input and output temperatures are known for each fluid
 
@@ -221,23 +219,52 @@ Method Assumptions:
 
 -Rigorously defined for double-pipe(or tubular) heat exchanger
 
-Based on these temperatures, the Logarathmic Mean Temperature Difference (LMTD) method can be employed.
-
- assumption that the heat exchanger must cool the compressed air back down to the same temperature as the incoming flow, the required heat released from the system is given as:
-
-.. math::   {Q}_{air}  = \dot{m}_{air} C_{p,air} \Delta{T}_{air}
+With a chosen cross-sectional area of pipe and annulus, and known Q and mdot the velocity of each fluid can be determined.
 
 
+.. math::    \dot{m} = \rho A V     ...        V  = \frac{Q} {\rho A C_{p} (T_{out} - T_{in})}
 
+The hydraulic diameter (characterstic length) of a tube can also be calculated as,
 
+.. math::  D_{h} = \frac{4 A_{f}} {P_{f}}  = \frac{4 \pi (ID_{a}^2-OD_{p}^2)} {4 \pi (ID_{a}+OD_{p})} = ID_{a}-OD_{p}
+
+.. math::  D_{\varepsilon} = \frac{4 A_{f}} {P_{ht}}   =  \frac{4 \pi (ID_{a}^2-OD_{p}^2)} {4 \pi (ID_{a}*OD_{p})} = \frac{ID_{a}^2-OD_{p}^2}{OD_{p}}
+
+Based on the geometry, kinematic viscosity :math:`\upsilon`, dynamic viscosity :math:`\mu`, thermal conductivity k, and 
+velocity of the fluids the following non-dimension values can be calculated
+
+Reynolds Number: (inertial forces/ viscous forces) :math:`Re = \frac{V D_{h}} {\upsilon}`
+
+Prandtl Number: (viscous diffusion rate/ thermal diffusion rate) :math:`Pr = \frac{C_{p}  \mu} {k}`
+
+Based on the flow regimes determined above, the `Nusselt Number.`__. can be calculated. The Dittus-Boelter equation is 
+used in this case,
+
+.. __: http://en.wikipedia.org/wiki/Nusselt_number
+
+Nusselt Number: (convecive heat transfer / conductive heat transfer) :math:`Nu = 0.023*(Re^{4/5})*(Pr^{n})` 
+where n = 0.4 if the fluid is heated, n = 0.3 if the fluid is cooled.
+
+Subsequently the convective heat transfer coefficient of each fluid can be determined, :math:`h = \frac{Nu*k} {D_{\varepsilon}}`  
+
+All of these terms can then be used to calculate the overall heat transfer coefficient of the system,
+
+.. math::  U_{o} = \frac{1} {(\frac{A_{o}}{A_{i}h{i}}) + (\frac{A_{o}ln(\frac{r_{o}}{r_{i}})}{2 \pi k L}) + \frac{1}{h_{o}}}
+
+This combined with the LMTD = :math:`\Delta {T}_{LMTD} = \frac{\Delta {T}_{2}-\Delta {T}_{1}}{ln(\frac{\Delta {T}_{2}}{\Delta {T}_{1}})}`
+where  :math:`\Delta {T}_{1} = T_{hot,in} - T_{cold,out}`  and  :math:`\Delta {T}_{2} = T_{hot,out} - T_{cold,in}`
+
+allows the length to be determined for a single pass heat exchanger.
+
+.. math::  q = U_{o} \pi D_{o} L \Delta {T}_{LMTD} 
+
+Further calculations for the multipass heat exchanger can be found in the source code.
 
 References:
 
 Cengal, Y., Turner, R., & Cimbala, J. (2008). Fundamentals of thermal-fluid sciences. (3rd ed.). McGraw-Hill Companies.
 
 Turns, S. (2006). Thermal-fluid sciences: An integrated approach. Cambridge University Press.
-
-3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465 <http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html>
 
 
 
@@ -259,6 +286,9 @@ References:
 .. __: https://github.com/jcchin/Hyperloop/blob/master/docs/Hyperloop-Alpha.md#4-hyperloop-transportation-system
 
 https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf
+
+
+3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465 <http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html>
 
 -----------------------------
 Geometry

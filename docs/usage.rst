@@ -193,7 +193,7 @@ Water          1.006 kJ/kg-K        791 K             300 K            0.45 kg/s
 Air            4.186 kJ/kg-K       288.15 K          416.6 K           0.49 kg/s         242      247.9
 ============== =============== ================= ================= ================== ========= =========  
 
-With a 35 minute trip, :math:`0.45 kg/s * 60 s/min * 35 min =  945 kg/s` of standard temperature/pressure water would 
+With a 35 minute trip, :math:`0.45 kg/s * 60 s/min * 35 min =  945 kg` of standard temperature/pressure water would 
 need to be carried with appropriate sized steam tanks. This doesn't even account for the second stage heat exchanger, 
 making the system nearly infeasible with water and unpressurized tanks. Various systems involving alternate coolants 
 such as liquid air or pressurized tanks could be explored, possibly with the benefit of being combined with a rankine 
@@ -219,10 +219,10 @@ Given:
 
 -Rigorously defined for double-pipe(or tubular) heat exchanger
 
-With a chosen cross-sectional area of pipe and annulus, and known Q and mdot the velocity of each fluid can be determined.
+With a chosen cross-sectional area of pipe and annulus, and known Q and mdot, the velocity of each fluid can be determined.
 
 
-.. math::    \dot{m} = \rho A V     ...        V  = \frac{Q} {\rho A C_{p} (T_{out} - T_{in})}
+.. math::    \dot{m} = \rho A V     ...therfore...        V  = \frac{Q} {\rho A C_{p} (T_{out} - T_{in})}
 
 The hydraulic diameter (characterstic length) of a tube can also be calculated as,
 
@@ -280,15 +280,86 @@ internal air and tube was not modeled and assumed to reach steady-state in a rea
 calculations served to approximate the necessary cooling requirements of the on-board heat exchanger given a 
 certain steady-state heat limit within the tube.
 
-References:
-`Link`__.
+The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic flow relations.
 
-.. __: https://github.com/jcchin/Hyperloop/blob/master/docs/Hyperloop-Alpha.md#4-hyperloop-transportation-system
+.. math::  T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} MN^2]
+
+.. math::  P_{t} = P_{s} * (\frac{ T_{t}}{T_{s}})^(\frac{\gamma}{\gamma -1})
+
+.. math::  P_{t,exit} = P_{t,inlet} * PR
+
+.. math:: T_{t,exit} = T_{t,inlet} + \frac{([T_{t,inlet}*PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,inlet})}  {{\eta}_{adiabatic}}
+
+Where PR is the compressor pressure ratio, MN is the mach number, :math:`\gamma` is the specific heat ratio, and :math:`{\eta}_{adiabatic}` is the adiabatic efficiency.
+
+With the air flow rate known, the heat flow rate per capsule is obtained,
+
+
+.. math:: {Q}_{pod}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube})
+
+The peak heating rate from the pods scales linearly. 
+
+.. math:: {Q}_{peak}= Q_{pod} (\# ofpods)
+
+The solar heat flow per unit area can be approximated, given the solar reflectance index (SRI) of stainless steel, non-normal incidence factor of the cylinder and solar insolation (SIF).
+
+.. math:: Solar = (1-SRI) {\theta}_{nni} SIF
+
+Multiplying this by the viewing area of the tube (assuming no shade and constant sun)
+
+.. math:: Q_{solar} = Solar * A_{view} = Solar * Length_{tube} * OuterDiameter_{tube}
+
+Tube cooling can be attributed to two general mechanisms, radiation and natural convection. Radiation power per unit area can be approximated to 
+
+.. math:: \frac{P_{rad}}{A} = \epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)
+
+where :math:`\epsilon` is the emissivity factor and :math:`\sigma` is the Stefan-Boltzmann constant.
+
+Multiplying by the surface area of the tube, the total heating rate can be found,
+
+.. math:: P_{rad} =  \frac{P_{rad}}{A} * \pi Length_{tube} OuterDiameter_{tube}
+
+Assuming the worst case scenario of no cross wind, convection is primarily is driven soley by temperature gradients. The non-dimensional relation between buoyancy and viscousity driven flows is parameterized using the following imperical `constants`__.
+
+.. __: https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf
+
+if 150 K < T_{amb} < 400 K:
+
+.. math:: \frac{g \beta T} {\upsilon^2} = (m^{-3}K^{-1}) = 4.178\times10^{19} \times T_{amb}^{-4.639}
+
+.. math:: Pr = 1.23 T_{amb}^{-0.09685}
+
+if 400 K < T_{amb} < 2100 K:
+
+.. math:: \frac{g \beta T} {\upsilon^2}  = (m^{-3}K^{-1}) = 4.985\times10^{18} \times T_{amb}^{-4.284}
+
+.. math:: Pr = 0.59 T_{amb}^{0.0239}
+
+The Grashof Number can then be approximated,
+
+.. math:: Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {OuterDiameter}_{tube}^3
+
+The non-dimensional Rayleigh number can then be calculated to estimate buoyancy effects, leading to the `Nusselt number`__.
+
+.. __: http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html
+
+.. math:: Ra = Gr * Pr
+
+.. math:: Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16}}]^{\frac{8}{27}}}\Bigg)^2
+
+From this point the total heat transfer from natural convection can be obtained,
+
+.. math:: Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tube} (T_{tube}-T_{amb})
+
+The steady state tube temperature can be found by varying the tube temperature until the rate of heat being released from the tube matches the rate of heat being absorbed by the tube. Using the values provided in the source code, a steady state temperature of 120 F was reached.
+
+References:
 
 https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf
 
 
-3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465 <http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html>
+3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465
+<http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html>
 
 -----------------------------
 Geometry

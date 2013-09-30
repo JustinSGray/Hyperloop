@@ -53,7 +53,7 @@ class tubeModel(Component):
     Solar_constant = Float(1366., units = 'K', desc='Average Temperature of the outside air') #
     Solar_insolation = Float(1000., units = 'K', desc='Average Temperature of the outside air') #
     nnIncidenceF = Float(0.7, desc='Non-normal incidence factor') #
-    Surface_reflectance = Float(0.5, desc='Average Temperature of the outside air') #
+    Surface_reflectance = Float(0.5, desc='Solar Reflectance Index') #
     solarHeat = Float(350., units = 'W/m**2', desc='Solar Heat Absorbed per Area') #
     solarHeatTotal = Float(375989751., units = 'W', desc='Solar Heat Absorbed by Tube') #
     tubeEmissivity = Float(0.5, units = 'W', desc='Emmissivity of the Tube') #

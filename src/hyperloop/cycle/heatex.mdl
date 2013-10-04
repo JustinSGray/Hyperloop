@@ -1,0 +1,118 @@
+// 
+// heat exchanger model
+//
+// http://www.aip.org/tip/INPHFA/vol-2/iss-4/p18.pdf
+setThermoPackage( "GasTbl" );
+
+class HeatEx extends Element {
+
+   real Mc, Mh, Cpc, Cph, Th_in, Th_out, Tc_in, Tc_out;
+   real Qreleased, Qabsorbed, U=1., area, LMTD, effectiveness;
+   real MCpMin, Qmax, Qreal;
+   int firstPass = TRUE;
+
+   void calculate() {
+      
+      // guess exit temperatures
+      if ( firstPass == TRUE ) { 
+         Tc_out = ( Th_in + Tc_in )/2.;
+         Th_out = ( Th_in + Tc_in )/2.;
+         firstPass = FALSE;
+      } 
+
+      // calculate mdot*Cp min
+      MCpMin = Mc*Cpc;
+      if ( Mh*Cph < Mc*Cpc ) {
+         MCpMin = Mh*Cph;
+      }
+
+      Qmax = MCpMin*(Th_in - Tc_in);
+
+      Qreleased = Mh*Cph*(Th_in - Th_out);
+      Qabsorbed = Mc*Cpc*(Tc_out - Tc_in);
+
+      LMTD = ( (Th_out - Th_in) + (Tc_out - Tc_in) ) / 
+             log( ( Th_out - Tc_in )/( Th_in - Tc_out ) );
+      Qreal = U*area*LMTD; // or eff = U*area*LMTD/Qmax
+
+   }
+}
+
+
+Element HeatEx HX {
+   Mh = 0.49;    // kg or kg/s
+   Cph = 1.006;  // 1.006 kJ/kg-K
+   Th_in = 791.; // = 1404. R
+   Mc = 0.45;    // kg or kg/s
+   Cpc = 4.186;  // 4.186 kJ/kg-K
+   Tc_in = 288.15; // = 518.67 R
+   effectiveness = 0.9765;
+   area = 10.;
+}
+
+Independent ind_T1 {
+   varName = "HX.Th_out";
+   autoSetup = TRUE;
+}
+Independent ind_T2 {
+   varName = "HX.Tc_out";
+   autoSetup = TRUE;
+}
+
+
+Dependent dep_Qmax {
+   eq_rhs = "HX.Qreleased";
+   eq_lhs = "HX.effectiveness*HX.Qmax";
+   autoSetup = TRUE;
+}
+
+Dependent dep_Qbalance {
+   eq_rhs = "HX.Qreleased";
+   eq_lhs = "HX.Qabsorbed";
+   autoSetup = TRUE;
+}
+
+autoSolverSetup();
+run();
+
+cout.precision=4; cout.showpoint = TRUE;
+cout << "air:      Tin       Tout         Q      Q' \n";
+cout << "        " << HX.Th_in << "      " << HX.Th_out << "     " << HX.Qreleased 
+     << "     " << HX.Qmax << endl;
+cout << endl;
+cout << "water:    Tin       Tout         Q      Q' \n";
+cout << "        " << HX.Tc_in << "      " << HX.Tc_out << "     " << HX.Qabsorbed 
+     << "     " << HX.Qmax << endl;
+cout << "LMTD = " << HX.LMTD << endl;
+quit();
+//cout << "done" << endl;
+
+
+// http://www.cambridge.org/us/engineering/author/nellisandklein/downloads/examples/EXAMPLE_8.2-1.pdf
+
+HX.Mh = 0.03;
+HX.Cph = 4.186;
+HX.Th_in = 60.0 + 273.15;
+HX.Mc = (0.07517/2.2046)*(3.281**3.)*0.06;  // 0.06 m3/s volumetric flowrate
+HX.Cpc = 1.006;
+HX.Tc_in = 20.0 + 273.15;
+HX.area = 0.0584;  // kJ/s-K , from input U*area = 58.4 W/K
+HX.effectiveness = 0.489;
+
+autoSolverSetup();
+run();
+
+cout << endl;
+cout << "air:      Tin       Tout         Q      Q' \n";
+cout << "        " << HX.Tc_in << "      " << HX.Tc_out << "     " << HX.Qabsorbed 
+     << "     " << HX.Qmax << endl;
+cout << endl;
+cout << "water:    Tin       Tout         Q      Q' \n";
+cout << "        " << HX.Th_in << "      " << HX.Th_out << "     " << HX.Qreleased 
+     << "     " << HX.Qmax << endl;
+cout << "Q real = " << HX.Qreal << endl;
+cout << "LMTD = " << HX.LMTD << endl;
+
+
+
+

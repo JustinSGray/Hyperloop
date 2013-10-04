@@ -15,27 +15,19 @@ Package Metadata
     [openmdao.component]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
-    hyperloop.cycle.heatExchanger.heatExchanger=hyperloop.cycle.heatExchanger:heatExchanger
-    hyperloop.cycle.tubeModel.tubeModel=hyperloop.cycle.tubeModel:tubeModel
-    hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
     hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
     hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
-    hyperloop.cycle.heatExchanger2.heatExchanger=hyperloop.cycle.heatExchanger2:heatExchanger
+    hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
     hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
-    hyperloop.cycle.hyperAssembly.hyperTop=hyperloop.cycle.hyperAssembly:hyperTop
     hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
     hyperloop.cycle.compression_system.CompressionSystem=hyperloop.cycle.compression_system:CompressionSystem
     [openmdao.container]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
-    hyperloop.cycle.heatExchanger.heatExchanger=hyperloop.cycle.heatExchanger:heatExchanger
-    hyperloop.cycle.tubeModel.tubeModel=hyperloop.cycle.tubeModel:tubeModel
-    hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
     hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
     hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
-    hyperloop.cycle.heatExchanger2.heatExchanger=hyperloop.cycle.heatExchanger2:heatExchanger
+    hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
     hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
-    hyperloop.cycle.hyperAssembly.hyperTop=hyperloop.cycle.hyperAssembly:hyperTop
     hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
     hyperloop.cycle.compression_system.CompressionSystem=hyperloop.cycle.compression_system:CompressionSystem
 

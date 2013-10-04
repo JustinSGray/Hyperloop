@@ -1,5 +1,5 @@
 from openmdao.main.api import Assembly, Component
-from openmdao.lib.drivers.api import NewtonKrylov, DOEdriver
+from openmdao.lib.drivers.api import DOEdriver
 from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
@@ -117,6 +117,7 @@ class CompressionSystem(Assembly):
 
 if __name__ == "__main__": 
     from math import pi
+    from openmdao.main.api import set_as_top
 
     hlc = set_as_top(CompressionSystem())
     hlc.Mach_pod = 1

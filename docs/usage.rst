@@ -180,6 +180,7 @@ The effectiveness for a counter flow heat exchanger with a Cmin/Cmax of ~0.25 wa
 .. figure:: images/heat_effectiveness.png
    :align: center
    :alt: Heat Exchanger Effictiveness Graph
+   
 Image from http://www.cheresources.com/content/articles/heat-transfer/heat-exchanger-effectiveness
 
 The following conditions satisfied an energy balance with an assumed effectiveness of 0.9765, and the proposed requirement to 

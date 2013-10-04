@@ -123,6 +123,14 @@ if __name__ == "__main__":
     test = HeatBalance()  
     set_as_top(test)
     test.hx.Mc = .45
+
+
+    #good values: 
+    #air:      Tin       Tout         Q      Q' 
+    #791.0    299.966975    242.049819343    247.874879
+    #water:    Tin       Tout         Q      Q' 
+    #288.15    416.647010853    242.049819343    247.874879
+
     print ""
     test.run()
     print  "air:      Tin       Tout         Q      Q\' \n";

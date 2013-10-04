@@ -15,19 +15,21 @@ Package Metadata
     [openmdao.component]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
+    hyperloop.hyperloop_sim.HyperloopPod=hyperloop.hyperloop_sim:HyperloopPod
+    hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
     hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
     hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
-    hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
-    hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
+    hyperloop.battery.Battery=hyperloop.battery:Battery
     hyperloop.cycle.compression_system.CompressionSystem=hyperloop.cycle.compression_system:CompressionSystem
     [openmdao.container]
     hyperloop.geometry.air_bearing.AirBearing=hyperloop.geometry.air_bearing:AirBearing
     hyperloop.geometry.battery.Battery=hyperloop.geometry.battery:Battery
+    hyperloop.hyperloop_sim.HyperloopPod=hyperloop.hyperloop_sim:HyperloopPod
+    hyperloop.battery.Battery=hyperloop.battery:Battery
     hyperloop.geometry.pod.Geometry=hyperloop.geometry.pod:Geometry
     hyperloop.geometry.inlet.InletGeom=hyperloop.geometry.inlet:InletGeom
     hyperloop.geometry.fan.Fan=hyperloop.geometry.fan:Fan
-    hyperloop.hyperloop_sim.Hyperloop=hyperloop.hyperloop_sim:Hyperloop
     hyperloop.kantrowitz_limit.KantrowitzLimit=hyperloop.kantrowitz_limit:KantrowitzLimit
     hyperloop.cycle.compression_system.CompressionSystem=hyperloop.cycle.compression_system:CompressionSystem
 

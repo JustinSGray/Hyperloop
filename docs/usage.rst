@@ -93,7 +93,7 @@ Each of these functions requires that the compressors move a certain amount of a
 combine to define the total airflow for the whole sub-system. The system is comprised of 
 an inlet, two compressors, two heat exchangers, a nozzle, and a duct to air bearings. 
 
-.. figure:: images/cropped_compressor_schematic.png
+.. figure:: images/compressor_schematic.png
    :align: center
    :alt: compressor system flow diagram
 

@@ -20,6 +20,19 @@ api.py
    :show-inheritance:
 
         
+.. index:: battery.py
+
+.. _hyperloop.battery.py:
+
+battery.py
+----------
+
+.. automodule:: hyperloop.battery
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
 .. index:: compression_system.py
 
 .. _hyperloop.cycle.compression_system.py:

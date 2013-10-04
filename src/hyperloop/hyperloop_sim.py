@@ -35,7 +35,7 @@ class Hyperloop(Assembly):
         driver = self.add('driver',BroydenSolver())
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
         driver.add_constraint('compress.W_in=kant.W_excess')
-        driver.workflow.add(['compress','inlet_geom','kant'])
+        driver.workflow.add(['compress','inlet_geom','kant','battery'])
 
 
 if __name__=="__main__": 

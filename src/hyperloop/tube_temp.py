@@ -7,36 +7,43 @@
 
     Compatible with OpenMDAO v0.8.1
 """
+from math import log, pi, sqrt, e
 
 from openmdao.main.api import Assembly, Component
 from openmdao.lib.drivers.api import BroydenSolver 
 from openmdao.lib.datatypes.api import Float, Bool
 from openmdao.main.api import convert_units as cu
 
+from pycycle.api import FlowStation
 
-from math import log, pi, sqrt, e
 
-class TubeModel(Component):
+class TubeTemp(Component):
     """ Main Component """
 
     #--Inputs--
     #Hyperloop Parameters/Design Variables
     tubeOD = Float(units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
     tubeLength = Float(units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
-    podMdot = Float(units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
+    #podMdot = Float(units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
     podFreq = Float(units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
-    podMN = Float(units = 'K', iotype='in', desc='Pod Mach Number') #
+    #podMN = Float(units = 'K', iotype='in', desc='Pod Mach Number') #
     tubeWallTemp = Float(units = 'K', iotype='in', desc='Average Temperature of the tube') #
-    tubeAmbientPressure = Float(units = 'Pa', iotype='in', desc='Average Temperature of the tube') #
+    #tubeAmbientPressure = Float(units = 'Pa', iotype='in', desc='Average Temperature of the tube') #
     ambientTemp = Float(units = 'K', iotype='in', desc='Average Temperature of the outside air') #
-    compInletTt = Float(units = 'K', iotype='in', desc='Compressor Inlet Total Temperature') #
-    compInletPt = Float(units = 'Pa', iotype='in', desc='Compressor Inlet Total Pressure') #
-    PR = Float(iotype='in', desc='Compressor Pressure Ratio') #
-    adiabaticEff = Float(iotype='in', desc='Adiabatic Efficiency of the Compressor') #
+    #compInletTt = Float(units = 'K', iotype='in', desc='Compressor Inlet Total Temperature') #
+    #compInletPt = Float(units = 'Pa', iotype='in', desc='Compressor Inlet Total Pressure') #
+    #PR = Float(iotype='in', desc='Compressor Pressure Ratio') #
+    #adiabaticEff = Float(iotype='in', desc='Adiabatic Efficiency of the Compressor') #
+    #compExitTt = Float(927., units = 'K', iotype='in', desc='Compressor Exit Total Temperature') 
+    podCp = Float(1144., units = 'J/(kg*K)', iotype='in', desc='specific heat of hot pod air')
+
+    nozzle_air = FlowStation(iotype="in", desc="air exiting the pod nozzle", copy=None)
+    bearing_air = FlowStation(iotype="in", desc="air exiting the air bearings", copy=None)
+
 
     #constants
-    Solar_constant = Float(1366., units = 'K', desc='Average Temperature of the outside air') #
-    Solar_insolation = Float(1000., units = 'K', desc='Average Temperature of the outside air') #
+    #Solar_constant = Float(1366., units = 'K', desc='Flux Density of incoming solar radiation') #
+    Solar_insolation = Float(1000., units = 'W/m**2', desc='solar irradiation at sea level on a clear day') #
     nnIncidenceF = Float(0.7, desc='Non-normal incidence factor') #
     Surface_reflectance = Float(0.5, desc='Solar Reflectance Index') #
     solarHeat = Float(350., units = 'W/m**2', desc='Solar Heat Absorbed per Area') #
@@ -48,10 +55,9 @@ class TubeModel(Component):
 
     #--Outputs--
     #Intermediate Values
-    podCp = Float(1144., units = 'J/(kg*K)', iotype='out', desc='specific heat of hot pod air')
     radArea = Float(337486.1, units = 'm**2', iotype='out', desc='Tube Radiating Area') #
-    compExitTt = Float(927., units = 'K', iotype='out', desc='Compressor Exit Total Temperature') #
-    compExitPt = Float(2099., units = 'Pa', iotype='out', desc='Compressor Exit Total Pressure') #
+    
+    #compExitPt = Float(2099., units = 'Pa', iotype='out', desc='Compressor Exit Total Pressure') #
     #Required for Natural Convection Calcs
     GrDelTL3 = Float(1946216.7, units = '1/((ft**3)*F)', iotype='out', desc='Heat Radiated to the outside') #
     Pr = Float(0.707, iotype='out', desc='Heat Radiated to the outside') #
@@ -75,27 +81,30 @@ class TubeModel(Component):
     #Natural Convection
     naturalConvection = Float(7.9, units = 'W/(m**2)', iotype='out', desc='Heat Radiated to the outside') #
     naturalConvectionTot = Float(286900419., units = 'W', iotype='out', desc='Heat Radiated to the outside') #
+
+    ssTemp_residual = Float(units = 'K', iotype='out', desc='Residual of T_released - T_absorbed')
   
     def execute(self):
         """Calculate Various Paramters"""
         
         #Determine heat added by pods coming through
         #Tt = Ts * (1 + [(gam-1)/2]*(MN^2)
-        self.compInletTt = self.tubeWallTemp*(1+((self.gammaAir-1)/2)*(self.podMN**2))
+        #self.compInletTt = self.tubeWallTemp*(1+((self.gammaAir-1)/2)*(self.podMN**2))
         #Pt = Ps * (Tt/Ts)^(gam/gam-1)
-        self.compInletPt = self.tubeAmbientPressure*(1+((self.gammaAir-1)/2)*(self.podMN**2))**(self.gammaAir/(self.gammaAir-1))
+        #self.compInletPt = self.tubeAmbientPressure*(1+((self.gammaAir-1)/2)*(self.podMN**2))**(self.gammaAir/(self.gammaAir-1))
         #Pt_exit = Pt_inlet * PR
-        self.compExitPt = self.compInletPt * self.PR
+        #self.compExitPt = self.compInletPt * self.PR
         #Tt_exit = Tt_inlet + ([Tt_inlet * PR^(gam-1/gam)]-Tt_inlet)/adiabatic_efficiency
-        self.compExitTt = self.compInletTt + (self.compInletTt*(self.PR)**((self.gammaAir-1)/self.gammaAir)-self.compInletTt)/self.adiabaticEff
+        #self.compExitTt = self.compInletTt + (self.compInletTt*(self.PR)**((self.gammaAir-1)/self.gammaAir)-self.compInletTt)/self.adiabaticEff
         
-        if (self.compExitTt < 400):
-            self.podCp = 990.8*(self.compExitTt**(0.00316)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
-        else:
-            self.podCp = 299.4*(self.compExitTt**(0.1962)) #SI units
-        
+        #if (self.compExitTt < 400):
+        #    self.podCp = 990.8*(self.compExitTt**(0.00316)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
+        #else:
+        #    self.podCp = 299.4*(self.compExitTt**(0.1962)) #SI units
+        bearing_q = cu(bearing_air.W,'lbm/s','W/(m**2)') * cu(bearing_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(bearing_air.Tt,'degR','degK') - self.tubeWallTemp)
+        nozzle_q = cu(nozzle_air.W,'lbm/s','W/(m**2)') * cu(nozzle_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(nozzle_air.Tt,'degR','degK') - self.tubeWallTemp)
         #Q = mdot * cp * deltaT 
-        self.podQ = self.podMdot * self.podCp * (self.compExitTt-self.tubeWallTemp)
+        self.podQ = nozzle_q #+bearing_q 
         #Total Q = Q * (number of pods)
         self.podQTot = self.podQ*self.podFreq
 
@@ -160,7 +169,7 @@ class TubeModel(Component):
         self.Qout = self.qRadTot + self.naturalConvectionTot
         self.Qin = self.solarHeatTotal + self.podQTot
         
-       
+        self.ssTemp_residual = self.Qout - self.Qin
 #run stand-alone component
 if __name__ == "__main__":
 
@@ -181,44 +190,34 @@ if __name__ == "__main__":
 
         def configure(self):
 
-            tm = self.add('tm', TubeModel())
+            tm = self.add('tm', TubeTemp())
+            #tm.bearing_air.setTotalTP()
             driver = self.add('driver',BroydenSolver())
-            driver.add_parameter('tm.Th_out',low=0.,high=1000.)
-            driver.add_parameter('tm.Tc_out',low=0.,high=1000.)
-            driver.add_constraint('tm.residual_qmax=0')
-            driver.add_constraint('tm.residual_e_balance=0')
+            driver.add_parameter('tm.tubeWallTemp',low=0.,high=10000.)
+            driver.add_constraint('tm.ssTemp_residual=0')
 
-            tm.Mh = 0.49
-            tm.Cph = 1.006
-            tm.Th_in = 791
-            tm.Mc = 0.45
-            tm.Cpc = 4.186
-            tm.Tc_in = 288.15
-            effectiveness = 0.9765
+            
 
-            #initial guess
-            avg = ( tm.Th_in + tm.Tc_in )/2.
-            tm.Tc_out = avg
-            tm.Th_out = avg
-
-            driver.workflow.add(['hx'])
+            driver.workflow.add(['tm'])
 
     test = TubeHeatBalance()
     set_as_top(test)
 
     #set input values
+    test.tm.nozzle_air.setTotalTP(1710, 0.304434211)
+    test.tm.nozzle_air.W = 1.08
     test.tm.tubeOD = 2.22504#, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
     test.tm.tubeLength = 482803.#, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
-    test.tm.podMdot = 0.49#, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
+    #test.tm.podMdot = 0.49#, units = 'kg/s', iotype='in', desc='Amount of air released by each pod') #
     test.tm.podFreq = 34.#, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
-    test.tm.podMN = 0.91#, units = 'K', iotype='in', desc='Pod Mach Number') #
+    #test.tm.podMN = 0.91#, units = 'K', iotype='in', desc='Pod Mach Number') #
     test.tm.tubeWallTemp = 322.361#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
-    test.tm.tubeAmbientPressure = 99.#, units = 'Pa', iotype='in', desc='Average Temperature of the tube') #
+    #test.tm.tubeAmbientPressure = 99.#, units = 'Pa', iotype='in', desc='Average Temperature of the tube') #
     test.tm.ambientTemp = 305.6#, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
-    test.tm.compInletTt = 367.#, units = 'K', iotype='in', desc='Compressor Inlet Total Temperature') #
-    test.tm.compInletPt = 169.#, units = 'Pa', iotype='in', desc='Compressor Inlet Total Pressure') #
-    test.tm.PR = 12.4#, iotype='in', desc='Compressor Pressure Ratio') #
-    test.tm.adiabaticEff = 0.69#, iotype='in', desc='Adiabatic Efficiency of the Compressor') #
+    #test.tm.compInletTt = 367.#, units = 'K', iotype='in', desc='Compressor Inlet Total Temperature') #
+    #test.tm.compInletPt = 169.#, units = 'Pa', iotype='in', desc='Compressor Inlet Total Pressure') #
+    #test.tm.PR = 12.4#, iotype='in', desc='Compressor Pressure Ratio') #
+    #test.tm.adiabaticEff = 0.69#, iotype='in', desc='Adiabatic Efficiency of the Compressor') #
 
     print ""
     test.run()

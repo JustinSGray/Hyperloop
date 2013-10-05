@@ -37,6 +37,8 @@ class HyperloopPod(Assembly):
         self.connect('compress.pwr_req','battery.pwr_req')
         self.create_passthrough('battery.energy')
 
+        tube_temp = self.add('tube_temp')
+
         driver = self.add('driver',BroydenSolver())
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
         driver.add_constraint('compress.W_in=kant.W_excess')

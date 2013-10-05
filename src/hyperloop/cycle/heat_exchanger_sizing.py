@@ -352,4 +352,3 @@ if __name__ == "__main__":
     
     print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format(cu(test.L,'m','ft')/2,x,y)
     print "Heat Exchanger Volume: {} ft^3".format( tot_vol)
-

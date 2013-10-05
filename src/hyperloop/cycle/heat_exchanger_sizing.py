@@ -13,12 +13,9 @@ Logarithmic Mean Temperature Difference (LMTD) Method
 
     Compatible with OpenMDAO v0.8.1
 """
-
-
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float, Bool
 from openmdao.main.api import convert_units as cu
-
 from math import log, pi, sqrt, e
 
 #Assumed Constant Water Properties
@@ -30,7 +27,10 @@ kvisc_w = 0.000000326#, units = 'm**2/s', desc='kinematic viscosity for water')
 #Assumed fouling factors
 R_w = 1.0#, units = 'W/(m*K)', desc='fouling factor of city water')
 R_a = 1.0#, units = 'W/(m*K)', desc='fouling factor of air')
-
+#Conductivity properties
+k_w = 0.58#, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
+k_a = 0.0454#, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
+k_p = 400.0#, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
 
 class HeatExchangerSizing(Component):
     """ Main Component """
@@ -60,21 +60,27 @@ class HeatExchangerSizing(Component):
 
     #--Outputs--
     #Calculated Variables
-    Asurf_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
-    Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
-    De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
-    A_a = Float(1.0, units= 'm**2', iotype='out', desc='cross sectional area of air')
-    A_w = Float(1.0, units= 'm**2', iotype='out', desc='cross sectional area of water')
-    Veloc_w = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of water')
-    Veloc_a = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of air')
-    k_w = Float(0.58, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
-    k_a = Float(0.0454, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
-    k_p = Float(400.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
-    h_w = Float(1.0, units = 'W/m', iotype ='out', desc='heat transfer of water')
-    h_a = Float(1.0, units = 'W/m', iotype='out', desc='heat transfer of air')
-    q_w = Float(1.0, units = 'W', iotype='out', desc='heat flow of water')
-    q_a = Float(1.0, units = 'W', iotype='out', desc='heat flow of air')
-    F = Float(1.0, iotype='out', desc='Multi-pass correction factor')
+    Asurf_pipe = Float(units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
+    Da_h = Float(units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
+    Da_e = Float(units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
+    Dw_h = Float(units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
+    Dw_e = Float(units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
+
+    A_a = Float(units= 'm**2', iotype='out', desc='cross sectional area of air')
+    A_w = Float(units= 'm**2', iotype='out', desc='cross sectional area of water')
+    Veloc_w = Float(units= 'm/s', iotype='out', desc='flow velocity of water')
+    Veloc_a = Float(units= 'm/s', iotype='out', desc='flow velocity of air')
+    Re_a = Float(iotype='out', desc='Reynolds Number of air')
+    Re_w = Float(iotype='out', desc='Reynolds Number of water')
+    Pr_a = Float(iotype='out', desc='Prandtl Number of air')
+    Pr_w = Float(iotype='out', desc='Prandtl Number of water')
+    Nu_a = Float(iotype='out', desc='Nusselt Number of air')
+    Nu_w  = Float(iotype='out', desc='Nusselt Number of water') 
+    h_w = Float(units = 'W/m', iotype ='out', desc='heat transfer of water')
+    h_a = Float(units = 'W/m', iotype='out', desc='heat transfer of air')
+    q_w = Float(units = 'W', iotype='out', desc='heat flow of water')
+    q_a = Float(units = 'W', iotype='out', desc='heat flow of air')
+    F = Float(iotype='out', desc='Multi-pass correction factor')
 
     #Most Interesting Outputs
     Mdot_w = Float(1.0, units = 'kg/s', iotype='in', desc='Mass flow rate of water pumped through system')
@@ -135,10 +141,10 @@ class HeatExchangerSizing(Component):
         #D_h = (4*Af)/(Pflow) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi*(Di_shell - Do_tube) = Di_shell - Do_tube
         #D_e = (4*Af)/(PheatTransfer) = 4*pi*(Di_shell^2 - Do_tube^2)/ 4*pi* Do_tube = (Di_shell^2 - Do_tube^2)/Do_tube
 
-        Da_h = Di_shell - Do_tube
-        Da_e = (Di_shell**2 - Do_tube**2)/Do_tube
-        Dw_h = Di_tube
-        Dw_e = Di_tube
+        self.Da_h = Di_shell - Do_tube
+        self.Da_e = (Di_shell**2 - Do_tube**2)/Do_tube
+        self.Dw_h = Di_tube
+        self.Dw_e = Di_tube
         
         #cascading errors
         #Da_h = 0.016082
@@ -149,9 +155,9 @@ class HeatExchangerSizing(Component):
         #Determine the Reynolds Number
         #Re = velocity * hydraulic dimater / kinematic viscostiy   (general form for pipes)
         #Re = inertial forces/ viscous forces
-        Re_a = self.Veloc_a*Da_h/self.kvisc_a
+        self.Re_a = self.Veloc_a*self.Da_h/self.kvisc_a
         
-        Re_w = self.Veloc_w*Dw_h/kvisc_w
+        self.Re_w = self.Veloc_w*self.Dw_h/kvisc_w
 
         #Re_w = 174215
  
@@ -159,11 +165,11 @@ class HeatExchangerSizing(Component):
         #Pr = viscous diffusion rate/ thermal diffusion rate = Cp * dyanamic viscosity / thermal conductivity
         #Pr << 1 means thermal diffusivity dominates
         #Pr >> 1 means momentum diffusivity dominates
-        Pr_a = self.cp_a*self.dvisc_a/self.k_a
-        Pr_w = cp_w*dvisc_w/self.k_w
+        self.Pr_a = self.cp_a*self.dvisc_a/k_a
+        self.Pr_w = cp_w*dvisc_w/k_w
 
         #Override Pr calculation based on better information @ 300 degree C 
-        Pr_a = 0.68 #http://www.engineeringtoolbox.com/air-properties-d_156.html
+        self.Pr_a = 0.68 #http://www.engineeringtoolbox.com/air-properties-d_156.html
 
         #Determine the Nusselt Number
         #Nu = convecive heat transfer / conductive heat transfer
@@ -191,20 +197,20 @@ class HeatExchangerSizing(Component):
         #or f = (0.79*ln(Re) - 1.64)^-2   for smooth tubes
         #Valid for 0.5<= Pr <=2000
         #and      3000<= Re <= 5*(10^6)
-        if ((Re_a >10000) and (Re_w > 10000) and (0.6 < Pr_a < 160) and (0.6 < Pr_w < 160)):
+        if ((self.Re_a >10000) and (self.Re_w > 10000) and (0.6 < self.Pr_a < 160) and (0.6 < self.Pr_w < 160)):
             print ""
             print "   Dittus-Boelter Equation Valid. Calculating Nusselt Number   "
         else:
             print ""
             print "!!!** Dittus-Boelter Equation not valid. Use alternate method  **!!!"
 
-        Nu_a = 0.023*(Re_a**(4./5))*(Pr_a**0.4) #fluid is heated n=0.4
-        Nu_w = 0.023*(Re_w**(4./5))*(Pr_w**0.3) #fluid is cooled n=0.3
+        self.Nu_a = 0.023*(self.Re_a**(4./5))*(self.Pr_a**0.4) #fluid is heated n=0.4
+        self.Nu_w = 0.023*(self.Re_w**(4./5))*(self.Pr_w**0.3) #fluid is cooled n=0.3
 
         #Determine h
         # h = Nu * k/ D
-        self.h_a = Nu_a*self.k_a/Da_e
-        self.h_w = Nu_w*self.k_w/Dw_e
+        self.h_a = self.Nu_a*k_a/self.Da_e
+        self.h_w = self.Nu_w*k_w/self.Dw_e
 
         #cascading
         #self.h_a = 1467.95
@@ -220,11 +226,11 @@ class HeatExchangerSizing(Component):
         term1 = Do_tube/(Di_tube*self.h_w)
         term2 =  Do_tube*log((Do_tube/Di_tube),e)
         
-        self.U_o = 1/ (term1+(term2/(2*self.k_p))+(1/self.h_a))
+        self.U_o = 1/ (term1+(term2/(2*k_p))+(1/self.h_a))
 
         #Assume fouling losses
         #lookup R_w, R_a
-        self.U_oF = 1/ ((term1+(term2/(2*self.k_p))+(1/self.h_a))+(self.R_w+self.R_a))
+        self.U_oF = 1/ ((term1+(term2/(2*k_p))+(1/self.h_a))+(R_w+R_a))
 
         #--Determine LMTD--
         #if(coFlow):
@@ -304,47 +310,46 @@ if __name__ == "__main__":
     test.T_ain = 791.
     test.T_aout = 338.4
     test.Mdot_a = 0.49
+    test.N = 1
 
     test.run()
 
     #crude unit testing
-    check('A_a',self.A_a, 0.0008444)
-    check('Veloc_a',self.Veloc_a, 2.803)
-    check('q_a',self.q_a, 60377.8)
-    check('Mdot_w',self.Mdot_w, 1.45)
-    check('A_w',self.A_w, 0.001086)
-    check('Veloc_w',self.Veloc_w, 1.71)
-    check('Da_h',Da_h, 0.016082)
-    check('Da_e',Da_e, 0.039586)
-    check('Dw_h',Dw_h, Di_tube)
-    check('Dw_e',Dw_e, Di_tube)
-    check('Re_a',Re_a, 82317)
-    check('Re_w',Re_w, 174215)
-    check('Pr_a',Pr_a, 7.48)
-    check('Pr_w',Pr_w, 2.25)
-    check('Nu_a',Nu_a, 440.345)
-    check('Nu_w',Nu_w, 457.16)
-    check('h_a',self.h_a, 1467.95)
-    check('h_w',self.h_w, 8088.82)
-    check('U_o',self.U_o, 1226)
-    check('LMTD',self.LMTD, 60.49)
-    if (self.N < 2): #only check single pass case
-        check('L',self.L, 7.42)
+    check('A_a',test.A_a, 0.0008444)
+    check('Veloc_a',test.Veloc_a, 941.)
+    check('q_a',test.q_a, 223104.)
+    check('Mdot_w',test.Mdot_w, 0.449)
+    check('A_w',test.A_w, 0.001086)
+    check('Veloc_w',test.Veloc_w, 0.414)
+    check('Da_h',test.Da_h, 0.016082)
+    check('Da_e',test.Da_e, 0.039586)
+    check('Dw_h',test.Dw_h, test.Di_tube)
+    check('Dw_e',test.Dw_e, test.Di_tube)
+    check('Re_a',test.Re_a, 966613)
+    check('Re_w',test.Re_w, 41650)
+    check('Pr_a',test.Pr_a, 0.68)
+    check('Pr_w',test.Pr_w, 2.25)
+    check('Nu_a',test.Nu_a, 1210.)
+    check('Nu_w',test.Nu_w, 145.)
+    check('h_a',test.h_a, 1387.989)
+    check('h_w',test.h_w, 2570.589)
+    check('U_o',test.U_o, 879.019)
+    check('LMTD',test.LMTD, 164.28)
+    if (test.N < 2): #only check single pass case
+        check('L',test.L, 14.078)
 
     print "-----Completed Heat Exchanger Sizing---"
     print ""
     print "Heat Exchanger Length: {} meters, with {} tube pass(es)".format(test.L/2,test.N)
     
-    m2ft = 3.28084 #meter to feet conversion
-    
     #sqrt(#passes * tube area * packing factor)
     #assumes shell magically becomes rectangular but keeps packing factor
     packing_factor =  (test.A_a/(test.A_a + test.A_w)) + 1
-    x = ((test.N * pi*((test.Do_tube/2)**2)*packing_factor)**0.5)*m2ft
+    x = cu(((test.N * pi*((test.Do_tube/2)**2)*packing_factor)**0.5),'m','ft')
     y = 2*x #height of a double pass
  
-    tot_vol = (x*(y) * (test.L *m2ft))
+    tot_vol = x*y * cu(test.L,'m','ft')
     
-    print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format((test.L/2)*m2ft,x,y)
+    print "Heat Exchanger Dimensions: {}ft (Length) x {}ft (Width) x {}ft (Height)".format(cu(test.L,'m','ft')/2,x,y)
     print "Heat Exchanger Volume: {} ft^3".format( tot_vol)
 

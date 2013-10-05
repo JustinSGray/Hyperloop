@@ -7,6 +7,9 @@ from openmdao.lib.datatypes.api import Float
 from pycycle.api import (FlowStartStatic, Splitter, Inlet, Compressor, Duct, Splitter,
     Nozzle, CycleComponent )
 
+from cycle.heat_exchanger import HeatExchanger
+
+
 
 class PwrSum(CycleComponent): 
 
@@ -61,6 +64,9 @@ class CompressionSystem(Assembly):
         duct1 = self.add('duct1', Duct())
         duct1.Q_dot = 0#-237
         duct1.dPqP = 0 #no losses
+
+        hx1 = self.add('hx1', HeatExchanger())
+        
 
         split = self.add('split', Splitter())
         split.BPR_des = 1.45

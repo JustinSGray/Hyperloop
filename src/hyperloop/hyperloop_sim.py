@@ -53,6 +53,7 @@ if __name__=="__main__":
     print "pwr: ", hl.pwr_req
     print "energy: ", hl.energy
     print "W: ", hl.compress.W_in
+    print "C1.Fl_O.Pt: ", hl.compress.comp1.Fl_O.Pt
 
 
 

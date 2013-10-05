@@ -13,30 +13,34 @@ NTU (effectiveness) Method
     Compatible with OpenMDAO v0.8.1
 """
 
+from math import log, pi, sqrt, e
+
 from openmdao.main.api import Assembly, Component
 from openmdao.lib.datatypes.api import Float, Bool
 from openmdao.lib.drivers.api import BroydenSolver 
 from openmdao.main.api import convert_units as cu
 
-from math import log, pi, sqrt, e
+from pycycle.api import FlowStation, AirFlowStation, CycleComponent
 
 
+class HeatExchanger(CycleComponent): 
+    """Calculates required Q to reach perscribed temperatures for a water-to-air heat exchanger"""
 
-
-class HeatExchanger(Component): 
     #inputs
-    Mc = Float(iotype="in", units = 'kg/s', desc='Mass flow rate of cold fluid (water)') 
-    Mh = Float(iotype="in", units = 'kg/s', desc='Mass flow rate of the hot fluid (air)') 
-    Cpc = Float(iotype="in", units = 'J/(kg*K)', desc='Specific Heat of the cold fluid (water)') 
-    Cph = Float(iotype="in", units = 'J/(kg*K)', desc='Specific Heat of the hot fluid (air)') 
-    Th_in = Float(iotype="in", units = 'K', desc='Temp of air into heat exchanger')     
-    Tc_in = Float(iotype="in", units = 'K', desc='Temp of water into heat exchanger') 
-    #not really inputs  
-    Th_out = Float(iotype="in", units = 'K', desc='Temp of air out of the heat exchanger')    
-    Tc_out = Float(iotype="in", units = 'K', desc='Temp of water out of the heat exchanger') 
+    W_cold = Float(0.45, iotype="in", units = 'kg/s', desc='Mass flow rate of cold fluid (water)') 
+    #Wh = Float(iotype="in", units = 'kg/s', desc='Mass flow rate of the hot fluid (air)') 
+    Cp_cold = Float(4186, iotype="in", units = 'J/(kg*K)', desc='Specific Heat of the cold fluid (water)') 
+    #Cp_hot = Float(iotype="in", units = 'J/(kg*K)', desc='Specific Heat of the hot fluid (air)') 
+    #T_hot_in = Float(iotype="in", units = 'K', desc='Temp of air into heat exchanger')     
+    T_cold_in = Float(288.1, iotype="in", units = 'K', desc='Temp of water into heat exchanger') 
     effectiveness = Float(.9765, iotype="in", desc='Heat Exchange Effectiveness') 
+    MNexit_des = Float(.6, iotype="in", desc="mach number at the exit of heat exchanger")
+    #State Vars
+    T_hot_out = Float(338.4, iotype="in", units = 'K', desc='Temp of air out of the heat exchanger')    
+    T_cold_out = Float(iotype="in", units = 'K', desc='Temp of water out of the heat exchanger') 
+    
 
-
+    Fl_I = FlowStation(iotype="in", desc="incoming air stream to heat exchanger", copy=None)
 
     #outputs
     Qreleased = Float(iotype="out", units = 'W', desc='Energy Released') 
@@ -47,47 +51,44 @@ class HeatExchanger(Component):
     residual_qmax = Float(iotype="out", desc='Residual of max*effectiveness') 
     residual_e_balance = Float(iotype="out", desc='Residual of the energy balance')
 
-
-    #intermediate variables
-    MCpMin = Float(units = 'J/(s*K)', desc='Minimum product of specific heat multiplied by mass flow rate') 
-
-    def __init__(self): 
-        super(HeatExchanger, self).__init__()
-
+    Fl_O = FlowStation(iotype="out", desc="outgoing air stream from heat exchanger", copy=None)
 
     def execute(self):
         """Calculate Various Paramters"""
+
+        Fl_I = self.Fl_I
+        Fl_O = self.Fl_O
+
+        T_cold_in = self.T_cold_in
+        T_cold_out = self.T_cold_out
+        T_hot_in = self.Fl_I.Tt*.555555556 # R to K
+        T_hot_out = self.T_hot_out
+        W_cold = self.W_cold
+        Wh = Fl_I.W
+        Cp_hot = Fl_I.Cp/2.388459e-1 #BTU/lbm-C to Kj/kg-k
+        Cp_cold = self.Cp_cold
         
-        Tc_in = self.Tc_in
-        Tc_out = self.Tc_out
-        Th_in = self.Th_in
-        Th_out = self.Th_out
-        Mc = self.Mc
-        Mh = self.Mh
-        Cph = self.Cph
-        Cpc = self.Cpc
-        MCpMin = self.MCpMin
-        
+        W_coldCpMin = W_cold*Cp_cold;
+        if ( Wh*Cp_hot < W_cold*Cp_cold ):
+            W_coldCpMin = Wh*Cp_hot
+        self.Qmax = W_coldCpMin*(T_hot_in - T_cold_in);
 
-        # guess exit temperatures     
-        #if ( firstPass == TRUE ): 
-        #     Tc_out = ( Th_in + Tc_in )/2.
-        #     Th_out = ( Th_in + Tc_in )/2.
-        #     firstPass = FALSE;
-        #calculate mdot*Cp min
-        MCpMin = Mc*Cpc;
-        if ( Mh*Cph < Mc*Cpc ):
-            MCpMin = Mh*Cph
-        self.Qmax = MCpMin*(Th_in - Tc_in);
+        self.Qreleased = Wh*Cp_hot*(T_hot_in - T_hot_out);
+        self.Qabsorbed = W_cold*Cp_cold*(T_cold_out - T_cold_in);
 
-        self.Qreleased = Mh*Cph*(Th_in - Th_out);
-        self.Qabsorbed = Mc*Cpc*(Tc_out - Tc_in);
-
-        self.LMTD = ((Th_out-Th_in)+(Tc_out-Tc_in))/log((Th_out-Tc_in)/(Th_in-Tc_out));
+        self.LMTD = ((T_hot_out-T_hot_in)+(T_cold_out-T_cold_in))/log((T_hot_out-T_cold_in)/(T_hot_in-T_cold_out))
 
         self.residual_qmax = self.Qreleased-self.effectiveness*self.Qmax
 
         self.residual_e_balance = self.Qreleased-self.Qabsorbed
+
+        Fl_O.setTotalTP(T_hot_out*1.8, Fl_I.Pt)
+        Fl_O.W = Fl_I.W
+        if self.run_design: 
+            Fl_O.Mach = self.MNexit_des  
+            self._exit_area_des = Fl_O.area
+        else: 
+            Fl_O.area = self._exit_area_des
  
 if __name__ == "__main__":
 
@@ -100,29 +101,33 @@ if __name__ == "__main__":
 
             hx = self.add('hx', HeatExchanger())
             driver = self.add('driver',BroydenSolver())
-            driver.add_parameter('hx.Th_out',low=0.,high=1000.)
-            driver.add_parameter('hx.Tc_out',low=0.,high=1000.)
+            driver.add_parameter('hx.T_hot_out',low=0.,high=1000.)
+            driver.add_parameter('hx.T_cold_out',low=0.,high=1000.)
             driver.add_constraint('hx.residual_qmax=0')
             driver.add_constraint('hx.residual_e_balance=0')
 
-            hx.Mh = 0.49
-            hx.Cph = 1.006
-            hx.Th_in = 791
-            hx.Mc = 0.45
-            hx.Cpc = 4.186
-            hx.Tc_in = 288.15
+            #hx.Wh = 0.49
+            #hx.Cp_hot = 1.006
+            #hx.T_hot_in = 791
+            fs = AirFlowStation()
+            fs.setTotalTP(1423.8, 0.302712118187) #R, psi
+            fs.W = .49
+            hx.Fl_I = fs
+            hx.W_cold = 0.45
+            hx.Cp_cold = 4.186
+            hx.T_cold_in = 288.15
             effectiveness = 0.9765
 
             #initial guess
-            avg = ( hx.Th_in + hx.Tc_in )/2.
-            hx.Tc_out = avg
-            hx.Th_out = avg
+            avg = ( hx.Fl_I.Tt*.555555556 + hx.T_cold_in )/2.
+            hx.T_cold_out = avg
+            hx.T_hot_out = avg  
 
             driver.workflow.add(['hx'])
 
     test = HeatBalance()  
     set_as_top(test)
-    test.hx.Mc = .45
+    test.hx.design = True
 
 
     #good values: 
@@ -134,9 +139,9 @@ if __name__ == "__main__":
     print ""
     test.run()
     print  "air:      Tin       Tout         Q      Q\' \n";
-    print "    {}    {}    {}    {}".format(test.hx.Th_in, test.hx.Th_out, test.hx.Qreleased, test.hx.Qmax)
+    print "    {}    {}    {}    {}".format(test.hx.Fl_I.Tt*.555555556, test.hx.T_hot_out, test.hx.Qreleased, test.hx.Qmax)
 
     print 
     print "water:    Tin       Tout         Q      Q\' \n";
-    print "    {}    {}    {}    {}".format(test.hx.Tc_in, test.hx.Tc_out, test.hx.Qabsorbed, test.hx.Qmax)
+    print "    {}    {}    {}    {}".format(test.hx.T_cold_in, test.hx.T_cold_out, test.hx.Qabsorbed, test.hx.Qmax)
     print " LMTD = {}  ".format(test.hx.LMTD)

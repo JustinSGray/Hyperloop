@@ -10,7 +10,7 @@ class Pump(Component):
 
     Pt_out = Float(1000, iotype="in", units="kPa", desc="Pump output pressure")
     Pt_in = Float(100, iotype="in", units="kPa", desc="Pump input pressure")
-    Tt = Float(287.7, iotype="in", units="degK", desc="water temperature at the pump inlet")
+    Tt = Float(288, iotype="in", units="K", desc="water temperature at the pump inlet")
     W = Float(.5, iotype="in", units="kg/s", desc="liquid flow rate")
     eff = Float(.8, iotype="in", desc="")
 

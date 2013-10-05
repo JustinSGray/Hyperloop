@@ -1,5 +1,5 @@
 """
-    heatExchanger2.py -  (This one is for water and air)
+    heat_exchanger_sizing.py -  (This one is for water and air)
         Performs basic heat exchanger calculations for a multi-tube double pass
         counter-flow or co-flow shell and tube heat exchanger
         
@@ -21,75 +21,71 @@ from openmdao.main.api import convert_units as cu
 
 from math import log, pi, sqrt, e
 
-def check(var_name,var,correct_val):
-    #check('<variable_name>',<variable>,<correct value>)
-    "Format and print the results of a value comparison, (crude tests for verification purposes)"
-    error = (correct_val - var)/correct_val
-    if (abs(error*100)<2): #determine percent error, if greater than 1%
-        print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(error)*100,"Test Passed")
-    else: #comparison fails, print error output
-        print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(error)*100,"Test Failed :(")
+#Assumed Constant Water Properties
+#http://www.engineeringtoolbox.com/air-properties-d_156.html air @300C
+rho_w = 1000.0#, units = 'kg/m**3', desc='density of water')
+cp_w = 4186.#, units = 'J/(kg*K)', desc='specific heat of water')
+dvisc_w = 0.00031#, units = 'kg/(m*s)', desc='dynamic viscosity for water')
+kvisc_w = 0.000000326#, units = 'm**2/s', desc='kinematic viscosity for water')
+#Assumed fouling factors
+R_w = 1.0#, units = 'W/(m*K)', desc='fouling factor of city water')
+R_a = 1.0#, units = 'W/(m*K)', desc='fouling factor of air')
 
-class heatExchanger(Component):
+
+class HeatExchangerSizing(Component):
     """ Main Component """
 
     #--Inputs--
-    #Boundary Temperatures
-    T_win = Float(288.1, units = 'K', iotype='in', desc='Temp of water into heat exchanger') #368 , 110
-    T_wout = Float(406.6, units = 'K', iotype='in', desc='Temp of water out of heat exchanger') #358 , 190
-    T_ain = Float(791., units = 'K', iotype='in', desc='Temp of air into heat exchanger') #297, 400
-    T_aout = Float(338.4, units = 'K', iotype='in', desc='Temp of air out of heat exchanger') #308, 170
+    T_win = Float(units = 'K', iotype='in', desc='Temp of water into heat exchanger') #368 , 110
+    T_wout = Float(units = 'K', iotype='in', desc='Temp of water out of heat exchanger') #358 , 190
+    T_ain = Float(units = 'K', iotype='in', desc='Temp of air into heat exchanger') #297, 400
+    T_aout = Float(units = 'K', iotype='in', desc='Temp of air out of heat exchanger') #308, 170
+    Mdot_a = Float(units = 'kg/s', iotype='in', desc='Mass flow rate of air')
 
-    #Design Variables
-    Mdot_a = Float(0.49, units = 'kg/s', iotype='out', desc='Mass flow rate of air')
-    Di_shell = Float(0.05102, units = 'm', iotype='out', desc='Shell pipe (inner) Diameter')
-    Do_tube = Float(0.03493, units = 'm', iotype='out', desc='Tube pipe (outer) Diameter')
+    #Heat Exchanger Physical Design Variables
+    Di_shell = Float(0.05102, units = 'm', iotype='in', desc='Shell pipe (inner) Diameter')
+    Do_tube = Float(0.03493, units = 'm', iotype='in', desc='Tube pipe (outer) Diameter')
     Di_tube = Float(0.03279, units = 'm', iotype='in', desc='Tube pipe (inner) Diameter') #0.03279, 0.0371851871796067
-    #A_a = Float(1.0, units = 'm**2', iotype='out', desc='Area')
-    N = Float(1, units = 'm', iotype='out', desc='Number of Tube Passes')
+    N = Float(1, units = 'm', iotype='in', desc='Number of Tube Passes')
     
     cooled = Bool(True, desc= 'Boolean true if fluid is cooled, false if heated')
     coFlow = Bool(False, desc= 'Boolean true if co-flow, false if coutner-flow')
 
-    #Assumed Constant Properties #http://www.engineeringtoolbox.com/air-properties-d_156.html air @300C
-    rho_w = Float(1000.0, units = 'kg/m**3', iotype='in', desc='density of water')
+    #Assumed Constant Properties of air (should come in from flow station)
     rho_a = Float(0.616, units = 'kg/m**3', iotype='in', desc='density of air ')
-    cp_w = Float(4186., units = 'J/(kg*K)', iotype='in', desc='specific heat of water')
     cp_a = Float(1006., units = 'J/(kg*K)', iotype='in', desc='specific heat of air')
-    dvisc_w = Float(0.00031, units = 'kg/(m*s)', iotype='in', desc='dynamic viscosity for water')
     dvisc_a = Float(0.00002, units = 'kg/(m*s)', iotype='in', desc='dynamic viscosity for air')
-    kvisc_w = Float(0.000000326, units = 'm**2/s', iotype='in', desc='kinematic viscosity for water')
     kvisc_a = Float(0.00001568, units = 'm**2/s', iotype='in', desc='kinematic viscosity for air')
-    k_w = Float(0.58, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
-    k_a = Float(0.0454, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
-    k_p = Float(400.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
-    R_w = Float(1.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of city water')
-    R_a = Float(1.0, units = 'W/(m*K)', iotype='in', desc='fouling factor of air')
+    
 
     #--Outputs--
-    #Intermediate Variables
+    #Calculated Variables
     Asurf_pipe = Float(1.0, units = 'm**2', iotype='out', desc='Surface Area of the Pipe')
     Dh = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for fluid flow')
     De = Float(1.0, units= 'm', iotype='out', desc='Hyrdraulic Diameter of the shell (annulus) for heat flow')
-    A_a = Float(1.0, units= 'm**2', iotype='out', desc='area of air')
-    A_w = Float(1.0, units= 'm**2', iotype='out', desc='area of water')
-    #Calculated Variables
-    Mdot_w = Float(1.0, units = 'kg/s', iotype='in', desc='Mass flow rate of water pumped through system')
+    A_a = Float(1.0, units= 'm**2', iotype='out', desc='cross sectional area of air')
+    A_w = Float(1.0, units= 'm**2', iotype='out', desc='cross sectional area of water')
     Veloc_w = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of water')
     Veloc_a = Float(1.0, units= 'm/s', iotype='out', desc='flow velocity of air')
+    k_w = Float(0.58, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for water')
+    k_a = Float(0.0454, units = 'W/(m*K)', iotype='in', desc='thermal conductivity for air')
+    k_p = Float(400.0, units = 'W/(m*K)', iotype='in', desc='thermal conductivity of the pipe')
     h_w = Float(1.0, units = 'W/m', iotype ='out', desc='heat transfer of water')
     h_a = Float(1.0, units = 'W/m', iotype='out', desc='heat transfer of air')
     q_w = Float(1.0, units = 'W', iotype='out', desc='heat flow of water')
     q_a = Float(1.0, units = 'W', iotype='out', desc='heat flow of air')
+    F = Float(1.0, iotype='out', desc='Multi-pass correction factor')
+
+    #Most Interesting Outputs
+    Mdot_w = Float(1.0, units = 'kg/s', iotype='in', desc='Mass flow rate of water pumped through system')
     U_o = Float(1.0, units = 'W/(m**2)*K', iotype='out', desc='Overall Heat Transfer Coefficient')
     L = Float(1.0, units = 'm', iotype='out', desc='Heat Exchanger Length')
-    F = Float(1.0, iotype='out', desc='Multi-pass correction factor')
     
     #Size/Volume Considerations
-    Vol_water = Float(1.0, units= 'm**3', iotype='out', desc='Volume of input water tank')
-    Vol_steam = Float(1.0, units= 'm**3', iotype='out', desc='Volume of output steam tank')
-    Mass_water = Float(1.0, units= 'kg', iotype='out', desc='Mass of input water tank')
-    Mass_steam = Float(1.0, units= 'kg', iotype='out', desc='Mass of output steam tank')
+    #Vol_water = Float(1.0, units= 'm**3', iotype='out', desc='Volume of input water tank')
+    #Vol_steam = Float(1.0, units= 'm**3', iotype='out', desc='Volume of output steam tank')
+    #Mass_water = Float(1.0, units= 'kg', iotype='out', desc='Mass of input water tank')
+    #Mass_steam = Float(1.0, units= 'kg', iotype='out', desc='Mass of output steam tank')
 
 
     def execute(self):
@@ -104,10 +100,9 @@ class heatExchanger(Component):
         Do_tube = self.Do_tube
         Di_tube = self.Di_tube
 
-        #Determine the area of the air tube
+        #Determine the cross sectional area of the air tube
         self.A_a = pi*(self.Di_tube/2)**2
-        
-        check('A_a',self.A_a, 0.0008444)
+
         #prevent cascading errors (switch areas)
         #self.A_a = 0.001086
         #self.A_w = 0.0008444
@@ -115,31 +110,24 @@ class heatExchanger(Component):
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
         self.Veloc_a = self.Mdot_a / (self.rho_a * self.A_a)
         
-        check('Veloc_a',self.Veloc_a, 2.803)
         #Determine q
         #q = mdot * cp * deltaT
         self.q_a = self.Mdot_a* self.cp_a * -(Th_out - Th_in)
 
         #Energy Balance: Q_water must equal Q_air
         self.q_w = self.q_a
-        
-        check('q_a',self.q_a, 60377.8)
 
         #Determine water Mdot
         #q = mdot * cp * deltaT
-        self.Mdot_w = self.q_w / (self.cp_w * -(Tc_in - Tc_out))
-
-        check('Mdot_w',self.Mdot_w, 1.45)
+        self.Mdot_w = self.q_w / (cp_w * -(Tc_in - Tc_out))
         
         #Determine the Water Cross sectional Area 
         self.A_w = (pi*(Di_shell/2)**2)- pi*((Do_tube/2)**2)
-        check('A_w',self.A_w, 0.001086)
-        
-        
+
         #Determin flow velocity of the water, from Mdot and Area
         #Rearrange Mdot = rho * Area * Velocity --> Velocity = Mdot/(rho*Area)
-        self.Veloc_w = self.Mdot_w / (self.rho_w * self.A_w)
-        check('Veloc_w',self.Veloc_w, 1.71)
+        self.Veloc_w = self.Mdot_w / (rho_w * self.A_w)
+        
         #prevent cascading
         #self.Veloc_w = 1.71
 
@@ -149,15 +137,8 @@ class heatExchanger(Component):
 
         Da_h = Di_shell - Do_tube
         Da_e = (Di_shell**2 - Do_tube**2)/Do_tube
-
-        check('Da_h',Da_h, 0.016082)
-        check('Da_e',Da_e, 0.039586)
-        
         Dw_h = Di_tube
         Dw_e = Di_tube
-        
-        check('Dw_h',Dw_h, Di_tube)
-        check('Dw_e',Dw_e, Di_tube)
         
         #cascading errors
         #Da_h = 0.016082
@@ -170,10 +151,8 @@ class heatExchanger(Component):
         #Re = inertial forces/ viscous forces
         Re_a = self.Veloc_a*Da_h/self.kvisc_a
         
-        Re_w = self.Veloc_w*Dw_h/self.kvisc_w
+        Re_w = self.Veloc_w*Dw_h/kvisc_w
 
-        check('Re_a',Re_a, 82317)
-        check('Re_w',Re_w, 174215)
         #Re_w = 174215
  
         #Determine the Prandtl Number
@@ -181,11 +160,8 @@ class heatExchanger(Component):
         #Pr << 1 means thermal diffusivity dominates
         #Pr >> 1 means momentum diffusivity dominates
         Pr_a = self.cp_a*self.dvisc_a/self.k_a
-        Pr_w = self.cp_w*self.dvisc_w/self.k_w
+        Pr_w = cp_w*dvisc_w/self.k_w
 
-        check('Pr_a',Pr_a, 7.48)
-        check('Pr_w',Pr_w, 2.25)
-        
         #Override Pr calculation based on better information @ 300 degree C 
         Pr_a = 0.68 #http://www.engineeringtoolbox.com/air-properties-d_156.html
 
@@ -224,18 +200,12 @@ class heatExchanger(Component):
 
         Nu_a = 0.023*(Re_a**(4./5))*(Pr_a**0.4) #fluid is heated n=0.4
         Nu_w = 0.023*(Re_w**(4./5))*(Pr_w**0.3) #fluid is cooled n=0.3
-        
-        check('Nu_a',Nu_a, 440.345)
-        check('Nu_w',Nu_w, 457.16)
 
         #Determine h
         # h = Nu * k/ D
         self.h_a = Nu_a*self.k_a/Da_e
         self.h_w = Nu_w*self.k_w/Dw_e
 
-        check('h_a',self.h_a, 1467.95)
-        check('h_w',self.h_w, 8088.82)
-        
         #cascading
         #self.h_a = 1467.95
         #self.h_w = 8088.82
@@ -251,8 +221,7 @@ class heatExchanger(Component):
         term2 =  Do_tube*log((Do_tube/Di_tube),e)
         
         self.U_o = 1/ (term1+(term2/(2*self.k_p))+(1/self.h_a))
-        check('U_o',self.U_o, 1226)
-        
+
         #Assume fouling losses
         #lookup R_w, R_a
         self.U_oF = 1/ ((term1+(term2/(2*self.k_p))+(1/self.h_a))+(self.R_w+self.R_a))
@@ -266,10 +235,7 @@ class heatExchanger(Component):
         dT2 = (Th_out-Tc_in) #Change in T2 (delta T2)
 
         self.LMTD = abs((dT1- dT2)/(log((dT1/dT2), e))) #take natural log (base e)
-        
-        check('LMTD',self.LMTD, 60.49)
 
-        print ""
         if (self.N>1):
             #Multi-Pass Corrections
             #Calc P, R  (Table lookup or equation parameters)
@@ -305,10 +271,6 @@ class heatExchanger(Component):
         self.L = self.q_a/(self.U_o*pi*self.F*Do_tube*self.LMTD)
         self.L = self.L / self.N #divide by number of passes
         
-        if (self.N < 2): #only check single pass case
-            check('L',self.L, 7.42)
-        
-
         #Assume pipe minor losses
         #function of length and number of passes
         #Head losses
@@ -317,16 +279,58 @@ class heatExchanger(Component):
         # delP = rho*g*H
         # Also consider bends in tube
         
-       
-       
+
 #run stand-alone component
 if __name__ == "__main__":
 
+    #this function is used for crude value comparisons (to test each calculation step versus a verified problem)
+    def check(var_name,var,correct_val):
+        #check('<variable_name>',<variable>,<correct value>)
+        "Format and print the results of a value comparison, (crude tests for verification purposes)"
+        error = (correct_val - var)/correct_val
+        if (abs(error*100)<2): #determine percent error, if greater than 1%
+            print "{}: {} ........{}%  --> {}!".format(var_name,var,abs(error)*100,"Test Passed")
+        else: #comparison fails, print error output
+            print " ===> {}: {} ........{}%  --> {} ?".format(var_name,var,abs(error)*100,"Test Failed :(")
+
+
     from openmdao.main.api import set_as_top
-    test = heatExchanger()  
+    test = HeatExchangerSizing()  
     set_as_top(test)
     print ""
+
+    test.T_win = 288.1
+    test.T_wout = 406.6
+    test.T_ain = 791.
+    test.T_aout = 338.4
+    test.Mdot_a = 0.49
+
     test.run()
+
+    #crude unit testing
+    check('A_a',self.A_a, 0.0008444)
+    check('Veloc_a',self.Veloc_a, 2.803)
+    check('q_a',self.q_a, 60377.8)
+    check('Mdot_w',self.Mdot_w, 1.45)
+    check('A_w',self.A_w, 0.001086)
+    check('Veloc_w',self.Veloc_w, 1.71)
+    check('Da_h',Da_h, 0.016082)
+    check('Da_e',Da_e, 0.039586)
+    check('Dw_h',Dw_h, Di_tube)
+    check('Dw_e',Dw_e, Di_tube)
+    check('Re_a',Re_a, 82317)
+    check('Re_w',Re_w, 174215)
+    check('Pr_a',Pr_a, 7.48)
+    check('Pr_w',Pr_w, 2.25)
+    check('Nu_a',Nu_a, 440.345)
+    check('Nu_w',Nu_w, 457.16)
+    check('h_a',self.h_a, 1467.95)
+    check('h_w',self.h_w, 8088.82)
+    check('U_o',self.U_o, 1226)
+    check('LMTD',self.LMTD, 60.49)
+    if (self.N < 2): #only check single pass case
+        check('L',self.L, 7.42)
+
     print "-----Completed Heat Exchanger Sizing---"
     print ""
     print "Heat Exchanger Length: {} meters, with {} tube pass(es)".format(test.L/2,test.N)

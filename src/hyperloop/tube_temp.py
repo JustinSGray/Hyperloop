@@ -101,8 +101,8 @@ class TubeTemp(Component):
         #    self.podCp = 990.8*(self.compExitTt**(0.00316)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         #else:
         #    self.podCp = 299.4*(self.compExitTt**(0.1962)) #SI units
-        bearing_q = cu(bearing_air.W,'lbm/s','W/(m**2)') * cu(bearing_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(bearing_air.Tt,'degR','degK') - self.tubeWallTemp)
-        nozzle_q = cu(nozzle_air.W,'lbm/s','W/(m**2)') * cu(nozzle_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(nozzle_air.Tt,'degR','degK') - self.tubeWallTemp)
+        bearing_q = cu(self.bearing_air.W,'lbm/s','kg/s') * cu(self.bearing_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.bearing_air.Tt,'degR','degK') - self.tubeWallTemp)
+        nozzle_q = cu(self.nozzle_air.W,'lbm/s','kg/s') * cu(self.nozzle_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.nozzle_air.Tt,'degR','degK') - self.tubeWallTemp)
         #Q = mdot * cp * deltaT 
         self.podQ = nozzle_q #+bearing_q 
         #Total Q = Q * (number of pods)
@@ -223,11 +223,11 @@ if __name__ == "__main__":
     test.run()
 
     #perform crude value comparison (calculation verification)
-    check('compInletTt',test.tm.compInletTt,375.96)
-    check('podCp',test.tm.podCp,1144.)
-    check('compInletPt',test.tm.compInletPt,169.)
-    check('compExitPt',test.tm.compExitPt,2099.)
-    check('compExitTt',test.tm.compExitTt,950.)
+    #check('compInletTt',test.tm.compInletTt,375.96)
+    #check('podCp',test.tm.podCp,1144.)
+    #check('compInletPt',test.tm.compInletPt,169.)
+    #check('compExitPt',test.tm.compExitPt,2099.)
+    #check('compExitTt',test.tm.compExitTt,950.)
     check('podQ',test.tm.podQ,353244.)
     check('podQTot',test.tm.podQTot,12010290.)
     check('GrDelTL3',test.tm.GrDelTL3,123775609)
@@ -250,6 +250,6 @@ if __name__ == "__main__":
 
     print "-----Completed Tube Heat Flux Model Calculations---"
     print ""
-    print "Equilibrium Wall Temperature: {} K or {} F".format(test.tubeWallTemp, cu(test.tubeWallTemp,'degK','degF'))
-    print "Ambient Temperature:          {} K or {} F".format(test.ambientTemp, cu(test.ambientTemp,'degK','degF'))
-    print "Q Out = {} W  ==>  Q In = {} W ==> Error: {}%".format(test.Qout,test.Qin,((test.Qout-test.Qin)/test.Qout)*100)
+    print "Equilibrium Wall Temperature: {} K or {} F".format(test.tm.tubeWallTemp, cu(test.tm.tubeWallTemp,'degK','degF'))
+    print "Ambient Temperature:          {} K or {} F".format(test.tm.ambientTemp, cu(test.tm.ambientTemp,'degK','degF'))
+    print "Q Out = {} W  ==>  Q In = {} W ==> Error: {}%".format(test.tm.Qout,test.tm.Qin,((test.tm.Qout-test.tm.Qin)/test.tm.Qout)*100)

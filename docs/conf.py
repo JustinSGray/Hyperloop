@@ -17,7 +17,7 @@ def _sys_path_add(toadd=None):
         distdir = os.path.dirname(os.path.dirname(__file__))
         sys.path = [distdir] + [os.path.join(distdir, p) for p in toadd] + sys.path
 
-_sys_path_add(['images', 'src', 'src/hyperloop', 'src/hyperloop/cycle', 'src/hyperloop/geometry'])
+_sys_path_add(['images', 'src', 'src/hyperloop', 'src/hyperloop/cycle', 'src/hyperloop/geometry', 'src/hyperloop/test'])
 
 # General configuration
 # ---------------------
@@ -26,7 +26,7 @@ _sys_path_add(['images', 'src', 'src/hyperloop', 'src/hyperloop/cycle', 'src/hyp
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 
               'sphinx.ext.doctest', 'sphinx.ext.todo','openmdao.util.doctools', 
-              'sphinx.ext.viewcode','sphinx.ext.mathjax'
+              'sphinx.ext.viewcode'
       ]
 
 # Add any paths that contain templates here, relative to this directory.

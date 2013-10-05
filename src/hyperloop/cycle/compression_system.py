@@ -5,7 +5,7 @@ from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
 from pycycle.api import (FlowStartStatic, Splitter, Inlet, Compressor, Duct, Splitter,
-    Nozzle, CycleComponent, HeatExchanger)
+    Nozzle, CycleComponent, HeatExchanger, FlowStation)
 
 
 
@@ -37,6 +37,9 @@ class CompressionSystem(Assembly):
     #c1_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the first compressor stage", units="kW")
     c2_PR_des = Float(5, iotype="in", desc="pressure ratio of second compressor at design conditions")
     #c2_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the second compressor stage", units="kW")
+
+    nozzle_Fl_O = FlowStation(iotype="out", desc="flow exiting the nozzle", copy=None)
+    bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
 
     area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
@@ -77,13 +80,13 @@ class CompressionSystem(Assembly):
         comp2.MNexit_des = .4
         comp2.eff_des = .80
 
-        duct2 = self.add('duct2', Duct())
+        duct2 = self.add('duct2', Duct()) #to bearings
         duct2.Q_dot = 0 #no heat exchangers
         duct2.dPqP = 0 #no losses
 
         pwr_sum = self.add('pwr_sum', PwrSum())
 
-        #Component Connections
+        #Inter Component Connections
         self.connect('tube.Fl_O', 'inlet.Fl_I')
         self.connect('inlet.Fl_O','comp1.Fl_I')
         self.connect('comp1.Fl_O', 'duct1.Fl_I')
@@ -102,6 +105,8 @@ class CompressionSystem(Assembly):
         self.connect('c2_PR_des','comp2.PR_des')
         #self.connect('-.94782*c1_q_dot', 'duct1.Q_dot') #negative q is heat out, convert from kW to btu/s
         #self.connect('-.94782*c2_q_dot', 'duct2.Q_dot') #negative q is heat out, convert from kW to btu/s
+        self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
+        self.connect('duct2.Fl_O', 'bearing_Fl_O')
 
         self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')

@@ -5,6 +5,4 @@
 openmdao_log.txt
 
 src/hyperloop/sphinx_build/
-docs/pkgdocs.rst
-docs/srcdocs.rst
 src/hyperloop.egg-info/

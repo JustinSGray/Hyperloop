@@ -46,6 +46,58 @@ compression_system.py
    :show-inheritance:
 
         
+.. index:: heat_exchanger.py
+
+.. _hyperloop.cycle.heat_exchanger.py:
+
+heat_exchanger.py
+-----------------
+
+.. automodule:: hyperloop.cycle.heat_exchanger
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
+.. index:: heat_exchanger_sizing.py
+
+.. _hyperloop.cycle.heat_exchanger_sizing.py:
+
+heat_exchanger_sizing.py
+------------------------
+
+.. automodule:: hyperloop.cycle.heat_exchanger_sizing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
+.. index:: pump.py
+
+.. _hyperloop.cycle.pump.py:
+
+pump.py
+-------
+
+.. automodule:: hyperloop.cycle.pump
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
+.. index:: tubeModel.py
+
+.. _hyperloop.cycle.tubeModel.py:
+
+tubeModel.py
+------------
+
+.. automodule:: hyperloop.cycle.tubeModel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
 .. index:: air_bearing.py
 
 .. _hyperloop.geometry.air_bearing.py:

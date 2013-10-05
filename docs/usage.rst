@@ -4,7 +4,6 @@ Introduction
 
 This plugin provides contains the Hyperloop model built using OpenMDAO. 
 
-
 ===================
 Modeling Summary
 ===================

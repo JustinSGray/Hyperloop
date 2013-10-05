@@ -6,7 +6,7 @@ import pylab as p
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float
 
-from pycycle.flowstation import CanteraFlowStation, secant
+from pycycle.flowstation import AirFlowStation, secant
 
 class KantrowitzLimit(Component): 
     """finds the Kantrowitz limit velocity for a body traveling through a tube"""
@@ -24,7 +24,7 @@ class KantrowitzLimit(Component):
 
     def execute(self):
 
-    	fs_tube = self.fs_tube = CanteraFlowStation()
+    	fs_tube = self.fs_tube = AirFlowStation()
 
         tube_rad = self.radius_tube*0.0328084 #convert to ft
         inlet_rad = self.radius_inlet*0.0328084

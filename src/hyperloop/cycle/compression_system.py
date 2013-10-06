@@ -34,14 +34,13 @@ class CompressionSystem(Assembly):
     radius_tube = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")
-    #c1_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the first compressor stage", units="kW")
     c2_PR_des = Float(5, iotype="in", desc="pressure ratio of second compressor at design conditions")
-    #c2_q_dot = Float(0, iotype="in", desc="heat extracted from the flow after the second compressor stage", units="kW")
 
     nozzle_Fl_O = FlowStation(iotype="out", desc="flow exiting the nozzle", copy=None)
     bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
 
     area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
+    area_inlet_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
     pwr_req = Float(iotype="out", desc="pwr required to drivr the compression system", units="kW")
 
@@ -103,12 +102,11 @@ class CompressionSystem(Assembly):
         self.connect('Mach_c1_in', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
-        #self.connect('-.94782*c1_q_dot', 'duct1.Q_dot') #negative q is heat out, convert from kW to btu/s
-        #self.connect('-.94782*c2_q_dot', 'duct2.Q_dot') #negative q is heat out, convert from kW to btu/s
         self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
         self.connect('duct2.Fl_O', 'bearing_Fl_O')
 
         self.connect('inlet.Fl_O.area', 'area_c1_in')
+        self.connect('tube.Fl_O.area', 'area_inlet_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
         self.connect('pwr_sum.pwr*0.74569', 'pwr_req') #convert hp to kW
 

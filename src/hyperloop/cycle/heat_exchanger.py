@@ -78,9 +78,9 @@ class HeatExchanger(CycleComponent):
 
         self.LMTD = ((T_hot_out-T_hot_in)+(T_cold_out-T_cold_in))/log((T_hot_out-T_cold_in)/(T_hot_in-T_cold_out))
 
-        self.residual_qmax = self.Qreleased-self.effectiveness*self.Qmax
+        self.residual_qmax = (self.Qreleased-self.effectiveness*self.Qmax)/100
 
-        self.residual_e_balance = self.Qreleased-self.Qabsorbed
+        self.residual_e_balance = (self.Qreleased-self.Qabsorbed)/100
 
         Fl_O.setTotalTP(T_hot_out*1.8, Fl_I.Pt)
         Fl_O.W = Fl_I.W

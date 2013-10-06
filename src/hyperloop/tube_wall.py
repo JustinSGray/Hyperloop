@@ -17,7 +17,7 @@ from openmdao.main.api import convert_units as cu
 from pycycle.api import FlowStation
 
 
-class TubeTemp(Component):
+class TubeWall(Component):
     """ Main Component """
 
     #--Inputs--
@@ -34,18 +34,17 @@ class TubeTemp(Component):
 
 
     #constants
-    Solar_insolation = Float(1000., units = 'W/m**2', desc='solar irradiation at sea level on a clear day') #
-    nnIncidenceF = Float(0.7, desc='Non-normal incidence factor') #
+    Solar_insolation = Float(1000., iotype="in", units = 'W/m**2', desc='solar irradiation at sea level on a clear day') #
+    nnIncidenceF = Float(0.7, iotype="in", desc='Non-normal incidence factor') #
     Surface_reflectance = Float(0.5, desc='Solar Reflectance Index') #
     solarHeat = Float(350., units = 'W/m**2', desc='Solar Heat Absorbed per Area') #
-    solarHeatTotal = Float(375989751., units = 'W', desc='Solar Heat Absorbed by Tube') #
-    tubeEmissivity = Float(0.5, units = 'W', desc='Emmissivity of the Tube') #
-    SBconst = Float(0.00000005670373, units = 'W/((m**2)*(K**4))', desc='Stefan-Boltzmann Constant') #
-    gammaAir = Float(1.4, desc='Heat Capacity of Air') #
+    solarHeatTotal = Float(375989751., iotype="in", units = 'W', desc='Solar Heat Absorbed by Tube') #
+    tubeEmissivity = Float(0.5, iotype="in", units = 'W', desc='Emmissivity of the Tube') #
+    SBconst = Float(0.00000005670373, iotype="in", units = 'W/((m**2)*(K**4))', desc='Stefan-Boltzmann Constant') #
+    gammaAir = Float(1.4, iotype="in", desc='Heat Capacity of Air') #
     
 
     #--Outputs--
-    #Intermediate Values
     radArea = Float(337486.1, units = 'm**2', iotype='out', desc='Tube Radiating Area') #
     
     #Required for Natural Convection Calcs
@@ -152,7 +151,7 @@ if __name__ == "__main__":
 
         def configure(self):
 
-            tm = self.add('tm', TubeTemp())
+            tm = self.add('tm', TubeWall())
             #tm.bearing_air.setTotalTP()
             driver = self.add('driver',BroydenSolver())
             driver.add_parameter('tm.tubeWallTemp',low=0.,high=10000.)

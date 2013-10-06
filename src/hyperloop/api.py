@@ -6,4 +6,6 @@ from geometry.inlet import  InletGeom
 from battery import Battery
 from tube_temp import TubeTemp
 
+from geometry.pod import Pod
+
 

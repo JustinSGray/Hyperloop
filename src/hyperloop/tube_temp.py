@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
             tm = self.add('tm', TubeTemp())
             #tm.bearing_air.setTotalTP()
-            driver = self.add('driver',NewtonKyrlovSolver())
+            driver = self.add('driver',BroydenSolver())
             driver.add_parameter('tm.tubeWallTemp',low=0.,high=10000.)
             driver.add_constraint('tm.ssTemp_residual=0')
 
@@ -172,7 +172,7 @@ if __name__ == "__main__":
     test.tm.tubeOD = 2.22504#, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
     test.tm.tubeLength = 482803.#, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     test.tm.podFreq = 34.#, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
-    test.tm.tubeWallTemp = 320#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    test.tm.tubeWallTemp = 340#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     test.tm.ambientTemp = 305.6#, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
 
     test.run()

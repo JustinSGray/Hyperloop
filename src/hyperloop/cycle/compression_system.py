@@ -27,7 +27,7 @@ class CompressionSystem(Assembly):
 
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
-    Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod at design conditions")
+    Mach_pod_max = Float(1.0, iotype="in", desc="Maximum travel Mach of the pod")
     W_in = Float(.69, iotype="in", desc="mass flow rate into the compression system", units="kg/s")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
@@ -98,7 +98,7 @@ class CompressionSystem(Assembly):
         self.connect('comp2.pwr','pwr_sum.C2_pwr')
 
         #variable pass_throughs to the assembly boundary
-        self.connect('Mach_pod', 'tube.Mach')
+        self.connect('Mach_pod_max', 'tube.Mach')
         self.connect('Mach_c1_in', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     from openmdao.main.api import set_as_top
 
     hlc = set_as_top(CompressionSystem())
-    hlc.Mach_pod = 1
+    hlc.Mach_pod_max = 1
     hlc.run()
 
     print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 

@@ -2,10 +2,24 @@
 Introduction
 ===============
 
-This plugin provides contains the Hyperloop model built using OpenMDAO. 
+The Hyperloop concept consists of numerous tightly coupled discplines, making the problem espcially daunting as an open source project. An overarching framework is needed to orchestrate the interaction between models of the various subsystems. Such a framework would provide a starting point and clear direction for independent outside contributions. This plugin contains a proposed Hyperloop framework built by a handful of NASA engineers and computer scientists using `OpenMDAO.`__. 
+
+We propose the the design of the hyperloop should be taken form a system perspective with an overall goal of minimizing capital cost pert trip while mai
+the central concept of the hyperloop was to provide a faster mode of transportation at a lower cost than current options. in order to achieve this goal we propose a top down design approach where the designs of each component is optimized with respect to the overall system goals.
+
+In order to achieve this goal, we have provided this plugin as a foundation systems model with some initial subsystem analyses. Our intention is to provide this code as a baseline for further public contribution to support an open source hyperloop design.
+
+The general layout of the model is as follows,
+
+.. __: http://openmdao.org/
+
+The model is designed to perform a global optimization across each sub-discipline, identifying key design variables and system coupling.
+
+Interested parties should feel to modify the code as they see fit.
+
 
 ===================
-Modeling Summary
+Subsystem Modeling Summary
 ===================
 
 The following sections outline the preliminary modeling work conducted by 
@@ -137,8 +151,8 @@ Tube Temperature
 -----------------------------
 
 As each pod passes through the tube, it adds energy to the air in an amount equivalent to what was 
-used to power the compressors. This added energy will cause a small temperature rise in the pod. Each 
-pod cause an additional slight temperature rise as it passes, which could potentially heat the overall 
+used to power the compressors. This added energy will cause a small temperature rise in the tube. Each 
+pod causes an additional slight temperature rise as it passes, which could potentially heat the overall 
 hyperloop system to excessive temperatures. In the original proposal, to combat this effect, it was 
 proposed that water-to-air heat exchangers could be added to the compression system. These would use 
 water stored in tanks in the pod to cool the air by converting it to steam. The steam could then be 
@@ -164,7 +178,7 @@ possible heat transfer. This can be written mathematically as,
 
 .. math::   {Q}_{released}  = effectiveness * {Q}_{max}
 
-where :math:`{Q}_{max} = (T_{hot,in} - T_{cold,in})` multiplied by the lowest product of the two fluids :math:`\dot{m}_{fluid} * C_{p,fluid}`
+where :math:`{Q}_{max} = (T_{hot,in} - T_{cold,in}) {\big[ \dot{m}_{fluid} C_{p,fluid} \big]}_{lowest}` with whichever fluid has the lowest product of :math:`\dot{m}_{fluid}  C_{p,fluid}`
 
 In order to satisfy the energy balance :math:`{Q}_{released}  = {Q}_{absorbed}` , the following must be true,
 

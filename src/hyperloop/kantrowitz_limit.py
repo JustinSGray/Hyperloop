@@ -45,10 +45,9 @@ class KantrowitzLimit(Component):
             ar = ((gam+1)/2)**(-1*g_exp)*((1+ (gam-1)/2*m_guess**2)**g_exp)/m_guess
             return ar - area_ratio_target
 
-        self.limit_Mach = secant(f, .1, x_min=0, x_max=1)
+        self.limit_Mach = secant(f, .3, x_min=0, x_max=1)
         self.limit_speed = fs_tube.Vflow*0.3048 #convert to meters
         
-
         #excess mass flow calculation
         fs_tube.setStaticTsPsMN(self._Ts, self._Ps, self.Mach_pod)
         self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area*0.45359

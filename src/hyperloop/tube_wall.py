@@ -23,7 +23,7 @@ class TubeWall(Component):
     #--Inputs--
     #Hyperloop Parameters/Design Variables
     tubeOD = Float(2.23, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
-    tubeLength = Float(482803, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
+    tube_length = Float(482803, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     podFreq = Float(34, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
     tubeWallTemp = Float(322.0, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     ambientTemp = Float(305.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
@@ -116,14 +116,14 @@ class TubeWall(Component):
         #h = k*Nu/Characteristic Length
         self.h = (self.k * self.Nu)/ self.tubeOD
         #Convection Area = Surface Area
-        self.convArea = pi * self.tubeLength * self.tubeOD 
+        self.convArea = pi * self.tube_length * self.tubeOD 
         #Determine heat radiated per square meter (Q)
         self.naturalConvection = self.h*(self.tubeWallTemp-self.ambientTemp)
         #Determine total heat radiated over entire tube (Qtotal)
         self.naturalConvectionTot = self.naturalConvection * self.convArea
         #Determine heat incoming via Sun radiation (Incidence Flux)
         #Sun hits an effective rectangular cross section
-        self.ViewingArea = self.tubeLength* self.tubeOD
+        self.ViewingArea = self.tube_length* self.tubeOD
         self.solarHeat = (1-self.Surface_reflectance)* self.nnIncidenceF * self.Solar_insolation
         self.solarHeatTotal = self.solarHeat * self.ViewingArea
         #Determine heat released via radiation
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     test.tm.nozzle_air.W = 1.08
     test.tm.bearing_air.W = 0.
     test.tm.tubeOD = 2.22504#, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
-    test.tm.tubeLength = 482803.#, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
+    test.tm.tube_length = 482803.#, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     test.tm.podFreq = 34.#, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
     test.tm.tubeWallTemp = 340#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     test.tm.ambientTemp = 305.6#, units = 'K', iotype='in', desc='Average Temperature of the outside air') #

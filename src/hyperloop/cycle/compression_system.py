@@ -4,7 +4,7 @@ from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
-from pycycle.api import (FlowStartStatic, Splitter, Inlet, Compressor, Duct, Splitter,
+from pycycle.api import (FlowStartStatic, SplitterBPR as Splitter, Inlet, Compressor, Duct,
     Nozzle, CycleComponent, HeatExchanger, FlowStation)
 
 
@@ -39,6 +39,7 @@ class CompressionSystem(Assembly):
     nozzle_Fl_O = FlowStation(iotype="out", desc="flow exiting the nozzle", copy=None)
     bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
 
+    speed_max = Float(iotype="out", desc="maximum velocity of the pod", units="m/s")
     area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     area_inlet_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
@@ -104,11 +105,11 @@ class CompressionSystem(Assembly):
         self.connect('c2_PR_des','comp2.PR_des')
         self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
         self.connect('duct2.Fl_O', 'bearing_Fl_O')
-
         self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('tube.Fl_O.area', 'area_inlet_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
-        self.connect('pwr_sum.pwr*0.74569', 'pwr_req') #convert hp to kW
+        self.connect('pwr_sum.pwr', 'pwr_req') 
+        self.connect('tube.Fl_O.Vflow', 'speed_max')
 
         #driver setup
         design = self.driver

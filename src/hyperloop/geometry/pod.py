@@ -7,6 +7,7 @@ from openmdao.lib.datatypes.api import Float
 
 #hyperloop sizing calculations
 from inlet import InletGeom
+from battery import Battery
 
 
 #ovearll geometry assembly
@@ -14,7 +15,8 @@ class Pod(Assembly):
 
     area_inlet_in = Float(iotype="in", units="cm**2", desc="flow area required at the front of the inlet")
     area_inlet_out = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")
-    
+    time_mission = Float(iotype="in", units="s", desc="travel time for a single trip")
+
     radius_inlet_outer = Float(iotype="out", units="cm", desc="outer radius of the inlet")
 
     def configure(self): 
@@ -24,6 +26,12 @@ class Pod(Assembly):
         self.connect('area_inlet_out','inlet.area_out')
         self.connect('inlet.radius_outer', 'radius_inlet_outer',)
         self.driver.workflow.add('inlet')
+
+        battery = self.add('battery', Battery())
+        self.create_passthrough('battery.pwr_req')
+        self.create_passthrough('battery.energy')
+        self.connect('time_mission','battery.time_mission')
+        self.driver.workflow.add('battery')
 
     def run(self,*args,**kwargs): 
         super(Assembly, self).run(*args,**kwargs)

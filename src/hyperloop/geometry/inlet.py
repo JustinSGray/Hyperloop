@@ -20,6 +20,7 @@ class InletGeom(Component):
         self.radius_outer = self.radius_inner+self.inlet_wall_thickness
         self.blockage = pi*(self.radius_outer)**2
 
+
 if __name__ == "__main__": 
 
     from openmdao.main.api import set_as_top

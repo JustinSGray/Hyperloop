@@ -71,10 +71,10 @@ if __name__=="__main__":
 
     hl = HyperloopPod()
     hl.Mach_bypass = .9
-    hl.Mach_pod_max = .75
+    hl.Mach_pod_max = .85
     hl.compress.W_in = .5 #initial guess
-    hl.compress.radius_tube = hl.kant.radius_tube = 201 #initial guess
-    hl.Mach_c1_in = .6
+    hl.compress.radius_tube = hl.kant.radius_tube = 300 #initial guess
+    hl.Mach_c1_in = .7
     hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.tubeWallTemp = 322 #initial guess
     hl.run()
 

@@ -47,8 +47,9 @@ class HyperloopPod(Assembly):
         tube_wall = self.add('tube_wall', TubeWall())
         self.connect('compress.nozzle_Fl_O', 'tube_wall.nozzle_air')
         self.connect('compress.bearing_Fl_O', 'tube_wall.bearing_air')
-        self.connect('SolarHeatingFactor', 'tube_wall.nnIncidenceF')
-        self.connect('tube_length', 'tube_wall.tube_length')
+        self.connect('SolarHeatingFactor', 'tube_wall.nn_incidence_factor')
+        self.connect('tube_length', 'tube_wall.length_tube')
+        self.connect('','tube_wall.diameter_outer_tube')
 
         #driver = self.driver
         driver = self.add('driver',BroydenSolver())

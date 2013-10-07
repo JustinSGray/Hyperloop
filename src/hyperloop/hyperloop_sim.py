@@ -42,6 +42,7 @@ class HyperloopPod(Assembly):
         self.connect('radius_tube', 'kant.radius_tube')
         self.connect('Ps_tube', 'kant.Ps_tube')
         self.connect('pod.radius_inlet_outer', 'kant.radius_inlet')
+        self.create_passthrough('kant.Mach_Mach_bypass')
 
         tube_wall = self.add('tube_wall', TubeWall())
         self.connect('compress.nozzle_Fl_O', 'tube_wall.nozzle_air')

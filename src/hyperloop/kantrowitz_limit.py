@@ -15,6 +15,7 @@ class KantrowitzLimit(Component):
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
+    Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
 
     limit_speed = Float(iotype="out", desc="pod travel speed where flow choking occurs", units="m/s")
     limit_Mach = Float(iotype="out", desc="pod travel Mach number where flow choking occurs")
@@ -52,7 +53,7 @@ class KantrowitzLimit(Component):
         fs_tube.setStaticTsPsMN(self._Ts, self._Ps, self.Mach_pod)
         self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area*0.45359
 
-        fs_tube.Mach = 1 #Kantrowitz flow is at these total conditions, but with Mach 1
+        fs_tube.Mach = self.Mach_bypass #Kantrowitz flow is at these total conditions, but with Mach 1
         self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area*0.45359
         #print "test", fs_tube.rhos, fs_tube.Vflow, self._bypass_area, self.W_kant
 

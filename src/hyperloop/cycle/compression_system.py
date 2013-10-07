@@ -97,6 +97,7 @@ class CompressionSystem(Assembly):
         self.connect('comp1.pwr','pwr_sum.C1_pwr')
         self.connect('comp2.pwr','pwr_sum.C2_pwr')
         self.connect('W_in', 'tube.W')
+        self.connect('W_bearing_in', 'split.W1_des')
 
         #variable pass_throughs to the assembly boundary
         self.connect('Mach_pod_max', 'tube.Mach')

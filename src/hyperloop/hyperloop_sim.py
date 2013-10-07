@@ -49,6 +49,7 @@ class HyperloopPod(Assembly):
         self.connect('SolarHeatingFactor', 'tube_wall.nnIncidenceF')
         self.connect('tube_length', 'tube_wall.tube_length')
 
+        #driver = self.driver
         driver = self.add('driver',BroydenSolver())
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
         driver.add_constraint('10*(compress.W_in-kant.W_excess) = 0')
@@ -63,13 +64,16 @@ class HyperloopPod(Assembly):
 if __name__=="__main__": 
 
     hl = HyperloopPod()
-    hl.Mach_pod_max = .9
-    hl.radius_tube = 200
+    hl.Mach_pod_max = .8
+    hl.compress.W_in = .85
+    hl.radius_tube = 300
+    hl.Mach_c1_in = .8
     hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.tubeWallTemp = 322
     hl.run()
 
-    print "Pod W: ", hl.compress.W_in, hl.compress.tube.Fl_O.W
-    print "bearing W: ", hl.compress.split.Fl_O1.W
+    print "Pod W: ", hl.compress.W_in
+    print "radii: ", hl.kant.radius_tube, hl.kant.radius_inlet
+    print "bearing W: ", hl.compress.W_bearing_in
     print "pwr: ", hl.pwr_req
     print "energy: ", hl.pod.energy
     print "speed:", hl.compress.speed_max

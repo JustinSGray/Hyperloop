@@ -54,14 +54,14 @@ class KantrowitzLimit(Component):
 
         fs_tube.Mach = 1 #Kantrowitz flow is at these total conditions, but with Mach 1
         self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area*0.45359
+        #print "test", fs_tube.rhos, fs_tube.Vflow, self._bypass_area, self.W_kant
 
         self.W_excess = self.W_tube - self.W_kant
 
 
-def plot_data():
+def plot_data(comp):
     """utility function to make the Kantrowitz Limit Plot""" 
-    from openmdao.main.api import set_as_top
-    comp = set_as_top(KantrowitzLimit())
+
 
     MN = []
     W_tube = []
@@ -70,6 +70,7 @@ def plot_data():
     for m in np.arange(.1,1.1,.1): 
         comp.Mach_pod = m
         comp.run()
+        #print comp.radius_tube, comp.Mach_pod, comp.W_tube, comp.W_kant, comp.W_excess
 
         MN.append(m)
         W_kant.append(comp.W_kant)
@@ -81,7 +82,9 @@ def plot_data():
     p.xlabel('Pod Mach Number')
     p.ylabel('Mass Flow Rate (kg/sec)')
     p.title('Kantrowitz Limit Flow')
-    p.show()
+    #p.show()
+
+    print np.array(W_tube)- np.array(W_kant)
 
         
 
@@ -90,10 +93,10 @@ if __name__ == "__main__":
 
     from openmdao.main.api import set_as_top
     comp = set_as_top(KantrowitzLimit())
-    #comp.radius_tube = 200
+    comp.radius_tube = 2000
     comp.run()
-    print comp.limit_speed, comp.limit_Mach, comp.W_excess
+    #print comp.Mach_pod, comp.W_tube, comp.W_kant, comp.W_excess
     #print comp.MN[-1]
     #print comp.W_tube[-1]
     #print comp.W_kant[-1]
-    #plot_data()
+    plot_data(comp)

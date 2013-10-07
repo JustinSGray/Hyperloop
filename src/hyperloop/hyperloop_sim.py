@@ -63,8 +63,6 @@ class HyperloopPod(Assembly):
         driver.add_parameter(['compress.radius_tube','kant.radius_tube'], low=-1e15, high=1e15)
         driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
 
-
-
         driver.workflow.add(['compress','mission','pod','kant','tube_wall'])
 
 
@@ -93,7 +91,7 @@ if __name__=="__main__":
     print "Performance"
     print "======================"
     print "inlet_radius: ", hl.kant.radius_inlet
-    print "area_compressor_bypass: ", hl.pod.area_compressor_bypass, hl.compress.area_c1_out
+    print "area_compressor_bypass: ", hl.pod.area_compressor_bypass 
     print "Pod W: ", hl.compress.W_in
     print "bearing W: ", hl.compress.W_bearing_in
     print "pwr: ", hl.compress.pwr_req

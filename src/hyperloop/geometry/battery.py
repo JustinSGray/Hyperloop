@@ -9,7 +9,7 @@ class Battery(Component):
     time_mission = Float(2100, iotype="in", units="s", desc="pod travel time")
     pwr_req = Float(420, iotype="in", units="kW", desc="average power requriment for the mission")
     pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
-    cross_sectional_area = Float(1.3, iotype="in", units="m**2", desc="available cross section for battery pack")
+    area_cross_section = Float(1.3, iotype="in", units="m**2", desc="available cross section for battery pack")
     
     energy = Float(iotype="out", units="kW*h", desc="total energy storage requirements")
     mass = Float(iotype="out", units="kg", desc="total mass of the batteries")
@@ -26,7 +26,7 @@ class Battery(Component):
 
         self.mass = self.energy/specific_energy
         self.volume = self.energy/energy_density
-        self.length = self.volume/self.cross_sectional_area
+        self.length = self.volume/self.area_cross_section
         
 
 if __name__ == "__main__": 

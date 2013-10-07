@@ -8,8 +8,6 @@ from pycycle.api import (FlowStartStatic, SplitterW, Inlet, Compressor, Duct,
     Nozzle, CycleComponent, HeatExchanger, FlowStation)
 
 
-
-
 class PwrSum(CycleComponent): 
 
     C1_pwr = Float(0, iotype='in', units='hp')
@@ -20,7 +18,6 @@ class PwrSum(CycleComponent):
     def execute(self): 
 
         self.pwr = self.C1_pwr + self.C2_pwr
-
 
 
 class CompressionSystem(Assembly): 
@@ -41,7 +38,8 @@ class CompressionSystem(Assembly):
     bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
 
     speed_max = Float(iotype="out", desc="maximum velocity of the pod", units="m/s")
-    area_c1_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
+    area_c1_in = Float(iotype="out", desc="flow area required for the input to the first compressor", units="cm**2")
+    area_c1_out = Float(iotype="out", desc="flow area required for the output to the first compressor", units="cm**2")
     area_inlet_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
     nozzle_flow_area = Float(iotype="out", desc="flow area required for the nozzle exit", units="cm**2")
     pwr_req = Float(iotype="out", desc="pwr required to drivr the compression system", units="kW")
@@ -107,6 +105,7 @@ class CompressionSystem(Assembly):
         self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
         self.connect('duct2.Fl_O', 'bearing_Fl_O')
         self.connect('inlet.Fl_O.area', 'area_c1_in')
+        self.connect('comp1.Fl_O.area', 'area_c1_out')
         self.connect('tube.Fl_O.area', 'area_inlet_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
         self.connect('pwr_sum.pwr', 'pwr_req') 

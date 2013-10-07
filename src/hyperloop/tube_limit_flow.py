@@ -8,8 +8,8 @@ from openmdao.lib.datatypes.api import Float
 
 from pycycle.flowstation import AirFlowStation, secant
 
-class KantrowitzLimit(Component): 
-    """finds the Kantrowitz limit velocity for a body traveling through a tube"""
+class TubeLimitFlow(Component): 
+    """Finds the limit velocity for a body traveling through a tube"""
     radius_tube = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")    
     radius_inlet = Float(73.7, iotype="in", units="cm", desc="radius of the inlet at it's largest point")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
@@ -93,7 +93,7 @@ def plot_data(comp):
 if __name__ == "__main__": 
 
     from openmdao.main.api import set_as_top
-    comp = set_as_top(KantrowitzLimit())
+    comp = set_as_top(TubeLimitFlow())
     comp.radius_tube = 2000
     comp.run()
     #print comp.Mach_pod, comp.W_tube, comp.W_kant, comp.W_excess

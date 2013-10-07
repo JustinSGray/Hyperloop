@@ -2,7 +2,7 @@ from openmdao.main.api import Assembly
 from openmdao.lib.datatypes.api import Float
 from openmdao.lib.drivers.api import BroydenSolver 
 
-from hyperloop.api import (KantrowitzLimit, CompressionSystem, TubeWall,
+from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
     Pod, Mission)
 
 
@@ -37,34 +37,34 @@ class HyperloopPod(Assembly):
         self.connect('compress.pwr_req','pod.pwr_req')
         self.connect('mission.time','pod.time_mission')
 
-        kant = self.add('kant', KantrowitzLimit())
-        self.connect('Mach_pod_max', 'kant.Mach_pod')
-        #self.connect('radius_tube', 'kant.radius_tube')
-        self.connect('Ps_tube', 'kant.Ps_tube')
-        self.connect('pod.radius_inlet_outer', 'kant.radius_inlet')
-        self.create_passthrough('kant.Mach_bypass')
+        flow_limit = self.add('flow_limit', TubeLimitFlow())
+        self.connect('Mach_pod_max', 'flow_limit.Mach_pod')
+        #self.connect('radius_tube', 'flow_limit.radius_tube')
+        self.connect('Ps_tube', 'flow_limit.Ps_tube')
+        self.connect('pod.radius_inlet_outer', 'flow_limit.radius_inlet')
+        self.create_passthrough('flow_limit.Mach_bypass')
 
-        tube_wall = self.add('tube_wall', TubeWall())
-        self.connect('compress.nozzle_Fl_O', 'tube_wall.nozzle_air')
-        self.connect('compress.bearing_Fl_O', 'tube_wall.bearing_air')
-        self.connect('SolarHeatingFactor', 'tube_wall.nn_incidence_factor')
-        self.connect('tube_length', 'tube_wall.length_tube')
-        self.connect('','tube_wall.diameter_outer_tube')
+        tube_wall_temp = self.add('tube_wall_temp', TubeWallTemp())
+        self.connect('compress.nozzle_Fl_O', 'tube_wall_temp.nozzle_air')
+        self.connect('compress.bearing_Fl_O', 'tube_wall_temp.bearing_air')
+        self.connect('SolarHeatingFactor', 'tube_wall_temp.nn_incidence_factor')
+        self.connect('tube_length', 'tube_wall_temp.length_tube')
+        self.connect('','tube_wall_temp.diameter_outer_tube')
 
         #driver = self.driver
         driver = self.add('driver',BroydenSolver())
         driver.itmax = 20 #max iterations
         driver.tol = .0001
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
-        driver.add_constraint('10*(compress.W_in-kant.W_excess) = 0')
+        driver.add_constraint('10*(compress.W_in-flow_limit.W_excess) = 0')
 
-        driver.add_parameter(['compress.Ts_tube','kant.Ts_tube','tube_wall.tubeWallTemp'], low=-1e-15, high=1e15)
-        driver.add_constraint('tube_wall.ssTemp_residual=0')
+        driver.add_parameter(['compress.Ts_tube','flow_limit.Ts_tube','tube_wall_temp.tubeWallTemp'], low=-1e-15, high=1e15)
+        driver.add_constraint('tube_wall_temp.ssTemp_residual=0')
 
-        driver.add_parameter(['compress.radius_tube','kant.radius_tube'], low=-1e15, high=1e15)
+        driver.add_parameter(['compress.radius_tube','flow_limit.radius_tube'], low=-1e15, high=1e15)
         driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
 
-        driver.workflow.add(['compress','mission','pod','kant','tube_wall'])
+        driver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
 
 
 
@@ -74,9 +74,9 @@ if __name__=="__main__":
     hl.Mach_bypass = .9
     hl.Mach_pod_max = .85
     hl.compress.W_in = .5 #initial guess
-    hl.compress.radius_tube = hl.kant.radius_tube = 300 #initial guess
-    hl.Mach_c1_in = .7
-    hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.tubeWallTemp = 322 #initial guess
+    hl.compress.radius_tube = hl.flow_limit.radius_tube = 300 #initial guess
+    hl.Mach_c1_in = .6
+    hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 #initial guess
     hl.run()
 
 
@@ -85,13 +85,13 @@ if __name__=="__main__":
     print "======================"
     print "Mach bypass: ", hl.Mach_bypass
     print "Max Travel Mach: ", hl.Mach_pod_max
-    print "Tube Radius: ", hl.kant.radius_tube
+    print "Tube Radius: ", hl.flow_limit.radius_tube
     print "Fan Face Mach: ", hl.Mach_c1_in
 
     print "======================"
     print "Performance"
     print "======================"
-    print "inlet_radius: ", hl.kant.radius_inlet
+    print "inlet_radius: ", hl.flow_limit.radius_inlet
     print "area_compressor_bypass: ", hl.pod.area_compressor_bypass 
     print "Pod W: ", hl.compress.W_in
     print "bearing W: ", hl.compress.W_bearing_in
@@ -99,7 +99,7 @@ if __name__=="__main__":
     print "energy: ", hl.pod.energy
     print "travel time: ", hl.mission.time/60
     print "speed:", hl.compress.speed_max
-    print "Tube Temp: ", hl.tube_wall.tubeWallTemp
+    print "Tube Temp: ", hl.tube_wall_temp.tubeWallTemp
 
 
 

@@ -3,17 +3,17 @@ import unittest
 from openmdao.main.api import set_as_top, Assembly
 from openmdao.util.testutil import assert_rel_error
 from openmdao.lib.drivers.api import BroydenSolver
-from hyperloop.tube_temp import TubeWall
+from hyperloop.tube_wall_temp import TubeWallTemp
 
 
 class TubeHeatBalance(Assembly):
 
     def configure(self):
 
-        tm = self.add('tm', TubeWall())
+        tm = self.add('tm', TubeWallTemp())
         #tm.bearing_air.setTotalTP()
         driver = self.add('driver',BroydenSolver())
-        driver.add_parameter('tm.tubeWallTemp',low=0.,high=10000.)
+        driver.add_parameter('tm.temp_tube_wall',low=0.,high=10000.)
         driver.add_constraint('tm.ssTemp_residual=0')
         driver.workflow.add(['tm'])
 

@@ -25,7 +25,13 @@ to modify the code as they see fit and improve the models in areas where they ha
 
 .. __: http://openmdao.org/
 
-The general layout of the model is as follows,
+The model is broken down into 5 major sub-systems: 
+
+    #. Compression System: Performance and power consumption of the compressors
+    #. Mission Analysis: Estimate of travel time 
+    #. Pod Geometry: Physical Dimensions and calculations that depend on them
+    #. Tube Flow Limitations: Tube flow limitations based on choked flow restrictions
+    #. Equilibrium Tube Wall Temperature: Equilibrium wall temperature of the tube
 
 
 The model has the following design variables: 
@@ -34,9 +40,9 @@ In addition to the design variables, the model includes a number of state variab
 values must be selected for any given design to satisfy a set of coupling constraints. 
 
 
-===================
+==============================
 Subsystem Modeling Summary
-===================
+==============================
 
 The following sections outline the preliminary modeling work conducted by 
 our team. Our main focus was to produce a model that predicts the instantaneous 

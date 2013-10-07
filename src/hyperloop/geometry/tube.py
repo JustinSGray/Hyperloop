@@ -11,7 +11,7 @@ class TubeStructural(Component):
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa")
     radius_inner = Float(300, iotype="in", units="cm", desc="inner radius of tube")
 
-    radius_outer = Float(300.6, iotype="in", units="cm", desc="inner radius of tube")
+    radius_outer = Float(300.6, iotype="out", units="cm", desc="outer radius of tube")
 
     def execute(self): 
 

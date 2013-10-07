@@ -49,7 +49,6 @@ class HyperloopPod(Assembly):
         self.connect('compress.bearing_Fl_O', 'tube_wall.bearing_air')
         self.connect('SolarHeatingFactor', 'tube_wall.nn_incidence_factor')
         self.connect('tube_length', 'tube_wall.length_tube')
-        self.connect('','tube_wall.diameter_outer_tube')
 
         #driver = self.driver
         driver = self.add('driver',BroydenSolver())
@@ -58,10 +57,10 @@ class HyperloopPod(Assembly):
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
         driver.add_constraint('10*(compress.W_in-kant.W_excess) = 0')
 
-        driver.add_parameter(['compress.Ts_tube','kant.Ts_tube','tube_wall.tubeWallTemp'], low=-1e-15, high=1e15)
-        driver.add_constraint('tube_wall.ssTemp_residual=0')
+        driver.add_parameter(['compress.Ts_tube','kant.Ts_tube','tube_wall.temp_tube_wall'], low=-1e-15, high=1e15)
+        driver.add_constraint('tube_wall.ss_temp_residual=0')
 
-        driver.add_parameter(['compress.radius_tube','kant.radius_tube'], low=-1e15, high=1e15)
+        driver.add_parameter(['compress.radius_tube','kant.radius_tube','pod.radius_tube_inner'], low=-1e15, high=1e15)
         driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
 
         driver.workflow.add(['compress','mission','pod','kant','tube_wall'])
@@ -76,7 +75,7 @@ if __name__=="__main__":
     hl.compress.W_in = .5 #initial guess
     hl.compress.radius_tube = hl.kant.radius_tube = 300 #initial guess
     hl.Mach_c1_in = .7
-    hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.tubeWallTemp = 322 #initial guess
+    hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.temp_tube_wall = 322 #initial guess
     hl.run()
 
 
@@ -85,7 +84,7 @@ if __name__=="__main__":
     print "======================"
     print "Mach bypass: ", hl.Mach_bypass
     print "Max Travel Mach: ", hl.Mach_pod_max
-    print "Tube Radius: ", hl.kant.radius_tube
+    print "Tube Inner Radius: ", hl.kant.radius_tube
     print "Fan Face Mach: ", hl.Mach_c1_in
 
     print "======================"
@@ -99,7 +98,7 @@ if __name__=="__main__":
     print "energy: ", hl.pod.energy
     print "travel time: ", hl.mission.time/60
     print "speed:", hl.compress.speed_max
-    print "Tube Temp: ", hl.tube_wall.tubeWallTemp
+    print "Tube Temp: ", hl.tube_wall.temp_tube_wall
 
 
 

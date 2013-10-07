@@ -29,6 +29,7 @@ class CompressionSystem(Assembly):
     #NOTE: Some unit conversions to metric also happen here
     Mach_pod_max = Float(1.0, iotype="in", desc="Maximum travel Mach of the pod")
     W_in = Float(.69, iotype="in", desc="mass flow rate into the compression system", units="kg/s")
+    W_bearing_in = Float(.2, iotype="in", desc="required mass flow rate for the bearing system", units="kg/s")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     radius_tube = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
@@ -46,8 +47,6 @@ class CompressionSystem(Assembly):
     pwr_req = Float(iotype="out", desc="pwr required to drivr the compression system", units="kW")
 
     def configure(self):
-
-      
 
         tube = self.add('tube', FlowStartStatic())
         #tube.W = 1.521
@@ -97,6 +96,7 @@ class CompressionSystem(Assembly):
         self.connect('comp2.Fl_O','duct2.Fl_I')
         self.connect('comp1.pwr','pwr_sum.C1_pwr')
         self.connect('comp2.pwr','pwr_sum.C2_pwr')
+        self.connect('W_in', 'tube.W')
 
         #variable pass_throughs to the assembly boundary
         self.connect('Mach_pod_max', 'tube.Mach')

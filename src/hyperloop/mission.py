@@ -48,7 +48,7 @@ class Mission(Component):
         self.time = self.tube_length/avg_speed
 
         #print self.itername, self.parent.pod.inlet.area_out, self.parent.compress.W_in, self.parent.kant.W_excess, self.parent.compress.W_in-self.parent.kant.W_excess
-        #print self.itername, self.parent.compress.W_in
+        print self.itername, self.parent.compress.W_in, 20*(self.parent.compress.W_in-self.parent.kant.W_excess)
 
 
 if __name__ == "__main__": 

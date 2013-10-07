@@ -25,8 +25,8 @@ class HyperloopPod(Assembly):
         self.connect('Mach_pod_max', 'compress.Mach_pod_max')
         self.connect('radius_tube', 'compress.radius_tube')
         self.connect('Ps_tube', 'compress.Ps_tube')
-        self.create_passthrough('compress.Mach_c1_in')
-        self.create_passthrough('compress.pwr_req')
+        self.create_passthrough('compress.Mach_c1_in') #Design Variable
+        #self.create_passthrough('compress.pwr_req')
 
         mission = self.add('mission', Mission())
         self.connect('compress.speed_max', 'mission.speed_max')
@@ -35,6 +35,7 @@ class HyperloopPod(Assembly):
         pod = self.add('pod', Pod())
         self.connect('compress.area_c1_in', 'pod.area_inlet_out')
         self.connect('compress.area_inlet_in', 'pod.area_inlet_in')
+        self.connect('compress.pwr_req','pod.pwr_req')
         self.connect('mission.time','pod.time_mission')
 
         kant = self.add('kant', KantrowitzLimit())
@@ -42,7 +43,7 @@ class HyperloopPod(Assembly):
         self.connect('radius_tube', 'kant.radius_tube')
         self.connect('Ps_tube', 'kant.Ps_tube')
         self.connect('pod.radius_inlet_outer', 'kant.radius_inlet')
-        self.create_passthrough('kant.Mach_Mach_bypass')
+        self.create_passthrough('kant.Mach_bypass')
 
         tube_wall = self.add('tube_wall', TubeWall())
         self.connect('compress.nozzle_Fl_O', 'tube_wall.nozzle_air')
@@ -65,17 +66,31 @@ class HyperloopPod(Assembly):
 if __name__=="__main__": 
 
     hl = HyperloopPod()
-    hl.Mach_pod_max = .8
-    hl.compress.W_in = .85
+    hl.Mach_bypass = .95
+    hl.Mach_pod_max = .9
+    hl.compress.W_in = .5 #initial guess
     hl.radius_tube = 300
     hl.Mach_c1_in = .8
-    hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.tubeWallTemp = 322
+    hl.compress.Ts_tube = hl.kant.Ts_tube = hl.tube_wall.tubeWallTemp = 322 #initial guess
     hl.run()
 
+
+    print "======================"
+    print "Design"
+    print "======================"
+    print "Mach bypass: ", hl.Mach_bypass
+    print "Max Travel Mach: ", hl.Mach_pod_max
+    print "Tube Radius: ", hl.kant.radius_tube
+    print "Fan Face Mach: ", hl.Mach_c1_in
+
+    print "======================"
+    print "Performance"
+    print "======================"
     print "Pod W: ", hl.compress.W_in
-    print "radii: ", hl.kant.radius_tube, hl.kant.radius_inlet
+    print "inlet_radius: ", hl.kant.radius_inlet
     print "bearing W: ", hl.compress.W_bearing_in
-    print "pwr: ", hl.pwr_req
+    print "pwr: ", hl.compress.pwr_req
+    print "travel time: ", hl.mission.time/60
     print "energy: ", hl.pod.energy
     print "speed:", hl.compress.speed_max
     print "Tube Temp: ", hl.tube_wall.tubeWallTemp

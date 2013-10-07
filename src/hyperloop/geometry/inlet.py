@@ -6,7 +6,6 @@ from openmdao.lib.datatypes.api import Float
 
 class InletGeom(Component): 
 
-
     inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
     area_in = Float(iotype="in", units="cm**2", desc="flow area required at the front of the inlet")
     area_out = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")

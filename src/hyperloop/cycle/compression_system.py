@@ -4,7 +4,7 @@ from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
-from pycycle.api import (FlowStartStatic, SplitterBPR as Splitter, Inlet, Compressor, Duct,
+from pycycle.api import (FlowStartStatic, SplitterW, Inlet, Compressor, Duct,
     Nozzle, CycleComponent, HeatExchanger, FlowStation)
 
 
@@ -67,8 +67,8 @@ class CompressionSystem(Assembly):
         duct1.Q_dot = 0# no heat exchangers
         duct1.dPqP = 0 #no losses
 
-        split = self.add('split', Splitter())
-        split.BPR_des = 1.45
+        split = self.add('split', SplitterW())
+        split.W1_des = .44
         split.MNexit1_des = 1.0
         split.MNexit2_des = 1.0
 

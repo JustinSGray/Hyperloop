@@ -47,9 +47,6 @@ class Mission(Component):
         avg_speed = self.speed_max*SPEED_FRAC
         self.time = self.tube_length/avg_speed
 
-        print self.itername, self.parent.pod.inlet.area_out, self.parent.compress.W_in, self.parent.kant.W_excess, self.parent.compress.W_in-self.parent.kant.W_excess
-
-
 
 if __name__ == "__main__": 
 

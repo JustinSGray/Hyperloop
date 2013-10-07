@@ -69,7 +69,7 @@ if __name__=="__main__":
     hl.run()
 
     print "Pod W: ", hl.compress.W_in, hl.compress.tube.Fl_O.W
-    print "bearing W: ", hl.compress.split.Fl_O1.W, hl.compress.split.BPR_des
+    print "bearing W: ", hl.compress.split.Fl_O1.W
     print "pwr: ", hl.pwr_req
     print "energy: ", hl.pod.energy
     print "speed:", hl.compress.speed_max

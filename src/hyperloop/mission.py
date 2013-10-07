@@ -47,7 +47,7 @@ class Mission(Component):
         avg_speed = self.speed_max*SPEED_FRAC
         self.time = self.tube_length/avg_speed
 
-        print self.itername, self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.kant.W_excess)
+        print self.itername, self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
         print "  ", self.parent.compress.radius_tube, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
 
 

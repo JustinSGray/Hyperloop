@@ -18,7 +18,7 @@ from openmdao.main.api import convert_units as cu
 from pycycle.api import FlowStation
 
 
-class TubeWall(Component):
+class TubeWallTemp(Component):
     """ Calculates Q released/absorbed by the hyperloop tube """
     #--Inputs--
     #Hyperloop Parameters/Design Variables

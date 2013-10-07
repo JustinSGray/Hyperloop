@@ -28,7 +28,10 @@ to modify the code as they see fit and improve the models in areas where they ha
 The general layout of the model is as follows,
 
 
+The model has the following design variables: 
 
+In addition to the design variables, the model includes a number of state variables whose 
+values must be selected for any given design to satisfy a set of coupling constraints. 
 
 
 ===================

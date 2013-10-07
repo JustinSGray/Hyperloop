@@ -2,20 +2,33 @@
 Introduction
 ===============
 
-The Hyperloop concept consists of numerous tightly coupled discplines, making the problem espcially daunting as an open source project. An overarching framework is needed to orchestrate the interaction between models of the various subsystems. Such a framework would provide a starting point and clear direction for independent outside contributions. This plugin contains a proposed Hyperloop framework built by a handful of NASA engineers and computer scientists using `OpenMDAO.`__. 
+The hyperloop concept is a proposed transportation system that could offer lower costs and 
+travel times than high speed rail system. The hyperloop consists consists of a passenger 
+pod traveling in a tube under light vacuum with a compression system to help move some 
+of the air around the pod. The compression system is powered by electric motors and 
+on board batteries. Propulsion is provided via linear accelerators mounted on the 
+tube itself. The pod rides on a set of air bearings, with pressurized air also being 
+provided by the compressions system. All of these different sub-systems interact with 
+each other and an effective hyperloop system will need to balance the needs of all of them. 
 
-We propose the the design of the hyperloop should be taken form a system perspective with an overall goal of minimizing capital cost pert trip while mai
-the central concept of the hyperloop was to provide a faster mode of transportation at a lower cost than current options. in order to achieve this goal we propose a top down design approach where the designs of each component is optimized with respect to the overall system goals.
+We propose the the design of the hyperloop should be taken from a systems perspective with 
+the dual objectives of minimizing ticket cost and minimizing travel time. In order to achieve 
+this goal we propose a top down design approach where the designs of all components
+are optimized simultaneously with respect to the overall system goals.
 
-In order to achieve this goal, we have provided this plugin as a foundation systems model with some initial subsystem analyses. Our intention is to provide this code as a baseline for further public contribution to support an open source hyperloop design.
-
-The general layout of the model is as follows,
+An overarching framework is needed to orchestrate the interaction between models of  
+various subsystems and perform the necessary optimization. This code base contains a hyperloop 
+system model built by a handful of NASA engineers and computer scientists as an `OpenMDAO.`__
+plugin. The intention is to provide this code as a baseline for further public 
+contribution to support an open source hyperloop design. Interested parties should feel 
+to modify the code as they see fit and improve the models in areas where they have expertise. 
 
 .. __: http://openmdao.org/
 
-The model is designed to perform a global optimization across each sub-discipline, identifying key design variables and system coupling.
+The general layout of the model is as follows,
 
-Interested parties should feel to modify the code as they see fit.
+
+
 
 
 ===================

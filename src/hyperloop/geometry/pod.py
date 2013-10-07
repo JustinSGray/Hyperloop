@@ -31,8 +31,7 @@ class Pod(Assembly):
         tube = self.add('tube', TubeStructural())
         inlet = self.add('inlet', InletGeom())
         battery = self.add('battery', Battery())
-        #Declare Workflow
-        self.driver.workflow.add(['capsule','tube','inlet','battery'])
+        
         #Create Passthroughs
         self.create_passthrough('capsule.area_cross_section')
         self.create_passthrough('battery.pwr_req')
@@ -47,7 +46,7 @@ class Pod(Assembly):
         #Pod -> Battery
         self.connect('time_mission','battery.time_mission')
 
-        #Inner Component Connections
+        #Inter Component Connections
         #Capsule -> Inlet
         self.connect('capsule.area_cross_section','inlet.area_passenger_capsule')
         #Capsule -> Battery
@@ -60,6 +59,8 @@ class Pod(Assembly):
         self.connect('inlet.radius_outer', 'radius_inlet_outer')
         self.connect('inlet.area_bypass', 'area_compressor_bypass')
 
+        #Declare Workflow
+        self.driver.workflow.add(['capsule','tube','inlet','battery'])
 
     def run(self,*args,**kwargs): 
         super(Assembly, self).run(*args,**kwargs)

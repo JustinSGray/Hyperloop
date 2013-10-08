@@ -36,6 +36,7 @@ class CompressionSystem(Assembly):
 
     nozzle_Fl_O = FlowStation(iotype="out", desc="flow exiting the nozzle", copy=None)
     bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
+    rho_air = Float(iotype="out", desc="Density (needed for aero calcs in another component)")
 
     speed_max = Float(iotype="out", desc="maximum velocity of the pod", units="m/s")
     area_c1_in = Float(iotype="out", desc="flow area required for the input to the first compressor", units="cm**2")
@@ -85,6 +86,7 @@ class CompressionSystem(Assembly):
 
         #Inter Component Connections
         self.connect('tube.Fl_O', 'inlet.Fl_I')
+        self.connect('tube.Fl_O.rhot', 'rho_air') #promoted for aero calc
         self.connect('inlet.Fl_O','comp1.Fl_I')
         self.connect('comp1.Fl_O', 'duct1.Fl_I')
         self.connect('duct1.Fl_O', 'split.Fl_I')

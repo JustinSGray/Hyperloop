@@ -64,7 +64,7 @@ class Pod(Assembly):
         self.create_passthrough('battery.energy') 
         self.create_passthrough('aero.drag')  #not currently used, eventually passed to mission
 
-        #Declare Workflow
+        #Declare Solver Workflow
         self.driver.workflow.add(['capsule','tube','inlet','battery','aero'])
 
     def run(self,*args,**kwargs): 

@@ -4,12 +4,12 @@
 # Design Variables
 ###########################################################################################
 #inlet
-despmtr r_fan 77.4
-despmtr r_inlet .62
+despmtr r_fan .718
+despmtr r_inlet .5
 
 despmtr inlet_h1 .1
 
-despmtr inlet_r2 .8
+despmtr inlet_r2 .6
 despmtr inlet_z2 .5
 despmtr inlet_h2 .1
 
@@ -20,8 +20,8 @@ despmtr inlet_scarf_ang 0
 despmtr inlet_scarf_offset 1
 
 #pod & tube
-despmtr r_pod 77.4
-despmtr r_tube 4
+despmtr r_pod .768
+despmtr r_tube 2.43
 
 despmtr utility_length 10 
 
@@ -48,23 +48,6 @@ despmtr n_bearings 6
 despmtr bearing_rotation 20 #angle rotation off vertical for each bearing pad
 
 
-
-
-###########################################################################################
-# Revolved Inlet
-###########################################################################################
-#inlet profile
-#skbeg 0 r_pod inlet_z3 #end of top surface
-#    linseg 0 r_fan inlet_z3 #start of bottom surface
-#    spline 0 inlet_r2-inlet_h2 inlet_z2 
-#    spline 0 r_inlet 0 #end of bottom surface
-#    linseg 0 r_inlet+inlet_h1 0 
-#    spline 0 inlet_r2+inlet_h2 inlet_z2
-#   spline 0 r_pod inlet_z3
-#skend
-#revolve 0 0 0 0 0 1 360 
-#fillet inlet_h1/2
-###########################################################################################
 
 ###########################################################################################
 #Scarfed Inlet
@@ -133,6 +116,7 @@ rotatex inlet_scarf_ang -(r_inlet+inlet_h1)+scarf_offset_1 0
 subtract
 
 
+
 ###########################################################################################
 #Utility Capsule for Batteries
 ###########################################################################################
@@ -145,7 +129,7 @@ set z_pos inlet_z3+1
 set utility_end z_pos+length
 box -width/2 -height/2 0 width height length
 translate 0 0 z_pos
-#fillet .4
+fillet .4
 
 ###########################################################################################
 #Passenger Capsule
@@ -159,7 +143,7 @@ set z_pos utility_end+1
 set passenger_end z_pos+length
 box -width/2 -height/2 0 width height length
 translate 0 0 z_pos
-#fillet .4
+fillet .4
 
 ###########################################################################################
 #Pod Outer Wall

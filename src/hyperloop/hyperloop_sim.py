@@ -79,9 +79,9 @@ if __name__=="__main__":
 
     hl = HyperloopPod()
     hl.Mach_bypass = .95
-    hl.Mach_pod_max = .9
-    hl.compress.W_in = .4 #initial guess
-    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 280 #initial guess
+    hl.Mach_pod_max = .8
+    hl.compress.W_in = .38 #initial guess
+    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 240 #initial guess
     hl.Mach_c1_in = .8
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 #initial guess
     hl.run()
@@ -98,7 +98,8 @@ if __name__=="__main__":
     print "======================"
     print "Performance"
     print "======================"
-    print "radius_inlet_back: ", hl.pod.radius_inlet_outer
+    print "radius_inlet_back_outer: ", hl.pod.radius_inlet_outer
+    print "radius_inlet_back_inner: ", hl.pod.inlet.radius_back_inner
     print "Tube radius: ", hl.pod.radius_tube_outer
     print "Pod W: ", hl.compress.W_in
     print "bearing W: ", hl.compress.W_bearing_in

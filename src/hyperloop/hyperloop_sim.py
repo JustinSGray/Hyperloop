@@ -1,5 +1,5 @@
 from openmdao.main.api import Assembly 
-from openmdao.lib.datatypes.api import Float
+from openmdao.lib.datatypes.api import Float, Int
 from openmdao.lib.drivers.api import BroydenSolver 
 
 from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
@@ -16,9 +16,14 @@ class HyperloopPod(Assembly):
     solar_heating_factor = Float(.7, iotype="in", 
       desc="Fractional amount of solar radiation to consider in tube temperature calculations", 
       low=0, high=1)
-
     tube_length = Float(563270, units = 'm', iotype='in', desc='Length of entire Hyperloop') 
     pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
+    speed_max = Float(iotype="in", desc="maximum velocity of the pod", units="m/s")
+    hub_to_tip = Float(.4, iotype="in", desc="hub to tip ratio for the compressor")
+    inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
+    coef_drag = Float(1, iotype="in", desc="capsule drag coefficient")
+    n_rows = Int(14, iotype="in", desc="number of rows of seats in the pod")
+    length_row = Float(150, iotype="in", units="cm", desc="length of each row of seats")
 
 
 
@@ -44,6 +49,13 @@ class HyperloopPod(Assembly):
         self.connect('Ps_tube', 'flow_limit.Ps_tube')
         self.connect('pod.radius_inlet_back_outer', 'flow_limit.radius_inlet')
         self.connect('Mach_bypass','flow_limit.Mach_bypass')
+        #Hyperloop -> Pod
+        self.connect('Ps_tube', 'pod.Ps_tube')
+        self.connect('hub_to_tip','pod.hub_to_tip')
+        self.connect('inlet_wall_thickness','pod.inlet_wall_thickness')
+        self.connect('coef_drag','pod.coef_drag')
+        self.connect('n_rows','pod.n_rows')
+        self.connect('length_row','pod.length_row')
         #Hyperloop -> TubeWallTemp
         self.connect('solar_heating_factor', 'tube_wall_temp.nn_incidence_factor')
         self.connect('tube_length', 'tube_wall_temp.length_tube')
@@ -56,6 +68,7 @@ class HyperloopPod(Assembly):
         self.connect('compress.area_inlet_in', 'pod.area_inlet_in')
         self.connect('compress.rho_air', 'pod.rho_air')
         self.connect('compress.thrust_nozzle','pod.thrust_nozzle')
+        self.connect('compress.speed_max', 'pod.speed_max')
         #Compress -> TubeWallTemp
         self.connect('compress.nozzle_Fl_O', 'tube_wall_temp.nozzle_air')
         self.connect('compress.bearing_Fl_O', 'tube_wall_temp.bearing_air')

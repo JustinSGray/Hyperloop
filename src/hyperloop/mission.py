@@ -35,8 +35,11 @@ class Mission(Component):
 
     speed_max = Float(308, iotype="in", units="m/s", desc="Maximum travel speed for the pod")
     tube_length = Float(563270, iotype="in", units="m", desc="length of one trip")
+    pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
+    pwr_req = Float(420, iotype="in", units="kW", desc="average power requriment for the mission")
 
     time = Float(iotype="out", units="s", desc="travel time for a pod to make one trip")
+    energy = Float(iotype="out", units="kW*h", desc="total energy storage requirements")
 
 
     def execute(self): 
@@ -46,6 +49,8 @@ class Mission(Component):
 
         avg_speed = self.speed_max*SPEED_FRAC
         self.time = self.tube_length/avg_speed
+
+        self.energy = (self.pwr_req*self.time/3600.)*(1+self.pwr_marg) #convert to hours
 
         print self.itername, self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
         print "  ", self.parent.compress.radius_tube, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)

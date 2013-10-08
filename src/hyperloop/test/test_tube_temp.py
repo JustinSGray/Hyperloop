@@ -13,7 +13,7 @@ class TubeHeatBalance(Assembly):
         tm = self.add('tm', TubeWallTemp())
         #tm.bearing_air.setTotalTP()
         driver = self.add('driver',BroydenSolver())
-        driver.add_parameter('tm.temp_tube_wall',low=0.,high=10000.)
+        driver.add_parameter('tm.temp_boundary',low=0.,high=10000.)
         driver.add_constraint('tm.ss_temp_residual=0')
         driver.workflow.add(['tm'])
 
@@ -30,7 +30,7 @@ class TubeWallTestCase(unittest.TestCase):
         test.tm.diameter_outer_tube = 2.22504#, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
         test.tm.length_tube = 482803.#, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
         test.tm.num_pods = 34.#, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
-        test.tm.temp_tube_wall = 322.361#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+        test.tm.temp_boundary = 322.361#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
         test.tm.temp_outside_ambient = 305.6#, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
 
         test.run()

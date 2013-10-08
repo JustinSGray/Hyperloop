@@ -25,7 +25,7 @@ class TubeWallTemp(Component):
     diameter_outer_tube = Float(2.23, units = 'm', iotype='in', desc='tube outer diameter') #7.3ft
     length_tube = Float(482803, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     num_pods = Float(34, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
-    temp_tube_wall = Float(322.0, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    temp_boundary = Float(322.0, units = 'K', iotype='in', desc='Average Temperature of the tube wall') #
     temp_outside_ambient = Float(305.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
     nozzle_air = FlowStation(iotype="in", desc="air exiting the pod nozzle", copy=None)
     bearing_air = FlowStation(iotype="in", desc="air exiting the air bearings", copy=None)
@@ -69,8 +69,8 @@ class TubeWallTemp(Component):
     def execute(self):
         """Calculate Various Paramters"""
         
-        bearing_q = cu(self.bearing_air.W,'lbm/s','kg/s') * cu(self.bearing_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.bearing_air.Tt,'degR','degK') - self.temp_tube_wall)
-        nozzle_q = cu(self.nozzle_air.W,'lbm/s','kg/s') * cu(self.nozzle_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.nozzle_air.Tt,'degR','degK') - self.temp_tube_wall)
+        bearing_q = cu(self.bearing_air.W,'lbm/s','kg/s') * cu(self.bearing_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.bearing_air.Tt,'degR','degK') - self.temp_boundary)
+        nozzle_q = cu(self.nozzle_air.W,'lbm/s','kg/s') * cu(self.nozzle_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.nozzle_air.Tt,'degR','degK') - self.temp_boundary)
         #Q = mdot * cp * deltaT 
         self.heat_rate_pod = nozzle_q +bearing_q 
         #Total Q = Q * (number of pods)
@@ -94,7 +94,7 @@ class TubeWallTemp(Component):
         #Relationship between buoyancy and viscosity
         #Laminar = Gr < 10^8
         #Turbulent = Gr > 10^9
-        self.Gr = self.GrDelTL3*(self.temp_tube_wall-self.temp_outside_ambient)*(self.diameter_outer_tube**3)
+        self.Gr = self.GrDelTL3*(self.temp_boundary-self.temp_outside_ambient)*(self.diameter_outer_tube**3)
         #Rayleigh Number 
         #Buoyancy driven flow (natural convection)
         self.Ra = self.Pr * self.Gr
@@ -111,7 +111,7 @@ class TubeWallTemp(Component):
         #Convection Area = Surface Area
         self.area_convection = pi * self.length_tube * self.diameter_outer_tube 
         #Determine heat radiated per square meter (Q)
-        self.q_per_area_nat_conv = self.h*(self.temp_tube_wall-self.temp_outside_ambient)
+        self.q_per_area_nat_conv = self.h*(self.temp_boundary-self.temp_outside_ambient)
         #Determine total heat radiated over entire tube (Qtotal)
         self.total_q_nat_conv = self.q_per_area_nat_conv * self.area_convection
         #Determine heat incoming via Sun radiation (Incidence Flux)
@@ -123,7 +123,7 @@ class TubeWallTemp(Component):
         #Radiative area = surface area
         self.area_rad = self.area_convection
         #P/A = SB*emmisitivity*(T^4 - To^4)
-        self.q_rad_per_area = self.sb_constant*self.emissivity_tube*((self.temp_tube_wall**4) - (self.temp_outside_ambient**4))
+        self.q_rad_per_area = self.sb_constant*self.emissivity_tube*((self.temp_boundary**4) - (self.temp_outside_ambient**4))
         #P = A * (P/A)
         self.q_rad_tot = self.area_rad * self.q_rad_per_area
         #------------
@@ -146,7 +146,7 @@ if __name__ == "__main__":
             tm = self.add('tm', TubeWall())
             #tm.bearing_air.setTotalTP()
             driver = self.add('driver',BroydenSolver())
-            driver.add_parameter('tm.temp_tube_wall',low=0.,high=10000.)
+            driver.add_parameter('tm.temp_boundary',low=0.,high=10000.)
             driver.add_constraint('tm.ss_temp_residual=0')
 
             driver.workflow.add(['tm'])
@@ -161,13 +161,13 @@ if __name__ == "__main__":
     test.tm.diameter_outer_tube = 2.22504#, units = 'm', iotype='in', desc='Tube out diameter') #7.3ft
     test.tm.length_tube = 482803.#, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     test.tm.num_pods = 34.#, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
-    test.tm.temp_tube_wall = 340#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
+    test.tm.temp_boundary = 340#, units = 'K', iotype='in', desc='Average Temperature of the tube') #
     test.tm.temp_outside_ambient = 305.6#, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
 
     test.run()
 
     print "-----Completed Tube Heat Flux Model Calculations---"
     print ""
-    print "Equilibrium Wall Temperature: {} K or {} F".format(test.tm.temp_tube_wall, cu(test.tm.temp_tube_wall,'degK','degF'))
+    print "Equilibrium Wall Temperature: {} K or {} F".format(test.tm.temp_boundary, cu(test.tm.temp_boundary,'degK','degF'))
     print "Ambient Temperature:          {} K or {} F".format(test.tm.temp_outside_ambient, cu(test.tm.temp_outside_ambient,'degK','degF'))
     print "Q Out = {} W  ==>  Q In = {} W ==> Error: {}%".format(test.tm.q_total_out,test.tm.q_total_in,((test.tm.q_total_out-test.tm.q_total_in)/test.tm.q_total_out)*100)

@@ -43,7 +43,7 @@ class Pod(Assembly):
         self.connect('radius_tube_inner', 'tube.radius_inner')
         #Pod -> Battery
         self.connect('time_mission','battery.time_mission')
-        self.create_passthrough('battery.pwr_req')
+        self.create_passthrough('battery.energy')
         #Pod -> Aero
         self.connect('rho_air','aero.rho')
 
@@ -59,9 +59,9 @@ class Pod(Assembly):
         #Inlet->Pod
         self.connect('inlet.radius_outer', 'radius_inlet_outer')
         self.connect('inlet.area_bypass', 'area_compressor_bypass')
-        
+        #Capsule -> Pod
         self.create_passthrough('capsule.area_cross_section')
-        self.create_passthrough('battery.energy') 
+        #Capsule -> Aero
         self.create_passthrough('aero.drag')  #not currently used, eventually passed to mission
 
         #Declare Solver Workflow

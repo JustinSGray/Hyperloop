@@ -23,7 +23,7 @@ kwargs = {'author': '',
  'package_dir': {'': 'src'},
  'packages': ['hyperloop'],
  'url': '',
- 'version': '0.1',
+ 'version': '0.5',
  'zip_safe': False}
 
 

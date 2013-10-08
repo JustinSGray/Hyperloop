@@ -53,7 +53,7 @@ Package Metadata
 
 - **name:** hyperloop
 
-- **requires-dist:** openmdao.main
+- **requires-dist:** openmdao.main, openmdao.lib, pycycle
 
 - **requires-python**:: 
 
@@ -62,5 +62,5 @@ Package Metadata
 
 - **static_path:** [ '_static' ]
 
-- **version:** 0.1
+- **version:** 0.5
 

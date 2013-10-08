@@ -44,6 +44,8 @@ class HyperloopPod(Assembly):
         self.connect('Ps_tube', 'flow_limit.Ps_tube')
         self.connect('pod.radius_inlet_back_outer', 'flow_limit.radius_inlet')
         self.connect('Mach_bypass','flow_limit.Mach_bypass')
+        #Hyperloop -> Pod
+        self.connect('Ps_tube', 'pod.Ps_tube')
         #Hyperloop -> TubeWallTemp
         self.connect('solar_heating_factor', 'tube_wall_temp.nn_incidence_factor')
         self.connect('tube_length', 'tube_wall_temp.length_tube')

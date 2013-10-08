@@ -10,13 +10,14 @@ from pycycle.flowstation import AirFlowStation, secant
 
 class TubeLimitFlow(Component): 
     """Finds the limit velocity for a body traveling through a tube"""
+    #Inputs
     radius_tube = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")    
     radius_inlet = Float(73.7, iotype="in", units="cm", desc="radius of the inlet at it's largest point")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
     Mach_pod = Float(1.0, iotype="in", desc="travel Mach of the pod")
     Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
-
+    #Outputs
     limit_speed = Float(iotype="out", desc="pod travel speed where flow choking occurs", units="m/s")
     limit_Mach = Float(iotype="out", desc="pod travel Mach number where flow choking occurs")
     W_excess = Float(iotype="out", desc="excess tube mass flow above the Kantrowitz limit", units="kg/s")

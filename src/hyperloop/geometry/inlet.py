@@ -6,13 +6,13 @@ from openmdao.lib.datatypes.api import Float
 
 class InletGeom(Component): 
     """Calculates the dimentions for the inlet and compressor entrance"""
-
+    #Inputs
     inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
     area_in = Float(iotype="in", units="cm**2", desc="flow area required at the front of the inlet")
     area_out = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")
     hub_to_tip = Float(.4, iotype="in", desc="hub to tip ratio for the compressor")
     area_passenger_capsule = Float(14000, iotype="in", units="cm**2", desc="cross sectional area of the passenger capsule")
-
+    #Outputs
     radius_back_inner = Float(iotype="out", units="cm", desc="inner radius of back of the inlet")
     radius_back_outer = Float(iotype="out", units="cm", desc="outer radius of back of the inlet")
     area_bypass = Float(iotype="out", units="cm**2", desc="available area to move bypass air around the passenger capsule")

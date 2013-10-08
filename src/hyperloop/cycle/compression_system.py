@@ -47,6 +47,7 @@ class CompressionSystem(Assembly):
 
     def configure(self):
 
+        #Add Compressor Cycle Components
         tube = self.add('tube', FlowStartStatic())
         #tube.W = 1.521
         tube.Ps = 0.01436
@@ -99,11 +100,12 @@ class CompressionSystem(Assembly):
         self.connect('W_in', 'tube.W')
         self.connect('W_bearing_in', 'split.W1_des')
 
-        #variable pass_throughs to the assembly boundary
+        #Input variable pass_throughs to the assembly boundary
         self.connect('Mach_pod_max', 'tube.Mach')
         self.connect('Mach_c1_in', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
+        #Output variable pass_throughs to the assembly boundary
         self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
         self.connect('duct2.Fl_O', 'bearing_Fl_O')
         self.connect('inlet.Fl_O.area', 'area_c1_in')

@@ -5,7 +5,7 @@ from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float
 
 
-#speed profile data from hyperloop alpha proposal
+#speed profile data from hyperloop alpha proposal, pg 43
 data = np.array([[0,0],
     [12.5, 300],
     [165, 300],
@@ -32,15 +32,14 @@ SPEED_FRAC = np.trapz(data[:,1], data[:,0])
 class Mission(Component): 
     """Place holder for real mission analysis. Could consider a 
     pseudospectral optimal control approach""" 
-
+    #Inputs
     speed_max = Float(308, iotype="in", units="m/s", desc="Maximum travel speed for the pod")
     tube_length = Float(563270, iotype="in", units="m", desc="length of one trip")
     pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
     pwr_req = Float(420, iotype="in", units="kW", desc="average power requriment for the mission")
-
+    #Outputs
     time = Float(iotype="out", units="s", desc="travel time for a pod to make one trip")
     energy = Float(iotype="out", units="kW*h", desc="total energy storage requirements")
-
 
     def execute(self): 
         """this is a *VERY* course approximation that takes the speed profile given in the 

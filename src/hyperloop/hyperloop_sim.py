@@ -8,6 +8,7 @@ from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
 
 class HyperloopPod(Assembly): 
 
+    #Inputs
     Mach_pod_max = Float(1.0, iotype="in", desc="travel Mach of the pod")
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
@@ -36,7 +37,7 @@ class HyperloopPod(Assembly):
         flow_limit = self.add('flow_limit', TubeLimitFlow())
         tube_wall_temp = self.add('tube_wall_temp', TubeWallTemp())
 
-        #Boundary Inputs
+        #Boundary Input Connections
         #Hyperloop -> Compress
         self.connect('Mach_pod_max', 'compress.Mach_pod_max')
         self.connect('Ps_tube', 'compress.Ps_tube')

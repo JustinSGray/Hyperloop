@@ -16,6 +16,8 @@ class HyperloopPod(Assembly):
       low=0, high=1)
 
     tube_length = Float(563270, units = 'm', iotype='in', desc='Length of entire Hyperloop') 
+    pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
+
 
 
     def configure(self):
@@ -34,6 +36,7 @@ class HyperloopPod(Assembly):
         self.create_passthrough('compress.Mach_c1_in') #Design Variable
         #Hyperloop -> Mission
         self.connect('tube_length', 'mission.tube_length')
+        self.connect('pwr_marg','mission.pwr_marg')
         #Hyperloop -> Flow Limit
         self.connect('Mach_pod_max', 'flow_limit.Mach_pod')
         self.connect('Ps_tube', 'flow_limit.Ps_tube')

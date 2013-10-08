@@ -25,6 +25,22 @@ Ps_tube                   Static pressure of the air in the tube                
 ========================  ====================================================  ========  ===============  ===============  ===============
 
 
+Model Parameters
+=======================
+These values are free for the user to set, but are not intended for the optimizer.
+
+
+========================  ===========================================================  ========  ===============  ===============  ===============
+Variable                  Description                                                  Units     Baseline Value        Min.             Max.
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------  
+pwr_margin                Safety factor applied to the power requirement for the pod                .3                  0                2
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
+solar_heating_factor      Fraction of solar radiation to consider in tube temperature               .7                  0                1
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
+tube_length               Length of the tube                                             m         563270              N/A              N/A
+========================  ===========================================================  ========  ===============  ===============  ===============
+
+
 Constraints and State Variables
 =================================
 
@@ -49,7 +65,7 @@ as a single variable for the purposes of converging the model, but remain distin
 Outputs
 ====================
 
-There are a number of key output values that are of interest for any design. 
+There are a number of output values that are of interest
 
     #. Overall pod radius: pod.radius_inlet_outer
     #. Total mass flow through the compression system: compress.W_in
@@ -58,4 +74,11 @@ There are a number of key output values that are of interest for any design.
     #. Travel time for one trip: mission.time
     #. Maximum speed: compress.speed_max
     #. Equilibrium tube temperature: tube_wall_temp.temp
+
+.. note:: 
+    For a more complete design process, the values of the design variables would be optimized 
+    to minimize a combination of total power consumption and travel time. However, the model does
+    not currently calculate some key values needed to get a useful answer. In particular, the linear 
+    accelerator and vacuum pump power needs to be modeled before a
+    design optimization can be attempted. 
 

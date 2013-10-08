@@ -82,3 +82,8 @@ There are a number of output values that are of interest
     accelerator and vacuum pump power needs to be modeled before a
     design optimization can be attempted. 
 
+It should be noted that you can select designs that are not realistic, particularly with respect
+to `pod.radius_inlet_outer`. There is a strong relationship between `Mach_pod_max` and the `pod.radius_inlet_outer`. 
+If you select a high `Mach_pod_max` (Above .8), you may find that the radius has shrunk below what is physically 
+feasible without significant design changes. 
+

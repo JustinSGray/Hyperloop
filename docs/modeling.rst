@@ -1,5 +1,5 @@
 ==============================
-Subsystem Modeling Summary
+Subsystem Modeling Theory
 ==============================
 
 The following sections some of the engineering behind the models. 
@@ -335,80 +335,7 @@ https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf
 Geometry
 -----------------------------
 
-============================
-Future Modeling RoadMap
-============================
 
-The current model of the hyperloop focuses on some of the primary sub-systems that operate within the pod. 
-However, there is much more analysis that needs to be done to build a complete hyperloop design. Below provides 
-a brief summary of the areas we feel represent the logical next steps for the engineering aspects of the analysis. 
-
-
-
------------------------------
-System Design Optimization
------------------------------
-
-The current baseline appears to be a feasible design, but the design space is large (and will grow with additional 
-models) and needs to be more fully explored. Overall, the goal of the hyperloop design should be to find the right 
-compromise between maximum passenger throughput, minimum travel time, and minimum cost per trip. The following are 
-some major open questions about the hyperloop design space: 
-
-1) What is the relationship between overall energy usage and tube pressure? Would a slightly higher pressure lower 
-the overall energy consumption by reducing vacuum pump effort more than it increases power requirements for the pod? 
-
-2) What is the best combination of pressure ratios for the compression system? Does the bypass air need to be 
-pressurized so highly? 
-
-3) What is the best size for the tube diameter? Larger diameters will increase pump effort, but decrease pod power 
-usage? Could a larger diameter coupled with a slightly higher pressure provide superior performance? 
-
-
------------------------------
-Battery and Motors 
------------------------------
-
-The initial estimates of battery size and weight rely on extremely simple calculations. As noted, the power requirements 
-amount to roughly three batteries from a Tesla Model-S. Much better weight and size estimates for these off-the-shelf 
-batteries need to be integrated. 
-
-
------------------------------
-Air Bearings
------------------------------
-
-The current models assume a fixed mass flow requirement for the air bearing system. A more accurate model would account 
-for the overall weight of the pod, the pressure of the air, and the overall bearing size. A more detailed bearing model 
-should be coupled to the compression system model to ensure a feasible design is achieved. 
-
-
------------------------------
-Vacuum Pumps
------------------------------
-
------------------------------
-Solar Power Generation
------------------------------
-
-One of the proposed features of the hyperloop concept is its near net-zero energy consumption, via the inclusion of solar panels 
-along the length of the tubes. Models are needed to predict, based on geographical location, weather, and time of year, how 
-much power could be produced on an ongoing basis from such a solar panel system.
-
------------------------------
-Pod Structural Design
------------------------------
-
------------------------------
-Component Mass Estimation
------------------------------
-
------------------------------
-Linear Accelerators
------------------------------
-
------------------------------
-Route Optimization
------------------------------
 
 
 

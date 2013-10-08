@@ -7,6 +7,19 @@ Source Documentation
 ====================
 
         
+.. index:: aero.py
+
+.. _hyperloop.aero.py:
+
+aero.py
+-------
+
+.. automodule:: hyperloop.aero
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
 .. index:: api.py
 
 .. _hyperloop.api.py:
@@ -137,14 +150,14 @@ pod.py
    :show-inheritance:
 
         
-.. index:: tube.py
+.. index:: tube_structure.py
 
-.. _hyperloop.geometry.tube.py:
+.. _hyperloop.geometry.tube_structure.py:
 
-tube.py
--------
+tube_structure.py
+-----------------
 
-.. automodule:: hyperloop.geometry.tube
+.. automodule:: hyperloop.geometry.tube_structure
    :members:
    :undoc-members:
    :show-inheritance:

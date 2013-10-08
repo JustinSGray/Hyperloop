@@ -10,6 +10,7 @@ Contents:
    intro
    io
    usage
+   future
    modeling
    srcdocs
    pkgdocs

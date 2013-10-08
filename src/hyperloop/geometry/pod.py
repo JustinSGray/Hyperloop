@@ -47,7 +47,7 @@ class Pod(Assembly):
         self.create_passthrough('battery.energy')
         #Pod -> Aero
         self.connect('rho_air','aero.rho')
-        self.connect('thrust_nozzle','aero.thrust_nozzle')
+        self.connect('thrust_nozzle','aero.gross_thrust')
 
         #Inter Component Connections
         #Capsule -> Inlet
@@ -61,7 +61,7 @@ class Pod(Assembly):
         #Tube->Pod
         self.connect('tube.radius_outer','radius_tube_outer')
         #Inlet->Pod
-        self.connect('inlet.radius_outer', 'radius_inlet_outer')
+        self.connect('inlet.radius_back_outer', 'radius_inlet_outer')
         self.connect('inlet.area_bypass', 'area_compressor_bypass')
         #Capsule -> Pod
         self.create_passthrough('capsule.area_cross_section')

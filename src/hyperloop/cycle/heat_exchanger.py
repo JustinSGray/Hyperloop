@@ -1,16 +1,12 @@
 """
-    preHeatEx.py -  (Run this before heatExchanger2.py)
-        Performs inital energy balance for a basic heat exchanger design
-
-     Originally built by Scott Jones in NPSS, ported and augmented by Jeff Chin   
+Originally built by Scott Jones in NPSS, ported and augmented by Jeff Chin   
 
 NTU (effectiveness) Method
-    Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.
+Determine the heat transfer rate and outlet temperatures when the type and size of the heat exchanger is specified.
 
-    NTU Limitations
-    1) Effectiveness of the chosen heat exchanger must be known (empirical)
+NTU Limitations
+1) Effectiveness of the chosen heat exchanger must be known (empirical)
 
-    Compatible with OpenMDAO v0.8.1
 """
 
 from math import log, pi, sqrt, e

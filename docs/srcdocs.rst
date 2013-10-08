@@ -20,19 +20,6 @@ api.py
    :show-inheritance:
 
         
-.. index:: battery.py
-
-.. _hyperloop.battery.py:
-
-battery.py
-----------
-
-.. automodule:: hyperloop.battery
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-        
 .. index:: compression_system.py
 
 .. _hyperloop.cycle.compression_system.py:
@@ -98,14 +85,14 @@ air_bearing.py
    :show-inheritance:
 
         
-.. index:: fan.py
+.. index:: battery.py
 
-.. _hyperloop.geometry.fan.py:
+.. _hyperloop.geometry.battery.py:
 
-fan.py
-------
+battery.py
+----------
 
-.. automodule:: hyperloop.geometry.fan
+.. automodule:: hyperloop.geometry.battery
    :members:
    :undoc-members:
    :show-inheritance:
@@ -124,6 +111,19 @@ inlet.py
    :show-inheritance:
 
         
+.. index:: passenger_capsule.py
+
+.. _hyperloop.geometry.passenger_capsule.py:
+
+passenger_capsule.py
+--------------------
+
+.. automodule:: hyperloop.geometry.passenger_capsule
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
 .. index:: pod.py
 
 .. _hyperloop.geometry.pod.py:
@@ -132,6 +132,19 @@ pod.py
 ------
 
 .. automodule:: hyperloop.geometry.pod
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
+.. index:: tube.py
+
+.. _hyperloop.geometry.tube.py:
+
+tube.py
+-------
+
+.. automodule:: hyperloop.geometry.tube
    :members:
    :undoc-members:
    :show-inheritance:
@@ -150,14 +163,14 @@ hyperloop_sim.py
    :show-inheritance:
 
         
-.. index:: kantrowitz_limit.py
+.. index:: mission.py
 
-.. _hyperloop.kantrowitz_limit.py:
+.. _hyperloop.mission.py:
 
-kantrowitz_limit.py
--------------------
+mission.py
+----------
 
-.. automodule:: hyperloop.kantrowitz_limit
+.. automodule:: hyperloop.mission
    :members:
    :undoc-members:
    :show-inheritance:
@@ -176,14 +189,27 @@ test_tube_temp.py
    :show-inheritance:
 
         
-.. index:: tube_temp.py
+.. index:: tube_limit_flow.py
 
-.. _hyperloop.tube_temp.py:
+.. _hyperloop.tube_limit_flow.py:
 
-tube_temp.py
-------------
+tube_limit_flow.py
+------------------
 
-.. automodule:: hyperloop.tube_temp
+.. automodule:: hyperloop.tube_limit_flow
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+        
+.. index:: tube_wall_temp.py
+
+.. _hyperloop.tube_wall_temp.py:
+
+tube_wall_temp.py
+-----------------
+
+.. automodule:: hyperloop.tube_wall_temp
    :members:
    :undoc-members:
    :show-inheritance:

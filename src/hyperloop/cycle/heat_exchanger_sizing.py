@@ -1,17 +1,17 @@
 """
-    heat_exchanger_sizing.py -  (This one is for water and air)
-        Performs basic heat exchanger calculations for a multi-tube double pass
-        counter-flow or co-flow shell and tube heat exchanger
+heat_exchanger_sizing.py -  (This one is for water and air)
+    Performs basic heat exchanger calculations for a multi-tube double pass
+    counter-flow or co-flow shell and tube heat exchanger
         
 Logarithmic Mean Temperature Difference (LMTD) Method
-    Design a heat exchanger to meet prescribed heat transfer requirements
+Design a heat exchanger to meet prescribed heat transfer requirements
 
-    LMTD Limitations
-    -Both starting and final temperature parameters must be known
-    -Temperature change across cannot be so large that Cp changes significantly
-    -Rigorously defined for double-pipe(or tubular) heat exchanger
+LMTD Limitations
+  -Both starting and final temperature parameters must be known
+  -Temperature change across cannot be so large that Cp changes significantly
+  -Rigorously defined for double-pipe(or tubular) heat exchanger
 
-    Compatible with OpenMDAO v0.8.1
+Compatible with OpenMDAO v0.8.1
 """
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float, Bool

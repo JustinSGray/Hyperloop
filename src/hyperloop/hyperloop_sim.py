@@ -59,7 +59,7 @@ class HyperloopPod(Assembly):
 
         #Add Solver
         driver = self.add('driver',BroydenSolver())
-        driver.itmax = 20 #max iterations
+        driver.itmax = 50 #max iterations
         driver.tol = .0001
         #Add Parameters and Constraints
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)

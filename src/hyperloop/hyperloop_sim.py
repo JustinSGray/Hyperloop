@@ -9,6 +9,8 @@ from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
 class HyperloopPod(Assembly): 
 
     Mach_pod_max = Float(1.0, iotype="in", desc="travel Mach of the pod")
+    Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
+    Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
     #radius_tube = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa", low=0)     
     solar_heating_factor = Float(.7, iotype="in", 
@@ -33,15 +35,15 @@ class HyperloopPod(Assembly):
         #Hyperloop -> Compress
         self.connect('Mach_pod_max', 'compress.Mach_pod_max')
         self.connect('Ps_tube', 'compress.Ps_tube')
-        self.create_passthrough('compress.Mach_c1_in') #Design Variable
+        self.connect('Mach_c1_in','compress.Mach_c1_in') #Design Variable
         #Hyperloop -> Mission
         self.connect('tube_length', 'mission.tube_length')
         self.connect('pwr_marg','mission.pwr_marg')
         #Hyperloop -> Flow Limit
         self.connect('Mach_pod_max', 'flow_limit.Mach_pod')
         self.connect('Ps_tube', 'flow_limit.Ps_tube')
-        self.connect('pod.radius_inlet_outer', 'flow_limit.radius_inlet')
-        self.create_passthrough('flow_limit.Mach_bypass')
+        self.connect('pod.radius_inlet_back_outer', 'flow_limit.radius_inlet')
+        self.connect('Mach_bypass','flow_limit.Mach_bypass')
         #Hyperloop -> TubeWallTemp
         self.connect('solar_heating_factor', 'tube_wall_temp.nn_incidence_factor')
         self.connect('tube_length', 'tube_wall_temp.length_tube')
@@ -98,7 +100,7 @@ if __name__=="__main__":
     print "======================"
     print "Performance"
     print "======================"
-    print "radius_inlet_back_outer: ", hl.pod.radius_inlet_outer
+    print "radius_inlet_back_outer: ", hl.pod.radius_inlet_back_outer
     print "radius_inlet_back_inner: ", hl.pod.inlet.radius_back_inner
     print "Tube radius: ", hl.pod.radius_tube_outer
     print "Pod W: ", hl.compress.W_in

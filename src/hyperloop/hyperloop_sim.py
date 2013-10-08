@@ -53,6 +53,7 @@ class HyperloopPod(Assembly):
         self.connect('compress.area_c1_in', 'pod.area_inlet_out')
         self.connect('compress.area_inlet_in', 'pod.area_inlet_in')
         self.connect('compress.rho_air', 'pod.rho_air')
+        self.connect('compress.thrust_nozzle','pod.thrust_nozzle')
         #Compress -> TubeWallTemp
         self.connect('compress.nozzle_Fl_O', 'tube_wall_temp.nozzle_air')
         self.connect('compress.bearing_Fl_O', 'tube_wall_temp.bearing_air')

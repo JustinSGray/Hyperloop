@@ -16,13 +16,14 @@ class InletGeom(Component):
     radius_inner = Float(iotype="out", units="cm", desc="inner radius of back of the inlet")
     radius_outer = Float(iotype="out", units="cm", desc="outer radius of back of the inlet")
     area_bypass = Float(iotype="out", units="cm**2", desc="available area to move bypass air around the passenger capsule")
+    area_frontal = Float(iotype="out", units="cm**2", desc="total capsule frontal area")
 
 
     def execute(self): 
         self.radius_inner = (self.area_out/pi/(1-self.hub_to_tip**2))**.5
         self.radius_outer = self.radius_inner+self.inlet_wall_thickness
         self.area_bypass = pi*(self.radius_inner)**2 - self.area_passenger_capsule
-
+        self.area_frontal = pi*(self.radius_outer)**2
 
 if __name__ == "__main__": 
 

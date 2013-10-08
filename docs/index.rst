@@ -11,6 +11,7 @@ Contents:
    io
    usage
    future
+   contribute
    modeling
    srcdocs
    pkgdocs

@@ -18,7 +18,7 @@ are optimized simultaneously with respect to the overall system goals.
 
 An overarching framework is needed to orchestrate the interaction between models of  
 various subsystems and perform the necessary optimization. This code base contains a hyperloop 
-system model built by a handful of NASA engineers and computer scientists as an `OpenMDAO.`__
+system model built by a handful of engineers and computer scientists as an `OpenMDAO.`__
 plugin. The intention is to provide this code as a baseline for further public 
 contribution to support an open source hyperloop design. Interested parties should feel 
 to modify the code as they see fit and improve the models in areas where they have expertise. 

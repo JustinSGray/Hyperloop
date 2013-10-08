@@ -29,7 +29,6 @@ class CompressionSystem(Assembly):
     W_bearing_in = Float(.2, iotype="in", desc="required mass flow rate for the bearing system", units="kg/s")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
-    radius_tube = Float(111.5, iotype="in", desc="radius of the tube", units="cm")
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")
     c2_PR_des = Float(5, iotype="in", desc="pressure ratio of second compressor at design conditions")

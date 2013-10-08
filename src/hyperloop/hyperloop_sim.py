@@ -68,7 +68,7 @@ class HyperloopPod(Assembly):
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
         driver.add_parameter(['compress.Ts_tube','flow_limit.Ts_tube','tube_wall_temp.temp_boundary'], low=-1e-15, high=1e15)
         driver.add_parameter(['compress.radius_tube','flow_limit.radius_tube', 'pod.radius_tube_inner'], low=-1e15, high=1e15)
-        driver.add_constraint('10*(compress.W_in-flow_limit.W_excess) = 0')
+        driver.add_constraint('.01*(compress.W_in-flow_limit.W_excess) = 0')
         driver.add_constraint('tube_wall_temp.ss_temp_residual=0')
         driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
         #Declare Solver Workflow
@@ -77,10 +77,10 @@ class HyperloopPod(Assembly):
 if __name__=="__main__": 
 
     hl = HyperloopPod()
-    hl.Mach_bypass = .9
-    hl.Mach_pod_max = .85
-    hl.compress.W_in = .5 #initial guess
-    hl.compress.radius_tube = hl.flow_limit.radius_tube = 300 #initial guess
+    hl.Mach_bypass = .95
+    hl.Mach_pod_max = .9
+    hl.compress.W_in = .6 #initial guess
+    hl.compress.radius_tube = hl.flow_limit.radius_tube = 280 #initial guess
     hl.Mach_c1_in = .7
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 #initial guess
     hl.run()
@@ -97,7 +97,8 @@ if __name__=="__main__":
     print "======================"
     print "Performance"
     print "======================"
-    print "inlet_radius: ", hl.flow_limit.radius_inlet
+    print "radius_inlet_front: ", hl.radius_inlet
+    print "radius_inlet_back: ", hl.flow_limit.radius_inlet
     print "Pod W: ", hl.compress.W_in
     print "bearing W: ", hl.compress.W_bearing_in
     print "pwr: ", hl.compress.pwr_req

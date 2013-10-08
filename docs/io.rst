@@ -50,7 +50,7 @@ couplings enforce a set of equality constraints that must be satisfied for any v
 design. For constraints 1 and 3, a multiplier has been applied to the constraint to scale it for 
 improved numerical convergence. 
      
-    #. 10*(compress.W\_in - flow\_limit.W_excess) = 0
+    #. 0.01*(compress.W\_in - flow\_limit.W_excess) = 0
     #. tube\_wall\_temp.ss\_temp\_residual = 0  
     #. 0.01*(pod.area\_compressor\_bypass - compress.area\_c1\_out) = 0
 

@@ -4,7 +4,7 @@
 # Design Variables
 ###########################################################################################
 #inlet
-despmtr r_fan .736
+despmtr r_fan .77.4
 despmtr r_inlet .62
 
 despmtr inlet_h1 .1
@@ -133,11 +133,8 @@ rotatex inlet_scarf_ang -(r_inlet+inlet_h1)+scarf_offset_1 0
 subtract
 
 
-
-end 
-
 ###########################################################################################
-#Utility Capsule for Batteries and Steam
+#Utility Capsule for Batteries
 ###########################################################################################
 
 #utilitiy container
@@ -264,6 +261,23 @@ patbeg i n_bearings
 
     translate 0 0 inlet_z3+(i-1)*(bearing_length+bearing_spacing)
 patend
+
+###########################################################################################
+# Tube
+###########################################################################################
+set r_tube_outer 1.02*r_tube
+skbeg 0 r_tube 0
+    cirarc -r_tube 0 0  0 -r_tube 0
+    cirarc r_tube 0 0  0 r_tube 0
+    cirarc -r_tube_outer 0 0  0 -r_tube_outer 0
+    cirarc r_tube_outer 0 0  0 r_tube_outer 0
+skend
+
+set length pod_length+inlet_z3+nozzle_z2
+translate 0 r_tube-r_top-bearing_height -.1*length
+
+
+extrude 0 0 length*1.2
 
 end 
 

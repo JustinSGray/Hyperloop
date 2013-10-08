@@ -20,7 +20,7 @@ class Pod(Assembly):
     area_inlet_out = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")
     time_mission = Float(iotype="in", units="s", desc="travel time for a single trip")
     radius_tube_inner = Float(iotype="in", units="cm", desc="inner tube radius")
-    rho_air = Float(iotype="in", units="cm", desc="air density (aero calcs)")
+    rho_air = Float(iotype="in", units="kg/m**3", desc="air density (aero calcs)")
 
     radius_inlet_outer = Float(iotype="out", units="cm", desc="outer radius of the inlet")
     area_compressor_bypass = Float(iotype="out", units="cm**2", desc="area available to move compressed air around the passenger capsule")
@@ -45,7 +45,7 @@ class Pod(Assembly):
         self.connect('time_mission','battery.time_mission')
         self.create_passthrough('battery.pwr_req')
         #Pod -> Aero
-        self.connect('rho_air','aero.rho_air')
+        self.connect('rho_air','aero.rho')
 
         #Inter Component Connections
         #Capsule -> Inlet

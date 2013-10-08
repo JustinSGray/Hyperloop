@@ -91,7 +91,6 @@ if __name__=="__main__":
     print "Performance"
     print "======================"
     print "inlet_radius: ", hl.flow_limit.radius_inlet
-    print "area_compressor_bypass: ", hl.pod.area_compressor_bypass 
     print "Pod W: ", hl.compress.W_in
     print "bearing W: ", hl.compress.W_bearing_in
     print "pwr: ", hl.compress.pwr_req

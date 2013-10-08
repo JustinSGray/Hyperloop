@@ -7,11 +7,11 @@ anl = 'Analysis'
 
 x = XDSM()
 #x.addComp('driver', mda, 'Solver')
-x.addComp('compress', anl, 'Compression System')
-x.addComp('mission', anl, 'Mission Analysis')
-x.addComp('pod', anl, 'Pod Geometry')
-x.addComp('flow_limit', anl, 'Tube Flow Limit')
-x.addComp('tube_wall_temp', anl, 'Tube Wall Temp')
+x.addComp('compress', anl, 'compress')
+x.addComp('mission', anl, 'mission')
+x.addComp('pod', anl, 'pod')
+x.addComp('flow_limit', anl, 'flow\_limit')
+x.addComp('tube_wall_temp', anl, 'tube\_wall\_temp')
 
 x.addDep('mission', 'compress', dat, '', stack=True)
 x.addDep('pod', 'compress', dat, '', stack=True)

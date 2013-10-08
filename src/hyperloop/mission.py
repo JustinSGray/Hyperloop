@@ -53,7 +53,7 @@ class Mission(Component):
         self.energy = (self.pwr_req*self.time/3600.)*(1+self.pwr_marg) #convert to hours
 
         print self.itername, self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
-        print "  ", self.parent.compress.radius_tube, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
+        print "  ", self.parent.pod.radius_tube_inner, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
 
 
 if __name__ == "__main__": 

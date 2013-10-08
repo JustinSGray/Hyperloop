@@ -60,7 +60,7 @@ as a single variable for the purposes of converging the model, but remain distin
 
     #. compress.W\_in
     #. (compress.Ts_tube,flow_limit.Ts_tube,tube_wall_temp.temp_tube_wall)
-    #. (compress.radius_tube, flow_limit.radius_tube, pod.radius_tube_inner)
+    #. (flow_limit.radius_tube, pod.radius_tube_inner)
 
 Outputs
 ====================

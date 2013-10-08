@@ -42,6 +42,7 @@ class HyperloopPod(Assembly):
         #self.connect('radius_tube', 'flow_limit.radius_tube')
         self.connect('Ps_tube', 'flow_limit.Ps_tube')
         self.connect('pod.radius_inlet_outer', 'flow_limit.radius_inlet')
+        self.connect('flow_limit.rho_air','pod.rho_air')
         self.create_passthrough('flow_limit.Mach_bypass')
 
         tube_wall_temp = self.add('tube_wall_temp', TubeWallTemp())

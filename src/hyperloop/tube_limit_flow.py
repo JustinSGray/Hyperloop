@@ -22,10 +22,12 @@ class TubeLimitFlow(Component):
     W_excess = Float(iotype="out", desc="excess tube mass flow above the Kantrowitz limit", units="kg/s")
     W_tube = Float(iotype="out", desc="Tube demand flow", units="kg/s")
     W_kant = Float(iotype="out", desc="Kantrowitz limit flow", units="kg/s")
+    rho_air = Float(iotype="out", desc="Density (needed for aero calcs in another component)")
 
     def execute(self):
 
     	fs_tube = self.fs_tube = AirFlowStation()
+        self.rho_air = fs_tube.rhot
 
         tube_rad = self.radius_tube*0.0328084 #convert to ft
         inlet_rad = self.radius_inlet*0.0328084

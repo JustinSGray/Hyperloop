@@ -40,7 +40,7 @@ class HyperloopPod(Assembly):
         #Hyperloop -> Flow Limit
         self.connect('Mach_pod_max', 'flow_limit.Mach_pod')
         self.connect('Ps_tube', 'flow_limit.Ps_tube')
-        self.connect('pod.radius_inlet_outer', 'flow_limit.radius_inlet')
+        self.connect('pod.radius_inlet_back_outer', 'flow_limit.radius_inlet')
         self.create_passthrough('flow_limit.Mach_bypass')
         #Hyperloop -> TubeWallTemp
         self.connect('solar_heating_factor', 'tube_wall_temp.nn_incidence_factor')
@@ -98,7 +98,7 @@ if __name__=="__main__":
     print "======================"
     print "Performance"
     print "======================"
-    print "radius_inlet_back: ", hl.pod.radius_inlet_outer
+    print "radius_inlet_back: ", hl.pod.radius_inlet_back_outer
     print "Tube radius: ", hl.pod.radius_tube_outer
     print "Pod W: ", hl.compress.W_in
     print "bearing W: ", hl.compress.W_bearing_in

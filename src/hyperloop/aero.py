@@ -9,7 +9,7 @@ class Aero(Component):
     area_capsule = Float(18000, iotype="in", units="cm**2", desc="capsule frontal area")
     velocity_capsule = Float(600, iotype="in", units="m/s", desc="capsule frontal area")
     rho = Float(iotype="in", units="kg/m**3", desc="tube air density") 
-    gross_thrust = Float(iotype="in", units="N", desc="tube air density") #connect from kant
+    gross_thrust = Float(iotype="in", units="N", desc="nozzle gross thrust") 
     
     net_force = Float(iotype="out", desc="Net force with drag considerations", units="N")
     drag = Float(iotype="out", units="N", desc="Drag Force")

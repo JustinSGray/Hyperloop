@@ -1,6 +1,6 @@
 
-Hyperloop Model
-=======================
+# Hyperloop Model
+
 
 This is an open-source system model of the Hyperloop transportation 
 system outlined in Elon Musk’s proposal. It's primary 
@@ -22,31 +22,59 @@ OpenMDAO includes a plugin system, which we used to build this model. The entire
 and distributed as an OpenMDAO plugin, To further improve the ability for others to expand and improve on this work. 
 
 
-Installation
-====================
+## Pre-Reqs
 
+
+### OpenMDAO
 There are two ways to use this plugin, but both assume you have already installed OpenMDAO. 
 If you need to install OpenMDAO follow the [install instructions](http://openmdao.org/docs/getting-started/index.html). 
-Then, make sure you have activated your openmdao environemnt. Now follow one of the two methods below: 
 
-Working with the source code
-----------------------------
-Using this method will be the best option if you want to hack on the hyperloop concept to make changes.
+If you're using a Mac, then you're best bet for installing all the pre-requisites is to use 
+homebrew. You can follow these [detailed instructions](http://www.lowindata.com/2013/installing-scientific-python-on-mac-os-x/)
+but once you have homebrew installed and setup, here is the short version: 
 
-1. clone this repository to your local machine (or clone your own fork of this repository) 
-2. navigate into the top level of the repository (you will see a setup.py file there)
-3. Issue the following command
-    
+```
+brew install git
+brew install python
+brew install gfortran
+pip install numpy
+pip install scipy
+brew install freetype
+pip install matplotlib
+```
+
+### PyCycle
+The hyperloop model depends on another plugin, [PyCycle](https://github.com/OpenMDAO-Plugins/pyCycle).
+You should follow the installation instruction for that plugin first.  
+
+
+## Installation
+Then, make sure you have activated your OpenMDAO environemnt. Now you should clone this repository to your 
+local machine. Alternately, you can fork this repo and then clone your fork. Either way. 
+
+    git clone https://github.com/OpenMDAO-Plugins/Hyperloop.git
+
+Next navigate to the top level of the repo and issue the following command 
+
     python setup.py develop
 
+This will install plugin and let you make modifications as you like. 
 
-Installing without source
---------------------------
-This is the best option if you just want to try out the hyperloop model, as is, and 
-try out performance with different inputs to the model. You'll be able to change any of the 
-design variable values that we have defined. 
+## Please Read The Docs
 
-    plugin install --github Hyperloop
+    plugin docs hyperloop
+
+The docs give a lot of background on the model, and explain the thinking that went into its 
+structure. They also give some usage examples. 
+
+### Quickstart
+If you just can't want to get started, then here you go: 
+
+    cd src/hyperloop
+    python hyperloop_sim.py
+
+
+
 
 
 

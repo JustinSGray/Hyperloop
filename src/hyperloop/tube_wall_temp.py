@@ -116,9 +116,9 @@ class TubeWallTemp(Component):
         self.total_q_nat_conv = self.q_per_area_nat_conv * self.area_convection
         #Determine heat incoming via Sun radiation (Incidence Flux)
         #Sun hits an effective rectangular cross section
-        self.ViewingArea = self.length_tube* self.diameter_outer_tube
+        self.area_viewing = self.length_tube* self.diameter_outer_tube
         self.q_per_area_solar = (1-self.surface_reflectance)* self.nn_incidence_factor * self.solar_insolation
-        self.q_total_solar = self.q_per_area_solar * self.ViewingArea
+        self.q_total_solar = self.q_per_area_solar * self.area_viewing
         #Determine heat released via radiation
         #Radiative area = surface area
         self.area_rad = self.area_convection

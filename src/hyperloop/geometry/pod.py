@@ -9,7 +9,8 @@ from openmdao.lib.datatypes.api import Float
 from inlet import InletGeom 
 from battery import Battery
 from passenger_capsule import PassengerCapsule
-from tube import TubeStructural
+from tube_structure import TubeStructural
+from aero import Aero
 
 
 #overall geometry assembly
@@ -19,6 +20,7 @@ class Pod(Assembly):
     area_inlet_out = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")
     time_mission = Float(iotype="in", units="s", desc="travel time for a single trip")
     radius_tube_inner = Float(iotype="in", units="cm", desc="inner tube radius")
+    rho_air = Float(iotype="in", units="kg/m**3", desc="air density (aero calcs)")
 
     radius_inlet_outer = Float(iotype="out", units="cm", desc="outer radius of the inlet")
     area_compressor_bypass = Float(iotype="out", units="cm**2", desc="area available to move compressed air around the passenger capsule")
@@ -31,12 +33,7 @@ class Pod(Assembly):
         tube = self.add('tube', TubeStructural())
         inlet = self.add('inlet', InletGeom())
         battery = self.add('battery', Battery())
-        #Declare Workflow
-        self.driver.workflow.add(['capsule','tube','inlet','battery'])
-        #Create Passthroughs
-        self.create_passthrough('capsule.area_cross_section')
-        self.create_passthrough('battery.pwr_req')
-        self.create_passthrough('battery.energy')
+        aero = self.add('aero',Aero())
         
         #Boundary Inputs
         #Pod->Inlet
@@ -46,8 +43,11 @@ class Pod(Assembly):
         self.connect('radius_tube_inner', 'tube.radius_inner')
         #Pod -> Battery
         self.connect('time_mission','battery.time_mission')
+        self.create_passthrough('battery.pwr_req')
+        #Pod -> Aero
+        self.connect('rho_air','aero.rho')
 
-        #Inner Component Connections
+        #Inter Component Connections
         #Capsule -> Inlet
         self.connect('capsule.area_cross_section','inlet.area_passenger_capsule')
         #Capsule -> Battery
@@ -59,7 +59,13 @@ class Pod(Assembly):
         #Inlet->Pod
         self.connect('inlet.radius_outer', 'radius_inlet_outer')
         self.connect('inlet.area_bypass', 'area_compressor_bypass')
+        
+        self.create_passthrough('capsule.area_cross_section')
+        self.create_passthrough('battery.energy') 
+        self.create_passthrough('aero.drag')  #not currently used, eventually passed to mission
 
+        #Declare Solver Workflow
+        self.driver.workflow.add(['capsule','tube','inlet','battery','aero'])
 
     def run(self,*args,**kwargs): 
         super(Assembly, self).run(*args,**kwargs)

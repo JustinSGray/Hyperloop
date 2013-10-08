@@ -15,7 +15,7 @@ from aero import Aero
 
 #overall geometry assembly
 class Pod(Assembly): 
-
+    #Inputs
     area_inlet_in = Float(iotype="in", units="cm**2", desc="flow area required at the front of the inlet")
     area_inlet_out = Float(iotype="in", units="cm**2", desc="flow area required at the back of the inlet")
     time_mission = Float(iotype="in", units="s", desc="travel time for a single trip")
@@ -30,7 +30,7 @@ class Pod(Assembly):
     coef_drag = Float(1, iotype="in", desc="capsule drag coefficient")
     n_rows = Int(14, iotype="in", desc="number of rows of seats in the pod")
     length_row = Float(150, iotype="in", units="cm", desc="length of each row of seats")
-
+    #Outputs
     radius_inlet_back_outer = Float(iotype="out", units="cm", desc="outer radius of the back of the inlet")
     area_compressor_bypass = Float(iotype="out", units="cm**2", desc="area available to move compressed air around the passenger capsule")
     area_cross_section = Float(iotype="out", units="cm**2", desc="cross sectional area of the passenger capsule")
@@ -46,7 +46,7 @@ class Pod(Assembly):
         battery = self.add('battery', Battery())
         aero = self.add('aero', Aero())
         
-        #Boundary Inputs
+        #Boundary Input Connections
         #Pod -> Capsule
         self.connect('n_rows','capsule.n_rows')
         self.connect('length_row','capsule.length_row')
@@ -76,7 +76,7 @@ class Pod(Assembly):
         #Inlet -> Aero
         self.connect('inlet.area_frontal','aero.area_capsule')
 
-        #Boundary Outputs
+        #Boundary Output Connections
         #Capsule -> Pod
         self.connect('capsule.area_cross_section','area_cross_section')
         #Tube->Pod

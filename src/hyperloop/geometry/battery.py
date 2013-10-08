@@ -5,11 +5,11 @@ from openmdao.lib.datatypes.api import Float
 #NOTE: This is a VERY oversimplified calculation! But it gets us a ballpark figure
 class Battery(Component): 
 
-    #energy = Float(160, iotype="in", units="kW*h", desc="total energy requirement for mission")
+    #Inputs
     time_mission = Float(2100, iotype="in", units="s", desc="pod travel time")
     area_cross_section = Float(1.3, iotype="in", units="m**2", desc="available cross section for battery pack")
     energy = Float(iotype="in", units="kW*h", desc="total energy storage requirements")
-    
+    #Outputs
     mass = Float(iotype="out", units="kg", desc="total mass of the batteries")
     volume = Float(iotype="out", units="m**3", desc="total volume of the batteries")
     length = Float(iotype="out", units="m", desc="required length of battery pack")

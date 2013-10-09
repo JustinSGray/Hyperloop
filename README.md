@@ -1,4 +1,3 @@
-
 # Hyperloop Model
 
 
@@ -30,7 +29,7 @@ This is an [OpenMDAO Plugin](http://openmdao.org/) so you need to install OpenMD
 
 If you need to install OpenMDAO follow the [install instructions](http://openmdao.org/docs/getting-started/index.html). 
 
-If you're using a Mac, then you're best bet for installing all the pre-requisites is to use 
+If you're using a Mac, then your best bet for installing all the pre-requisites is to use 
 homebrew. You can follow these [detailed instructions](http://www.lowindata.com/2013/installing-scientific-python-on-mac-os-x/)
 but once you have homebrew installed and setup, here is the short version: 
 

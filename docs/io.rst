@@ -21,7 +21,13 @@ The compression system and pod geometry sub-systems are further broken down into
 
 .. figure:: images/pod_assembly_xdsm.png
    :align: center
-   :alt: Pod assembly XDSM chart
+   :alt: Pod assembly XDSM diagram
+
+   The expanded layout of the pod sub-assembly.
+
+.. figure:: images/compress_assembly_xdsm.png
+   :align: center
+   :alt: Compress assembly XDSM diagram
 
    The expanded layout of the pod sub-assembly.
 

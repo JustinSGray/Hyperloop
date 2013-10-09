@@ -22,7 +22,7 @@ An overarching framework is needed to orchestrate the interaction between models
 various subsystems and perform the necessary optimization. This code base contains a hyperloop 
 system model built by a handful of engineers and computer scientists as an `OpenMDAO.`__
 plugin. The intention is to provide this code as a baseline for further public 
-contribution to support an open source hyperloop design. Interested parties should feel 
+contribution to support an open source hyperloop design. Interested parties should feel free
 to modify the code as they see fit and improve the models in areas where they have expertise. 
 
 .. __: http://openmdao.org/
@@ -32,7 +32,7 @@ The model is broken down into 5 major sub-systems:
     #. **Compression System (compress)**: Performance and power consumption of the compressors
     #. **Mission Analysis (mission)**: Estimate of travel time 
     #. **Pod Geometry (pod)**: Physical Dimensions and calculations that depend on them
-    #. **Tube Flow Limitations (flow_limit)**: Tube flow limitations based on choked flow restrictions
+    #. **Tube Flow Limitations (flow_limit)**: Pod speed limitations based on choked flow restrictions between the pod and the tube
     #. **Tube Wall Temperature (tube_wall_temp)**: Equilibrium temperature of the tube wall
 
 .. figure:: images/hyperloop_assembly_xdsm.png
@@ -40,21 +40,3 @@ The model is broken down into 5 major sub-systems:
    :alt: Hyperloop assembly connections
 
    The overall layout of the hyperloop assembly and the connections between the components. 
-
-.. figure:: images/inlet.png
-   :align: center
-   :alt: hyperloop re-designed inlet
-
-   Redesign of the inlet using OpenCSM, a parametric solid modeler.
-
-.. figure:: images/nozzle.png
-   :align: center
-   :alt: hyperloop re-designed nozzle
-
-   Redesign of the nozzle. (back of the capsule)
-
-.. figure:: images/full_tube.png
-   :align: center
-   :alt: hyperloop re-designed tube and capsule
-
-   Relational size between the capsule and tube for a designed capsule speed of Mach 0.8 and bypass air speed of Mach 0.95

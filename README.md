@@ -73,8 +73,9 @@ Then, from anywhere in an activated environment you can open the docs with the f
     plugin docs hyperloop
 
 The docs give a lot of background on the model, and explain the thinking that went into its 
-structure. They also give some usage examples. If you plan to make any of your own contributions
-to this code base, you should read the plugin and [developer docs](http://openmdao.org/docs/dev-guide/index.html) first!
+structure. They also give some usage examples. If you plan to make any of your own contributions 
+to this work, you might find the information in the [OpenMDAO developer docs](http://openmdao.org/docs/dev-guide/index.html) 
+useful. 
 
 ### Quickstart
 If you just can't want to get started, the simulation can be run straight out of the box with:

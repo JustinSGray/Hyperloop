@@ -12,7 +12,6 @@ class HyperloopPod(Assembly):
     Mach_pod_max = Float(1.0, iotype="in", desc="travel Mach of the pod")
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
-    #radius_tube = Float(111.5 , iotype="in", units="cm", desc="required radius for the tube")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa", low=0)     
     solar_heating_factor = Float(.7, iotype="in", 
       desc="Fractional amount of solar radiation to consider in tube temperature calculations", 
@@ -68,7 +67,7 @@ class HyperloopPod(Assembly):
         self.connect('compress.area_c1_in', 'pod.area_inlet_out')
         self.connect('compress.area_inlet_in', 'pod.area_inlet_in')
         self.connect('compress.rho_air', 'pod.rho_air')
-        self.connect('compress.thrust_nozzle','pod.thrust_nozzle')
+        self.connect('compress.F_net','pod.F_net')
         self.connect('compress.speed_max', 'pod.speed_max')
         #Compress -> TubeWallTemp
         self.connect('compress.nozzle_Fl_O', 'tube_wall_temp.nozzle_air')
@@ -80,14 +79,21 @@ class HyperloopPod(Assembly):
         #Add Solver
         driver = self.add('driver',BroydenSolver())
         driver.itmax = 50 #max iterations
-        driver.tol = .0001
+        driver.tol = .001
         #Add Parameters and Constraints
         driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
+        driver.add_parameter('compress.c2_PR_des', low=-1e15, high=1e15)
         driver.add_parameter(['compress.Ts_tube','flow_limit.Ts_tube','tube_wall_temp.temp_boundary'], low=-1e-15, high=1e15)
         driver.add_parameter(['flow_limit.radius_tube', 'pod.radius_tube_inner'], low=-1e15, high=1e15)
+
         driver.add_constraint('.01*(compress.W_in-flow_limit.W_excess) = 0')
+        driver.add_constraint('compress.Ps_bearing_residual=0')
         driver.add_constraint('tube_wall_temp.ss_temp_residual=0')
         driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
+
+
+
+
         #Declare Solver Workflow
         driver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
 
@@ -97,7 +103,7 @@ if __name__=="__main__":
     hl.Mach_bypass = .95
     hl.Mach_pod_max = .8
     hl.compress.W_in = .38 #initial guess
-    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 240 #initial guess
+    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 209 #initial guess
     hl.Mach_c1_in = .8
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 #initial guess
     hl.run()
@@ -108,7 +114,6 @@ if __name__=="__main__":
     print "======================"
     print "Mach bypass: ", hl.Mach_bypass
     print "Max Travel Mach: ", hl.Mach_pod_max
-    print "Tube Inner Radius: ", hl.flow_limit.radius_tube
     print "Fan Face Mach: ", hl.Mach_c1_in
 
     print "======================"
@@ -116,9 +121,11 @@ if __name__=="__main__":
     print "======================"
     print "radius_inlet_back_outer: ", hl.pod.radius_inlet_back_outer
     print "radius_inlet_back_inner: ", hl.pod.inlet.radius_back_inner
-    print "Tube radius: ", hl.pod.radius_tube_outer
+    print "Tube Inner Radius: ", hl.flow_limit.radius_tube
     print "Pod W: ", hl.compress.W_in
-    print "bearing W: ", hl.compress.W_bearing_in
+    print "bearing Ps: ", hl.compress.duct2.Fl_O.Ps*6894.75729
+    print "Pod Net Force: ", hl.pod.net_force
+    print "Pod Thrust: ", hl.compress.F_net 
     print "pwr: ", hl.compress.pwr_req
     print "energy: ", hl.pod.energy
     print "travel time: ", hl.mission.time/60

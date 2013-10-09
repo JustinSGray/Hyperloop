@@ -6,7 +6,7 @@ This is an open-source system model of the Hyperloop transportation
 system outlined in Elon Musk’s proposal. It's primary 
 purpose is to provide a completely open-source multidisciplinary model 
 as a central point for continued crowd-sourced refinement of the concept. 
-The current model focusses mainly on the compression system: inlet compressors, 
+The current model focuses mainly on the compression system: inlet compressors, 
 heat exchangers, ducting, and nozzle. The entire model is a work in progress 
 and was built with the hope that external participation can help both 
 refine our estimates and expand the model to include other important 
@@ -24,9 +24,10 @@ and distributed as an OpenMDAO plugin, To further improve the ability for others
 
 ## Pre-Reqs
 
+This is an [OpenMDAO Plugin](http://openmdao.org/) so you need to install OpenMDAO, PyCycle and all of their dependencies to use it.
 
 ### OpenMDAO
-This is an OpenMDAO Plugin, so you need to install OpenMDAO to use it. 
+
 If you need to install OpenMDAO follow the [install instructions](http://openmdao.org/docs/getting-started/index.html). 
 
 If you're using a Mac, then you're best bet for installing all the pre-requisites is to use 
@@ -44,8 +45,8 @@ pip install matplotlib
 ```
 
 ### PyCycle
-The hyperloop model depends on another plugin, [PyCycle](https://github.com/OpenMDAO-Plugins/pyCycle).
-You should follow the installation instruction for that plugin first.  
+The hyperloop model depends on another plugin, [PyCycle](https://github.com/OpenMDAO-Plugins/pyCycle) a thermodynamic cycle modeling tool.
+You should follow the installation instruction for that plugin before moving on.  
 
 
 ## Installation
@@ -62,14 +63,16 @@ This will install plugin and let you make modifications as you like.
 
 ## Please Read The Docs
 
+From anywhere inside your local hyperloo repo, enter:
+
     plugin docs hyperloop
 
 The docs give a lot of background on the model, and explain the thinking that went into its 
 structure. They also give some usage examples. If you plan to make any of your own contributions
-to this code base, you should read the docs first! 
+to this code base, you should read the plugin and [developer docs](http://openmdao.org/docs/dev-guide/index.html) first!
 
 ### Quickstart
-If you just can't want to get started, then here you go: 
+If you just can't want to get started, the simulation can be run straight out of the box with:
 
     cd src/hyperloop
     python hyperloop_sim.py

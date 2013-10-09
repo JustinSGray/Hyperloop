@@ -9,10 +9,22 @@ source the development of the hyperloop concept. The `github wiki`__.
 
 walks through basic installation steps, further support can be found through the main `OpenMDAO docs`__.
 
-.. __: http://openmdao.org/
+.. __: http://openmdao.org/docs/
 
 We've tried our best to follow a small set of
 conventions that help keep the code neat and fairly organized. 
 
 Variable Naming
 ---------------------
+
+Variables should be lower case and connected with underscores. 
+
+    like_this
+
+Inputs should have default values and both inputs and outputs should be given descriptions, units, and iotypes whenever possible.
+
+Classes capatilize the first letter of each word with no spaces.
+
+    LikeThis
+
+Assemblies should make explicit connections, first connecting boundary inputs, followed by inter-component connections, then boundary outputs.

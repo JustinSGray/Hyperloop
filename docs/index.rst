@@ -26,6 +26,10 @@ The original hyperloop proposal can be found here: `Hyperloop-Alpha`__.
 .. __: http://www.spacex.com/hyperloop
 
 
+.. figure:: images/hyperloop4.png
+   :align: center
+   :alt: hyperloop re-designed inlet
+
 .. figure:: images/hyperloop.png
    :align: center
    :alt: hyperloop re-designed inlet

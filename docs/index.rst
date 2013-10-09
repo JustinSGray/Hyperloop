@@ -17,7 +17,7 @@ with each other and an effective hyperloop system will need to balance multiple 
    :width: 800 px
    :alt: hyperloop re-designed inlet
 
-   Baseline hyperloop geometry with capsule speed of Mach 0.8
+   Calculated baseline hyperloop dimensions for a capsule speed of Mach 0.8, rendered in OpenCSM a parametric solid modeler.
 
 
 We propose the design of the hyperloop should be taken from a systems perspective with 
@@ -42,7 +42,7 @@ Contents
    :maxdepth: 2
     
    io
-   usage
+   baseline
    future
    contribute
    modeling

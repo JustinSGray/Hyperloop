@@ -28,8 +28,7 @@ class Performance(CycleComponent):
 
         self.pwr = self.C1_pwr + self.C2_pwr
         self.F_net = self.Fg - self.F_ram
-        print "check: ", self.Fg, self.F_ram
-        self.Ps_bearing_residual = .0001*(self.Ps_bearing - self.Ps_bearing_target)
+        self.Ps_bearing_residual = .001*(self.Ps_bearing - self.Ps_bearing_target)
 
 
 class CompressionSystem(Assembly): 

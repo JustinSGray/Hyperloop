@@ -123,12 +123,20 @@ as part of the mission analysis work.
 Route Optimization
 -----------------------------
 
-The current mission analysis takes the velocity profile given in the original proposal as a
-given. This is not sufficient, and a more advanced analysis needs to be constructed which 
-accounts for actual route constraints and can derive an optimal route and speed profile for 
+The current mission analysis takes the velocity profile in the original proposal as a
+given. We normalize this profile in both time and velocity, then integrate it. This gives 
+a speed factor of about .8. So for any given maximum velocity, the average velocity would 
+be about 80% of it. 
+
+
+While this simple method provides some basic dependence of travel time on overall speed and 
+tube length it is not really sufficient. A more advanced analysis needs to be constructed which 
+accounts for actual passenger G-load constraints and can derive an optimal route and speed profile for 
 a given design. 
 
 
 .. figure:: images/velocity_profile.png
    :align: center
    :alt: hyperloop velocity profile
+
+   Velocity profile given in the original proposal

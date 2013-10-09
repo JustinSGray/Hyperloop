@@ -64,7 +64,7 @@ class TubeLimitFlow(Component):
         #self.mu_air = self.fs_tube.mu/0.671968975
 
 
-def plot_data(comp):
+def plot_data(comp, c='b'):
     """utility function to make the Kantrowitz Limit Plot""" 
 
 
@@ -81,15 +81,17 @@ def plot_data(comp):
         W_kant.append(comp.W_kant)
         W_tube.append(comp.W_tube)
 
-    p.plot(MN,W_tube, label="Required Tube Flow", lw=5)
-    p.plot(MN,W_kant, label="Kantrowitz Limit",   lw=5)
-    p.legend(loc="best")
+    fig = p.plot(MN,W_tube, '-', label="R=%d Req. Flow"%comp.radius_tube, lw=3, c=c)
+    p.plot(MN,W_kant, '--', label="R=%d Limit Flow"%comp.radius_tube,   lw=3, c=c)
+    #p.legend(loc="best")
     p.xlabel('Pod Mach Number')
-    p.ylabel('Mass Flow Rate (kg/sec)')
-    p.title('Kantrowitz Limit Flow')
-    #p.show()
+    p.ylabel('Flow Rate (kg/sec)')
+    p.title('Tube Limit Flow')
 
-    print np.array(W_tube)- np.array(W_kant)
+    return fig
+
+
+    #print np.array(W_tube)- np.array(W_kant)
 
         
 
@@ -98,10 +100,19 @@ if __name__ == "__main__":
 
     from openmdao.main.api import set_as_top
     comp = set_as_top(TubeLimitFlow())
-    comp.radius_tube = 2000
+    comp.radius_tube = 100
     comp.run()
     #print comp.Mach_pod, comp.W_tube, comp.W_kant, comp.W_excess
     #print comp.MN[-1]
     #print comp.W_tube[-1]
     #print comp.W_kant[-1]
-    plot_data(comp)
+    plot_data(comp,c='b')
+
+    comp.radius_tube = 150
+    plot_data(comp,c='g')
+
+    comp.radius_tube = 200
+    plot_data(comp,c='r')
+
+    p.legend(loc="best")
+    p.show()

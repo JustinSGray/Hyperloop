@@ -1,5 +1,32 @@
 ============================
-Model Inputs and Outputs
+Model Layout
+============================
+
+The model is broken down into 5 major sub-systems: 
+
+    #. **Compression System (compress)**: Performance and power consumption of the compressors
+    #. **Mission Analysis (mission)**: Estimate of travel time 
+    #. **Pod Geometry (pod)**: Physical Dimensions and calculations that depend on them
+    #. **Tube Flow Limitations (flow_limit)**: Pod speed limitations based on choked flow restrictions between the pod and the tube
+    #. **Tube Wall Temperature (tube_wall_temp)**: Equilibrium temperature of the tube wall
+
+.. figure:: images/hyperloop_assembly_xdsm.png
+   :align: center
+   :alt: Hyperloop assembly XDSM chart
+
+   The overall layout of the hyperloop assembly and the connections between the components. 
+
+
+The compression system and pod geometry sub-systems are further broken down into sub assemblies. 
+
+.. figure:: images/pod_assembly_xdsm.png
+   :align: center
+   :alt: Pod assembly XDSM chart
+
+   The expanded layout of the pod sub-assembly.
+
+============================
+Inputs and Outputs
 ============================
 
 .. note:: 

@@ -1,6 +1,8 @@
 from openmdao.main.api import Assembly 
 from openmdao.lib.datatypes.api import Float, Int
-from openmdao.lib.drivers.api import BroydenSolver 
+from openmdao.lib.drivers.api import BroydenSolver
+from openmdao.lib.casehandlers.api import CSVCaseRecorder
+
 
 from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
     Pod, Mission)
@@ -77,59 +79,83 @@ class HyperloopPod(Assembly):
         self.connect('mission.energy', 'pod.energy')
 
         #Add Solver
-        driver = self.add('driver',BroydenSolver())
-        driver.itmax = 50 #max iterations
-        driver.tol = .001
+        solver = self.add('solver',BroydenSolver())
+        solver.itmax = 50 #max iterations
+        solver.tol = .001
         #Add Parameters and Constraints
-        driver.add_parameter('compress.W_in',low=-1e15,high=1e15)
-        driver.add_parameter('compress.c2_PR_des', low=-1e15, high=1e15)
-        driver.add_parameter(['compress.Ts_tube','flow_limit.Ts_tube','tube_wall_temp.temp_boundary'], low=-1e-15, high=1e15)
-        driver.add_parameter(['flow_limit.radius_tube', 'pod.radius_tube_inner'], low=-1e15, high=1e15)
+        solver.add_parameter('compress.W_in',low=-1e15,high=1e15)
+        solver.add_parameter('compress.c2_PR_des', low=-1e15, high=1e15)
+        solver.add_parameter(['compress.Ts_tube','flow_limit.Ts_tube','tube_wall_temp.temp_boundary'], low=-1e-15, high=1e15)
+        solver.add_parameter(['flow_limit.radius_tube', 'pod.radius_tube_inner'], low=-1e15, high=1e15)
 
-        driver.add_constraint('.01*(compress.W_in-flow_limit.W_excess) = 0')
-        driver.add_constraint('compress.Ps_bearing_residual=0')
-        driver.add_constraint('tube_wall_temp.ss_temp_residual=0')
-        driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
+        solver.add_constraint('.01*(compress.W_in-flow_limit.W_excess) = 0')
+        solver.add_constraint('compress.Ps_bearing_residual=0')
+        solver.add_constraint('tube_wall_temp.ss_temp_residual=0')
+        solver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
+
+        driver = self.driver
+        driver.workflow.add('solver')
+        driver.recorders = [CSVCaseRecorder(filename="hyperloop_data.csv")] #record only converged
+        driver.printvars = ['Mach_bypass', 'Mach_pod_max', 'Mach_c1_in', 'c1_PR_des', 'pod.radius_inlet_back_outer',
+                            'pod.inlet.radius_back_inner', 'flow_limit.radius_tube', 'compress.W_in', 'compress.c2_PR_des',
+                            'pod.net_force', 'compress.F_net', 'compress.pwr_req', 'pod.energy', 'mission.time',
+                            'compress.speed_max', 'tube_wall_temp.temp_boundary']
 
         #Declare Solver Workflow
-        driver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
+        solver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
 
 if __name__=="__main__": 
+    from collections import OrderedDict
 
     hl = HyperloopPod()
     #design variables
     hl.Mach_bypass = .95
-    hl.Mach_pod_max = .8
-    hl.Mach_c1_in = .8
-    hl.c1_PR_des = 12.5
+    hl.Mach_pod_max = .7
+    hl.Mach_c1_in = .65
+    hl.c1_PR_des = 13
 
-    hl.compress.W_in = .38 #initial guess
-    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 209 #initial guess
-    hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 #initial guess
+    #initial guesses
+    hl.compress.W_in = .46 
+    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 324 
+    hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 
+    hl.compress.c2_PR_des = 5 
     
     hl.run()
+
+    design_data = OrderedDict([
+        ('Mach bypass', hl.Mach_bypass), 
+        ('Max Travel Mach', hl.Mach_pod_max), 
+        ('Fan Face Mach', hl.Mach_c1_in),
+        ('C1 PR', hl.c1_PR_des)
+    ])
+
+    output_data = OrderedDict([
+        ('Radius Inlet Outer',  hl.pod.radius_inlet_back_outer), 
+        ('Radius Inlet Inner',  hl.pod.inlet.radius_back_inner), 
+        ('Tube Inner Radius', hl.flow_limit.radius_tube),
+        ('Pod W', hl.compress.W_in),
+        ('Compressor C2 PR', hl.compress.c2_PR_des), 
+        ('Pod Net Force', hl.pod.net_force), 
+        ('Pod Thrust', hl.compress.F_net), 
+        ('Pod Power', hl.compress.pwr_req), 
+        ('Total Energy', hl.pod.energy), 
+        ('Travel time', hl.mission.time), 
+        ('Max Speed', hl.compress.speed_max), 
+        ('Equilibirum Tube Temp', hl.tube_wall_temp.temp_boundary)
+    ])
+
+    def pretty_print(data): 
+        for label,value in data.iteritems(): 
+            print '%s: %.2f'%(label,value)
 
 
     print "======================"
     print "Design"
     print "======================"
-    print "Mach bypass: ", hl.Mach_bypass
-    print "Max Travel Mach: ", hl.Mach_pod_max
-    print "Fan Face Mach: ", hl.Mach_c1_in
+    pretty_print(design_data)
 
     print "======================"
     print "Performance"
     print "======================"
-    print "radius_inlet_back_outer: ", hl.pod.radius_inlet_back_outer
-    print "radius_inlet_back_inner: ", hl.pod.inlet.radius_back_inner
-    print "Tube Inner Radius: ", hl.flow_limit.radius_tube
-    print "Pod W: ", hl.compress.W_in
-    print "bearing Ps: ", hl.compress.duct2.Fl_O.Ps*6894.75729
-    print "Pod Net Force: ", hl.pod.net_force
-    print "Pod Thrust: ", hl.compress.F_net 
-    print "pwr: ", hl.compress.pwr_req
-    print "energy: ", hl.pod.energy
-    print "travel time: ", hl.mission.time/60
-    print "speed:", hl.compress.speed_max
-    print "Tube Temp: ", hl.tube_wall_temp.temp_boundary
+    pretty_print(output_data)
 

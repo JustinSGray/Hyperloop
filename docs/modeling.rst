@@ -20,58 +20,6 @@ sufficiently feasible. These aspects are equally important to the overall
 design and they represent the next required step in producing a viable hyperloop 
 design concept. 
 
------------------------------
-Tube Airflow Requirements
------------------------------
-
-
-The hyperloop pod travels through a fixed diameter tube. As it travels, 
-it must displace air around itself. The displaced air moves past the 
-pod with a relative velocity equal to the travel speed of the pod and 
-must fit into the area between the pod and the tube wall. If you assume 
-a circular cross section for the pod, then the area for the air to 
-travel through is given by 
-
-.. math:: A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
-
-Given the conditions in the tube, we know the density of air to be 
-0.00118 :math:`\frac{kg}{m^3}`. The mass flow rate of the air 
-bypassing the pod is then given by
-
-.. math:: \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
-
-Since :math:`\rho_{air}` and :math:`A_{tube}` are both constant for given tube size 
-and pressure, mass flow rate grows linearly with the velocity of the pod. 
-
-For any given flow there is a physical limitation to how the amount of 
-flow you can pass through a given area. The maximum flow rate occurs when 
-the velocity reaches Mach 1. For the hyperloop concept, all the air must fit 
-through the area between the pod and the tube, called :math:`A_{bypass}`. When 
-the air going through :math:`A_{bypass}` reaches Mach 1, no additional flow can pass through. 
-This is called the Kantrowitz limit. 
-
-.. math:: \dot{W}_{kantrowitz} = \rho_{air} A_{bypass} V_{Mach 1} 
-
-If the required  :math:`\dot{W}_{kantrowitz}` exceeds the kantrowitz limit, then the pod will 
-act like a piston in a tube and start the increase the air pressure in front 
-of it and lower the pressure behind it. For the baseline hyperloop design, 
-the Kantrowitz limit speed is 120 :math:`\frac{m}{s}`, or Mach .35, as shown in the 
-figure below. The limit is reached when the required tube mass flow equals 
-the kantrowitz limit flow. 
-
-.. figure:: images/kantrowitz_limit.png
-   :align: center
-   :alt: kantrowitz limit for hyperloop
-
-   The Kantrowitz limit for the baseline hyperloop concept
-
-Such low speeds would not allow the hyperloop concept to significantly reduce 
-travel times between Los Angeles and San Francisco. To reach higher speeds, 
-a compression system is needed to help push additional air around the pod 
-to enable higher travel speeds. The amount of air that the compression system needs 
-to move is equal to the difference between the required tube flow (the blue line) 
-and the Kantrowitz limit (the green line). As speed increases, the flow demands on the 
-compression system increase as well. 
 
 -----------------------------
 Compression System
@@ -331,9 +279,7 @@ https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf
 3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465
 <http://www.egr.msu.edu/~somerton/Nusselt/ii/ii_a/ii_a_3/ii_a_3_a.html>
 
------------------------------
-Geometry
------------------------------
+
 
 
 

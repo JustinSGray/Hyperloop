@@ -107,7 +107,6 @@ class CompressionSystem(Assembly):
 
         #Inter Component Connections
         self.connect('tube.Fl_O', 'inlet.Fl_I')
-        self.connect('tube.Fl_O.rhot', 'rho_air') #promoted for aero calc
         self.connect('inlet.Fl_O','comp1.Fl_I')
         self.connect('comp1.Fl_O', 'duct1.Fl_I')
         self.connect('duct1.Fl_O', 'split.Fl_I')
@@ -117,19 +116,22 @@ class CompressionSystem(Assembly):
         self.connect('comp2.Fl_O','duct2.Fl_I')
         self.connect('comp1.pwr','perf.C1_pwr')
         self.connect('comp2.pwr','perf.C2_pwr')
-        self.connect('W_in', 'tube.W')
-        self.connect('W_bearing_in', 'split.W1_des')
         self.connect('duct2.Fl_O.Ps', 'perf.Ps_bearing')
         self.connect('nozzle.Fg', 'perf.Fg')
         self.connect('inlet.F_ram', 'perf.F_ram')
 
         #Input variable pass_throughs to the assembly boundary
+        self.connect('W_in', 'tube.W')
+        self.connect('W_bearing_in', 'split.W1_des')
         self.connect('Mach_pod_max', 'tube.Mach')
         self.connect('Mach_c1_in', 'inlet.MNexit_des')
         self.connect('c1_PR_des','comp1.PR_des')
         self.connect('c2_PR_des','comp2.PR_des')
         self.connect('Ps_bearing', 'perf.Ps_bearing_target')
+        self.connect('Ts_tube','tube.Ts')
+        self.connect('Ps_tube', 'tube.Ps')
         #Output variable pass_throughs to the assembly boundary
+        self.connect('tube.Fl_O.rhot', 'rho_air') #promoted for aero calc
         self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
         self.connect('duct2.Fl_O', 'bearing_Fl_O')
         self.connect('inlet.Fl_O.area', 'area_c1_in')

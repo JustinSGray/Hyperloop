@@ -79,7 +79,7 @@ the tube diameter to grow as you increase the maximum velocity. The model set up
 on the necessary tube diameter, given a desired pod Mach number. 
 
 Capsule Cooling Requirements
-----------------------
+------------------------------
 
 The limits and requirements of a hypothtical on-board heat exchanger can be estimated with a straightforward energy balance. 
 The effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum 

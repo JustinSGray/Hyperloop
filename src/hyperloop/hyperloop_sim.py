@@ -20,8 +20,9 @@ class HyperloopPod(Assembly):
     pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
     speed_max = Float(iotype="in", desc="maximum velocity of the pod", units="m/s")
     hub_to_tip = Float(.4, iotype="in", desc="hub to tip ratio for the compressor")
+    c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")    
     inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
-    coef_drag = Float(1, iotype="in", desc="capsule drag coefficient")
+    coef_drag = Float(2, iotype="in", desc="capsule drag coefficient")
     n_rows = Int(14, iotype="in", desc="number of rows of seats in the pod")
     length_row = Float(150, iotype="in", units="cm", desc="length of each row of seats")
 
@@ -41,6 +42,7 @@ class HyperloopPod(Assembly):
         self.connect('Mach_pod_max', 'compress.Mach_pod_max')
         self.connect('Ps_tube', 'compress.Ps_tube')
         self.connect('Mach_c1_in','compress.Mach_c1_in') #Design Variable
+        self.connect('c1_PR_des', 'compress.c1_PR_des') #Design Variable
         #Hyperloop -> Mission
         self.connect('tube_length', 'mission.tube_length')
         self.connect('pwr_marg','mission.pwr_marg')
@@ -91,21 +93,22 @@ class HyperloopPod(Assembly):
         driver.add_constraint('tube_wall_temp.ss_temp_residual=0')
         driver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
 
-
-
-
         #Declare Solver Workflow
         driver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
 
 if __name__=="__main__": 
 
     hl = HyperloopPod()
+    #design variables
     hl.Mach_bypass = .95
     hl.Mach_pod_max = .8
+    hl.Mach_c1_in = .8
+    hl.c1_PR_des = 12.5
+
     hl.compress.W_in = .38 #initial guess
     hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 209 #initial guess
-    hl.Mach_c1_in = .8
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 #initial guess
+    
     hl.run()
 
 

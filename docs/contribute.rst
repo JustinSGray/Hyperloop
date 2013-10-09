@@ -11,6 +11,8 @@ walks through basic installation steps, further support can be found through the
 
 .. __: http://openmdao.org/docs/
 
+And the basic structure of an assembly is explained in the :ref:`usage section <Usage>`  of these docs.
+
 We've tried our best to follow a small set of
 conventions that help keep the code neat and fairly organized. 
 

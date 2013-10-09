@@ -37,6 +37,13 @@ The model is broken down into 5 major sub-systems:
 
 .. figure:: images/hyperloop_assembly_xdsm.png
    :align: center
-   :alt: Hyperloop assembly connections
+   :alt: Hyperloop assembly XDSM chart
 
    The overall layout of the hyperloop assembly and the connections between the components. 
+
+
+.. figure:: images/pod_assembly_xdsm.png
+   :align: center
+   :alt: Pod assembly XDSM chart
+
+   The expanded layout of the pod sub-assembly.

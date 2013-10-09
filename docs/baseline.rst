@@ -74,9 +74,21 @@ compression system increase as well.
 The challenge is that when you increase the flow demands on the compression system, you 
 also force the pod diameter to grow in order to handle the increased flow. So traveling 
 faster means that the mass flow requirements grow, which drives the pod diameter up, which 
-further increase the mass flow requirements. The only way to alleviate this cycle is to allow
+further increase the mass flow requirements. The only way to damp out this cycle is to allow
 the tube diameter to grow as you increase the maximum velocity. The model set up here converges 
-on the necessary tube diameter, given a desired pod Mach number. 
+on the minimal possible tube diameter, given a desired pod Mach number. 
+
+.. figure:: images/mach_vs_rad.png
+    :align: center
+    :width: 800 px
+    :alt: mach versus tube radius graph
+
+The data shows that above Mach .85, the minimum allowable tube size gets very sensitive to 
+pod travel speed. This indicates that Mach numbers much higher than about .9 are likely not 
+feasible. Even at a Mach .8, the tube diameter still needs to be around 4 meters. This is twice
+the size considered in the original proposal. At Mach .8 the travel time is around 45 minutes. 
+Although this performance is less than described in the original proposal, it still represents 
+an improvement over what can be achieved with a high speed rail. 
 
 .. _`Cooling`:
 
@@ -128,16 +140,6 @@ Further discussion of heat exchanger sizing and tube equilibrium temperature can
 
 Sensitivity
 --------------
-
-.. figure:: images/mach_vs_rad.png
-    :align: center
-    :width: 800 px
-    :alt: mach versus tube radius graph
-
-
-The minimum allowable tube size (which can be viewed as a surrogate to overall cost) is most sensitive to the maximum allowable pod speed. 
-
-
 
 .. figure:: images/mach_vs_energy.png
     :align: center

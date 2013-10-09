@@ -126,7 +126,23 @@ such as liquid air or pressurized tanks could be explored.
 Further discussion of heat exchanger sizing and tube equilibrium temperature can be found in the 
 :ref:`Tube Temperature <TubeTemp>` section of the 'Subsystem Modeling Theory' chapter of the docs.
 
+Sensitivity
+--------------
+
+.. figure:: images/mach_vs_rad.png
+    :align: center
+    :width: 800 px
+    :alt: mach versus tube radius graph
+
+
+The minimum allowable tube size (which can be viewed as a surrogate to overall cost) is most sensitive to the maximum allowable pod speed. 
 
 
 
+.. figure:: images/mach_vs_energy.png
+    :align: center
+    :width: 800 px
+    :alt: mach versus battery energy graph
+
+    Hyperloop speed limits as a function of tube radius
 

@@ -3,13 +3,15 @@ Introduction
 ===============
 
 The hyperloop concept is a proposed transportation system that could offer lower costs and 
-travel times than high speed rail system. The hyperloop consists consists of a passenger 
-pod traveling in a tube under light vacuum with a compression system to help move some 
-of the air around the pod. The compression system is powered by electric motors and 
-on board batteries. Propulsion is provided via linear accelerators mounted on the 
-tube itself. The pod rides on a set of air bearings, with pressurized air also being 
-provided by the compressions system. All of these different sub-systems interact with 
-each other and an effective hyperloop system will need to balance the needs of all of them. 
+travel times relative to California's current high speed rail project. The design consists 
+of a passenger pod traveling in a tube under light vacuum at near sonic speeds. Propulsion 
+is provided via linear accelerators mounted on the tube itself and the pod rides on a set 
+of air bearings. The speed of the capsule is limited by the ability of air to escape around
+the outside of the vehicle, therefore a compression system is used to draw air through the 
+vehicle. Compressing the air allows the capsule to reach higher speeds and also provides 
+the air bearings with the necessary pressure. Many of these different sub-systems interact 
+with each other and an effective hyperloop system will need to balance multiple tradeoffs. 
+
 
 We propose the the design of the hyperloop should be taken from a systems perspective with 
 the dual objectives of minimizing ticket cost and minimizing travel time. In order to achieve 

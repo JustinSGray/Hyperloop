@@ -87,7 +87,9 @@ If you just can't want to get started, the simulation can be run straight out of
     python hyperloop_sim.py
 
 
+### Credit
+These models were created by Justin Gray and Jeffrey Chin, with contributions from Scott Jones, Jeff Berton, and Chris Heath
 
-
-
+### License
+This model is covered by a MIT Apache License
 

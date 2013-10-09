@@ -64,7 +64,7 @@ class CompressionSystem(Assembly):
 
         duct1 = self.add('duct1', Duct())
         duct1.Q_dot = 0# no heat exchangers
-        duct1.dPqP = 0 #no losses
+        duct1.dPqP = .1 #no losses
 
         split = self.add('split', SplitterW())
         split.W1_des = .44
@@ -81,7 +81,7 @@ class CompressionSystem(Assembly):
 
         duct2 = self.add('duct2', Duct()) #to bearings
         duct2.Q_dot = 0 #no heat exchangers
-        duct2.dPqP = 0 #no losses
+        duct2.dPqP = .1 #no losses
 
         pwr_sum = self.add('pwr_sum', PwrSum())
 

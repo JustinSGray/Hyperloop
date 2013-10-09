@@ -2,6 +2,9 @@
 Introduction
 =======================
 
+This is the documentation for a hyperloop optimization framework, which can be found 
+in this [github repository](https://github.com/OpenMDAO-Plugins/Hyperloop).  
+
 The hyperloop concept is a proposed transportation system that could offer lower costs and 
 travel times relative to California's current high speed rail project. The design consists 
 of a passenger pod traveling in a tube under light vacuum at near sonic speeds. Propulsion 
@@ -51,9 +54,9 @@ Contents
    pkgdocs
 
 
-The hyperloop github repository and installation instructions can be found here: `https://github.com/openmdao-plugins/Hyperloop`__.
+The hyperloop github repository and installation instructions can be found here: `https://github.com/OpenMDAO-Plugins/Hyperloop`__.
 
-.. __: https://github.com/JustinSGray/Hyperloop
+.. __: https://github.com/OpenMDAO-Plugins/Hyperloop
 
 The original hyperloop proposal can be found here: `Hyperloop-Alpha`__.
 

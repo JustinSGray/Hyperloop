@@ -78,6 +78,8 @@ further increase the mass flow requirements. The only way to alleviate this cycl
 the tube diameter to grow as you increase the maximum velocity. The model set up here converges 
 on the necessary tube diameter, given a desired pod Mach number. 
 
+.. _`Cooling`:
+
 Capsule Cooling Requirements
 ------------------------------
 
@@ -121,7 +123,8 @@ need to be carried with appropriate sized steam tanks. This doesn't even account
 making the system nearly infeasible with water and unpressurized tanks. Various systems involving alternate coolants 
 such as liquid air or pressurized tanks could be explored.
 
-Further discussion of heat exchanger sizing and tube equilibrium temperature can be found in the "Tube Temperature" section of the 'Subsystem Modeling Theory' chapter of the docs.
+Further discussion of heat exchanger sizing and tube equilibrium temperature can be found in the 
+:ref:`Tube Temperature <TubeTemp>` section of the 'Subsystem Modeling Theory' chapter of the docs.
 
 
 

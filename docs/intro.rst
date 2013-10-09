@@ -38,3 +38,21 @@ The model is broken down into 5 major sub-systems:
    :alt: Hyperloop assembly connections
 
    The overall layout of the hyperloop assembly and the connections between the components. 
+
+.. figure:: images/inlet.png
+   :align: center
+   :alt: hyperloop re-designed inlet
+
+   Redesign of the inlet using OpenCSM, a parametric solid modeler.
+
+.. figure:: images/nozzle.png
+   :align: center
+   :alt: hyperloop re-designed nozzle
+
+   Redesign of the nozzle. (back of the capsule)
+
+.. figure:: images/full_tube.png
+   :align: center
+   :alt: hyperloop re-designed tube and capsule
+
+   Relational size between the capsule and tube for a designed capsule speed of Mach 0.8 and bypass air speed of Mach 0.95

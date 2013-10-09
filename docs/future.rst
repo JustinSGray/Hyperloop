@@ -128,3 +128,7 @@ given. This is not sufficient, and a more advanced analysis needs to be construc
 accounts for actual route constraints and can derive an optimal route and speed profile for 
 a given design. 
 
+
+.. figure:: images/velocity_profile.png
+   :align: center
+   :alt: hyperloop velocity profile

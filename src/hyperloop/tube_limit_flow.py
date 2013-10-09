@@ -23,6 +23,7 @@ class TubeLimitFlow(Component):
     W_excess = Float(iotype="out", desc="excess tube mass flow above the Kantrowitz limit", units="kg/s")
     W_tube = Float(iotype="out", desc="Tube demand flow", units="kg/s")
     W_kant = Float(iotype="out", desc="Kantrowitz limit flow", units="kg/s")
+    #mu_air = Float(iotype="out", desc="dynamic viscosity of air", units="Pa*s")
 
     def execute(self):
 
@@ -59,6 +60,8 @@ class TubeLimitFlow(Component):
         #print "test", fs_tube.rhos, fs_tube.Vflow, self._bypass_area, self.W_kant
 
         self.W_excess = self.W_tube - self.W_kant
+
+        #self.mu_air = self.fs_tube.mu/0.671968975
 
 
 def plot_data(comp):

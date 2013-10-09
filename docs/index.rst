@@ -20,7 +20,7 @@ with each other and an effective hyperloop system will need to balance multiple 
    Baseline hyperloop geometry with capsule speed of Mach 0.8
 
 
-We propose the the design of the hyperloop should be taken from a systems perspective with 
+We propose the design of the hyperloop should be taken from a systems perspective with 
 the dual objectives of minimizing ticket cost and minimizing travel time. In order to achieve 
 this goal we propose a top down design approach where the designs of all components
 are optimized simultaneously with respect to the overall system goals.

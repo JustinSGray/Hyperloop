@@ -168,6 +168,7 @@ if __name__ == "__main__":
 
     print "-----Completed Tube Heat Flux Model Calculations---"
     print ""
+    print "CompressQ-{} SolarQ-{} RadQ-{} ConvecQ-{}".format(test.tm.total_heat_rate_pods, test.tm.q_total_solar, test.tm.q_rad_tot, test.tm.total_q_nat_conv )
     print "Equilibrium Wall Temperature: {} K or {} F".format(test.tm.temp_boundary, cu(test.tm.temp_boundary,'degK','degF'))
     print "Ambient Temperature:          {} K or {} F".format(test.tm.temp_outside_ambient, cu(test.tm.temp_outside_ambient,'degK','degF'))
     print "Q Out = {} W  ==>  Q In = {} W ==> Error: {}%".format(test.tm.q_total_out,test.tm.q_total_in,((test.tm.q_total_out-test.tm.q_total_in)/test.tm.q_total_out)*100)

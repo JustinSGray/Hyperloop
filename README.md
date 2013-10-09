@@ -63,10 +63,14 @@ This will install plugin and let you make modifications as you like.
 
 
 ## Please Read The Docs
-Once you download the repo, you can build the docs. Navigate to the top of the repository 
+You can read the [online version of the docs](http://openmdao-plugins.github.io/Hyperloop/), which tracks the latest version of the code
+on https://github.com/OpenMDAO-Plugins/Hyperloop. 
+Or you can read the docs directly from the repository. Once you download the repo, you 
+need build the docs one time. If you make any changes to them, you need to rebuild them 
+to see the updates. To build the docs navigate to the top of the repository 
 and use the following command to build the docs. 
     
-    plugin build docs/
+    plugin build docs
 
 Then, from anywhere in an activated environment you can open the docs with the following command
 

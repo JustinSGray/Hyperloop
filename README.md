@@ -61,9 +61,14 @@ Next navigate to the top level of the repo and issue the following command
 
 This will install plugin and let you make modifications as you like. 
 
-## Please Read The Docs
 
-From anywhere inside your local hyperloo repo, enter:
+## Please Read The Docs
+Once you download the repo, you can build the docs. Navigate to the top of the repository 
+and use the following command to build the docs. 
+    
+    plugin build docs/
+
+Then, from anywhere in an activated environment you can open the docs with the following command
 
     plugin docs hyperloop
 

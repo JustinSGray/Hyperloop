@@ -7,14 +7,18 @@ baseline numbers for the hyperloop concept. For the most part, the ideas and num
 in the original hyperloop proposal hold up using this analysis. However, the data shows that
 there are two major changes to the design that need to be considered. 
 
-    #. The tube will need to be significantly larger than the original proposal. In the original 
-    proposal, the tube was sized with a diameter 2.23 meters. However, it appears that it will 
-    need to have a diameter closer to 4 meters. 
+    #. The tube will need to be significantly larger than the original proposal. In the 
+       original proposal, the tube was sized with a diameter 2.23 meters. However, it 
+       appears that it will need to have a diameter closer to 4 meters. 
 
-    #. There is no need for significant, water based, air cooling system to remove excess 
-    heat from the air that is added by the compression system as the pod travels through the tube. 
-    Although the heat will cause the air to rise in temperature somewhat, the temperature rise is 
-    very modest. In fact, solar radiation onto the surface of the tube has a much stronger affect. 
+    #. On-board water based intercoolers are impractical due to volume and weight constraints.
+       This may prove to be a non-issue since temperature rise due to compression is less 
+       significant than originally estimated and only leads to a modest rise in steady-state 
+       tube temperature. Assuming the tube was left uncovered, the heat rate from solar radiation 
+       would be an order of magnitude larger than the heat rate added from pod compression systems. 
+       Further assuming a 90 degF day, radiation and convection out of the tube would lead to a 
+       manageable steady state tube wall temperature of 120 degF.
+
 
 Tube Diameter
 ----------------------
@@ -74,6 +78,50 @@ further increase the mass flow requirements. The only way to alleviate this cycl
 the tube diameter to grow as you increase the maximum velocity. The model set up here converges 
 on the necessary tube diameter, given a desired pod Mach number. 
 
+Capsule Cooling Requirements
+----------------------
+
+The limits and requirements of a hypothtical on-board heat exchanger can be estimated with a straightforward energy balance. 
+The effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum 
+possible heat transfer. This can be written mathematically as,
+
+.. math::   {Q}_{released}  = effectiveness * {Q}_{max}
+
+where :math:`{Q}_{max} = (T_{hot,in} - T_{cold,in}) {\big[ \dot{m}_{fluid} C_{p,fluid} \big]}_{lowest}` with whichever fluid has the lowest product of :math:`\dot{m}_{fluid}  C_{p,fluid}`
+
+In order to satisfy the energy balance :math:`{Q}_{released}  = {Q}_{absorbed}` , the following must be true,
+
+.. math::      \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
+
+where the :math:`T_{out}` of each fluid is unknown. With assumed massflow rates and initial temperatures, a valid combination of :math:`T_{out}`'s of each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be determined based on the E- `NTU method.`__. 
+
+.. __: http://en.wikipedia.org/wiki/NTU_method
+
+The effectiveness for a counter flow heat exchanger with a Cmin/Cmax of ~0.25 was chosen
+
+.. figure:: images/heat_effectiveness.png
+   :align: center
+   :alt: Heat Exchanger Effictiveness Graph
+   
+Image from http://www.cheresources.com/content/articles/heat-transfer/heat-exchanger-effectiveness
+
+The following conditions satisfied an energy balance with an assumed effectiveness of 0.9765, and the proposed requirement to 
+cool the air completely down to inlet temperatures.
+
+============== =============== ================= ================= ================== ========= ========= 
+Fluid               Cp         :math:`{T}_{in}`  :math:`{T}_{out}` :math:`\dot{m}`     Q  kJ/s   Q  max
+============== =============== ================= ================= ================== ========= ========= 
+Air            1.006 kJ/kg-K        791 K             300 K            0.49 kg/s        -242      247.9
+-------------- --------------- ----------------- ----------------- ------------------ --------- --------- 
+Water           4.186 kJ/kg-K       288.15 K          416.6 K           0.45 kg/s         242      247.9
+============== =============== ================= ================= ================== ========= =========  
+
+With a 35 minute trip, :math:`0.45 kg/s * 60 s/min * 35 min =  945 kg` of standard temperature/pressure water would 
+need to be carried with appropriate sized steam tanks. This doesn't even account for the second stage heat exchanger, 
+making the system nearly infeasible with water and unpressurized tanks. Various systems involving alternate coolants 
+such as liquid air or pressurized tanks could be explored.
+
+Further discussion of heat exchanger sizing and tube equilibrium temperature can be found in the "Tube Temperature" section of the 'Subsystem Modeling Theory' chapter of the docs.
 
 
 

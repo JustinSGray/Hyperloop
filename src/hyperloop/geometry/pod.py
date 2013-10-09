@@ -26,7 +26,6 @@ class Pod(Assembly):
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa")
     speed_max = Float(iotype="in", desc="maximum velocity of the pod", units="m/s")
     hub_to_tip = Float(.4, iotype="in", desc="hub to tip ratio for the compressor")
-    inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
     coef_drag = Float(2, iotype="in", desc="capsule drag coefficient")
     n_rows = Int(14, iotype="in", desc="number of rows of seats in the pod")
     length_row = Float(150, iotype="in", units="cm", desc="length of each row of seats")
@@ -57,7 +56,6 @@ class Pod(Assembly):
         self.connect('area_inlet_in','inlet.area_in')
         self.connect('area_inlet_out','inlet.area_out')
         self.connect('hub_to_tip','inlet.hub_to_tip')
-        self.connect('inlet_wall_thickness','inlet.inlet_wall_thickness')
         #Pod -> Battery
         self.connect('time_mission','battery.time_mission')
         self.connect('energy','battery.energy')

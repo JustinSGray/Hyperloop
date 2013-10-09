@@ -22,7 +22,10 @@ Mach_pod_max              Maximum travel Mach number of the pod                 
 Mach_c1_in                Mach number of the air at the back of the inlet                   .6               .5              .8
 ------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
 Ps_tube                   Static pressure of the air in the tube                  Pa         99                99              500
+------------------------  ----------------------------------------------------  --------  ---------------  ---------------  ---------------  
+c1_PR_des                 First compressor pressure ratio                                    12.47             10              25
 ========================  ====================================================  ========  ===============  ===============  ===============
+
 
 
 Model Parameters
@@ -33,11 +36,19 @@ These values are free for the user to set, but are not intended for the optimize
 ========================  ===========================================================  ========  ===============  ===============  ===============
 Variable                  Description                                                  Units     Baseline Value        Min.             Max.
 ------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------  
-pwr_margin                Safety factor applied to the power requirement for the pod                .3                  0                2
+pwr_marg                  Safety factor applied to the power requirement for the pod                .3                  0                2
 ------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
 solar_heating_factor      Fraction of solar radiation to consider in tube temperature               .7                  0                1
 ------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
 tube_length               Length of the tube                                             m         563270              N/A              N/A
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
+n_rows                    Number of rows of seats in the passenger capsule                           14
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
+length_row                Length alloted to each row of seats                            cm          150               120              200
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
+coef_drag                 Drag coefficient for the pod                                                2                 .6               2.5
+------------------------  -----------------------------------------------------------  --------  ---------------  ---------------  ---------------
+hub_to_tip                Ratio of hub radius to tip radius for the first compressor                  .4                .2               .6
 ========================  ===========================================================  ========  ===============  ===============  ===============
 
 
@@ -47,19 +58,21 @@ Constraints and State Variables
 The hyperloop system presents a multidisciplinary design problem. The cyclic connections in
 the above figure represent the coupling relationships between the different sub-systems. These 
 couplings enforce a set of equality constraints that must be satisfied for any valid hyperloop 
-design. For constraints 1 and 3, a multiplier has been applied to the constraint to scale it for 
+design. For constraints 1 and 4, a multiplier has been applied to the constraint to scale it for 
 improved numerical convergence. 
      
     #. 0.01*(compress.W\_in - flow\_limit.W_excess) = 0
+    #. compress.Ps\_bearing\_residual = 0
     #. tube\_wall\_temp.ss\_temp\_residual = 0  
     #. 0.01*(pod.area\_compressor\_bypass - compress.area\_c1\_out) = 0
 
 The model has a set of state variables that are varied to satisfy the constraints. State variables 
-2 and 3 are given as a list of variables. These are lists represent linked variables. They are treated 
+3 and 4 are given as a list of variables. These are lists represent linked variables. They are treated 
 as a single variable for the purposes of converging the model, but remain distinct variables in the model. 
 
     #. compress.W\_in
-    #. (compress.Ts_tube,flow_limit.Ts_tube,tube_wall_temp.temp_tube_wall)
+    #. compress.c2_PR_des
+    #. (compress.Ts_tube,flow_limit.Ts_tube,tube_wall_temp.temp_boundary)
     #. (flow_limit.radius_tube, pod.radius_tube_inner)
 
 Outputs

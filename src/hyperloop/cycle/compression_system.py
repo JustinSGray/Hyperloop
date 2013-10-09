@@ -121,24 +121,31 @@ class CompressionSystem(Assembly):
         self.connect('inlet.F_ram', 'perf.F_ram')
 
         #Input variable pass_throughs to the assembly boundary
+        #Compress -> Tube
         self.connect('W_in', 'tube.W')
-        self.connect('W_bearing_in', 'split.W1_des')
-        self.connect('Mach_pod_max', 'tube.Mach')
-        self.connect('Mach_c1_in', 'inlet.MNexit_des')
-        self.connect('c1_PR_des','comp1.PR_des')
-        self.connect('c2_PR_des','comp2.PR_des')
-        self.connect('Ps_bearing', 'perf.Ps_bearing_target')
         self.connect('Ts_tube','tube.Ts')
         self.connect('Ps_tube', 'tube.Ps')
+        self.connect('Mach_pod_max', 'tube.Mach')
+        #Compress -> Inlet
+        self.connect('Mach_c1_in', 'inlet.MNexit_des')
+        #Compress -> C1
+        self.connect('c1_PR_des','comp1.PR_des')
+        #Compress -> C2
+        self.connect('c2_PR_des','comp2.PR_des')
+        #Compress -> Splitter
+        self.connect('W_bearing_in', 'split.W1_des')
+        #Compress -> Perf
+        self.connect('Ps_bearing', 'perf.Ps_bearing_target')
+        
         #Output variable pass_throughs to the assembly boundary
         self.connect('tube.Fl_O.rhot', 'rho_air') #promoted for aero calc
-        self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
-        self.connect('duct2.Fl_O', 'bearing_Fl_O')
+        self.connect('tube.Fl_O.area', 'area_inlet_in')
+        self.connect('tube.Fl_O.Vflow', 'speed_max')
         self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('comp1.Fl_O.area', 'area_c1_out')
-        self.connect('tube.Fl_O.area', 'area_inlet_in')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')
-        self.connect('tube.Fl_O.Vflow', 'speed_max')
+        self.connect('nozzle.Fl_O', 'nozzle_Fl_O')
+        self.connect('duct2.Fl_O', 'bearing_Fl_O')
         self.connect('perf.F_net','F_net')
         self.connect('perf.pwr', 'pwr_req') 
         self.connect('perf.Ps_bearing_residual', 'Ps_bearing_residual')

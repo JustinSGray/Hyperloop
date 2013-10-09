@@ -8,24 +8,23 @@ from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
 
 class HyperloopPod(Assembly): 
 
-    #Inputs
+    #Design Variables
     Mach_pod_max = Float(1.0, iotype="in", desc="travel Mach of the pod")
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
+    c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")    
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa", low=0)     
+
+    #Parameters
     solar_heating_factor = Float(.7, iotype="in", 
       desc="Fractional amount of solar radiation to consider in tube temperature calculations", 
       low=0, high=1)
     tube_length = Float(563270, units = 'm', iotype='in', desc='Length of entire Hyperloop') 
     pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
-    speed_max = Float(iotype="in", desc="maximum velocity of the pod", units="m/s")
     hub_to_tip = Float(.4, iotype="in", desc="hub to tip ratio for the compressor")
-    c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")    
-    inlet_wall_thickness = Float(5, iotype="in", units="cm", desc="thickness of the inlet wall")
     coef_drag = Float(2, iotype="in", desc="capsule drag coefficient")
     n_rows = Int(14, iotype="in", desc="number of rows of seats in the pod")
     length_row = Float(150, iotype="in", units="cm", desc="length of each row of seats")
-
 
 
     def configure(self):
@@ -54,7 +53,6 @@ class HyperloopPod(Assembly):
         #Hyperloop -> Pod
         self.connect('Ps_tube', 'pod.Ps_tube')
         self.connect('hub_to_tip','pod.hub_to_tip')
-        self.connect('inlet_wall_thickness','pod.inlet_wall_thickness')
         self.connect('coef_drag','pod.coef_drag')
         self.connect('n_rows','pod.n_rows')
         self.connect('length_row','pod.length_row')

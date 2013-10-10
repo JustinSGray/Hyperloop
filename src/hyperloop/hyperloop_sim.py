@@ -11,7 +11,7 @@ from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
 class HyperloopPod(Assembly): 
 
     #Design Variables
-    Mach_pod_max = Float(1.0, iotype="in", desc="travel Mach of the pod")
+    speed_pod_max = Float(251, iotype="in", desc="travel speed of the pod", units="m/s")
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")    
@@ -40,15 +40,15 @@ class HyperloopPod(Assembly):
 
         #Boundary Input Connections
         #Hyperloop -> Compress
-        self.connect('Mach_pod_max', 'compress.Mach_pod_max')
+        self.connect('speed_pod_max', 'compress.speed_max')
         self.connect('Ps_tube', 'compress.Ps_tube')
         self.connect('Mach_c1_in','compress.Mach_c1_in') #Design Variable
         self.connect('c1_PR_des', 'compress.c1_PR_des') #Design Variable
         #Hyperloop -> Mission
+        self.connect('speed_pod_max', 'mission.speed_max')
         self.connect('tube_length', 'mission.tube_length')
         self.connect('pwr_marg','mission.pwr_marg')
-        #Hyperloop -> Flow Limit
-        self.connect('Mach_pod_max', 'flow_limit.Mach_pod')
+        #Hyperloop -> Flow Limit        
         self.connect('Ps_tube', 'flow_limit.Ps_tube')
         self.connect('pod.radius_inlet_back_outer', 'flow_limit.radius_inlet')
         self.connect('Mach_bypass','flow_limit.Mach_bypass')
@@ -58,19 +58,19 @@ class HyperloopPod(Assembly):
         self.connect('coef_drag','pod.coef_drag')
         self.connect('n_rows','pod.n_rows')
         self.connect('length_row','pod.length_row')
+        self.connect('speed_pod_max', 'pod.speed_max')
         #Hyperloop -> TubeWallTemp
         self.connect('solar_heating_factor', 'tube_wall_temp.nn_incidence_factor')
         self.connect('tube_length', 'tube_wall_temp.length_tube')
 
         #Inter-component Connections
         #Compress -> Mission
-        self.connect('compress.speed_max', 'mission.speed_max')
+        self.connect('compress.Mach_pod_max', 'flow_limit.Mach_pod')
         #Compress -> Pod
         self.connect('compress.area_c1_in', 'pod.area_inlet_out')
         self.connect('compress.area_inlet_in', 'pod.area_inlet_in')
         self.connect('compress.rho_air', 'pod.rho_air')
         self.connect('compress.F_net','pod.F_net')
-        self.connect('compress.speed_max', 'pod.speed_max')
         #Compress -> TubeWallTemp
         self.connect('compress.nozzle_Fl_O', 'tube_wall_temp.nozzle_air')
         self.connect('compress.bearing_Fl_O', 'tube_wall_temp.bearing_air')
@@ -96,7 +96,7 @@ class HyperloopPod(Assembly):
         driver = self.driver
         driver.workflow.add('solver')
         driver.recorders = [CSVCaseRecorder(filename="hyperloop_data.csv")] #record only converged
-        driver.printvars = ['Mach_bypass', 'Mach_pod_max', 'Mach_c1_in', 'c1_PR_des', 'pod.radius_inlet_back_outer',
+        driver.printvars = ['Mach_bypass', 'speed_pod_max', 'Mach_c1_in', 'c1_PR_des', 'pod.radius_inlet_back_outer',
                             'pod.inlet.radius_back_inner', 'flow_limit.radius_tube', 'compress.W_in', 'compress.c2_PR_des',
                             'pod.net_force', 'compress.F_net', 'compress.pwr_req', 'pod.energy', 'mission.time',
                             'compress.speed_max', 'tube_wall_temp.temp_boundary']
@@ -110,13 +110,13 @@ if __name__=="__main__":
     hl = HyperloopPod()
     #design variables
     hl.Mach_bypass = .95
-    hl.Mach_pod_max = .7
+    hl.speed_max = 251
     hl.Mach_c1_in = .65
     hl.c1_PR_des = 13
 
     #initial guesses
-    hl.compress.W_in = .46 
-    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 324 
+    hl.compress.W_in = .35
+    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 178
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 
     hl.compress.c2_PR_des = 5 
     
@@ -124,7 +124,7 @@ if __name__=="__main__":
 
     design_data = OrderedDict([
         ('Mach bypass', hl.Mach_bypass), 
-        ('Max Travel Mach', hl.Mach_pod_max), 
+        ('Max Travel speed', hl.speed_pod_max), 
         ('Fan Face Mach', hl.Mach_c1_in),
         ('C1 PR', hl.c1_PR_des)
     ])
@@ -141,7 +141,8 @@ if __name__=="__main__":
         ('Total Energy', hl.pod.energy), 
         ('Travel time', hl.mission.time), 
         ('Max Speed', hl.compress.speed_max), 
-        ('Equilibirum Tube Temp', hl.tube_wall_temp.temp_boundary)
+        ('Max Mach', hl.compress.Mach_pod_max),
+        ('Equilibirum Tube Temp', hl.tube_wall_temp.temp_boundary), 
     ])
 
     def pretty_print(data): 

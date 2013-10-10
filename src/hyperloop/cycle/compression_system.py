@@ -4,7 +4,7 @@ from openmdao.lib.doegenerators.api import FullFactorial
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
-from pycycle.api import (FlowStartStatic, SplitterW, Inlet, Compressor, Duct,
+from pycycle.api import (FlowStartStaticV, SplitterW, Inlet, Compressor, Duct,
     Nozzle, CycleComponent, HeatExchanger, FlowStation)
 
 
@@ -35,8 +35,8 @@ class CompressionSystem(Assembly):
 
     #I/O Variables accessible on the boundary of the assembly 
     #NOTE: Some unit conversions to metric also happen here
-    Mach_pod_max = Float(1.0, iotype="in", desc="Maximum travel Mach of the pod")
     W_in = Float(.69, iotype="in", desc="mass flow rate into the compression system", units="kg/s")
+    speed_max = Float(iotype="in", desc="maximum velocity of the pod", units="m/s")
     W_bearing_in = Float(.2, iotype="in", desc="required mass flow rate for the bearing system", units="kg/s")
     Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa") 
     Ts_tube = Float(292.1, iotype="in", desc="static temperature in the tube", units="degK")
@@ -49,7 +49,8 @@ class CompressionSystem(Assembly):
     bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
     rho_air = Float(iotype="out", desc="Density (needed for aero calcs in another component)")
 
-    speed_max = Float(iotype="out", desc="maximum velocity of the pod", units="m/s")
+    Mach_pod_max = Float(1.0, iotype="out", desc="Maximum travel Mach of the pod")
+
     area_c1_in = Float(iotype="out", desc="flow area required for the input to the first compressor", units="cm**2")
     area_c1_out = Float(iotype="out", desc="flow area required for the output to the first compressor", units="cm**2")
     area_inlet_in = Float(iotype="out", desc="flow area required for the first compressor", units="cm**2")
@@ -68,7 +69,7 @@ class CompressionSystem(Assembly):
     def configure(self):
 
         #Add Compressor Cycle Components
-        tube = self.add('tube', FlowStartStatic())
+        tube = self.add('tube', FlowStartStaticV())
         #tube.W = 1.521
         tube.Ps = 0.01436
         tube.Ts = 525.6
@@ -125,7 +126,7 @@ class CompressionSystem(Assembly):
         self.connect('W_in', 'tube.W')
         self.connect('Ts_tube','tube.Ts')
         self.connect('Ps_tube', 'tube.Ps')
-        self.connect('Mach_pod_max', 'tube.Mach')
+        self.connect('speed_max', 'tube.velocity')
         #Compress -> Inlet
         self.connect('Mach_c1_in', 'inlet.MNexit_des')
         #Compress -> C1
@@ -140,7 +141,7 @@ class CompressionSystem(Assembly):
         #Output variable pass_throughs to the assembly boundary
         self.connect('tube.Fl_O.rhot', 'rho_air') #promoted for aero calc
         self.connect('tube.Fl_O.area', 'area_inlet_in')
-        self.connect('tube.Fl_O.Vflow', 'speed_max')
+        self.connect('tube.Fl_O.Mach', 'Mach_pod_max')
         self.connect('inlet.Fl_O.area', 'area_c1_in')
         self.connect('comp1.Fl_O.area', 'area_c1_out')
         self.connect('nozzle.Fl_O.area', 'nozzle_flow_area')

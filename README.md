@@ -11,6 +11,8 @@ and was built with the hope that external participation can help both
 refine our estimates and expand the model to include other important 
 aspects of the hyperloop concept.
 
+![Hyperloop Rendering](https://raw.github.com/OpenMDAO-Plugins/Hyperloop/master/docs/images/hyperloop.png "Hyperloop Rendering with a design speed of Mach .8")
+
 Due to the cross-disciplinary nature of the problem, an overarching framework is 
 needed to orchestrate the interaction between models of the various subsystems. So 
 the entire model is built ontop of the OpenMDAO framework. 

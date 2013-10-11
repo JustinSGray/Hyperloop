@@ -22,6 +22,12 @@ capabilities and provides a flexible structure to grow and refine the hyperloop 
 OpenMDAO includes a plugin system, which we used to build this model. The entire thing is built 
 and distributed as an OpenMDAO plugin, To further improve the ability for others to expand and improve on this work. 
 
+Our initial results indicate that, while the concept is still very viable, the tube size will need 
+to be around twice as large as originally proposed by the Tesla/SpaceX team. The tube diameter 
+is closely tied to the maximum speed the pod travels at. 
+
+![Tube Diameter vs Mach](https://github.com/OpenMDAO-Plugins/Hyperloop/blob/master/docs/images/mach_vs_rad.png?raw=true "Hyperloop Tube Diameter vs Mach Number")
+
 
 ## Pre-Reqs
 

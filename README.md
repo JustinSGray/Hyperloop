@@ -9,7 +9,8 @@ The current model focuses mainly on the compression system: inlet compressors,
 heat exchangers, ducting, and nozzle. The entire model is a work in progress 
 and was built with the hope that external participation can help both 
 refine our estimates and expand the model to include other important 
-aspects of the hyperloop concept.
+aspects of the hyperloop concept. We've put together [detailed documentation](http://openmdao-plugins.github.io/Hyperloop/index.html) of 
+the models and some conclusions we've drawn with them. 
 
 ![Hyperloop Rendering](https://raw.github.com/OpenMDAO-Plugins/Hyperloop/master/docs/images/hyperloop.png "Hyperloop Rendering with a design speed of Mach .8")
 

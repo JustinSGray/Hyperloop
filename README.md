@@ -77,7 +77,7 @@ to this work, you might find the information in the [OpenMDAO developer docs](ht
 useful. 
 
 ### Quickstart
-If you just can't want to get started, the simulation can be run straight out of the box with:
+If you just can't wait to get started, the simulation can be run straight out of the box with:
 
     cd src/hyperloop
     python hyperloop_sim.py

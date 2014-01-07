@@ -102,3 +102,7 @@ These models were created by Justin Gray and Jeffrey Chin, with contributions fr
 ### License
 This model is covered by an Apache V2.0 License
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/OpenMDAO-Plugins/hyperloop/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

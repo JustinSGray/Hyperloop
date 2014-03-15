@@ -5,7 +5,7 @@ from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
 from pycycle.api import (FlowStartStatic, SplitterW, Inlet, Compressor, Duct,
-    Nozzle, CycleComponent, HeatExchanger, FlowStation)
+    Nozzle, CycleComponent, HeatExchanger, FlowStationVar)
 
 
 class Performance(CycleComponent): 
@@ -45,8 +45,8 @@ class CompressionSystem(Assembly):
     Ps_bearing = Float(11000, iotype="in", desc="Static pressure of the bearing air", units="Pa")
 
 
-    nozzle_Fl_O = FlowStation(iotype="out", desc="flow exiting the nozzle", copy=None)
-    bearing_Fl_O = FlowStation(iotype="out", desc="flow exiting the bearings", copy=None)
+    nozzle_Fl_O = FlowStationVar(iotype="out", desc="flow exiting the nozzle", copy=None)
+    bearing_Fl_O = FlowStationVar(iotype="out", desc="flow exiting the bearings", copy=None)
     rho_air = Float(iotype="out", desc="Density (needed for aero calcs in another component)")
 
     speed_max = Float(iotype="out", desc="maximum velocity of the pod", units="m/s")

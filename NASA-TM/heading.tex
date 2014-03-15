@@ -1,0 +1,79 @@
+%  sample input file for using the NASA.cls LaTeX class
+%  this distribution is handy for formatting TM, TP, CR, etc.
+%
+%  $Id: sample.tex,v 1.18 2009/08/10 17:22:22 wawood Exp $
+
+%  next 2 lines pull in the NASA.cls file, put options between []
+\documentclass[]             % options: RDPonly, coveronly, nocover
+{NASA}                       %   plus standard article class options
+
+%  Fill in the following catagories between the braces {}
+\title{A Public Platform for the Optimization of the Hyperloop Concept}
+\author{Jeffrey C. Chin and Justin S. Gray} % list all the author names for
+                                    % the RDP
+
+\AuthorAffiliation{Jeffrey C. Chin\\                      % list the authors
+  Glenn Research Center, Cleveland, Ohio \\[10pt]   % with affiliations
+  Justin S. Gray\\                                          % for cover page
+  Glenn Research Center, Cleveland, Ohio\\[10pt] % with affiliations
+ }
+\NasaCenter{Glenn Research Center\\Cleveland, Ohio 44135-3127}
+\Type{TM}                    % TM, TP, CR, CP, SP, TT
+\SubjectCategory{64}         % two digit number
+\LNumber{12456}              % Langley L-number
+\Number{217743}              % Report number
+\Month{03}                   % two digit number
+\Year{2014}                  % four digit number
+\SubjectTerms{Hyperloop, openMDAO, optimization, SpaceX, Tesla}     % 4-5 comma separated words
+\Pages{19}                   % all the pages from the front to back covers
+\DatesCovered{}              % 10/2000--9/2002
+\ContractNumber{}            % NAS1-12345
+\GrantNumber{}               % NAG1-1234
+\ProgramElementNumber{}
+\ProjectNumber{}             % NCC1-123
+\TaskNumber{}                % Task 123
+\WorkUnitNumber{}            % 123-45-67-89
+\SupplementaryNotes{}
+\Acknowledgment{Thanks to Scott Jones, Jeff Berton and the rest of the RTM branch for contributing their expertise.}
+
+\abstract{The hyperloop concept is a proposed transportation system aimed to lower costs and travel times relative to California's current high speed rail project. \cite{Musk} The design consists of a passenger pod traveling in a tube under light vacuum at ground level and near sonic speeds. Even with the tube mostly evacuated, the speed of the capsule is limited by the ability of air to escape around the sides of the vehicle determined by the relative diameters of the capsule and the tube. The capsule carries a compression system that provides pressurized air to the air bearings and helps to bypass some of the air through the capsule itself. This compression system introduces size constraints on the capsule itself. This situation introduces a coupling between the speed the capsule travels and the required size of the tube it travels in. This work investigates that coupling in order to size the capsule and tube for a given maximum speed. The results indicate that travel speeds 
+around Mach .85 are reachable with reasonable tube sizes. In addition, some basic sizing estimates are made to quantify the effect on maximum 
+speed on overall travel time and required battery sizes on the capsule.  }   % suggested 200 words (currently 160 words)
+
+\usepackage{minted} %syntax highlighting
+\usepackage{color} %syntax highlighting
+\usepackage{graphicx}
+\usepackage{changepage}
+\usepackage{amsmath} %math equations
+\usepackage{subfiles} %break up document into subfiles
+\usepackage{hyperref} %hyperlinks
+\usepackage{courier} %courier font for variable names
+\usepackage{cleveref} %section references
+\usepackage[hypcap]{caption} %figure references point to top of figure
+
+%these seemed to be necessary with minted... not sure what they do..
+\makeatletter
+\color{black}
+\let\default@color\current@color
+\makeatother
+
+%reference appendix
+\crefname{appsec}{Appendix}{Appendices}
+\begin{document}
+
+%\tableofcontents
+%\listoffigures
+%\listoftables
+
+\subfile{hyperloop}
+
+\cite{Cengal}
+\cite{Turns}
+\cite{Berton}
+\cite{Rouleau}
+\bibliographystyle{unsrt} %sorted by appearence, consider using natbib?
+\bibliography{bibliography}
+
+\subfile{appendix}
+
+\end{document}

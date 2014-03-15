@@ -15,7 +15,7 @@ from openmdao.lib.drivers.api import BroydenSolver
 from openmdao.lib.datatypes.api import Float, Bool
 from openmdao.main.api import convert_units as cu
 
-from pycycle.api import FlowStation
+from pycycle.api import FlowStationVar
 
 
 class TubeWallTemp(Component):
@@ -27,8 +27,8 @@ class TubeWallTemp(Component):
     num_pods = Float(34, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
     temp_boundary = Float(322.0, units = 'K', iotype='in', desc='Average Temperature of the tube wall') #
     temp_outside_ambient = Float(305.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
-    nozzle_air = FlowStation(iotype="in", desc="air exiting the pod nozzle", copy=None)
-    bearing_air = FlowStation(iotype="in", desc="air exiting the air bearings", copy=None)
+    nozzle_air = FlowStationVar(iotype="in", desc="air exiting the pod nozzle", copy=None)
+    bearing_air = FlowStationVar(iotype="in", desc="air exiting the air bearings", copy=None)
     #constants
     solar_insolation = Float(1000., iotype="in", units = 'W/m**2', desc='solar irradiation at sea level on a clear day') #
     nn_incidence_factor = Float(0.7, iotype="in", desc='Non-normal incidence factor') #

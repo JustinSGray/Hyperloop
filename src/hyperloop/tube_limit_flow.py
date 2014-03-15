@@ -6,7 +6,7 @@ import pylab as p
 from openmdao.main.api import Component
 from openmdao.lib.datatypes.api import Float
 
-from pycycle.flowstation import AirFlowStation, secant
+from pycycle.flowstation import FlowStation, secant
 
 class TubeLimitFlow(Component): 
     """Finds the limit velocity for a body traveling through a tube"""
@@ -27,7 +27,7 @@ class TubeLimitFlow(Component):
 
     def execute(self):
 
-    	fs_tube = self.fs_tube = AirFlowStation()
+    	fs_tube = self.fs_tube = FlowStation()
 
         tube_rad = self.radius_tube*0.0328084 #convert to ft
         inlet_rad = self.radius_inlet*0.0328084

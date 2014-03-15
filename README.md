@@ -9,7 +9,10 @@ The current model focuses mainly on the compression system: inlet compressors,
 heat exchangers, ducting, and nozzle. The entire model is a work in progress 
 and was built with the hope that external participation can help both 
 refine our estimates and expand the model to include other important 
-aspects of the hyperloop concept.
+aspects of the hyperloop concept. We've put together [detailed documentation](http://openmdao-plugins.github.io/Hyperloop/index.html) of 
+the models and some conclusions we've drawn with them. 
+
+![Hyperloop Rendering](https://raw.github.com/OpenMDAO-Plugins/Hyperloop/master/docs/images/hyperloop.png "Hyperloop Rendering with a design speed of Mach .8")
 
 Due to the cross-disciplinary nature of the problem, an overarching framework is 
 needed to orchestrate the interaction between models of the various subsystems. So 
@@ -19,6 +22,12 @@ that suits the needs of this problem well. It provides advanced modeling and opt
 capabilities and provides a flexible structure to grow and refine the hyperloop models. 
 OpenMDAO includes a plugin system, which we used to build this model. The entire thing is built 
 and distributed as an OpenMDAO plugin, To further improve the ability for others to expand and improve on this work. 
+
+Our initial results indicate that, while the concept is still very viable, the tube size will need 
+to be around twice as large as originally proposed by the Tesla/SpaceX team. The tube diameter 
+is closely tied to the maximum speed the pod travels at. 
+
+![Tube Diameter vs Mach](https://github.com/OpenMDAO-Plugins/Hyperloop/blob/master/docs/images/mach_vs_rad.png?raw=true "Hyperloop Tube Diameter vs Mach Number")
 
 
 ## Pre-Reqs
@@ -81,7 +90,7 @@ to this work, you might find the information in the [OpenMDAO developer docs](ht
 useful. 
 
 ### Quickstart
-If you just can't want to get started, the simulation can be run straight out of the box with:
+If you just can't wait to get started, the simulation can be run straight out of the box with:
 
     cd src/hyperloop
     python hyperloop_sim.py
@@ -95,5 +104,4 @@ This model is covered by an Apache V2.0 License
 
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jcchin/hyperloop/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

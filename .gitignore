@@ -8,3 +8,4 @@ openmdao_log.txt
 
 src/hyperloop/sphinx_build/
 src/hyperloop.egg-info/
+*.DS_Store

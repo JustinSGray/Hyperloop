@@ -46,155 +46,6 @@ Hyperloop design evolves, an ever increasing number of design variables will nee
 the means to manage this rapidly growing complexity in an efficient and flexible manner that will allow the model to grow as the necessary
 refinements are made.
 
-\section{Model Layout}
-The model is broken down into 5 major assemblies as described below. 
-
-\begin{enumerate}
-  \item Compression System (\texttt{compress}): Performance and power consumption of the compressors
-  \item Mission Analysis (\texttt{mission}): Estimate of travel time
-  \item Pod Geometry (\texttt{pod}): Physical dimensions of the capsule and calculations that depend on them
-  \item Tube Flow Limitations (\texttt{flow\_limit}): Pod speed limitations based on choked flow restrictions between the pod and the tube
-  \item Tube Wall Temperature (\texttt{tube\_wall\_temp}): Equilibrium temperature of the tube wall
-\end{enumerate}
-
-The connectivity between the assemblies is visually represented using XDSM charts below. Each green box represents a system that takes a
-set of inputs and operates on them to produce a set of outputs. The connection of one system's outputs to another system's inputs is
-visualized as a grey line. The cascading parallelograms indicate intersections, implying that an output is connected to multiple inputs. 
-
-
-\begin{figure}[hbtp]
-\centering
-\includegraphics[scale=1]{images/hyperloop_assembly_xdsm.png}
-\caption{Hyperloop Top Level Assembly XDSM}
-\label{f:hyperloopXDSM}
-\end{figure}
-
-The compression system and pod geometry systems in figure \ref{f:hyperloopXDSM} are further expanded into sub-assemblies as shown in figure \ref{f:podXDSM} and \ref{f:compressorXDSM}.
-
-\begin{figure}[hbtp]
-\centering
-\includegraphics[scale=1]{images/pod_assembly_xdsm.png}
-\caption{Expanded \texttt{pod} assembly XDSM}
-\label{f:podXDSM}
-\end{figure}
-
-\begin{figure}[hbtp]
-\centering
-\includegraphics[scale=0.75]{images/compress_assembly_xdsm.png}
-\caption{Expanded \texttt{compress} assembly XDSM}
-\label{f:compressorXDSM}
-\end{figure}
-
-\subsection{Design Variables}
-The system design is defined at the top-most level with the following design variables. These variables can be actively varied
- by the optimizer to achieve user defined objectives:
-
-\begin{adjustwidth}{-3cm}{-3cm}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline 
-Variable & Description & Units & Baseline Val. & Min & Max \\ 
-\hline 
-\texttt{Mach\_bypass} & Mach number of the air traveling around the pod & - & 0.95 & 0.5 & 0.98 \\ 
-\hline 
-\texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod & - & 0.9 & 0.5 & 0.98 \\ 
-\hline 
-\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet & - & 0.6 & 0.5 & 0.8 \\ 
-\hline 
-\texttt{Ps\_tube} & Static pressure of the air in the tube & Pa & 99 & 99 & 500 \\ 
-\hline 
-\texttt{c1\_PR\_des} & First compressor pressure ratio & - & 12.47 & 10 & 25 \\ 
-\hline 
-\end{tabular} 
-\end{adjustwidth}
-
-\subsection{Model Parameters}
-These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
-
-\begin{adjustwidth}{-3cm}{-3cm}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline 
-Variable & Description & Units & Baseline Val & Min. & Max. \\ 
-\hline 
-pwr\_marg & Safety factor applied to the power requirement for the pod & - & 0.3 & 0 & 2 \\ 
-\hline 
-solar\_heating\_factor & Fraction of solar radiation to consider in tube temperature & - & 0.7 & 0 & 1 \\ 
-\hline 
-tube\_length & Length of the tube & m & 563270 & - & - \\ 
-\hline 
-n\_rows & Number of rows of seats in the passenger capsule & - & 14 & - & - \\ 
-\hline 
-length\_row & Length allotted to each row of seats & cm & 150 & 120 & 200 \\ 
-\hline 
-coef\_drag & Drag Coefficient for the pod & - & 2 & 0.6 & 2.5 \\ 
-\hline 
-hub\_to\_tip & Ratio of hub radius to tip radius for the first compressor & - & 0.4 & 0.2 & 0.6 \\ 
-\hline 
-\end{tabular} 
-\end{adjustwidth}
-
-\subsection{Constraints and State Variables}
-
-The hyperloop concept presents a multidisciplinary design problem and encapsulating complexity into systems makes the relationship
-between variables easier to understand.  Any connection originating from the left side of a component in an XDSM diagram represents a
-cyclic connection. The cyclic connections in figure \ref{f:hyperloopXDSM}  and \ref{f:compressorXDSM} represent the coupling relationships
-between the sub-systems. These couplings enforce a set of equality constraints that must be satisfied for any physically valid hyperloop design. 
-
-\begin{equation} \label{eq:flow}
-	0.01*(\texttt{compress.W\_in} - \texttt{flow\_limit.W\_excess}) = 0
-\end{equation}
-\begin{equation}
-	\texttt{compress.Ps\_bearing\_residual} = 0
-\end{equation}
-\begin{equation}
-	\texttt{tube\_wall\_temp.ss\_temp\_residual} = 0
-\end{equation}
-\begin{equation} \label{eq:area}
-	0.01*(\texttt{pod.area\_compressor\_bypass} - \texttt{compress.area\_c1\_out}) = 0
-\end{equation}
-
-For constraints \ref{eq:flow} and \ref{eq:area}, a multiplier has been applied to the constraint to scale it for improved numerical
-convergence.
-
-The optimizer varies  the following state variables to to satisfy the constraints. 
-
-\begin{enumerate}
-\item \texttt{compress.W\_in}
-\item \texttt{compress.c2\_PR\_des}
-\item (\texttt{compress.Ts\_tube}, \texttt{flow\_limit.Ts\_tube}, \texttt{tube\_wall\_temp.temp\_boundary}) \label{Temp}
-\item (\texttt{flow\_limit.radius\_tube}, \texttt{pod.radius\_tube\_inner}) \label{Radius}
-\end{enumerate}
-
-State variables \ref{Temp} and \ref{Radius} are given as a list of variables signifying that they are linked variables with equivalent values. They are
-treated as a single variable for the purposes of converging the model, but remain as distinct variables within each subsystem.
-
-\subsection{Outputs}
-There are a number of output values that are of interest
-
-\begin{description}
-  \item[Overall pod radius] \hfill \\
-  \texttt{pod.radius\_inlet\_outer}
-  \item[Total mass flow through the compression system] \hfill \\
-  \texttt{compress.W\_in}
-  \item[Total power required to drive the compression system] \hfill \\
-  \texttt{compress.pwr\_req}
-  \item[Total energy needed to power the compression system for one trip] \hfill \\
-  \texttt{mission.energy}
-  \item[Travel time for one trip] \hfill \\
-  \texttt{mission.time}
-  \item[Maximum speed] \hfill \\
-  \texttt{compress.speed\_max}
-  \item[Equilibrium tube temperature] \hfill \\
-  \texttt{tube\_wall\_temp.temp}
-\end{description}
-
-Note: For a more complete design process, the values of the design variables would be optimized to minimize a combination of total power
-consumption and travel time. However, the model does not currently calculate some key values needed to get a useful answer. In particular,
-the linear accelerator and vacuum pump power needs to be modeled before a design optimization can be attempted.
-It should be noted that you can select designs that are not realistic, particularly with respect to \texttt{pod.radius\_inlet\_outer}. There is
-a strong relationship between \texttt{Mach\_pod\_max} and the \texttt{pod.radius\_inlet\_outer}. If you select a high 
-\texttt{Mach\_pod\_max} (Above .8), you may find that the radius has shrunk below what is physically feasible without significant design
-changes.
-
 \section{Baseline Design}
 
 The modeling done identifies a number of high level trends and provides some concrete baseline numbers for the hyperloop concept. For
@@ -295,13 +146,6 @@ each fluid can be found through solver iteration. Valid effectiveness levels for
 method..
 
 The effectiveness for a counter flow heat exchanger with a Cmin/Cmax of ~0.25 was chosen 
-
-\begin{figure}[hbtp]
-\centering
-\includegraphics[scale=0.75]{images/heat_effectiveness.png}
-\caption{Image from http://www.cheresources.com/content/articles/heat-transfer/heat-exchanger-effectiveness}
-\label{f:heat_effectiveness}
-\end{figure}
 
 The following conditions satisfied an energy balance with an assumed effectiveness of 0.9765, and the proposed requirement to cool the
 air completely down to inlet temperatures.
@@ -552,6 +396,155 @@ The steady state tube temperature can be found by varying the tube temperature u
 matches the rate of heat being absorbed by the tube. Using the values provided in the source code, a steady state temperature of 120 F
 was reached.
 
+
+\section{Model Layout}
+The model is broken down into 5 major assemblies as described below. 
+
+\begin{enumerate}
+  \item Compression System (\texttt{compress}): Performance and power consumption of the compressors
+  \item Mission Analysis (\texttt{mission}): Estimate of travel time
+  \item Pod Geometry (\texttt{pod}): Physical dimensions of the capsule and calculations that depend on them
+  \item Tube Flow Limitations (\texttt{flow\_limit}): Pod speed limitations based on choked flow restrictions between the pod and the tube
+  \item Tube Wall Temperature (\texttt{tube\_wall\_temp}): Equilibrium temperature of the tube wall
+\end{enumerate}
+
+The connectivity between the assemblies is visually represented using XDSM charts below. Each green box represents a system that takes a
+set of inputs and operates on them to produce a set of outputs. The connection of one system's outputs to another system's inputs is
+visualized as a grey line. The cascading parallelograms indicate intersections, implying that an output is connected to multiple inputs. 
+
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=1]{images/hyperloop_assembly_xdsm.png}
+\caption{Hyperloop Top Level Assembly XDSM}
+\label{f:hyperloopXDSM}
+\end{figure}
+
+The compression system and pod geometry systems in figure \ref{f:hyperloopXDSM} are further expanded into sub-assemblies as shown in figure \ref{f:podXDSM} and \ref{f:compressorXDSM}.
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=1]{images/pod_assembly_xdsm.png}
+\caption{Expanded \texttt{pod} assembly XDSM}
+\label{f:podXDSM}
+\end{figure}
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=0.75]{images/compress_assembly_xdsm.png}
+\caption{Expanded \texttt{compress} assembly XDSM}
+\label{f:compressorXDSM}
+\end{figure}
+
+\subsection{Design Variables}
+The system design is defined at the top-most level with the following design variables. These variables can be actively varied
+ by the optimizer to achieve user defined objectives:
+
+\begin{adjustwidth}{-3cm}{-3cm}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Variable & Description & Units & Baseline Val. & Min & Max \\ 
+\hline 
+\texttt{Mach\_bypass} & Mach number of the air traveling around the pod & - & 0.95 & 0.5 & 0.98 \\ 
+\hline 
+\texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod & - & 0.9 & 0.5 & 0.98 \\ 
+\hline 
+\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet & - & 0.6 & 0.5 & 0.8 \\ 
+\hline 
+\texttt{Ps\_tube} & Static pressure of the air in the tube & Pa & 99 & 99 & 500 \\ 
+\hline 
+\texttt{c1\_PR\_des} & First compressor pressure ratio & - & 12.47 & 10 & 25 \\ 
+\hline 
+\end{tabular} 
+\end{adjustwidth}
+
+\subsection{Model Parameters}
+These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
+
+\begin{adjustwidth}{-3cm}{-3cm}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Variable & Description & Units & Baseline Val & Min. & Max. \\ 
+\hline 
+pwr\_marg & Safety factor applied to the power requirement for the pod & - & 0.3 & 0 & 2 \\ 
+\hline 
+solar\_heating\_factor & Fraction of solar radiation to consider in tube temperature & - & 0.7 & 0 & 1 \\ 
+\hline 
+tube\_length & Length of the tube & m & 563270 & - & - \\ 
+\hline 
+n\_rows & Number of rows of seats in the passenger capsule & - & 14 & - & - \\ 
+\hline 
+length\_row & Length allotted to each row of seats & cm & 150 & 120 & 200 \\ 
+\hline 
+coef\_drag & Drag Coefficient for the pod & - & 2 & 0.6 & 2.5 \\ 
+\hline 
+hub\_to\_tip & Ratio of hub radius to tip radius for the first compressor & - & 0.4 & 0.2 & 0.6 \\ 
+\hline 
+\end{tabular} 
+\end{adjustwidth}
+
+\subsection{Constraints and State Variables}
+
+The hyperloop concept presents a multidisciplinary design problem and encapsulating complexity into systems makes the relationship
+between variables easier to understand.  Any connection originating from the left side of a component in an XDSM diagram represents a
+cyclic connection. The cyclic connections in figure \ref{f:hyperloopXDSM}  and \ref{f:compressorXDSM} represent the coupling relationships
+between the sub-systems. These couplings enforce a set of equality constraints that must be satisfied for any physically valid hyperloop design. 
+
+\begin{equation} \label{eq:flow}
+	0.01*(\texttt{compress.W\_in} - \texttt{flow\_limit.W\_excess}) = 0
+\end{equation}
+\begin{equation}
+	\texttt{compress.Ps\_bearing\_residual} = 0
+\end{equation}
+\begin{equation}
+	\texttt{tube\_wall\_temp.ss\_temp\_residual} = 0
+\end{equation}
+\begin{equation} \label{eq:area}
+	0.01*(\texttt{pod.area\_compressor\_bypass} - \texttt{compress.area\_c1\_out}) = 0
+\end{equation}
+
+For constraints \ref{eq:flow} and \ref{eq:area}, a multiplier has been applied to the constraint to scale it for improved numerical
+convergence.
+
+The optimizer varies  the following state variables to to satisfy the constraints. 
+
+\begin{enumerate}
+\item \texttt{compress.W\_in}
+\item \texttt{compress.c2\_PR\_des}
+\item (\texttt{compress.Ts\_tube}, \texttt{flow\_limit.Ts\_tube}, \texttt{tube\_wall\_temp.temp\_boundary}) \label{Temp}
+\item (\texttt{flow\_limit.radius\_tube}, \texttt{pod.radius\_tube\_inner}) \label{Radius}
+\end{enumerate}
+
+State variables \ref{Temp} and \ref{Radius} are given as a list of variables signifying that they are linked variables with equivalent values. They are
+treated as a single variable for the purposes of converging the model, but remain as distinct variables within each subsystem.
+
+\subsection{Outputs}
+There are a number of output values that are of interest
+
+\begin{description}
+  \item[Overall pod radius] \hfill \\
+  \texttt{pod.radius\_inlet\_outer}
+  \item[Total mass flow through the compression system] \hfill \\
+  \texttt{compress.W\_in}
+  \item[Total power required to drive the compression system] \hfill \\
+  \texttt{compress.pwr\_req}
+  \item[Total energy needed to power the compression system for one trip] \hfill \\
+  \texttt{mission.energy}
+  \item[Travel time for one trip] \hfill \\
+  \texttt{mission.time}
+  \item[Maximum speed] \hfill \\
+  \texttt{compress.speed\_max}
+  \item[Equilibrium tube temperature] \hfill \\
+  \texttt{tube\_wall\_temp.temp}
+\end{description}
+
+Note: For a more complete design process, the values of the design variables would be optimized to minimize a combination of total power
+consumption and travel time. However, the model does not currently calculate some key values needed to get a useful answer. In particular,
+the linear accelerator and vacuum pump power needs to be modeled before a design optimization can be attempted.
+It should be noted that you can select designs that are not realistic, particularly with respect to \texttt{pod.radius\_inlet\_outer}. There is
+a strong relationship between \texttt{Mach\_pod\_max} and the \texttt{pod.radius\_inlet\_outer}. If you select a high 
+\texttt{Mach\_pod\_max} (Above .8), you may find that the radius has shrunk below what is physically feasible without significant design
+changes.
 
 \section{Future Modeling Road Map}
 The current model of the hyperloop focuses on some of the primary sub-systems that operate within the pod. However, there is much more

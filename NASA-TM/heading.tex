@@ -34,11 +34,18 @@
 \TaskNumber{}                % Task 123
 \WorkUnitNumber{}            % 123-45-67-89
 \SupplementaryNotes{}
-\Acknowledgment{Thanks to Scott Jones, Jeff Berton and the rest of the RTM branch for contributing their expertise.}
+\Acknowledgment{Thanks to Scott Jones, Jeff Berton, Chris Heath and the rest of the RTM branch for contributing their expertise.}
 
-\abstract{The hyperloop concept is a proposed transportation system aimed to lower costs and travel times relative to California's current high speed rail project. \cite{Musk} The design consists of a passenger pod traveling in a tube under light vacuum at ground level and near sonic speeds. Even with the tube mostly evacuated, the speed of the capsule is limited by the ability of air to escape around the sides of the vehicle determined by the relative diameters of the capsule and the tube. The capsule carries a compression system that provides pressurized air to the air bearings and helps to bypass some of the air through the capsule itself. This compression system introduces size constraints on the capsule itself. This situation introduces a coupling between the speed the capsule travels and the required size of the tube it travels in. This work investigates that coupling in order to size the capsule and tube for a given maximum speed. The results indicate that travel speeds 
-around Mach .85 are reachable with reasonable tube sizes. In addition, some basic sizing estimates are made to quantify the effect on maximum 
-speed on overall travel time and required battery sizes on the capsule.  }   % suggested 200 words (currently 160 words)
+\abstract{In order to develop a comprehensive system model of the Hyperloop transportation system, first steps have been taken in constructing
+various baseline models as outlined in Elon Musk's proposal. A completely open-source multidisciplinary framework is provided as a starting point
+and the system's design, modeling, analysis and optimization (MDAO) is approached from an aeronautic perspective. Therefore, the modeling is
+focused on the compressor cycle analysis, heat estimates, and capsule geometry. From this analysis, physical limitations of the tube diameter and
+capsule geometry have been identified that were not vetted in the original proposal. The results indicate that travel speeds around Mach 0.8 are
+attainable, with an inner diameter approximately two times larger than originally proposed. In addition, some basic sizing estimates are made to quantify
+the effect of the maximum speed on battery sizing and cooling requirements. The estimated power
+requirement of 3-5 Tesla Model-S sized batteries is in agreement with Musk's original proposal. Conversely, preliminary cooling calculations indicate
+ steam tanks to be ineffective and possibly trivial in comparison to the heat exchange between the tube and surrounding environment.}  
+ % suggested 200 words max
 
 \usepackage{minted} %syntax highlighting
 \usepackage{color} %syntax highlighting
@@ -49,7 +56,7 @@ speed on overall travel time and required battery sizes on the capsule.  }   % s
 \usepackage{hyperref} %hyperlinks
 \usepackage{courier} %courier font for variable names
 \usepackage{cleveref} %section references
-\usepackage[hypcap]{caption} %figure references point to top of figure
+\usepackage[all]{hypcap} %figure references point to top of figure (must come after hyperref)
 
 %these seemed to be necessary with minted... not sure what they do..
 \makeatletter
@@ -61,9 +68,9 @@ speed on overall travel time and required battery sizes on the capsule.  }   % s
 \crefname{appsec}{Appendix}{Appendices}
 \begin{document}
 
-%\tableofcontents
-%\listoffigures
-%\listoftables
+\tableofcontents
+\listoffigures
+\listoftables
 
 \subfile{hyperloop}
 

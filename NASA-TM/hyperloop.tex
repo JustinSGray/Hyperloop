@@ -7,13 +7,13 @@ The hyperloop concept is a proposed transportation system aimed to lower costs a
  rail project. \cite{Musk} The design consists of a passenger pod traveling in a tube under light vacuum at ground level and near sonic
 speeds. The capsule is supported by a set of air bearings with air provided by a battery powered compression system and propulsion maintained
 by a set of linear actuators mounted to the tube. Even with the tube largely evacuated, the speed of the capsule is limited by the ability of air to
-escape around the sides of the vehicle. This limitation is governed by the size of the capsule relative to the tube and is alleviated by drawing air
+escape around the sides of the vehicle. This limitation is governed by the size of the capsule relative to the tube and is alleviated by redirecting air
 through the inlet and compression system. Drawing sufficient airflow through the vehicle to support the bearings and achieve higher speeds results
 in a fairly large air intake at the nose of the capsule, show in Fig. \ref{f:hyperloopCAD}. The diameter of this inlet and hence the diameter of the
 capsule, is strongly tied to the maximum travel speed of the capsule. This coupling between the maximum velocity and
-required tube diameter cascades into multiple subsystems and needs to be accounted upfront in the design process. The concept requires
-optimization from a system-wide perspective to effectively account for multiple trade-offs that arise from the interactions between the various
-sub-systems. The intention of this paper is to explore some of these trade-offs, and provide a starting point for subsystem expansion.
+required tube diameter cascades into multiple subsystems and needs to be accounted for upfront in the design process. 
+All of the sub-system interactions make it necessary to take a more integrated approach to the design of the Hyperloop concept. The intention of
+this paper is to explore some of the most significant trade-offs between sub-systems and provide a starting point for subsystem expansion.
 
 \begin{figure}[hbtp]
 \centering
@@ -23,18 +23,16 @@ sub-systems. The intention of this paper is to explore some of these trade-offs,
 \end{figure}
 
 The physical limitations of the system and the underlying design space needs to be better understood before ultimately approaching the
-problem with the dual objectives of minimizing ticket cost and travel time. In order to achieve this goal, a top down analysis is proposed.
-This requires a better understanding of key interactions between sub-systems so the design of all components can be optimized concurrently with 
-respect to the overall system goals. An overarching framework is needed to orchestrate the interaction between models of various subsystems
-and perform the necessary optimization. By identifying interactions and defining rigid interfaces between different competencies the problem can
+problem with the dual objectives of minimizing ticket cost and travel time. By identifying interactions and defining rigid interfaces between different
+competencies the problem can
 be kept tractable and development can be performed in parallel. The Hyperloop concept straddles a different combination of disciplines than many
 existing monolithic systems, falling ambiguously between the purview of existing tool-sets and traditional engineering competencies. The modeling
 approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod is not unlike those
 found in aircraft concepts involving electric propulsion. They both operate at high speeds and low pressure conditions with an electric motor
-driving turbo-machinery in a highly volume constrained vehicle. Therefore, experience drawn from systems design and optimization in aircraft engine design were adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
- \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. Free and easily accessible
-tool-sets are leveraged as much as possible with the Python programming language and OpenMDAO framework serving as the backbone for
-continued expansion.  
+driving turbo-machinery in a highly volume constrained vehicle. Therefore, experience drawn from systems design and optimization in aircraft engine
+design were adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
+ \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
+free and easily accessible tool-sets with the Python programming language and OpenMDAO framework serving as the backbone for continued expansion.  
 
 \subsection{Modeling Platform: OpenMDAO}
 The presented Hyperloop models were built exclusively using open-source tools including, but not limited to: OpenCSM, GeoMACH, VSP and
@@ -49,12 +47,12 @@ the means to manage this rapidly growing complexity in an efficient and flexible
 refinements are made.
 
 \section{Model Layout}
-The model is broken down into 5 major assemblies. 
+The model is broken down into 5 major assemblies as described below. 
 
 \begin{enumerate}
   \item Compression System (\texttt{compress}): Performance and power consumption of the compressors
   \item Mission Analysis (\texttt{mission}): Estimate of travel time
-  \item Pod Geometry (\texttt{pod}): Physical Dimensions and calculations that depend on them
+  \item Pod Geometry (\texttt{pod}): Physical dimensions of the capsule and calculations that depend on them
   \item Tube Flow Limitations (\texttt{flow\_limit}): Pod speed limitations based on choked flow restrictions between the pod and the tube
   \item Tube Wall Temperature (\texttt{tube\_wall\_temp}): Equilibrium temperature of the tube wall
 \end{enumerate}
@@ -76,19 +74,20 @@ The compression system and pod geometry systems in figure \ref{f:hyperloopXDSM} 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[scale=1]{images/pod_assembly_xdsm.png}
-\caption{Pod Assembly XDSM}
+\caption{Expanded \texttt{pod} assembly XDSM}
 \label{f:podXDSM}
 \end{figure}
 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[scale=0.75]{images/compress_assembly_xdsm.png}
-\caption{Compressor Assembly XDSM}
+\caption{Expanded \texttt{compress} assembly XDSM}
 \label{f:compressorXDSM}
 \end{figure}
 
 \subsection{Design Variables}
-The model has the following design variables:
+The system design is defined at the top-most level with the following design variables. These variables can be actively varied
+ by the optimizer to achieve user defined objectives:
 
 \begin{adjustwidth}{-3cm}{-3cm}
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -99,7 +98,7 @@ Variable & Description & Units & Baseline Val. & Min & Max \\
 \hline 
 \texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod & - & 0.9 & 0.5 & 0.98 \\ 
 \hline 
-\texttt{Mach\c1\_in} & Mach number of the air at the back of the inlet & - & 0.6 & 0.5 & 0.8 \\ 
+\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet & - & 0.6 & 0.5 & 0.8 \\ 
 \hline 
 \texttt{Ps\_tube} & Static pressure of the air in the tube & Pa & 99 & 99 & 500 \\ 
 \hline 
@@ -109,7 +108,7 @@ Variable & Description & Units & Baseline Val. & Min & Max \\
 \end{adjustwidth}
 
 \subsection{Model Parameters}
-These values are free for the user to set, but are not intended for the optimizer.
+These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
 
 \begin{adjustwidth}{-3cm}{-3cm}
 \begin{tabular}{|c|c|c|c|c|c|}
@@ -138,7 +137,7 @@ hub\_to\_tip & Ratio of hub radius to tip radius for the first compressor & - & 
 The hyperloop concept presents a multidisciplinary design problem and encapsulating complexity into systems makes the relationship
 between variables easier to understand.  Any connection originating from the left side of a component in an XDSM diagram represents a
 cyclic connection. The cyclic connections in figure \ref{f:hyperloopXDSM}  and \ref{f:compressorXDSM} represent the coupling relationships
-between the sub-systems. These couplings enforce a set of equality constraints that must be satisfied for any valid hyperloop design. 
+between the sub-systems. These couplings enforce a set of equality constraints that must be satisfied for any physically valid hyperloop design. 
 
 \begin{equation} \label{eq:flow}
 	0.01*(\texttt{compress.W\_in} - \texttt{flow\_limit.W\_excess}) = 0
@@ -165,8 +164,8 @@ The optimizer varies  the following state variables to to satisfy the constraint
 \item (\texttt{flow\_limit.radius\_tube}, \texttt{pod.radius\_tube\_inner}) \label{Radius}
 \end{enumerate}
 
-State variables \ref{Temp} and \ref{Radius} are given as a list of variables. These are lists represent linked variables. They are treated as a
-single variable for the purposes of converging the model, but remain distinct variables in the model.
+State variables \ref{Temp} and \ref{Radius} are given as a list of variables signifying that they are linked variables with equivalent values. They are
+treated as a single variable for the purposes of converging the model, but remain as distinct variables within each subsystem.
 
 \subsection{Outputs}
 There are a number of output values that are of interest

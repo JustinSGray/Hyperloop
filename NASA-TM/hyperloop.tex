@@ -48,55 +48,42 @@ refinements are made.
 
 \section{Baseline Design}
 
-The modeling done identifies a number of high level trends and provides some concrete baseline numbers for the hyperloop concept. For
-the most part, the ideas and numbers given in the original hyperloop proposal hold up using this analysis. However, the data shows that
-there are two major changes to the design that need to be considered.
-
-The tube will need to be significantly larger than the original proposal. In the original proposal, the tube was sized with a diameter 2.23
-meters. However, it appears that it will need to have a diameter closer to 4 meters.
-On-board water based inter-coolers are impractical due to volume and weight constraints. This may prove to be a non-issue since
-temperature rise due to compression is less significant than originally estimated and only leads to a modest rise in steady-state tube
-temperature. Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat
-rate added from pod compression systems. Further assuming a 90 degF day, radiation and convection out of the tube would lead to a
-manageable steady state tube wall temperature of 120 degF.
+Due to the novelty of the Hyperloop design, the stack up of many subsystem uncertainties makes even the highest level trends difficult to pin down.
+The initial subsystem modeling described below provides some concrete baseline numbers, since the devil is always in the implementation details. 
 
 \subsection{Tube Diameter}
-The hyperloop pod travels through a fixed diameter tube. As it travels, it must displace air around itself. The displaced air moves past the
+The hyperloop pod travels through a fixed diameter tube. As it travels, it must displace air around itself. The bypassed air moves past the
 pod with a relative velocity equal to the travel speed of the pod and must fit into the area between the pod and the tube wall. If you
-assume a circular cross section for the pod, then the area for the air to travel through is given by
+assume a circular cross section for the pod, then the bypass air must travel through an area given by
 \begin{equation*}
 A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 \end{equation*}
 
-
-Given the conditions in the tube, we know the density of air to be 0.00118 kgm3. The mass flow rate of the air bypassing the pod is then
-given by
+Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size and pressure, the mass flow rate of the air
+traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
 \begin{equation*}
 \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
 \end{equation*}
 
-Since ρair and Atube are both constant for given tube size and pressure, mass flow rate grows linearly with the velocity of the pod.
-
-For any given flow there is a physical limitation to how the amount of flow you can pass through a given area. The maximum flow rate
-occurs when the velocity reaches Mach 1. For the hyperloop concept, all the air must fit through the area between the pod and the tube,
-called Abypass. When the air going through Abypass reaches Mach 1, no additional flow can pass through.
+However, the maximum flow rate of ${W}_{bypass}$ occurs when the velocity reaches a physical limitation of Mach 1. At this point, no additional
+flow can escape around the sides of the vehicle.
 
 \begin{equation*}
 \dot{W}_{limit} = \rho_{air} A_{bypass} V_{Mach 1}
 \end{equation*}
 
 
-If the required W˙bypass exceeds W˙limit, then the pod will act like a piston in a tube and start the increase the air pressure in front of it
-and lower the pressure behind it. For the baseline hyperloop design, the limit speed is around 120 ms, or Mach .3, as shown in the figure
-below in the blue lines. The limit is reached when the required tube mass flow equals the kantrowitz limit flow. The value of this limit speed
+If the required $\dot{W}_{bypass}$ exceeds $\dot{W}_{limit}$, then the pod will act like a piston in a tube; increasing the air pressure in front
+and lower the pressure behind it. Without a ducted capsule, the limiting speed is around 120 ms, or Mach 0.3, as shown by the intersection of the blue
+lines on figure \ref{f:flowLIMIT}. The limit is reached when the required tube mass flow equals the kantrowitz limit flow. The value of this limit speed
 is strongly dependent on the ratio of the pod diameter to the tube diameter.
 
 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[scale=0.5]{images/tube_flow_limits.png}
-\caption{Hyperloop speed limits as a function of tube radius}
+\caption{Hyperloop speed limits as a function of tube radius (R in cm)}
 \label{f:flowLIMIT}
 \end{figure}
 
@@ -114,7 +101,7 @@ maximum velocity. The model set up here converges on the minimal possible tube d
 \begin{figure}[hbtp]
 \centering
 \includegraphics[scale=0.5]{images/mach_vs_rad.png}
-\caption{Exponential relationship between pod speed and required tube diameter}
+\caption{Exponential relationship between pod speed and required tube r}
 \label{f:machRAD}
 \end{figure}
 
@@ -645,7 +632,16 @@ concept. The readme on the github repository walks through basic installation st
 OpenMDAO docs. And the basic structure of an assembly is explained in the usage section of these docs.
 
 \section{Conclusions}
-This is quite handy.
+For the most part, the ideas and numbers given in the original hyperloop proposal hold up using this analysis. However, the data shows that
+there are two major changes to the design that need to be considered.
+
+The tube cross section will need to be significantly larger than the original proposal. In the original proposal, the tube was sized with a diameter 2.23
+meters. However, it appears that it will need to have a diameter closer to 4 meters to reach speeds maximum speeds of Mach 0.8.
+On-board water based inter-coolers also seem impractical due to both volume and weight constraints. This may prove to be a non-issue since
+temperature rise due to compression is significant less than originally estimated and only leads to a modest rise in steady-state tube
+temperature. Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat
+rate added from pod compression systems. Further assuming a 90 degF day, radiation and convection out of the tube would lead to a
+manageable steady state tube wall temperature of 120 degF.
 
 %\begin{thebibliography}{WoodTP}
 %\bibitem[WoodTP]{woodTP} Wood, W.A., ``Multidimensional Upwind

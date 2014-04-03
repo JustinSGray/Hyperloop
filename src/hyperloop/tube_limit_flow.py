@@ -34,21 +34,23 @@ class TubeLimitFlow(Component):
         inlet_rad = cu(self.radius_inlet,'cm','ft')
         #A = pi(r^2) 
         self._tube_area  = pi*(tube_rad**2) #ft**2
-        self._bypass_area = pi*(tube_rad**2-inlet_rad**2)
+        self._inlet_area  = pi*(inlet_rad**2) #ft**2
+        self._bypass_area = self._tube_area - self._inlet_area
 
         self._Ts = cu(self.Ts_tube,'degK','degR') #convert to R
         self._Ps = cu(self.Ps_tube,'Pa','psi') #convert to psi
 
         area_ratio_target = self._tube_area/self._bypass_area
 
+        #iterate over pod speed until the area ratio = A_tube / A_bypass
         def f(m_guess): 
-            fs_tube.setStaticTsPsMN(self._Ts, self._Ps , m_guess)
+            fs_tube.setStaticTsPsMN(self._Ts, self._Ps , m_guess) #set the static conditions iteratively until correct (Ts, Ps are known)
             gam = fs_tube.gamt
             g_exp = (gam+1)/(2*(gam-1))
             ar = ((gam+1)/2)**(-1*g_exp)*((1+ (gam-1)/2*m_guess**2)**g_exp)/m_guess
             return ar - area_ratio_target
         #Solve for Mach where AR = AR_target
-        self.limit_Mach = secant(f, .3, x_min=0, x_max=1)
+        self.limit_Mach = secant(f, .3, x_min=0, x_max=1) #value not actually needed, fs_tube contains necessary flow information
         self.limit_speed = cu(fs_tube.Vflow,'ft','m') #convert to meters/second
         
         #excess mass flow calculation
@@ -80,8 +82,8 @@ def plot_data(comp, c='b'):
         W_kant.append(comp.W_kant)
         W_tube.append(comp.W_tube)
 
-    fig = p.plot(MN,W_tube, '-', label="%3.1f Req."%(comp.radius_tube/comp.radius_inlet), lw=3, c=c)
-    p.plot(MN,W_kant, '--', label="%3.1f Limit"%(comp.radius_tube/comp.radius_inlet),   lw=3, c=c)
+    fig = p.plot(MN,W_tube, '-', label="%3.1f Req."%(comp._tube_area/comp._inlet_area), lw=3, c=c)
+    p.plot(MN,W_kant, '--', label="%3.1f Limit"%(comp._tube_area/comp._inlet_area),   lw=3, c=c)
     #p.legend(loc="best")
     p.tick_params(axis='both', which='major', labelsize=15)
     p.xlabel('Pod Mach Number', fontsize=18)

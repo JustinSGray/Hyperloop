@@ -83,10 +83,10 @@ def plot_data(comp, c='b'):
     fig = p.plot(MN,W_tube, '-', label="%3.1f Req."%(comp.radius_tube/comp.radius_inlet), lw=3, c=c)
     p.plot(MN,W_kant, '--', label="%3.1f Limit"%(comp.radius_tube/comp.radius_inlet),   lw=3, c=c)
     #p.legend(loc="best")
-    p.tick_params(axis='both', which='major', labelsize=13)
-    p.xlabel('Pod Mach Number', fontsize=16)
-    p.ylabel('Flow Rate (kg/sec)', fontsize=16)
-    p.title('Tube Flow Limits', fontsize=19)
+    p.tick_params(axis='both', which='major', labelsize=15)
+    p.xlabel('Pod Mach Number', fontsize=18)
+    p.ylabel('Flow Rate (kg/sec)', fontsize=18)
+    p.title('Tube Flow Limits', fontsize=20)
 
     return fig
 
@@ -112,4 +112,7 @@ if __name__ == "__main__":
     plot_data(comp,c='r')
 
     p.legend(loc="best")
+    
+    p.gcf().set_size_inches(11,5.5)
+    p.gcf().savefig('test2png.png',dpi=130)
     p.show()

@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
         def configure(self):
 
-            tm = self.add('tm', TubeWall())
+            tm = self.add('tm', TubeWallTemp())
             #tm.bearing_air.setTotalTP()
             driver = self.add('driver',BroydenSolver())
             driver.add_parameter('tm.temp_boundary',low=0.,high=10000.)

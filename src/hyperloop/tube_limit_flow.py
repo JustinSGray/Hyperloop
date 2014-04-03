@@ -4,6 +4,7 @@ import numpy as np
 import pylab as p
 
 from openmdao.main.api import Component
+from openmdao.main.api import convert_units as cu
 from openmdao.lib.datatypes.api import Float
 
 from pycycle.flowstation import FlowStation, secant
@@ -29,15 +30,14 @@ class TubeLimitFlow(Component):
 
     	fs_tube = self.fs_tube = FlowStation()
 
-        tube_rad = self.radius_tube*0.0328084 #convert to ft
-        inlet_rad = self.radius_inlet*0.0328084
-
+        tube_rad = cu(self.radius_tube,'cm','ft') #convert to ft
+        inlet_rad = cu(self.radius_inlet,'cm','ft')
+        #A = pi(r^2) 
         self._tube_area  = pi*(tube_rad**2) #ft**2
         self._bypass_area = pi*(tube_rad**2-inlet_rad**2)
 
-        self._Ts = self.Ts_tube*1.8 #convert to R
-        self._Ps = self.Ps_tube*0.000145037738 #convert to psi
-
+        self._Ts = cu(self.Ts_tube,'degK','degR') #convert to R
+        self._Ps = cu(self.Ps_tube,'Pa','psi') #convert to psi
 
         area_ratio_target = self._tube_area/self._bypass_area
 
@@ -47,16 +47,16 @@ class TubeLimitFlow(Component):
             g_exp = (gam+1)/(2*(gam-1))
             ar = ((gam+1)/2)**(-1*g_exp)*((1+ (gam-1)/2*m_guess**2)**g_exp)/m_guess
             return ar - area_ratio_target
-
+        #Solve for Mach where AR = AR_target
         self.limit_Mach = secant(f, .3, x_min=0, x_max=1)
-        self.limit_speed = fs_tube.Vflow*0.3048 #convert to meters
+        self.limit_speed = cu(fs_tube.Vflow,'ft','m') #convert to meters/second
         
         #excess mass flow calculation
         fs_tube.setStaticTsPsMN(self._Ts, self._Ps, self.Mach_pod)
-        self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area*0.45359
+        self.W_tube = cu(fs_tube.rhos*fs_tube.Vflow*self._tube_area,'lbm','kg') #convert to kg/sec
 
         fs_tube.Mach = self.Mach_bypass #Kantrowitz flow is at these total conditions, but with Mach 1
-        self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area*0.45359
+        self.W_kant = cu(fs_tube.rhos*fs_tube.Vflow*self._bypass_area,'lbm','kg') #convert to kg/sec
         #print "test", fs_tube.rhos, fs_tube.Vflow, self._bypass_area, self.W_kant
 
         self.W_excess = self.W_tube - self.W_kant
@@ -66,7 +66,6 @@ class TubeLimitFlow(Component):
 
 def plot_data(comp, c='b'):
     """utility function to make the Kantrowitz Limit Plot""" 
-
 
     MN = []
     W_tube = []
@@ -91,10 +90,7 @@ def plot_data(comp, c='b'):
 
     return fig
 
-
     #print np.array(W_tube)- np.array(W_kant)
-
-        
 
 
 if __name__ == "__main__": 

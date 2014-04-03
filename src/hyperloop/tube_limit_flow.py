@@ -81,12 +81,13 @@ def plot_data(comp, c='b'):
         W_kant.append(comp.W_kant)
         W_tube.append(comp.W_tube)
 
-    fig = p.plot(MN,W_tube, '-', label="R=%d Req. Flow"%comp.radius_tube, lw=3, c=c)
-    p.plot(MN,W_kant, '--', label="R=%d Limit Flow"%comp.radius_tube,   lw=3, c=c)
+    fig = p.plot(MN,W_tube, '-', label="%3.1f Req."%(comp.radius_tube/comp.radius_inlet), lw=3, c=c)
+    p.plot(MN,W_kant, '--', label="%3.1f Limit"%(comp.radius_tube/comp.radius_inlet),   lw=3, c=c)
     #p.legend(loc="best")
-    p.xlabel('Pod Mach Number')
-    p.ylabel('Flow Rate (kg/sec)')
-    p.title('Tube Limit Flow')
+    p.tick_params(axis='both', which='major', labelsize=13)
+    p.xlabel('Pod Mach Number', fontsize=16)
+    p.ylabel('Flow Rate (kg/sec)', fontsize=16)
+    p.title('Tube Flow Limits', fontsize=19)
 
     return fig
 

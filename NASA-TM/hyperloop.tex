@@ -3,6 +3,7 @@
 
 \section{Introduction}
 
+
 The hyperloop concept is a proposed transportation system aimed to lower costs and travel times relative to California's current high speed
  rail project. \cite{Musk} The design consists of a passenger pod traveling in a tube under light vacuum at ground level and near sonic
 speeds. The capsule is supported by a set of air bearings with air provided by a battery powered compression system and propulsion maintained
@@ -35,6 +36,8 @@ design are adapted for the capsule compressor analysis, heat estimates and capsu
 free and easily accessible tool-sets with the Python programming language and OpenMDAO framework serving as the backbone for continued expansion.  
 
 \subsection{Modeling Platform: OpenMDAO}
+
+
 The presented Hyperloop models were built exclusively using open-source tools including, but not limited to: OpenCSM, GeoMACH, VSP and
 Cantera. These models were subsequently connected and operated using the OpenMDAO framework. OpenMDAO is a Python based
 integration environment that facilitates the application of advanced Multidisciplinary Design Analysis and Optimization (MDAO) methods.
@@ -48,10 +51,13 @@ refinements are made.
 
 \section{Baseline Design}
 
+
 Due to the novelty of the hyperloop design, the stack up of many subsystem uncertainties makes even the highest level trends difficult to pin down.
 The initial subsystem modeling described below provides some concrete baseline numbers, since the devil is always in the implementation details. 
 
 \subsection{Tube Diameter}
+
+
 	The pod travels through a fixed diameter tube displacing air around itself. The tube air reaches the
 pod with a relative velocity equal to the pod speed. As the air is forced through the smaller bypass area, it increases in speed. Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
 
@@ -67,7 +73,7 @@ the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the ve
 \end{equation*}
 
 However, the velocity reaches a physical limitation as it reaches Mach 1. At this point, no additional flow can escape around the sides of the vehicle without
-increasing the density of the air. For a given area ratio and flow conditions, the limiting pod speed can be determined.
+increasing the density of the air. For a given area ratio and flow conditions, the limiting pod speed can be determined based on isentropic flow relations.
 
 \begin{equation*}
 \frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M}
@@ -88,7 +94,7 @@ area.
 
 Such low speeds would not allow the hyperloop concept to significantly reduce travel times between Los Angeles and San Francisco relative to high speed rail.
 To reach higher speeds, an inlet and compression system is needed to help draw additional air through the pod. The vertical distances between the choked flow
-limit (dashed lines) and the required flow (solid lines) of figure \ref{f:flowLIMIT} signifies the compressor flow rates necessary to achieve a given speed. 
+limit (dashed lines) and the required flow (solid lines) of figure \ref{f:flowLIMIT} signifies the minimum compressor flow rates necessary to achieve a given speed. 
 
 Additional non-linearity is introduced when considering the limitations of the compression system. Increasing the demands on the compression system
 causes the required pod inlet diameter to grow in order to handle the increased flow. Traveling faster results in larger mass flow requirements, which drives
@@ -119,6 +125,8 @@ be necessary to keep turns under 1 g. Although this performance is much less fav
 described in the original proposal, it still represents an improvement over what can be achieved with a high speed rail.
 
 \subsection{Capsule Cooling Requirements}
+
+
 The limits and requirements of a hypothetical on-board heat exchanger can be estimated with a straightforward energy balance. The
 effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum possible heat transfer. This can
 be written mathematically as,
@@ -128,9 +136,8 @@ be written mathematically as,
 \end{equation*}
 
 
-with $Qmax=\left(T_{hot,in} − T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where the product $\dot{m} C_{p}$ of whichever fluid is lowest is used.
-
-In order to satisfy the energy balance Qreleased=Qabsorbed , the following must be true,
+with $Qmax=\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where the product $\dot{m} C_{p}$ is determined by the the fluid with the lowest
+value. In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
 \begin{equation*}
 \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})

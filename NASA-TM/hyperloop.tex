@@ -104,23 +104,24 @@ pod Mach number with additional considerations for the steady state tube tempera
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[scale=0.5]{images/mach_vs_rad.png}
+\includegraphics[width=\textwidth]{images/mach_vs_rad2.png}
 \caption{Exponential relationship between pod speed and required tube radius}
 \label{f:machRAD}
 \end{figure}
 
-Figure \ref{f:machRAD} portrays the exponential relationship between pod speed and required tube radius. This figure explicitly shows the trend depicted by
-connecting the dots of figure \ref{f:flowLIMIT}. For visual simplicity (and as a more of a direct indicator of total system cost), the absolute tube radius is
-charted rather than an area ratio. Although it isn't shown, the pod size is also free to vary at each optimized point. Somewhat surprisingly, the pod size remains
+Figure \ref{f:machRAD} portrays the exponential relationship between pod max speed and required tube radius. This figure explicitly shows the trend depicted by
+connecting the dots of figure \ref{f:flowLIMIT}. The absolute tube radius is charted rather than an area ratio for visual simplicity and as a more of a direct indicator of total
+system cost. The pod size is also free to vary at each optimized point and is plotted on the green line. Somewhat surprisingly, the pod size remains
 nearly constant for every optimization at each targeted speed condition. This can be attributed the extremely sensitive nature of the inlet
 size when perturbed in either direction. Decreasing the inlet diameter adversely effects capsule air intake more-so than it helps bypass air throughput; and
-increasing the inlet diameter harms the bypass area at a greater rate than it improves compressor intake. Unlike figure \ref{f:flowLIMIT}, this plot also assumes
-the capsule contains a compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT} were directly
-overlayed. 
+increasing the inlet diameter negatively impacts the bypass area at a greater rate than it improves compressor intake. The inlet size is also somewhat governed by the
+necessary bearing flow requirements. Unlike figure \ref{f:flowLIMIT}, this plot accounts for
+the capsule compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT} were translated and directly
+overlaid. 
 
 The data shows that above Mach .85, the minimum allowable tube size gets very sensitive to pod travel speed. This indicates that speeds greater than Mach
-.9 are likely not feasible. Even at a Mach .8, the tube diameter still needs to be around 4 meters, roughly
-twice the size considered in the original proposal. With a maximum speed of Mach .8, the travel time is greater than 45 minutes. Additional time would also
+.9 are likely not feasible. Even at a Mach .8, the tube still needs to be around 4 meters in diameter, roughly
+twice the size considered in the original proposal. With a maximum speed of Mach .8, the travel time is greater than 45 minutes and additional time would also
 be necessary to keep turns under 1 g. Although this performance is much less favorable than the performance
 described in the original proposal, it still represents an improvement over what can be achieved with a high speed rail.
 
@@ -144,9 +145,9 @@ value. In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the fo
 \end{equation*}
 
 where the $T_{out}$  of each fluid is unknown. With assumed mass-flow rates and initial temperatures, a valid combination of Tout‘s of
-each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be determined based on the E- NTU
-method. The effectiveness for a counter flow heat exchanger with a $\frac{C_{min}}{C_{max}}$ of ~0.25 was chosen. The following conditions satisfied an
-energy balance with an extremely optimistically assumed effectiveness of 0.9765, and the proposed requirement to cool the
+each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be estimated based on the E- NTU
+method. The effectiveness for a counter flow heat exchanger with a $\frac{C_{min}}{C_{max}}$ of ~0.25 was chosen with air and water as the working fluids. 
+The following conditions satisfied an energy balance with an extremely optimistically assumed effectiveness of 0.9765, and the proposed requirement to cool the
 air completely down to inlet temperatures.
 
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -165,9 +166,10 @@ sized steam tanks. This doesn't even account for the second stage heat exchanger
 unpressurized tanks. Various systems involving alternate coolants such as liquid air or pressurized tanks could be explored.
 
 Further discussion of heat exchanger sizing and tube equilibrium temperature can be found in the Tube Temperature section of the
-‘Subsystem Modeling Theory’ chapter of the docs.
+‘Subsystem Modeling Theory’ chapter of the appendix.
 
-\subsection{Sensitivity}
+\subsection{On-board Battery Requirements}
+
 \begin{figure}[hbtp]
 \centering
 \includegraphics[scale=0.5]{images/mach_vs_energy.png}

@@ -9,7 +9,7 @@ speeds. The capsule is supported by a set of air bearings with air provided by a
 by a set of linear actuators mounted to the tube. Even with the tube largely evacuated, the speed of the capsule is limited by the ability of air to
 escape around the sides of the vehicle. This limitation is governed by the size of the capsule relative to the tube and is alleviated by redirecting air
 through the inlet and compression system. Drawing sufficient airflow through the vehicle to support the bearings and achieve higher speeds results
-in a fairly large air intake at the nose of the capsule, show in Fig. \ref{f:hyperloopCAD}. The diameter of this inlet and hence the diameter of the
+in a fairly large air intake at the nose of the capsule, shown in Fig. \ref{f:hyperloopCAD}. The diameter of this inlet and hence the diameter of the
 capsule, is strongly tied to the maximum travel speed of the capsule. This coupling between the maximum velocity and
 required tube diameter cascades into multiple subsystems and needs to be accounted for upfront in the design process. 
 All of the sub-system interactions make it necessary to take a more integrated approach to the design of the Hyperloop concept. The intention of
@@ -29,8 +29,8 @@ be kept tractable and development can be performed in parallel. The Hyperloop co
 existing monolithic systems, falling ambiguously between the purview of existing tool-sets and traditional engineering competencies. The modeling
 approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod is not unlike those
 found in aircraft concepts involving electric propulsion. They both operate at high speeds and low pressure conditions with an electric motor
-driving turbo-machinery in a highly volume constrained vehicle. Therefore, experience drawn from systems design and optimization in aircraft engine
-design were adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
+driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems design and optimization for aircraft engine
+design are adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
  \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
 free and easily accessible tool-sets with the Python programming language and OpenMDAO framework serving as the backbone for continued expansion.  
 
@@ -53,8 +53,7 @@ The initial subsystem modeling described below provides some concrete baseline n
 
 \subsection{Tube Diameter}
 	The pod travels through a fixed diameter tube displacing air around itself. The tube air reaches the
-pod with a relative velocity equal to the pod speed. As the air is forced through the smaller bypass area, it increases in speed. If you
-assume a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
+pod with a relative velocity equal to the pod speed. As the air is forced through the smaller bypass area, it increases in speed. Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
 
 \begin{equation*}
 A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
@@ -77,7 +76,8 @@ increasing the density of the air. For a given area ratio and flow conditions, t
 
 If the $V_{bypass}$ reaches the speed of sound, then the pod will act like a piston in a tube; increasing the air pressure in front
 and lowering the pressure behind it. Without a ducted capsule the limiting speed is around 120 $\frac{m}{s}$, or Mach 0.3, as shown by the intersection of
-the blue lines in figure \ref{f:flowLIMIT}. This limited pod speed is strongly dependent on the ratio of the pod diameter to the tube diameter.
+the blue lines in figure \ref{f:flowLIMIT}. This limited pod speed is strongly dependent on the ratio of the pod cross-sectional area to the tube cross-sectional
+area.
 
 \begin{figure}[hbtp]
 \centering
@@ -87,9 +87,8 @@ the blue lines in figure \ref{f:flowLIMIT}. This limited pod speed is strongly d
 \end{figure}
 
 Such low speeds would not allow the hyperloop concept to significantly reduce travel times between Los Angeles and San Francisco relative to high speed rail.
-To reach higher speeds, an inlet and compression system is needed to help push additional air through the pod. The amount
-of air that the compression system needs to move is equal to the vertical distance between the required tube flow (the solid lines) and the choked flow limit
-(the dashed lines) of figure \ref{f:flowLIMIT}. As speed increases, the flow demands on the compression system increases.
+To reach higher speeds, an inlet and compression system is needed to help draw additional air through the pod. The vertical distances between the choked flow
+limit (dashed lines) and the required flow (solid lines) of figure \ref{f:flowLIMIT} signifies the compressor flow rates necessary to achieve a given speed. 
 
 Additional non-linearity is introduced when considering the limitations of the compression system. Increasing the demands on the compression system
 causes the required pod inlet diameter to grow in order to handle the increased flow. Traveling faster results in larger mass flow requirements, which drives
@@ -106,8 +105,12 @@ pod Mach number with additional considerations for the steady state tube tempera
 
 Figure \ref{f:machRAD} portrays the exponential relationship between pod speed and required tube radius. This figure explicitly shows the trend depicted by
 connecting the dots of figure \ref{f:flowLIMIT}. For visual simplicity (and as a more of a direct indicator of total system cost), the absolute tube radius is
-charted rather than an area ratio. Although it isn't shown, the pod size is also varied at each optimized point. This plot assumes the capsule contains a
-compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT} were directly overlayed. 
+charted rather than an area ratio. Although it isn't shown, the pod size is also free to vary at each optimized point. Somewhat surprisingly, the pod size remains
+nearly constant for every optimization at each targeted speed condition. This can be attributed the extremely sensitive nature of the inlet
+size when perturbed in either direction. Decreasing the inlet diameter adversely effects capsule air intake more-so than it helps bypass air throughput; and
+increasing the inlet diameter harms the bypass area at a greater rate than it improves compressor intake. Unlike figure \ref{f:flowLIMIT}, this plot also assumes
+the capsule contains a compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT} were directly
+overlayed. 
 
 The data shows that above Mach .85, the minimum allowable tube size gets very sensitive to pod travel speed. This indicates that speeds greater than Mach
 .9 are likely not feasible. Even at a Mach .8, the tube diameter still needs to be around 4 meters, roughly
@@ -125,7 +128,7 @@ be written mathematically as,
 \end{equation*}
 
 
-where Qmax=(Thot,in−Tcold,in)[m˙fluidCp,fluid]lowest with whichever fluid has the lowest product of m˙fluidCp,fluid
+with $Qmax=\left(T_{hot,in} − T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where the product $\dot{m} C_{p}$ of whichever fluid is lowest is used.
 
 In order to satisfy the energy balance Qreleased=Qabsorbed , the following must be true,
 
@@ -135,11 +138,8 @@ In order to satisfy the energy balance Qreleased=Qabsorbed , the following must 
 
 where the $T_{out}$  of each fluid is unknown. With assumed mass-flow rates and initial temperatures, a valid combination of Tout‘s of
 each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be determined based on the E- NTU
-method..
-
-The effectiveness for a counter flow heat exchanger with a Cmin/Cmax of ~0.25 was chosen 
-
-The following conditions satisfied an energy balance with an assumed effectiveness of 0.9765, and the proposed requirement to cool the
+method. The effectiveness for a counter flow heat exchanger with a $\frac{C_{min}}{C_{max}}$ of ~0.25 was chosen. The following conditions satisfied an
+energy balance with an extremely optimistically assumed effectiveness of 0.9765, and the proposed requirement to cool the
 air completely down to inlet temperatures.
 
 \begin{tabular}{|c|c|c|c|c|c|c|}
@@ -152,7 +152,8 @@ Water & 4.186 kJ/kg-K & 288.15 & 416.6 K  & 0.45 kg/s & 242 & 247.9 \\
 \hline 
 \end{tabular} 
 
-With a 35 minute trip, 0.45kg/s∗60s/min∗35min=945kg of standard temperature/pressure water would need to be carried with appropriate
+
+With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$ of standard temperature/pressure water would need to be carried with appropriate
 sized steam tanks. This doesn't even account for the second stage heat exchanger, making the system nearly infeasible with water and
 unpressurized tanks. Various systems involving alternate coolants such as liquid air or pressurized tanks could be explored.
 

@@ -48,39 +48,36 @@ refinements are made.
 
 \section{Baseline Design}
 
-Due to the novelty of the Hyperloop design, the stack up of many subsystem uncertainties makes even the highest level trends difficult to pin down.
+Due to the novelty of the hyperloop design, the stack up of many subsystem uncertainties makes even the highest level trends difficult to pin down.
 The initial subsystem modeling described below provides some concrete baseline numbers, since the devil is always in the implementation details. 
 
 \subsection{Tube Diameter}
-The hyperloop pod travels through a fixed diameter tube. As it travels, it must displace air around itself. The bypassed air moves past the
-pod with a relative velocity equal to the travel speed of the pod and must fit into the area between the pod and the tube wall. If you
-assume a circular cross section for the pod, then the bypass air must travel through an area given by
+	The pod travels through a fixed diameter tube displacing air around itself. The tube air reaches the
+pod with a relative velocity equal to the pod speed. As the air is forced through the smaller bypass area, it increases in speed. If you
+assume a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
+
 \begin{equation*}
 A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 \end{equation*}
 
-Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size and pressure, the mass flow rate of the air
-traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
+Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size, temperature and pressure, the mass flow rate of
+the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
 \begin{equation*}
 \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
 \end{equation*}
 
-However, the maximum flow rate of ${W}_{bypass}$ occurs when the velocity reaches a physical limitation of Mach 1. At this point, no additional
-flow can escape around the sides of the vehicle without increasing the density of the air.
+However, the velocity reaches a physical limitation as it reaches Mach 1. At this point, no additional flow can escape around the sides of the vehicle without
+increasing the density of the air. For a given area ratio and flow conditions, the limiting pod speed can be determined.
 
 \begin{equation*}
-\dot{W}_{limit} = \rho_{air} A_{bypass} V_{Mach 1}
-\end{equation*}
-
-\begin{equation*}
-\frac{A_{tube}}{A_{bypass}} = 
+\frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M}
 \end{equation*}
 
 
-If the required $\dot{W}_{bypass}$ reaches $\dot{W}_{limit}$, then the pod will act like a piston in a tube; increasing the air pressure in front
-and lowering the pressure behind it. Without a ducted capsule, the limiting speed is around 120 $\frac{m}{s}$, or Mach 0.3, as shown by the intersection of the
-blue lines on figure \ref{f:flowLIMIT}. The value of this limited pod speed is strongly dependent on the ratio of the pod diameter to the tube diameter.
+If the $V_{bypass}$ reaches the speed of sound, then the pod will act like a piston in a tube; increasing the air pressure in front
+and lowering the pressure behind it. Without a ducted capsule the limiting speed is around 120 $\frac{m}{s}$, or Mach 0.3, as shown by the intersection of
+the blue lines in figure \ref{f:flowLIMIT}. This limited pod speed is strongly dependent on the ratio of the pod diameter to the tube diameter.
 
 \begin{figure}[hbtp]
 \centering
@@ -89,27 +86,33 @@ blue lines on figure \ref{f:flowLIMIT}. The value of this limited pod speed is s
 \label{f:flowLIMIT}
 \end{figure}
 
-Such low speeds would not allow the hyperloop concept to significantly reduce travel times between Los Angeles and San Francisco. To
-reach higher speeds, a compression system is needed to help push additional air around the pod to enable higher travel speeds. The amount
-of air that the compression system needs to move is equal to the difference between the required tube flow (the solid lines) and the limit
-(the dashed lines). As speed increases, the flow demands on the compression system increase as well.
+Such low speeds would not allow the hyperloop concept to significantly reduce travel times between Los Angeles and San Francisco relative to high speed rail.
+To reach higher speeds, an inlet and compression system is needed to help push additional air through the pod. The amount
+of air that the compression system needs to move is equal to the vertical distance between the required tube flow (the solid lines) and the choked flow limit
+(the dashed lines) of figure \ref{f:flowLIMIT}. As speed increases, the flow demands on the compression system increases.
 
-The challenge is that when you increase the flow demands on the compression system, you also force the pod diameter to grow in order to
-handle the increased flow. So traveling faster means that the mass flow requirements grow, which drives the pod diameter up, which further
-increase the mass flow requirements. The only way to damp out this cycle is to allow the tube diameter to grow as you increase the
-maximum velocity. The model set up here converges on the minimal possible tube diameter, given a desired pod Mach number.
-
+Additional non-linearity is introduced when considering the limitations of the compression system. Increasing the demands on the compression system
+causes the required pod inlet diameter to grow in order to handle the increased flow. Traveling faster results in larger mass flow requirements, which drives
+the pod diameter up, changing the area ratio and further increasing the mass flow requirements. This compounding relationship between 
+speed and tube diameter is shown in figure \ref{f:machRAD}. The full system model converges on the minimal possible tube diameter, given a desired
+pod Mach number with additional considerations for the steady state tube temperature and compressor performance.
 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[scale=0.5]{images/mach_vs_rad.png}
-\caption{Exponential relationship between pod speed and required tube r}
+\caption{Exponential relationship between pod speed and required tube radius}
 \label{f:machRAD}
 \end{figure}
 
-The data shows that above Mach .85, the minimum allowable tube size gets very sensitive to pod travel speed. This indicates that Mach
-numbers much higher than about .9 are likely not feasible. Even at a Mach .8, the tube diameter still needs to be around 4 meters. This is
-twice the size considered in the original proposal. At Mach .8 the travel time is around 45 minutes. Although this performance is less than
+Figure \ref{f:machRAD} portrays the exponential relationship between pod speed and required tube radius. This figure explicitly shows the trend depicted by
+connecting the dots of figure \ref{f:flowLIMIT}. For visual simplicity (and as a more of a direct indicator of total system cost), the absolute tube radius is
+charted rather than an area ratio. Although it isn't shown, the pod size is also varied at each optimized point. This plot assumes the capsule contains a
+compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT} were directly overlayed. 
+
+The data shows that above Mach .85, the minimum allowable tube size gets very sensitive to pod travel speed. This indicates that speeds greater than Mach
+.9 are likely not feasible. Even at a Mach .8, the tube diameter still needs to be around 4 meters, roughly
+twice the size considered in the original proposal. With a maximum speed of Mach .8, the travel time is greater than 45 minutes. Additional time would also
+be necessary to keep turns under 1 g. Although this performance is much less favorable than the performance
 described in the original proposal, it still represents an improvement over what can be achieved with a high speed rail.
 
 \subsection{Capsule Cooling Requirements}

@@ -5,7 +5,7 @@ from openmdao.lib.casehandlers.api import DumpCaseRecorder
 from openmdao.lib.datatypes.api import Float
 
 from pycycle.api import (FlowStartStatic, SplitterW, Inlet, Compressor, Duct,
-    Nozzle, CycleComponent, HeatExchanger, FlowStationVar)
+    Nozzle, CycleComponent, HeatExchanger, FlowStationVar, FlowStation)
 
 
 class Performance(CycleComponent): 
@@ -93,6 +93,7 @@ class CompressionSystem(Assembly):
 
         nozzle = self.add('nozzle', Nozzle())
         nozzle.dPqP = 0 #no losses
+        nozzle.Fl_ref = FlowStation()
 
         comp2 = self.add('comp2', Compressor())
         comp2.PR_des = 5.0

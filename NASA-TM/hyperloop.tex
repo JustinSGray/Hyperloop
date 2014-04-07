@@ -111,7 +111,7 @@ pod Mach number with additional considerations for the steady state tube tempera
 
 Figure \ref{f:machRAD} portrays the exponential relationship between pod max speed and required tube radius. This figure explicitly shows the trend depicted by
 connecting the dots of figure \ref{f:flowLIMIT}. The absolute tube radius is charted rather than an area ratio for visual simplicity and as a more of a direct indicator of total
-system cost. The pod size is also free to vary at each optimized point and is plotted on the green line. Somewhat surprisingly, the pod size remains
+system cost. It's worth noting that the pod size is also free to vary at each optimized point and is plotted on the green line. Somewhat surprisingly, the pod size remains
 nearly constant for every optimization at each targeted speed condition. This can be attributed the extremely sensitive nature of the inlet
 size when perturbed in either direction. Decreasing the inlet diameter adversely effects capsule air intake more-so than it helps bypass air throughput; and
 increasing the inlet diameter negatively impacts the bypass area at a greater rate than it improves compressor intake. The inlet size is also somewhat governed by the
@@ -128,10 +128,10 @@ described in the original proposal, it still represents an improvement over what
 
 \subsection{Compression System}
 
-The compression system performs two functions on the hyperloop concept.
-Pressurizes some of the air, increasing its density, to provide a means of exceeding the Kantrowitz limit.
-Provides a source of high pressure air to the air bearing system.
-Each of these functions requires that the compressors move a certain amount of air, which combine to define the total airflow for the whole
+The compression system serves dual purposes. It provide a means of exceeding the nominal Kantrowitz limit as explored in the previous section and also supplies the resulting
+pressurized air to support the air bearing system.
+
+Each of these functions requires the compressors to move a specified amount of air to a specific pressure gain, which combine to define the total airflow for the whole
 sub-system. The system is comprised of an inlet, two compressors, two heat exchangers, a nozzle, and a duct to air bearings.
 
 \begin{figure}[hbtp]
@@ -140,8 +140,10 @@ sub-system. The system is comprised of an inlet, two compressors, two heat excha
 \caption{Schematic flow diagram of the compressor system}
 \end{figure}
 
-The compression systems is modeled as a 1-D cycle, representing components as a thermodynamic processes which are chained together.
-These models predict the instantaneous power consumption of the compression system.
+The compression systems is modeled as a one dimensional cycle, representing components as a thermodynamic processes that are subsequently chained together. 
+Each component is responsible for calculating gas properties across its boundaries, appropriately enforcing conservation equations across the entire system. 
+The subsystem leverages the open-source Cantera package, which is responsible for calculating chemical kinetics, thermodynamics, and transport processes.
+These models predict the instantaneous power consumption of the compressors and determine the upstream conditions necessary to supply sufficient airflow to the bearings.
 
 \subsection{Tube Temperature}
 

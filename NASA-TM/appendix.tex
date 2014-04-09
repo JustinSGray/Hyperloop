@@ -97,7 +97,7 @@ While this simple method provides some basic dependence of travel time on overal
 advanced analysis needs to be constructed which accounts for actual passenger G-load constraints and can derive an optimal route and
 speed profile for a given design.
 
-\begin{figure}[hbtp]
+\begin{figure}[H]
 \caption{Velocity profile given in the original proposal}
 \centering
 \includegraphics[scale=0.5]{images/velocity_profile.png}
@@ -204,12 +204,12 @@ First we add an instance of each component class, then connect variables to and 
 \inputminted[]{python}{code/example2.py}
  \end{adjustwidth} 
  Since assemblies often require iteration and convergence, a solver is then added. Each added parameter gives the solver variables to vary, until all declared constraints are satisfied.
-\begin{adjustwidth}{-3cm}{-3cm}
+\begin{adjustwidth}{-2cm}{-2cm}
 \inputminted[]{python}{code/example3.py}
  \end{adjustwidth} 
 The final ‘’‘if \_\_name\_\_==”\_\_main\_\_”:’‘’ section works the same as you might see it in any other python script. This trick allows the user to set up conditional inputs and parameters for the file to run by itself, rather than in conjunction with the rest of the optimization. Running stand-alone is much more convenient when initially building a component and debugging. 
 
- \begin{adjustwidth}{-3cm}{-3cm}
+ \begin{adjustwidth}{-2cm}{-2cm}
 \inputminted[]{python}{code/example4.py} %[linenos]
   \end{adjustwidth} 
 

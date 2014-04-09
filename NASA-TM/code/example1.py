@@ -17,13 +17,15 @@ class HyperloopPod(Assembly):
     Mach_bypass = Float(.95, iotype="in", desc="Mach in the air passing around the pod")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at \
         design conditions")
-    Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa", low=0)
+    Ps_tube = Float(99, iotype="in", desc="static pressure in the tube", units="Pa", 
+        low=0)
 
     #Parameters
     solar_heating_factor = Float(.7, iotype="in",
-      desc="Fractional amount of solar radiation to consider in tube temperature calculations",
-      low=0, high=1)
-    tube_length = Float(563270, units = 'm', iotype='in', desc='Length of entire Hyperloop')
+      desc="Fractional amount of solar radiation to consider in tube temperature \
+      calculations", low=0, high=1)
+    tube_length = Float(563270, units = 'm', iotype='in', desc='Length of entire\
+     Hyperloop')
     pwr_marg = Float(.3, iotype="in", desc="fractional extra energy requirement")
     hub_to_tip = Float(.4, iotype="in", desc="hub to tip ratio for the compressor")
     coef_drag = Float(2, iotype="in", desc="capsule drag coefficient")

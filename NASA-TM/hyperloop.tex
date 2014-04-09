@@ -438,7 +438,7 @@ between the sub-systems. These couplings enforce a set of equality constraints t
 For constraints \ref{eq:flow} and \ref{eq:area}, a multiplier has been applied to the constraint to scale it for improved numerical convergence.
 The first equality constraint ensures the capsule compressor achieves the necessary flow intake given a maximum bypass flow.
 The second enforces a minimum static air pressure for the air bearings. The third constraint drives the operating tube temperature to balanced conditions,
-and the final constraint requires agreement between the capsule geometry and the compression system computed areas.
+and the final constraint requires agreement between the capsule geometry code and the compression system computed areas.
 
 The optimizer varies  the following state variables to to satisfy the constraints. 
 
@@ -492,6 +492,9 @@ temperature rise due to compression is significant less than originally estimate
 temperature. Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat
 rate added from pod compression systems. Further assuming a 90 degF day, radiation and convection out of the tube would lead to a
 manageable steady state tube wall temperature of 120 degF.
+
+Current tool-sets provide sufficient complexity management, however a larger breadth of disciplines need to be modeled before ultimately understanding
+the feasibility of this unique multidisciplinary problem.
 
 %\begin{thebibliography}{WoodTP}
 %\bibitem[WoodTP]{woodTP} Wood, W.A., ``Multidimensional Upwind

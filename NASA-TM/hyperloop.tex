@@ -30,7 +30,7 @@ be kept tractable and development can be performed in parallel. The Hyperloop co
 existing monolithic systems, falling ambiguously between the purview of existing tool-sets and traditional engineering competencies. The modeling
 approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod is not unlike those
 found in aircraft concepts involving electric propulsion. They both operate at high speeds and low pressure conditions with an electric motor
-driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems design and optimization for aircraft engine
+driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems level aircraft engine
 design are adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
  \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
 free and easily accessible tool-sets with the Python programming language and OpenMDAO framework serving as the backbone for continued expansion.  
@@ -222,10 +222,10 @@ and the logarithmic mean temperature difference (LMTD) of the heat exchanger is 
 
 \subsubsection{Equilibrium Tube Temperature}
 A high-level assessment of the overall steady-state heat transfer between the 300 mile Hyperloop tube and the ambient atmosphere is
-also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the capsule exhaust air and
-solar flux were considered the primary drivers for heat absorption into the tube. Conversely, heat released from the tube was modeled by means of
+also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the capsule exhaust
+air and solar flux are considered the primary drivers for heat absorption into the tube. Conversely, heat released from the tube is modeled by means of
 ambient natural convection and radiation out from the stainless-steel surface. The thermal interaction between the rarified internal air and
-tube was not modeled.
+tube is not modeled.
 
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
 flow relations.
@@ -325,7 +325,12 @@ matches the rate of heat being absorbed by the tube. Assuming numerous state var
 was reached. These result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
 
 \section{Full Model Integration}
-The model is broken down into 5 major assemblies as described below. 
+
+Each subsystem contains variables pertinent to other disciplines, resulting in a large inter-dependence between components. 
+This coupling requires a workflow with numerous sub-iterations in order to arrive at a physically valid state for the entire system.
+At the highest level, a solver is necessary to perturb numerous design and state variables to characterize the system of equations and drive each variable
+towards a specified valid criteria. For this task, the OpenMDAO framework provides numerous solvers and optimizers and simplifies the process of assembling
+disparate codes into a cohesive workflow. The fully assembled Hyperloop model is broken down into 5 major assemblies as described below. 
 
 \begin{enumerate}
   \item Compression System (\texttt{compress}): Performance and power consumption of the compressors
@@ -420,18 +425,20 @@ between the sub-systems. These couplings enforce a set of equality constraints t
 \begin{equation} \label{eq:flow}
 	0.01*(\texttt{compress.W\_in} - \texttt{flow\_limit.W\_excess}) = 0
 \end{equation}
-\begin{equation}
+\begin{equation} \label{eq:bearing}
 	\texttt{compress.Ps\_bearing\_residual} = 0
 \end{equation}
-\begin{equation}
+\begin{equation} \label{eq:temp}
 	\texttt{tube\_wall\_temp.ss\_temp\_residual} = 0
 \end{equation}
 \begin{equation} \label{eq:area}
 	0.01*(\texttt{pod.area\_compressor\_bypass} - \texttt{compress.area\_c1\_out}) = 0
 \end{equation}
 
-For constraints \ref{eq:flow} and \ref{eq:area}, a multiplier has been applied to the constraint to scale it for improved numerical
-convergence.
+For constraints \ref{eq:flow} and \ref{eq:area}, a multiplier has been applied to the constraint to scale it for improved numerical convergence.
+The first equality constraint ensures the capsule compressor achieves the necessary flow intake given a maximum bypass flow.
+The second enforces a minimum static air pressure for the air bearings. The third constraint drives the operating tube temperature to balanced conditions,
+and the final constraint requires agreement between the capsule geometry and the compression system computed areas.
 
 The optimizer varies  the following state variables to to satisfy the constraints. 
 

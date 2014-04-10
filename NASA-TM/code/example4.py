@@ -11,7 +11,8 @@ if __name__=="__main__":
     #initial guesses
     hl.compress.W_in = .46
     hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 324
-    hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322
+    hl.compress.Ts_tube = hl.flow_limit.Ts_tube \
+        = hl.tube_wall_temp.tubeWallTemp = 322
     hl.compress.c2_PR_des = 5
 
     hl.run()

@@ -17,13 +17,13 @@ solver.add_constraint('.01*(pod.area_compressor_bypass-compress.area_c1_out)=0')
 
 driver = self.driver
 driver.workflow.add('solver')
-driver.recorders = [CSVCaseRecorder(filename="hyperloop_data.csv")] #record only converged
+driver.recorders = [CSVCaseRecorder(filename="hyperloop.csv")]#record only converged
 driver.printvars = ['Mach_bypass', 'Mach_pod_max', 'Mach_c1_in', 
 					'c1_PR_des', 'pod.radius_inlet_back_outer',
                     'pod.inlet.radius_back_inner', 'flow_limit.radius_tube',
                     'compress.W_in', 'compress.c2_PR_des', 'pod.net_force', 
-                    'compress.F_net', 'compress.pwr_req', 'pod.energy', 
-                    'mission.time', 'compress.speed_max', 'tube_wall_temp.temp_boundary']
+                    'compress.F_net','compress.pwr_req','pod.energy','mission.time',
+                    'compress.speed_max', 'tube_wall_temp.temp_boundary']
 
 #Declare Solver Workflow
 solver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])

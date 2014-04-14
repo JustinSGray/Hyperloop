@@ -13,12 +13,12 @@ in a fairly large air intake at the nose of the capsule, shown in Fig. \ref{f:hy
 tube is strongly tied to the maximum travel speed of the capsule. This coupling between the maximum velocity and
 tube diameter cascades into multiple subsystems and needs to be accounted for upfront in the design process. 
 All of the sub-system interactions make it necessary to take a more integrated approach to the design of the Hyperloop concept. The intention of
-this paper is to explore some of the most significant trade-offs between sub-systems and provide a starting point for subsystem expansion.
+this paper is to explore some of the most significant trade-offs between sub-systems and provide a starting point for subsystem development.
 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[width=\textwidth]{images/hyperloop_cad.png}
-\caption{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a capsule speed of Mach 0.8. Geometry rendered in OpenCSM, a parametric solid modeling tool.}
+ \caption[Hyperloop geometry assembled in OpenCSM]{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a capsule speed of Mach 0.8. Geometry rendered in OpenCSM, a parametric solid modeling tool.}
 \label{f:hyperloopCAD}
 \end{figure}
 
@@ -200,6 +200,7 @@ method. The effectiveness for a counter flow heat exchanger with a $\frac{C_{min
 The following conditions satisfied an energy balance with an extremely optimistically assumed effectiveness of 0.9765, and the proposed requirement to fully
 cool the air back down to inlet temperatures.
 
+\begin{table} [H]
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline 
 Fluid & Cp & Tin & Tout & mdot & Q (kJ/s) & Qmax \\ 
@@ -209,7 +210,8 @@ Air & 1.006 kJ/kh-K & 791 K & 300 K & 0.49 kg/s & -242 & 247.9 \\
 Water & 4.186 kJ/kg-K & 288.15 & 416.6 K  & 0.45 kg/s & 242 & 247.9 \\ 
 \hline 
 \end{tabular} 
-
+ \caption{Heat Exchanger Fluid Properties}
+\end{table}
 
 With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$ of standard temperature/pressure water would need to be carried 
 with steam tanks over a hundred meters in length. This doesn't even account for the second stage heat exchanger, making the system nearly infeasible
@@ -371,6 +373,7 @@ The compression system and pod geometry systems in figure \ref{f:hyperloopXDSM} 
 The system design is defined at the top-most level with the following design variables. These variables can be actively varied
  by the optimizer to achieve user defined objectives:
 
+\begin{table} [H]
 \begin{adjustwidth}{-2cm}{-2cm}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
@@ -386,12 +389,15 @@ Variable & Description & Units & Baseline Val. & Min & Max \\
 \hline 
 \texttt{c1\_PR\_des} & First compressor pressure ratio & - & 12.47 & 10 & 25 \\ 
 \hline 
-\end{tabular} 
+\end{tabular}
 \end{adjustwidth}
+ \caption[Design Variables]{Top-level Design Variables.}
+\end{table}
 
 \subsection{Model Parameters}
 These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
 
+\begin{table} [H]
 \begin{adjustwidth}{-3cm}{-3cm}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
@@ -413,6 +419,8 @@ hub\_to\_tip & Ratio of hub radius to tip radius for the first compressor & - & 
 \hline 
 \end{tabular} 
 \end{adjustwidth}
+ \caption[Model Parameters]{Top-level model parameters}
+\end{table}
 
 \subsection{Constraints and State Variables}
 

@@ -57,7 +57,10 @@ requirement of 350-425 kw-hrs is in agreement with Musk's original proposal. Con
 \usepackage{courier} %courier font for variable names
 \usepackage{cleveref} %section references
 \usepackage[all]{hypcap} %figure references point to top of figure (must come after hyperref)
+\usepackage{nomencl} %nomenclature
 
+%nomenclature
+\makenomenclature
 %these seemed to be necessary with minted... not sure what they do..
 \makeatletter
 \color{black}
@@ -68,10 +71,13 @@ requirement of 350-425 kw-hrs is in agreement with Musk's original proposal. Con
 \crefname{appsec}{Appendix}{Appendices}
 \begin{document}
 
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
 \tableofcontents
 \listoffigures
 \listoftables
-
+\printnomenclature
+ 
 \subfile{hyperloop}
 
 \cite{Cengal}

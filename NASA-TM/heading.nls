@@ -2,12 +2,14 @@
 
  \nomgroup{A}
 
-  \item [{$\dot{W}_{bypass}$}]\begingroup Bypass Mass Flow Rate (kg/s)\nomeqref {0}
+  \item [{$\dot{W}_{bypass}$}]\begingroup Bypass Mass Flow Rate ($\frac{kg}{s}$) \nomeqref {0}
 		\nompageref{4}
+  \item [{$\gamma$}]\begingroup Ratio of specific heat\nomeqref {0}
   \item [{$\rho_{air}$}]\begingroup Air Density\nomeqref {0}
 		\nompageref{4}
   \item [{$A_{bypass}$}]\begingroup Bypass Area\nomeqref {0}
 		\nompageref{4}
+  \item [{$M$}]\begingroup Mach Number\nomeqref {0}\nompageref{4}
   \item [{OpenCSM}]\begingroup Open Source Constructive Modeler\nomeqref {0}
 		\nompageref{3}
   \item [{OpenMDAO}]\begingroup Open Source Multidisciplinary Design, Analysis, and Optimization\nomeqref {0}

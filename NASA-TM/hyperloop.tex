@@ -32,12 +32,12 @@ found in aircraft concepts involving electric propulsion. They both operate at h
 driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems level aircraft engine
 design are adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
  \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
-free and easily accessible tool-sets with the Python programming language and OpenMDAO framework serving as the backbone for continued expansion.  
+free and easily accessible tool-sets with the Python programming language and OpenMDAO \nomenclature{OpenMDAO}{Open Source Multidisciplinary Design, Analysis, and Optimization} framework serving as the backbone for continued expansion.  
 
 \subsection{Modeling Platform: OpenMDAO}
 
 
-The presented Hyperloop models were built exclusively using open-source tools including, but not limited to: OpenCSM, GeoMACH, VSP and
+The presented Hyperloop models were built exclusively using open-source tools including OpenCSM \nomenclature{OpenCSM}{Open Source Constructive Modeler} and
 Cantera. These models were subsequently connected and operated using the OpenMDAO framework. OpenMDAO is a Python based
 integration environment that facilitates the application of advanced Multidisciplinary Design Analysis and Optimization (MDAO) methods.
 The framework leverages the extensive scientific community already backing Python development and provides further tailored functionality
@@ -58,15 +58,21 @@ The initial subsystem modeling provides some concrete baseline numbers, given si
 
 
 	The pod travels through a fixed diameter tube displacing air around itself. The air reaches the
-pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area, it increases in speed. Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
+pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area, it increases in speed. Assuming a circular cross section
+for both the pod and tube, then the bypass air must travel through an area given by
 
+\nomenclature{A_{bypass}}{Bypass Area}
+\nomenclature{r_{tube}}{Tube Radius}
+\nomenclature{r_{pod}}{Pod Radius}
 \begin{equation*}
 A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 \end{equation*}
-
+\nomenclature{\rho_{air}}{Air Density}
+\nomenclature{\dot{W}_{bypass}}{Bypass Mass Flow Rate (kg/s)}
 Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size, temperature and pressure, the mass flow rate of
 the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
+\nomenclature{V_{pod}}{Pod Velocity}
 \begin{equation*}
 \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
 \end{equation*}

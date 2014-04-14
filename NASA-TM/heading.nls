@@ -1,0 +1,19 @@
+\begin{thenomenclature} 
+
+ \nomgroup{A}
+
+  \item [{$\dot{W}_{bypass}$}]\begingroup Bypass Mass Flow Rate (kg/s)\nomeqref {0}
+		\nompageref{4}
+  \item [{$\rho_{air}$}]\begingroup Air Density\nomeqref {0}
+		\nompageref{4}
+  \item [{$A_{bypass}$}]\begingroup Bypass Area\nomeqref {0}
+		\nompageref{4}
+  \item [{OpenCSM}]\begingroup Open Source Constructive Modeler\nomeqref {0}
+		\nompageref{3}
+  \item [{OpenMDAO}]\begingroup Open Source Multidisciplinary Design, Analysis, and Optimization\nomeqref {0}
+		\nompageref{3}
+  \item [{$r_{pod}$}]\begingroup Pod Radius\nomeqref {0}\nompageref{4}
+  \item [{$r_{tube}$}]\begingroup Tube Radius\nomeqref {0}\nompageref{4}
+  \item [{$V_{pod}$}]\begingroup Pod Velocity\nomeqref {0}\nompageref{4}
+
+\end{thenomenclature}

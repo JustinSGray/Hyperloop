@@ -37,6 +37,10 @@ nomencl for nomenclature (see build script)
 \nomenclature{MDAO}{Multi-disciplinary}
 \nomenclature{\rho}{Density}
 
+Build with build.sh
+Edit .nls to add $$ to math equation nomenclature manually so TexMaker doesn't bark
+otherwise can't interperate \dot{W}
+
 http://en.wikibooks.org/wiki/LaTeX/Indexing
 for more info
 -------------------------------------------

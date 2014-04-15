@@ -193,24 +193,22 @@ To use the hyperloop model, you want to run the file src\\hyperloop\\hyperloop\_
 
 The file starts out with some library imports and the i/o definition of the HyperloopPod assembly.
 
-\begin{adjustwidth}{-3cm}{-3cm}
-\inputminted[]{python}{code/example1.py}
-\end{adjustwidth} 
+\inputminted[fontsize=\tiny]{python}{code/example1.py}
 
 Next is the configure method, which is used to wire up the assembly components like the diagrams we show in the model layout section.
 
 First we add an instance of each component class, then connect variables to and from each component.
-\begin{adjustwidth}{-1cm}{-1cm}
-\inputminted[]{python}{code/example2.py}
- \end{adjustwidth} 
+
+\inputminted[fontsize=\tiny]{python}{code/example2.py}
+ 
  Since assemblies often require iteration and convergence, a solver is then added. Each added parameter gives the solver variables to vary, until all declared constraints are satisfied.
-\begin{adjustwidth}{-2cm}{-2cm}
-\inputminted[]{python}{code/example3.py}
- \end{adjustwidth} 
+%\begin{adjustwidth}{-2cm}{-2cm}
+\inputminted[fontsize=\tiny]{python}{code/example3.py}
+ %\end{adjustwidth} 
 The final ‘’‘if \_\_name\_\_==”\_\_main\_\_”:’‘’ section works the same as you might see it in any other python script. This trick allows the user to set up conditional inputs and parameters for the file to run by itself, rather than in conjunction with the rest of the optimization. Running stand-alone is much more convenient when initially building a component and debugging. 
 
- \begin{adjustwidth}{-2cm}{-2cm}
-\inputminted[]{python}{code/example4.py} %[linenos]
-  \end{adjustwidth} 
+ %\begin{adjustwidth}{-2cm}{-2cm}
+\inputminted[fontsize=\tiny]{python}{code/example4.py} %[linenos]
+  %\end{adjustwidth} 
 
 \end{document}

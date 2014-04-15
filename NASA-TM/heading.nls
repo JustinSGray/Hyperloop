@@ -2,6 +2,7 @@
 
  \nomgroup{A}
 
+  \item [{$\beta$}]\begingroup Volume coefficient of expansion (K)\nomeqref {0}\nompageref{11}
   \item [{$\dot{m}$}]\begingroup Mass flow rate\nomeqref {0}
     \nompageref{9}
   \item [{$\dot{W}_{bypass}$}]\begingroup Bypass Mass Flow Rate ($\frac{kg}{s}$) \nomeqref {0}
@@ -14,12 +15,19 @@
 		\nompageref{4}
   \item [{$\sigma$}]\begingroup Stefan-Boltzmann constant\nomeqref {0}
     \nompageref{10}
-  \item [{$A_{bypass}$}]\begingroup Bypass Area\nomeqref {0}
-		\nompageref{4}
+  \item [{$\upsilon$}]\begingroup Area\nomeqref {0}\nompageref{11}
+  \item [{A}]\begingroup Area\nomeqref {0}\nompageref{10}
   \item [{$C_{p}$}]\begingroup Heat capacity at constant pressure\nomeqref {0}
     \nompageref{9}
+  \item [{g}]\begingroup Area\nomeqref {0}\nompageref{11}
+  \item [{Gr}]\begingroup Grashof Number\nomeqref {0}\nompageref{11}
+  \item [{h}]\begingroup Heat transfer coefficient\nomeqref {0}
+    \nompageref{11}
+  \item [{k}]\begingroup Thermal Conductivity\nomeqref {0}
+    \nompageref{11}
   \item [{L}]\begingroup Length\nomeqref {0}\nompageref{10}
-  \item [{$MN$}]\begingroup Mach Number\nomeqref {0}\nompageref{5}
+  \item [{MN}]\begingroup Mach Number\nomeqref {0}\nompageref{5}
+  \item [{Nu}]\begingroup Nusselt Number\nomeqref {0}\nompageref{11}
   \item [{OD}]\begingroup Outer diameter\nomeqref {0}\nompageref{10}
   \item [{OpenCSM}]\begingroup Open Source Constructive Modeler\nomeqref {0}
 		\nompageref{4}
@@ -29,9 +37,11 @@
   \item [{$P_{rad}$}]\begingroup Radiated Power\nomeqref {0}
     \nompageref{10}
   \item [{PR}]\begingroup Pressure Ratio\nomeqref {0}\nompageref{10}
+  \item [{Pr}]\begingroup Prandtl Number\nomeqref {0}\nompageref{11}
   \item [{Q}]\begingroup Heat flow rate\nomeqref {0}\nompageref{9}
   \item [{$r_{pod}$}]\begingroup Pod Radius\nomeqref {0}\nompageref{4}
   \item [{$r_{tube}$}]\begingroup Tube Radius\nomeqref {0}\nompageref{4}
+  \item [{Ra}]\begingroup Rayleigh Number\nomeqref {0}\nompageref{11}
   \item [{SIF}]\begingroup Solar Insulation Factor\nomeqref {0}
     \nompageref{10}
   \item [{SRI}]\begingroup Solar Reflectance Index\nomeqref {0}

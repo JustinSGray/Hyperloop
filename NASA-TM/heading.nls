@@ -4,7 +4,7 @@
 
   \item [{$\dot{W}_{bypass}$}]\begingroup Bypass Mass Flow Rate ($\frac{kg}{s}$) \nomeqref {0}
 		\nompageref{4}
-  \item [{$\gamma$}]\begingroup Ratio of specific heat\nomeqref {0}
+  \item [{$\gamma$}]\begingroup Heat Capacity Ratio\nomeqref {0}
   \item [{$\rho_{air}$}]\begingroup Air Density\nomeqref {0}
 		\nompageref{4}
   \item [{$A_{bypass}$}]\begingroup Bypass Area\nomeqref {0}

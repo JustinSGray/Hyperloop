@@ -2,6 +2,8 @@
 
  \nomgroup{A}
 
+  \item [{$\dot{m}$}]\begingroup Mass flow rate\nomeqref {0}
+    \nompageref{9}
   \item [{$\dot{W}_{bypass}$}]\begingroup Bypass Mass Flow Rate ($\frac{kg}{s}$) \nomeqref {0}
 		\nompageref{4}
   \item [{$\gamma$}]\begingroup Heat Capacity Ratio\nomeqref {0}
@@ -10,13 +12,21 @@
 		\nompageref{4}
   \item [{$A_{bypass}$}]\begingroup Bypass Area\nomeqref {0}
 		\nompageref{4}
-  \item [{$M$}]\begingroup Mach Number\nomeqref {0}\nompageref{4}
+  \item [{$C_{p}$}]\begingroup Heat capacity at constant pressure\nomeqref {0}
+    \nompageref{9}
+  \item [{$MN$}]\begingroup Mach Number\nomeqref {0}\nompageref{4}
   \item [{OpenCSM}]\begingroup Open Source Constructive Modeler\nomeqref {0}
 		\nompageref{3}
   \item [{OpenMDAO}]\begingroup Open Source Multidisciplinary Design, Analysis, and Optimization\nomeqref {0}
 		\nompageref{3}
+  \item [{P}]\begingroup Pressure\nomeqref {0}\nompageref{10}
+  \item [{PR}]\begingroup Pressure Ratio\nomeqref {0}\nompageref{10}
+  \item [{Q}]\begingroup Heat flow rate\nomeqref {0}\nompageref{9}
   \item [{$r_{pod}$}]\begingroup Pod Radius\nomeqref {0}\nompageref{4}
   \item [{$r_{tube}$}]\begingroup Tube Radius\nomeqref {0}\nompageref{4}
+  \item [{T}]\begingroup Temperature\nomeqref {0}\nompageref{9}
   \item [{$V_{pod}$}]\begingroup Pod Velocity\nomeqref {0}\nompageref{4}
+  \item [{${\eta}_{adiabatic}$}]\begingroup Adiabatic Efficiency\nomeqref {0}
+    \nompageref{10}
 
 \end{thenomenclature}

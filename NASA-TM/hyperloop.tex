@@ -82,9 +82,9 @@ around the sides of the vehicle without increasing the density of the air.
 For a given area ratio and flow conditions characterized by the heat capacity ratio $\gamma$, the limiting pod speed can be determined based on isentropic flow relations.
 
 \nomenclature{\gamma}{Heat Capacity Ratio}
-\nomenclature{M}{Mach Number}
+\nomenclature{MN}{Mach Number}
 \begin{equation*}
-\frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M}
+\frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}MN^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{MN}
 \end{equation*}
 
 
@@ -190,6 +190,7 @@ The following two sections provide additional details about the engineering mode
 The limits and requirements of a hypothetical on-board heat exchanger can be estimated with a straightforward energy balance. The
 effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum possible heat transfer.
 
+\nomenclature{Q}{Heat flow rate}
 \begin{equation*}
 {Q}_{released}  = effectiveness * {Q}_{max}
 \end{equation*}
@@ -198,6 +199,9 @@ effectiveness of a heat exchanger can be described as the ratio of actual heat t
 with $Qmax=\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where each fluid has a $\dot{m} C_{p}$ and the fluid with the lowest
 product is used to determine the maximum heat transfer. In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
+\nomenclature{\dot{m}}{Mass flow rate}
+\nomenclature{T}{Temperature}
+\nomenclature{C_{p}}{Heat capacity at constant pressure}
 \begin{equation*}
 \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
 \end{equation*}
@@ -239,6 +243,10 @@ tube is not modeled.
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
 flow relations.
 
+\nomenclature{P}{Pressure}
+\nomenclature{PR}{Pressure Ratio}
+\nomenclature{PR}{Pressure Ratio}
+\nomenclature{{\eta}_{adiabatic}}{Adiabatic Efficiency}
 \begin{equation*}
 T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} MN^2]
 \end{equation*}
@@ -266,6 +274,17 @@ The peak heating rate from the pods scales linearly.
 \end{equation*}
 The solar heat flow per unit area can be approximated, given the solar reflectance index (SRI) of stainless steel, non-normal incidence factor
 of the cylinder and solar insulation (SIF).
+
+\nomenclature{SRI}{Solar Reflectance Index}
+\nomenclature{SIF}{Solar Insulation Factor}
+\nomenclature{{\theta}_{nni}}{Non-normal Incidence factor}
+\nomenclature{L}{Length}
+\nomenclature{OD}{Outer diameter}
+\nomenclature{\epsilon}{Emissivity Factor}
+\nomenclature{\sigma}{Stefan-Boltzmann constant}
+\nomenclature{P_{rad}}{Radiated Power}
+\nomenclature{L}{Length}
+
 \begin{equation*}
 Solar = (1-SRI) {\theta}_{nni} SIF
 \end{equation*}

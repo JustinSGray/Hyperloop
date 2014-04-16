@@ -32,12 +32,12 @@ found in aircraft concepts involving electric propulsion. They both operate at h
 driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems level aircraft engine
 design are adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
  \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
-free and easily accessible tool-sets with the Python programming language and OpenMDAO \nomenclature{OpenMDAO}{Open Source Multidisciplinary Design, Analysis, and Optimization} framework serving as the backbone for continued expansion.  
+free and easily accessible tool-sets with the Python programming language and OpenMDAO \nomenclature{MDAO}{Multidisciplinary Design, Analysis, and Optimization} framework serving as the backbone for continued expansion.  
 
 \subsection{Modeling Platform: OpenMDAO}
 
 
-The presented Hyperloop models were built exclusively using open-source tools including OpenCSM \nomenclature{OpenCSM}{Open Source Constructive Modeler} and
+The presented Hyperloop models were built exclusively using open-source tools including OpenCSM \nomenclature{CSM}{Constructive Solid Modeler} and
 Cantera. These models were subsequently connected and operated using the OpenMDAO framework. OpenMDAO is a Python based
 integration environment that facilitates the application of advanced Multidisciplinary Design Analysis and Optimization (MDAO) methods.
 The framework leverages the extensive scientific community already backing Python development and provides further tailored functionality
@@ -71,7 +71,7 @@ A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size, temperature and pressure, the mass flow rate of
 the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
-\nomenclature{V}{Velocity}
+\nomenclature{V}{Velocity ($\frac{m}{s}$)}
 \begin{equation*}
 \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
 \end{equation*}
@@ -189,7 +189,7 @@ The following two sections provide additional details about the engineering mode
 The limits and requirements of a hypothetical on-board heat exchanger can be estimated with a straightforward energy balance. The
 effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum possible heat transfer.
 
-\nomenclature{Q}{Heat flow rate}
+\nomenclature{Q}{Heat flow rate (W)}
 \begin{equation*}
 {Q}_{released}  = effectiveness * {Q}_{max}
 \end{equation*}
@@ -199,7 +199,7 @@ with $Qmax=\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ wher
 product is used to determine the maximum heat transfer. In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
 \nomenclature{\dot{m}}{Mass flow rate}
-\nomenclature{T}{Temperature}
+\nomenclature{T}{Temperature (K)}
 \nomenclature{C_{p}}{Heat capacity at constant pressure ($\frac{J}{kg-K}$) }
 \begin{equation*}
 \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
@@ -242,7 +242,7 @@ tube is not modeled.
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
 flow relations.
 
-\nomenclature{P}{Pressure}
+\nomenclature{P}{Pressure ($\frac{N}{m^{2}}$)}
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{{\eta}_{adiabatic}}{Adiabatic Efficiency}
@@ -276,12 +276,12 @@ of the cylinder and solar insulation (SIF).
 
 \nomenclature{SRI}{Solar Reflectance Index}
 \nomenclature{SIF}{Solar Insulation Factor}
-\nomenclature{{\theta}_{nni}}{Non-normal Incidence factor}
+\nomenclature{{\theta}_{nni}}{Non-normal Incidence factor (rad)}
 \nomenclature{L}{Length (m)}
-\nomenclature{OD}{Outer diameter}
+\nomenclature{OD}{Outer diameter (m)}
 \nomenclature{\epsilon}{Emissivity Factor}
 \nomenclature{\sigma}{Stefan-Boltzmann constant ($\frac{W}{m-K}$)}
-\nomenclature{P_{rad}}{Radiated Power}
+\nomenclature{P_{rad}}{Radiated Power (W)}
 \nomenclature{L}{Length}
 
 \begin{equation*}
@@ -308,15 +308,15 @@ between buoyancy and viscosity driven flows is parameterized using the following
 
 if 150 K $<  T_{amb} <$ 400 K:
 
-\nomenclature{g}{Acceleration of gravity}
+\nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}
 \nomenclature{\upsilon}{Kinematic Viscosity ($\frac{m^{2}}{s}$)}
-\nomenclature{Pr}{Prandtl Number}
-\nomenclature{Gr}{Grashof Number}
-\nomenclature{Ra}{Rayleigh Number}
-\nomenclature{Nu}{Nusselt Number}
-\nomenclature{h}{Heat transfer coefficient}
-\nomenclature{k}{Thermal Conductivity}
+\nomenclature{Pr}{Prandtl Number, $\frac{\upsilon}{\alpha}$}
+\nomenclature{Gr}{Grashof Number, $\frac{ g \beta \delta TL^{3}}{v^{2}}$}
+\nomenclature{Ra}{Rayleigh Number, $\frac{\rho U_{\infty} L}{\mu}$}
+\nomenclature{Nu}{Nusselt Number, $\frac{hL}{k}$}
+\nomenclature{h}{Heat transfer coefficient ($\frac{W}{m^{2}-K}$)}
+\nomenclature{k}{Thermal Conductivity ($\frac{W}{m-K}$) }
 
 \begin{equation*}
 \frac{g \beta T} {\upsilon^2} =  4.178\times10^{19} \times T_{amb}^{-4.639}

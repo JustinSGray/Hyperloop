@@ -410,23 +410,22 @@ The system design is defined at the top-most level with the following design var
  by the optimizer to achieve user defined objectives:
 
 \begin{table} [H]
-\begin{adjustwidth}{-2cm}{-2cm}
-\begin{tabular}{|c|c|c|c|c|c|}
+\centering
+\begin{tabular}{|c|c|}
 \hline 
-Variable & Description & Units & Baseline Val. & Min & Max \\ 
+Variable & Description\\ 
 \hline 
-\texttt{Mach\_bypass} & Mach number of the air traveling around the pod & - & 0.95 & 0.5 & 0.98 \\ 
+\texttt{Mach\_bypass} & Mach number of the air traveling around the pod \\ 
 \hline 
-\texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod & - & 0.9 & 0.5 & 0.98 \\ 
+\texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod \\ 
 \hline 
-\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet & - & 0.6 & 0.5 & 0.8 \\ 
+\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet \\ 
 \hline 
-\texttt{Ps\_tube} & Static pressure of the air in the tube & Pa & 99 & 99 & 500 \\ 
+\texttt{Ps\_tube} & Static pressure of the air in the tube \\ 
 \hline 
-\texttt{c1\_PR\_des} & First compressor pressure ratio & - & 12.47 & 10 & 25 \\ 
+\texttt{c1\_PR\_des} & First compressor pressure ratio \\ 
 \hline 
 \end{tabular}
-\end{adjustwidth}
  \caption[Design Variables]{Top-level Design Variables.}
 \end{table}
 
@@ -434,27 +433,26 @@ Variable & Description & Units & Baseline Val. & Min & Max \\
 These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
 
 \begin{table} [H]
-\begin{adjustwidth}{-3cm}{-3cm}
+\centering
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
-Variable & Description & Units & Baseline Val & Min. & Max. \\ 
+Variable & Description  \\ 
 \hline 
-pwr\_marg & Safety factor applied to the power requirement for the pod & - & 0.3 & 0 & 2 \\ 
+\texttt{pwr\_marg} & Safety factor applied to the power req. for the pod \\ 
 \hline 
-solar\_heating\_factor & Fraction of solar radiation to consider in tube temperature & - & 0.7 & 0 & 1 \\ 
+\texttt{solar\_heating\_factor} & Fraction of solar radiation to consider in tube temp.\\ 
 \hline 
-tube\_length & Length of the tube & m & 563270 & - & - \\ 
+\texttt{tube\_length} & Length of the tube  \\ 
 \hline 
-n\_rows & Number of rows of seats in the passenger capsule & - & 14 & - & - \\ 
+\texttt{n\_rows} & Number of rows of seats in the passenger capsule  \\ 
 \hline 
-length\_row & Length allotted to each row of seats & cm & 150 & 120 & 200 \\ 
+\texttt{length\_row} & Length allotted to each row of seats  \\ 
 \hline 
-coef\_drag & Drag Coefficient for the pod & - & 2 & 0.6 & 2.5 \\ 
+\texttt{coef\_drag} & Drag Coefficient for the pod  \\ 
 \hline 
-hub\_to\_tip & Ratio of hub radius to tip radius for the first compressor & - & 0.4 & 0.2 & 0.6 \\ 
+\texttt{hub\_to\_tip} & Hub radius to tip radius ratio for the first compressor \\ 
 \hline 
 \end{tabular} 
-\end{adjustwidth}
  \caption[Model Parameters]{Top-level model parameters}
 \end{table}
 

@@ -28,7 +28,7 @@ different competencies the problem can
 be kept tractable and development can be performed in parallel. The Hyperloop concept straddles a unique combination of disciplines
 compared to many existing monolithic systems, falling ambiguously between the purview of
 traditional aircraft and rail transportation systems. The modeling
-approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod is not unlike those
+approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod are similar to those
 found in aircraft concepts involving electric propulsion. They both operate at high speeds and low pressure conditions with an electric motor
 driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems level aircraft engine
 design are adapted for the pod compressor analysis, heat estimates and pod geometry. The full source code is provided in
@@ -43,7 +43,7 @@ The presented Hyperloop models were built exclusively using open-source tools in
 Cantera. These models were subsequently connected and operated using the OpenMDAO framework. OpenMDAO is a Python based
 integration environment that facilitates the application of advanced Multidisciplinary Design Analysis and Optimization (MDAO) methods.
 The framework leverages the extensive scientific community already backing Python development and provides further tailored functionality
-to more easily facilitate large and complex engineering problems. The development of this software is being led out NASA Glenn Research
+to more easily facilitate large and complex engineering problems. The development of this software is being led out of the NASA Glenn Research
 Center, stemming from demands of unconventional aircraft concepts. Although NASA's
 focus is centered on analyzing aerospace applications, the framework itself is extremely general and not specific to any field. As the
 Hyperloop design evolves, an ever increasing number of design variables will need to be managed and optimized. OpenMDAO can provide
@@ -226,6 +226,7 @@ The following conditions satisfied an energy balance with an extremely optimisti
 cool the air back down to inlet temperatures.
 
 \begin{table} [H]
+\centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline 
 Fluid & Cp & Tin & Tout & mdot & Q (kJ/s) & Qmax \\ 
@@ -373,7 +374,7 @@ Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tub
 
 The steady state tube temperature can be found by varying the tube temperature until the rate of heat being released from the tube
 matches the rate of heat being absorbed by the tube. Assuming numerous state variables provided in the source code, a steady state temperature of 120 F
-was reached. These result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
+was reached. This result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
 
 \section{Full Model Integration}
 

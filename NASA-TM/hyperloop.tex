@@ -61,18 +61,17 @@ The initial subsystem modeling provides some concrete baseline numbers, given si
 pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area, it increases in speed. Assuming a circular cross section
 for both the pod and tube, then the bypass air must travel through an area given by
 
-\nomenclature{A}{Area}
-\nomenclature{r_{tube}}{Tube Radius}
-\nomenclature{r_{pod}}{Pod Radius}
+\nomenclature{A}{Area (m^{2})}
+\nomenclature{r}{Radius (m)}
 \begin{equation*}
 A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 \end{equation*}
-\nomenclature{\rho_{air}}{Air Density}
-\nomenclature{\dot{W}_{bypass}}{Bypass Mass Flow Rate (kg/s)}
+\nomenclature{\rho_}{Density (\frac{kg}{m^{3}})}
+\nomenclature{\dot{W}, \dot{m}}{Mass Flow Rate (kg/s)}
 Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size, temperature and pressure, the mass flow rate of
 the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
-\nomenclature{V_{pod}}{Pod Velocity}
+\nomenclature{V}{Velocity}
 \begin{equation*}
 \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
 \end{equation*}
@@ -201,7 +200,7 @@ product is used to determine the maximum heat transfer. In order to satisfy the 
 
 \nomenclature{\dot{m}}{Mass flow rate}
 \nomenclature{T}{Temperature}
-\nomenclature{C_{p}}{Heat capacity at constant pressure}
+\nomenclature{C_{p}}{Heat capacity at constant pressure ($\frac{J}{kg-K}$) }
 \begin{equation*}
 \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
 \end{equation*}
@@ -278,10 +277,10 @@ of the cylinder and solar insulation (SIF).
 \nomenclature{SRI}{Solar Reflectance Index}
 \nomenclature{SIF}{Solar Insulation Factor}
 \nomenclature{{\theta}_{nni}}{Non-normal Incidence factor}
-\nomenclature{L}{Length}
+\nomenclature{L}{Length (m)}
 \nomenclature{OD}{Outer diameter}
 \nomenclature{\epsilon}{Emissivity Factor}
-\nomenclature{\sigma}{Stefan-Boltzmann constant}
+\nomenclature{\sigma}{Stefan-Boltzmann constant ($\frac{W}{m-K}$)}
 \nomenclature{P_{rad}}{Radiated Power}
 \nomenclature{L}{Length}
 
@@ -311,7 +310,7 @@ if 150 K $<  T_{amb} <$ 400 K:
 
 \nomenclature{g}{Acceleration of gravity}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}
-\nomenclature{\upsilon}{Kinematic Viscosity}
+\nomenclature{\upsilon}{Kinematic Viscosity ($\frac{m^{2}}{s}$)}
 \nomenclature{Pr}{Prandtl Number}
 \nomenclature{Gr}{Grashof Number}
 \nomenclature{Ra}{Rayleigh Number}
@@ -320,7 +319,7 @@ if 150 K $<  T_{amb} <$ 400 K:
 \nomenclature{k}{Thermal Conductivity}
 
 \begin{equation*}
-\frac{g \beta T} {\upsilon^2} = (m^{-3}K^{-1}) = 4.178\times10^{19} \times T_{amb}^{-4.639}
+\frac{g \beta T} {\upsilon^2} =  4.178\times10^{19} \times T_{amb}^{-4.639}
 \end{equation*}
 
 \begin{equation*}
@@ -331,7 +330,7 @@ if 400 K $<  T_{amb}  <$ 2100 K:
 
 
 \begin{equation*}
-\frac{g \beta T} {\upsilon^2}  = (m^{-3}K^{-1}) = 4.985\times10^{18} \times T_{amb}^{-4.284}
+\frac{g \beta T} {\upsilon^2}  = 4.985\times10^{18} \times T_{amb}^{-4.284}
 \end{equation*}
 \begin{equation*}
 Pr = 0.59 T_{amb}^{0.0239}

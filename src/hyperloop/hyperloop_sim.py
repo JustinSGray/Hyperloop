@@ -112,7 +112,7 @@ if __name__=="__main__":
     #design variables
     hl.Mach_bypass = .95
     hl.Mach_pod_max = .90
-    hl.Mach_c1_in = .65
+    hl.Mach_c1_in = .75
     hl.c1_PR_des = 13
 
     #initial guesses
@@ -125,7 +125,7 @@ if __name__=="__main__":
     tube_r = []
     capsule_r = []
 
-    for m in np.arange(.7,.95, .01):
+    for m in np.arange(.781,.95, .01):
         hl.Mach_pod_max = m
         hl.run()
         machs.append(m)

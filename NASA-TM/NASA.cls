@@ -44,7 +44,7 @@
 %                                           body of the report.
 %
 \RequirePackage[paper=letterpaper, twoside, noheadfoot,%
-                lmargin=0.975in, rmargin=0.975in,%
+                lmargin=0.75in, rmargin=0.75in,%
                 tmargin=0.975in, bmargin=0.75in]{geometry}[1999/10/07]
 \RequirePackage{ifthen} % ifthenelse
 \RequirePackage{cite}% sorting, collapses multiple entries, etc.

@@ -74,12 +74,13 @@ data8 = np.array([
 p.tick_params(axis='both', which='major', labelsize=15)
 p.xlabel('Max Pod Mach', fontsize=18)
 p.ylabel('Radius (cm)', fontsize=18)
-p.title('Tube Radius vs Max Pod Mach', fontsize=20)
-p.plot(data8[0],-1*data8[2], label="FFMN = .55", lw=3)
-p.plot(data[0],1*data[2], label="FFMN = .65", lw=3)
-p.plot(data6[0],1*data6[2], label="FFMN = .75", lw=3)
-#p.plot(data[0],1*data[1], label="Pod Outer", lw=3)
-p.xlim([0.7,0.93])
+p.title('Tube and Pod Radius vs Max Pod Mach', fontsize=20)
+p.plot(data8[0],-1*data8[2], label="Tube (c1MN = .55)", lw=3) #'--',
+p.plot(data[0],1*data[2], label="Tube (c1MN = .65)", lw=3)
+p.plot(data6[0],1*data6[2], label="Tube (c1MN = .75)", lw=3) #':',
+p.plot(data[0],1*data[1], label="Pod   (c1MN = .55,.65,.75)", lw=3)
+p.xlim([0.79,0.92])
+p.ylim([0,1000])
 p.legend(loc="best")
     
 p.gcf().set_size_inches(11,5.5)

@@ -3,8 +3,10 @@
 
 \section{Introduction}
 
-The Hyperloop concept is a proposed transportation system aimed to lower costs and travel times relative to California's current high speed
- rail project. \cite{Musk} The design consists of a passenger pod traveling in a tube under partial vacuum at ground level and near sonic
+The Hyperloop is a conceptual transportation system aimed to lower costs and travel times relative to California's current high speed
+ rail project. \cite{Musk} The idea was released in August 2013 as an open design concept to be vetted and further designed through public contribution.
+ Despite receiving significant media attention, no further publications have yet been published on the subject.
+ The design consists of a passenger pod traveling in a tube under partial vacuum at ground level and near sonic
 speeds. The pod is supported by a set of air bearings with air provided by a battery powered compression system and propulsion maintained
 by a set of linear actuators mounted to the tube. Even with the tube largely evacuated, the speed of the pod is limited by the ability of air to
 escape around the sides of the vehicle. This limitation is governed by the size of the pod relative to the tube and is alleviated by redirecting some air
@@ -52,16 +54,15 @@ refinements are made.
 
 \section{Baseline Design and Subsystem Modeling Theory}
 
-
 Due to the novelty of the Hyperloop design, the stack up of many subsystem uncertainties makes even the highest level trends difficult to pin down.
-The initial subsystem modeling provides some concrete baseline numbers, given significant obstacles that are often hidden in the implementation details. 
+The initial subsystem modeling provides some concrete baseline numbers and better identifies the underlying details driving
+the overall design.
 
 \subsection{Tube Diameter}
 
-
-	The pod travels through a fixed diameter tube displacing air around itself. The air reaches the
-pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area around the pod, it accelerates. Assuming a circular cross section
-for both the pod and tube, then the bypass air must travel through an area given by
+The pod travels through a fixed diameter tube displacing air around itself. The air reaches the
+pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area around the pod,
+it accelerates. Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
 
 \nomenclature{A}{Area (m^{2})}
 \nomenclature{r}{Radius (m)}
@@ -117,18 +118,20 @@ slightly below Mach 0.7.
 \end{figure}
 
 
- Additional non-linearity is introduced when
-considering the limitations of the compression system. Increasing the demands on the compressors
-causes the required pod inlet diameter to grow in order to handle the increased flow. Traveling faster results in larger mass flow requirements,
+Additional non-linearity is introduced when considering the limitations of the compression system. Increasing the demands on the compressors
+causes the required pod inlet diameter to grow in order to handle the increased flow. As depicted in figure \ref{f:diffuse}, the area at the front of
+the inlet ($A_{tube,c}$) must be smaller than the area at the front of the first compressor ($A_{diffused,c}$). This expansion is necessary to slow
+the air down to manageable speeds before entering the first compressor. Traveling faster results in larger mass flow requirements,
 which drives the pod diameter up, subsequently changing the area ratio and further increasing the mass flow requirements.
 This compounding relationship between 
 speed and tube diameter is shown in figure \ref{f:machRAD}. For each point on this graph, the full system model converges on the minimal
 possible tube diameter, given a desired pod Mach number. Figure \ref{f:machRAD} also accounts for compressor performance limitations and
-the steady-state operating tube temperature that reaches quiescence above ambient conditions.
+the steady-state operating tube temperature that reaches quiescence above ambient conditions. The family of curves represents the
+improvements that could be gained from designing a primary compressor capable of handling incoming air moving at higher mach numbers denoted by c1MN.
 
 \nomenclature{c1MN}{Mach number at the front face of the first compressor}
 
-\begin{figure}[hbtp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/mach_vs_rad4.png}
 \caption[Tube and Pod Radius vs Mach]{Exponential relationship between pod speed and required tube radius, for three diffused mach numbers}
@@ -138,10 +141,11 @@ the steady-state operating tube temperature that reaches quiescence above ambien
 The exponential relationship between pod max speed and required tube radius explicitly shows the trend depicted by
 connecting the dots of figure \ref{f:flowLIMIT}. The absolute tube radius is charted rather than an area ratio for visual simplicity
 and as a more of a direct indicator of total system cost. It's worth noting that the pod size is also free to vary at each converged point
-and is plotted on the green line. Somewhat surprisingly, the pod radius remains
-nearly constant for every valid solution at each targeted speed condition. This can be attributed the extremely sensitive nature of the inlet
+and is plotted on the cyan line. Somewhat surprisingly, the pod radius remains
+nearly constant for every valid solution at each targeted speed condition and for every diffused mach design.
+This can be attributed the extremely sensitive nature of the inlet
 size when perturbed in either direction. Decreasing the inlet diameter adversely effects pod air intake more-so than it helps
-bypass air throughput; and increasing the inlet diameter negatively impacts the bypass area at a greater rate than it improves
+bypass air throughput; and increasing the inlet diameter harms the bypass area at a more than it improves
 compressor intake. The inlet size is also somewhat governed by the
 necessary bearing flow requirements. This plot accounts for
 the pod compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT}

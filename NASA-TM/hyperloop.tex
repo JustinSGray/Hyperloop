@@ -445,8 +445,8 @@ The compression system and pod geometry systems in figure \ref{f:hyperloopXDSM} 
 \end{figure}
 
 \subsection{Design Variables}
-The system design is defined at the top-most level with the following design variables. These variables can be actively varied
- by the optimizer to achieve user defined objectives:
+The system design is defined at the top-most level with the following design variables. The variables listed in \ref{t:designVars}
+can be actively varied by the optimizer to achieve user defined objectives:
 
 \begin{table} [H]
 \centering
@@ -466,10 +466,11 @@ Variable & Description\\
 \hline 
 \end{tabular}
  \caption[Design Variables]{Top-level Design Variables.}
+ \label{t:designVars}
 \end{table}
 
 \subsection{Model Parameters}
-These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
+The variables listed in table \ref{t:modelVars} are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
 
 \begin{table} [H]
 \centering
@@ -493,6 +494,7 @@ Variable & Description  \\
 \hline 
 \end{tabular} 
  \caption[Model Parameters]{Top-level model parameters}
+ \label{t:modelVars}
 \end{table}
 
 \subsection{Constraints and State Variables}
@@ -533,7 +535,7 @@ State variables \ref{Temp} and \ref{Radius} are given as a list of variables sig
 treated as a single variable for the purposes of converging the model, but remain as distinct variables within each subsystem.
 
 \subsection{Outputs}
-There are a number of output values that are of interest
+There are a number of top-level output values that are of interest. They are listed in table \ref{t:outVars}.
 
 \begin{table} [H]
 \centering
@@ -557,6 +559,7 @@ Variable & Description  \\
 \hline 
 \end{tabular} 
  \caption[Model Outputs]{Top-level model outputs}
+ \label{t:outVars}
 \end{table}
 
 

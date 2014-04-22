@@ -25,11 +25,23 @@ Build to PDF using this command:
 -------------------------------------------
 *** Packages ***
 -------------------------------------------
-BibTex for references
+BibTex for references (see build script)
 
 \cite{Cengal} to cite a source
 
 http://en.wikipedia.org/wiki/BibTeX#Entry_types
+for more info
+-------------------------------------------
+nomencl for nomenclature (see build script)
+
+\nomenclature{MDAO}{Multi-disciplinary}
+\nomenclature{\rho}{Density}
+
+Build with build.sh
+Edit .nls to add $$ to math equation nomenclature manually so TexMaker doesn't bark
+otherwise can't interperate \dot{W}
+
+http://en.wikibooks.org/wiki/LaTeX/Indexing
 for more info
 -------------------------------------------
 Cleveref for section linking
@@ -54,7 +66,7 @@ Label must come after caption for proper figure referencing.
 or inline: $<equation>$
 
 -------------------------------------------
-"minted" -for code syntax highlighting
+"minted" -for code syntax highlighting (see build script)
 
 	\begin{adjustwidth}{-3cm}{-3cm}
 	\inputminted[]{python}{code/example1.py}

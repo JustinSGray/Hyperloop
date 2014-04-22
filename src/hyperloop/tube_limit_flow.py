@@ -88,7 +88,7 @@ def plot_data(comp, c='b'):
     p.tick_params(axis='both', which='major', labelsize=15)
     p.xlabel('Pod Mach Number', fontsize=18)
     p.ylabel('Flow Rate (kg/sec)', fontsize=18)
-    p.title('Tube Flow Limits', fontsize=20)
+    p.title('Tube Flow Limits for Three Area Ratios', fontsize=20)
 
     return fig
 

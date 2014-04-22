@@ -10,3 +10,6 @@
 /*.blg
 /*.DS_Store
 /*.bbl
+*.ilg
+*.nlo
+

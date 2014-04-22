@@ -3,88 +3,99 @@
 
 \section{Introduction}
 
-
-The Hyperloop concept is a proposed transportation system aimed to lower costs and travel times relative to California's current high speed
- rail project. \cite{Musk} The design consists of a passenger pod traveling in a tube under light vacuum at ground level and near sonic
-speeds. The capsule is supported by a set of air bearings with air provided by a battery powered compression system and propulsion maintained
-by a set of linear actuators mounted to the tube. Even with the tube largely evacuated, the speed of the capsule is limited by the ability of air to
-escape around the sides of the vehicle. This limitation is governed by the size of the capsule relative to the tube and is alleviated by redirecting air
+The Hyperloop is a conceptual transportation system aimed to lower costs and travel times relative to California's current high speed
+ rail project. \cite{Musk} The idea was released in August 2013 as an open design concept to be vetted and further designed through public contribution.
+ Despite receiving significant media attention, no further publications have yet been published on the subject.
+ The design consists of a passenger pod traveling in a tube under partial vacuum at ground level and near sonic
+speeds. The pod is supported by a set of air bearings with air provided by a battery powered compression system and propulsion maintained
+by a set of linear actuators mounted to the tube. Even with the tube largely evacuated, the speed of the pod is limited by the ability of air to
+escape around the sides of the vehicle. This limitation is governed by the size of the pod relative to the tube and is alleviated by redirecting some air
 through an inlet and compression system. Drawing sufficient airflow through the vehicle to support the bearings and achieve higher speeds results
-in a fairly large air intake at the nose of the capsule, shown in Fig. \ref{f:hyperloopCAD}. The diameter of this inlet and hence the diameter of the
-capsule, is strongly tied to the maximum travel speed of the capsule. This coupling between the maximum velocity and
-required tube diameter cascades into multiple subsystems and needs to be accounted for upfront in the design process. 
+in a fairly large air intake at the nose of the pod, shown in figure \ref{f:hyperloopCAD}. The ratio between the diameter of this inlet and the diameter of the
+tube is strongly tied to the maximum travel speed of the pod. This coupling between the maximum velocity and
+tube diameter cascades into multiple subsystems and needs to be accounted for upfront in the design process. 
 All of the sub-system interactions make it necessary to take a more integrated approach to the design of the Hyperloop concept. The intention of
-this paper is to explore some of the most significant trade-offs between sub-systems and provide a starting point for subsystem expansion.
+this paper is to explore some of the most significant trade-offs between sub-systems and provide a starting point for more refined modeling.
 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[width=\textwidth]{images/hyperloop_cad.png}
-\caption{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a capsule speed of Mach 0.8, rendered in OpenCSM a parametric solid modeler.}
+ \caption[Hyperloop geometry assembled in OpenCSM]{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a pod speed of Mach 0.8. Geometry rendered in OpenCSM, a parametric solid modeling tool.}
 \label{f:hyperloopCAD}
 \end{figure}
 
 The physical limitations of the system and the underlying design space needs to be better understood before ultimately approaching the
 problem with the dual objectives of minimizing ticket cost and travel time. By identifying key interactions and defining rigid interfaces between
 different competencies the problem can
-be kept tractable and development can be performed in parallel. The Hyperloop concept straddles a different combination of disciplines than many
-existing monolithic systems, falling ambiguously between the purview of existing tool-sets and traditional engineering competencies. The modeling
-approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod is not unlike those
+be kept tractable and development can be performed in parallel. The Hyperloop concept straddles a unique combination of disciplines
+compared to many existing monolithic systems, falling ambiguously between the purview of
+traditional aircraft and rail transportation systems. The modeling
+approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod are similar to those
 found in aircraft concepts involving electric propulsion. They both operate at high speeds and low pressure conditions with an electric motor
 driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems level aircraft engine
-design are adapted for the capsule compressor analysis, heat estimates and capsule geometry. The full source code is provided in
+design are adapted for the pod compressor analysis, heat estimates and pod geometry. The full source code is provided in
  \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
-free and easily accessible tool-sets with the Python programming language and OpenMDAO framework serving as the backbone for continued expansion.  
+free and easily accessible tool-sets with the Python programming language and OpenMDAO \nomenclature{MDAO}{Multidisciplinary Design, Analysis, and Optimization} framework serving as the backbone for continued expansion.  
 
 \subsection{Modeling Platform: OpenMDAO}
 
 
-The presented Hyperloop models were built exclusively using open-source tools including, but not limited to: OpenCSM, GeoMACH, VSP and
+The presented Hyperloop models were built exclusively using open-source tools including OpenCSM
+\nomenclature{CSM}{Constructive Solid Modeler} and
 Cantera. These models were subsequently connected and operated using the OpenMDAO framework. OpenMDAO is a Python based
 integration environment that facilitates the application of advanced Multidisciplinary Design Analysis and Optimization (MDAO) methods.
 The framework leverages the extensive scientific community already backing Python development and provides further tailored functionality
-to more easily facilitate large and complex engineering problems. The development of this software is being led out NASA Glenn Research
-Center with support from NASA Langley Research center, stemming from demands of unconventional aircraft concepts. Although NASA's
-focus is centered on analyzing aerospace applications, the framework itself is extremely general and not specific to any discipline. As the
+to more easily facilitate large and complex engineering problems. The development of this software is being led out of the NASA Glenn Research
+Center, stemming from demands of unconventional aircraft concepts. Although NASA's
+focus is centered on analyzing aerospace applications, the framework itself is extremely general and not specific to any field. As the
 Hyperloop design evolves, an ever increasing number of design variables will need to be managed and optimized. OpenMDAO can provide
 the means to manage this rapidly growing complexity in an efficient and flexible manner that will allow the model to grow as the necessary
 refinements are made.
 
 \section{Baseline Design and Subsystem Modeling Theory}
 
-
 Due to the novelty of the Hyperloop design, the stack up of many subsystem uncertainties makes even the highest level trends difficult to pin down.
-The initial subsystem modeling provides some concrete baseline numbers, given significant obstacles that are often hidden in the implementation details. 
+The initial subsystem modeling provides some concrete baseline numbers and better identifies the underlying details driving
+the overall design.
 
 \subsection{Tube Diameter}
 
+The pod travels through a fixed diameter tube displacing air around itself. The air reaches the
+pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area around the pod,
+it accelerates. Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
 
-	The pod travels through a fixed diameter tube displacing air around itself. The air reaches the
-pod at a relative velocity equal to the pod speed and as the air is forced through the smaller bypass area, it increases in speed. Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
-
+\nomenclature{A}{Area (m^{2})}
+\nomenclature{r}{Radius (m)}
 \begin{equation*}
 A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 \end{equation*}
-
+\nomenclature{\rho_}{Density (\frac{kg}{m^{3}})}
+\nomenclature{\dot{W}, \dot{m}}{Mass Flow Rate (kg/s)}
 Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size, temperature and pressure, the mass flow rate of
 the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
+\nomenclature{V}{Velocity ($\frac{m}{s}$)}
 \begin{equation*}
 \dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
 \end{equation*}
 
 However, the flow reaches a physical limitation as it approaches the speed of sound. At this point, no additional flow can escape
 around the sides of the vehicle without increasing the density of the air.
-For a given area ratio and flow conditions characterized by the heat capacity ratio $\gamma$, the limiting pod speed can be determined based on isentropic flow relations.
+For a given area ratio, the limiting pod speed can be determined based on isentropic flow relations, where $\gamma$ is the heat capacity ratio.
 
+\nomenclature{\gamma}{Heat Capacity Ratio}
+\nomenclature{MN}{Mach Number}
 \begin{equation*}
-\frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M}
+\frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}MN^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{MN}
 \end{equation*}
 
 
 If the bypass air velocity, expressed as a Mach Number ($M$) above, reaches the speed of sound then the pod will act like a piston in a tube;
-increasing the air pressure in front and lowering the pressure behind it. Without a ducted capsule the limiting speed is around
-120 $\frac{m}{s}$, or Mach 0.3, as shown by the intersection of the blue lines in figure \ref{f:flowLIMIT}.
-This limited pod speed is strongly dependent on the ratio of the pod cross-sectional area to the tube cross-sectional area.
+increasing the air pressure in front and lowering the pressure behind it. Without a ducted pod the limiting speed is around
+120 $\frac{m}{s}$, or Mach 0.3, for the tube and pod size in the original proposal. This limit is shown by the intersection of the blue lines at the
+bottom of figure \ref{f:flowLIMIT}. Such low speeds would not allow the Hyperloop concept to significantly reduce travel times between Los Angeles
+and San Francisco relative to high speed rail. This limited pod speed is strongly dependent on the ratio of the pod cross-sectional area to the tube
+cross-sectional area.
 
 \begin{figure}[hbtp]
 \centering
@@ -93,36 +104,51 @@ This limited pod speed is strongly dependent on the ratio of the pod cross-secti
 \label{f:flowLIMIT}
 \end{figure}
 
-Such low speeds would not allow the Hyperloop concept to significantly reduce travel times between Los Angeles and San Francisco relative
-to high speed rail. To reach higher speeds, an inlet and compression system is needed to help draw additional air through the pod.
+
+To further increase speeds, an inlet and compression system is needed to help draw additional air through the pod. 
 The vertical distances between the choked flow limit (dashed lines) and the required flow (solid lines) of figure \ref{f:flowLIMIT}
-signifies the minimum compressor flow rates necessary to achieve a given speed. 
+signifies the minimum compressor flow rates necessary to achieve a given speed.  Increasing the area ratio to 7.5 yields a max speed 
+slightly below Mach 0.7.
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=\textwidth]{images/diffused_inlet.png}
+\caption[Inlet Diffuser]{Vehicle speed determines amount of diffusion necessary}
+\label{f:diffuse}
+\end{figure}
+
 
 Additional non-linearity is introduced when considering the limitations of the compression system. Increasing the demands on the compressors
-causes the required pod inlet diameter to grow in order to handle the increased flow. Traveling faster results in larger mass flow requirements,
+causes the required pod inlet diameter to grow in order to handle the increased flow. As depicted in figure \ref{f:diffuse}, the area at the front of
+the inlet ($A_{tube,c}$) must be smaller than the area at the front of the first compressor ($A_{diffused,c}$). This expansion is necessary to slow
+the air down to manageable speeds before entering the first compressor. Traveling faster results in larger mass flow requirements,
 which drives the pod diameter up, subsequently changing the area ratio and further increasing the mass flow requirements.
 This compounding relationship between 
 speed and tube diameter is shown in figure \ref{f:machRAD}. For each point on this graph, the full system model converges on the minimal
 possible tube diameter, given a desired pod Mach number. Figure \ref{f:machRAD} also accounts for compressor performance limitations and
-the steady-state operating tube temperature that reaches quiescence above ambient conditions.
+the steady-state operating tube temperature that reaches quiescence above ambient conditions. The family of curves represents the
+improvements that could be gained from designing a primary compressor capable of handling incoming air moving at higher mach numbers denoted by c1MN.
 
-\begin{figure}[hbtp]
+\nomenclature{c1MN}{Mach number at the front face of the first compressor}
+
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{images/mach_vs_rad2.png}
-\caption{Exponential relationship between pod speed and required tube radius}
+\includegraphics[width=\textwidth]{images/mach_vs_rad4.png}
+\caption[Tube and Pod Radius vs Mach]{Exponential relationship between pod speed and required tube radius, for three diffused mach numbers}
 \label{f:machRAD}
 \end{figure}
 
 The exponential relationship between pod max speed and required tube radius explicitly shows the trend depicted by
 connecting the dots of figure \ref{f:flowLIMIT}. The absolute tube radius is charted rather than an area ratio for visual simplicity
-and as a more of a direct indicator of total system cost. It's worth noting that the pod size is also free to vary at each optimized point
-and is plotted on the green line. Somewhat surprisingly, the pod radius remains
-nearly constant for every optimization at each targeted speed condition. This can be attributed the extremely sensitive nature of the inlet
-size when perturbed in either direction. Decreasing the inlet diameter adversely effects capsule air intake more-so than it helps
-bypass air throughput; and increasing the inlet diameter negatively impacts the bypass area at a greater rate than it improves
+and as a more of a direct indicator of total system cost. It's worth noting that the pod size is also free to vary at each converged point
+and is plotted on the cyan line. Somewhat surprisingly, the pod radius remains
+nearly constant for every valid solution at each targeted speed condition and for every diffused mach design.
+This can be attributed the extremely sensitive nature of the inlet
+size when perturbed in either direction. Decreasing the inlet diameter adversely effects pod air intake more-so than it helps
+bypass air throughput; and increasing the inlet diameter harms the bypass area at a more than it improves
 compressor intake. The inlet size is also somewhat governed by the
-necessary bearing flow requirements. Unlike figure \ref{f:flowLIMIT}, this plot accounts for
-the capsule compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT}
+necessary bearing flow requirements. This plot accounts for
+the pod compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT}
 were translated and directly overlaid. 
 
 The data shows that above Mach .85, the minimum allowable tube size gets very sensitive to pod travel speed. This indicates that speeds
@@ -146,19 +172,33 @@ The system is comprised of an inlet, two compressors, two heat exchangers, a noz
 \caption{Schematic flow diagram of the modeled compressor system}
 \end{figure}
 
-The compression systems is modeled as a one dimensional cycle, representing components as thermodynamic processes that are
+The compression system is modeled as a one dimensional cycle, representing components as thermodynamic processes that are
 subsequently chained together. Each component is responsible for calculating gas properties across its boundaries and appropriately
 enforcing conservation equations across the entire system. The subsystem leverages the open-source Cantera package, which is 
 responsible for calculating chemical kinetics, thermodynamics, and transport processes. These models predict the instantaneous
 power consumption of the compressors, temperature rise, and upstream conditions necessary to supply sufficient airflow to the bearings.
 These power requirements are a function of the chosen cycle and are both affected by and contribute to the thermal conditions. 
 Combined with the estimated travel time, these requirements impact battery sizing and coolant storage requirements.
-The following section provides a brief summary of the assumptions and modeling that went into each sub-system necessary to perform this analysis.
 
-\begin{figure}[H]
+\subsection{Battery Sizing}
+
+The battery power requirement was estimated based on the calculated max pod speed and compressor power requirements. Using the
+notional velocity profile described in the original proposal (and included in \cref{app:test}) the average velocity can be
+estimated by normalizing the profile then scaling it to the calculated max allowable speed. The total mission duration is then
+calculated based on the average speed and tube length. This time estimate multiplied by the instantaneous compressor
+power requirements and a 30\% margin results in a total battery energy requirement.
+
+The necessary on-board battery size was found to be inversly related to max pod speed, as show in figure \ref{f:battery}.
+This indicates that compressor power requirements are less sensitive to increased speeds than total trip time. This sensitivity
+is highly dependent on the velocity profile; reducing the time spent at max speed could result in a positive correlation between
+battery size and pod speed. It should be noted that the Y-axis of figure \ref{f:battery} begins at 340kW for visual simplicity.
+The overal reduction in battery size is on the order of 25\% if speed is increased from Mach 0.7 to Mach 0.9.
+
+\begin{figure}[hbtp]
 \centering
 \includegraphics[width=\textwidth]{images/mach_vs_energy.png}
-\caption{Battery requirements as a function of pod speed}
+\caption[Battery requirements as a function of pod speed]{Battery requirements as a function of pod speed. Note: the y-axis begins at 340kW-hr.}
+\label{f:battery}
 \end{figure}
 
 \subsection{Tube Temperature}
@@ -178,11 +218,12 @@ and the external environment. Even without an active on-board cooling solution, 
 
 The following two sections provide additional details about the engineering models used to draw these conclusions.
 
-\subsubsection{Capsule Cooling Requirements}
+\subsubsection{Pod Cooling Requirements}
 
 The limits and requirements of a hypothetical on-board heat exchanger can be estimated with a straightforward energy balance. The
 effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum possible heat transfer.
 
+\nomenclature{Q}{Heat flow rate (W)}
 \begin{equation*}
 {Q}_{released}  = effectiveness * {Q}_{max}
 \end{equation*}
@@ -191,6 +232,9 @@ effectiveness of a heat exchanger can be described as the ratio of actual heat t
 with $Qmax=\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where each fluid has a $\dot{m} C_{p}$ and the fluid with the lowest
 product is used to determine the maximum heat transfer. In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
+\nomenclature{\dot{m}}{Mass flow rate}
+\nomenclature{T}{Temperature (K)}
+\nomenclature{C_{p}}{Heat capacity at constant pressure ($\frac{J}{kg-K}$) }
 \begin{equation*}
 \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
 \end{equation*}
@@ -201,6 +245,8 @@ method. The effectiveness for a counter flow heat exchanger with a $\frac{C_{min
 The following conditions satisfied an energy balance with an extremely optimistically assumed effectiveness of 0.9765, and the proposed requirement to fully
 cool the air back down to inlet temperatures.
 
+\begin{table} [H]
+\centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline 
 Fluid & Cp & Tin & Tout & mdot & Q (kJ/s) & Qmax \\ 
@@ -210,7 +256,8 @@ Air & 1.006 kJ/kh-K & 791 K & 300 K & 0.49 kg/s & -242 & 247.9 \\
 Water & 4.186 kJ/kg-K & 288.15 & 416.6 K  & 0.45 kg/s & 242 & 247.9 \\ 
 \hline 
 \end{tabular} 
-
+ \caption{Heat Exchanger Fluid Properties}
+\end{table}
 
 With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$ of standard temperature/pressure water would need to be carried 
 with steam tanks over a hundred meters in length. This doesn't even account for the second stage heat exchanger, making the system nearly infeasible
@@ -222,7 +269,7 @@ and the logarithmic mean temperature difference (LMTD) of the heat exchanger is 
 
 \subsubsection{Equilibrium Tube Temperature}
 A high-level assessment of the overall steady-state heat transfer between the 300 mile Hyperloop tube and the ambient atmosphere is
-also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the capsule exhaust
+also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the pod exhaust
 air and solar flux are considered the primary drivers for heat absorption into the tube. Conversely, heat released from the tube is modeled by means of
 ambient natural convection and radiation out from the stainless-steel surface. The thermal interaction between the rarified internal air and
 tube is not modeled.
@@ -230,6 +277,10 @@ tube is not modeled.
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
 flow relations.
 
+\nomenclature{P}{Pressure ($\frac{N}{m^{2}}$)}
+\nomenclature{PR}{Pressure Ratio}
+\nomenclature{PR}{Pressure Ratio}
+\nomenclature{{\eta}_{adiabatic}}{Adiabatic Efficiency}
 \begin{equation*}
 T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} MN^2]
 \end{equation*}
@@ -246,7 +297,7 @@ T_{t,exit} = T_{t,inlet} + \frac{([T_{t,inlet}*PR^{(\frac{\gamma-1}{\gamma})}] -
 Where PR is the compressor pressure ratio, MN is the mach number,  $\gamma$ is the specific heat ratio, and  ${\eta}_{adiabatic}$ is the
 adiabatic efficiency.
 
-With the air flow rate known, the heat flow rate per capsule is obtained,
+With the air flow rate known, the heat flow rate per pod is obtained,
 
 \begin{equation*}
 {Q}_{pod}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube})
@@ -257,6 +308,17 @@ The peak heating rate from the pods scales linearly.
 \end{equation*}
 The solar heat flow per unit area can be approximated, given the solar reflectance index (SRI) of stainless steel, non-normal incidence factor
 of the cylinder and solar insulation (SIF).
+
+\nomenclature{SRI}{Solar Reflectance Index}
+\nomenclature{SIF}{Solar Insulation Factor}
+\nomenclature{{\theta}_{nni}}{Non-normal Incidence factor (rad)}
+\nomenclature{L}{Length (m)}
+\nomenclature{OD}{Outer diameter (m)}
+\nomenclature{\epsilon}{Emissivity Factor}
+\nomenclature{\sigma}{Stefan-Boltzmann constant ($\frac{W}{m-K}$)}
+\nomenclature{P_{rad}}{Radiated Power (W)}
+\nomenclature{L}{Length}
+
 \begin{equation*}
 Solar = (1-SRI) {\theta}_{nni} SIF
 \end{equation*}
@@ -281,8 +343,18 @@ between buoyancy and viscosity driven flows is parameterized using the following
 
 if 150 K $<  T_{amb} <$ 400 K:
 
+\nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
+\nomenclature{\beta}{Volume coefficient of expansion (K)}
+\nomenclature{\upsilon}{Kinematic Viscosity ($\frac{m^{2}}{s}$)}
+\nomenclature{Pr}{Prandtl Number, $\frac{\upsilon}{\alpha}$}
+\nomenclature{Gr}{Grashof Number, $\frac{ g \beta \delta TL^{3}}{v^{2}}$}
+\nomenclature{Ra}{Rayleigh Number, $\frac{\rho U_{\infty} L}{\mu}$}
+\nomenclature{Nu}{Nusselt Number, $\frac{hL}{k}$}
+\nomenclature{h}{Heat transfer coefficient ($\frac{W}{m^{2}-K}$)}
+\nomenclature{k}{Thermal Conductivity ($\frac{W}{m-K}$) }
+
 \begin{equation*}
-\frac{g \beta T} {\upsilon^2} = (m^{-3}K^{-1}) = 4.178\times10^{19} \times T_{amb}^{-4.639}
+\frac{g \beta T} {\upsilon^2} =  4.178\times10^{19} \times T_{amb}^{-4.639}
 \end{equation*}
 
 \begin{equation*}
@@ -293,7 +365,7 @@ if 400 K $<  T_{amb}  <$ 2100 K:
 
 
 \begin{equation*}
-\frac{g \beta T} {\upsilon^2}  = (m^{-3}K^{-1}) = 4.985\times10^{18} \times T_{amb}^{-4.284}
+\frac{g \beta T} {\upsilon^2}  = 4.985\times10^{18} \times T_{amb}^{-4.284}
 \end{equation*}
 \begin{equation*}
 Pr = 0.59 T_{amb}^{0.0239}
@@ -322,7 +394,7 @@ Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tub
 
 The steady state tube temperature can be found by varying the tube temperature until the rate of heat being released from the tube
 matches the rate of heat being absorbed by the tube. Assuming numerous state variables provided in the source code, a steady state temperature of 120 F
-was reached. These result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
+was reached. This result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
 
 \section{Full Model Integration}
 
@@ -335,7 +407,7 @@ disparate codes into a cohesive workflow. The fully assembled Hyperloop model is
 \begin{enumerate}
   \item Compression System (\texttt{compress}): Performance and power consumption of the compressors
   \item Mission Analysis (\texttt{mission}): Estimate of travel time
-  \item Pod Geometry (\texttt{pod}): Physical dimensions of the capsule and calculations that depend on them
+  \item Pod Geometry (\texttt{pod}): Physical dimensions of the pod and calculations that depend on them
   \item Tube Flow Limitations (\texttt{flow\_limit}): Pod speed limitations based on choked flow restrictions between the pod and the tube
   \item Tube Wall Temperature (\texttt{tube\_wall\_temp}): Equilibrium temperature of the tube wall
 \end{enumerate}
@@ -372,48 +444,52 @@ The compression system and pod geometry systems in figure \ref{f:hyperloopXDSM} 
 The system design is defined at the top-most level with the following design variables. These variables can be actively varied
  by the optimizer to achieve user defined objectives:
 
-\begin{adjustwidth}{-2cm}{-2cm}
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{table} [H]
+\centering
+\begin{tabular}{|c|c|}
 \hline 
-Variable & Description & Units & Baseline Val. & Min & Max \\ 
+Variable & Description\\ 
 \hline 
-\texttt{Mach\_bypass} & Mach number of the air traveling around the pod & - & 0.95 & 0.5 & 0.98 \\ 
+\texttt{Mach\_bypass} & Mach number of the air traveling around the pod \\ 
 \hline 
-\texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod & - & 0.9 & 0.5 & 0.98 \\ 
+\texttt{Mach\_pod\_max} & Maximum travel Mach number of the pod \\ 
 \hline 
-\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet & - & 0.6 & 0.5 & 0.8 \\ 
+\texttt{Mach\_c1\_in} & Mach number of the air at the back of the inlet \\ 
 \hline 
-\texttt{Ps\_tube} & Static pressure of the air in the tube & Pa & 99 & 99 & 500 \\ 
+\texttt{Ps\_tube} & Static pressure of the air in the tube \\ 
 \hline 
-\texttt{c1\_PR\_des} & First compressor pressure ratio & - & 12.47 & 10 & 25 \\ 
+\texttt{c1\_PR\_des} & First compressor pressure ratio \\ 
 \hline 
-\end{tabular} 
-\end{adjustwidth}
+\end{tabular}
+ \caption[Design Variables]{Top-level Design Variables.}
+\end{table}
 
 \subsection{Model Parameters}
 These variables are free for the user to set, but are not intended for the optimizer. Rather, they are general traits of the system.
 
-\begin{adjustwidth}{-3cm}{-3cm}
+\begin{table} [H]
+\centering
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline 
-Variable & Description & Units & Baseline Val & Min. & Max. \\ 
+Variable & Description  \\ 
 \hline 
-pwr\_marg & Safety factor applied to the power requirement for the pod & - & 0.3 & 0 & 2 \\ 
+\texttt{pwr\_marg} & Safety factor applied to the power req. for the pod \\ 
 \hline 
-solar\_heating\_factor & Fraction of solar radiation to consider in tube temperature & - & 0.7 & 0 & 1 \\ 
+\texttt{solar\_heating\_factor} & Fraction of solar radiation to consider in tube temp.\\ 
 \hline 
-tube\_length & Length of the tube & m & 563270 & - & - \\ 
+\texttt{tube\_length} & Length of the tube  \\ 
 \hline 
-n\_rows & Number of rows of seats in the passenger capsule & - & 14 & - & - \\ 
+\texttt{n\_rows} & Number of rows of seats in the passenger pod  \\ 
 \hline 
-length\_row & Length allotted to each row of seats & cm & 150 & 120 & 200 \\ 
+\texttt{length\_row} & Length allotted to each row of seats  \\ 
 \hline 
-coef\_drag & Drag Coefficient for the pod & - & 2 & 0.6 & 2.5 \\ 
+\texttt{coef\_drag} & Drag Coefficient for the pod  \\ 
 \hline 
-hub\_to\_tip & Ratio of hub radius to tip radius for the first compressor & - & 0.4 & 0.2 & 0.6 \\ 
+\texttt{hub\_to\_tip} & Hub radius to tip radius ratio for the first compressor \\ 
 \hline 
 \end{tabular} 
-\end{adjustwidth}
+ \caption[Model Parameters]{Top-level model parameters}
+\end{table}
 
 \subsection{Constraints and State Variables}
 
@@ -436,9 +512,9 @@ between the sub-systems. These couplings enforce a set of equality constraints t
 \end{equation}
 
 For constraints \ref{eq:flow} and \ref{eq:area}, a multiplier has been applied to the constraint to scale it for improved numerical convergence.
-The first equality constraint ensures the capsule compressor achieves the necessary flow intake given a maximum bypass flow.
+The first equality constraint ensures the pod compressor achieves the necessary flow intake given a maximum bypass flow.
 The second enforces a minimum static air pressure for the air bearings. The third constraint drives the operating tube temperature to balanced conditions,
-and the final constraint requires agreement between the capsule geometry code and the compression system computed areas.
+and the final constraint requires agreement between the pod geometry code and the compression system computed areas.
 
 The optimizer varies  the following state variables to to satisfy the constraints. 
 

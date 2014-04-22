@@ -145,7 +145,7 @@ and is plotted on the cyan line. Somewhat surprisingly, the pod radius remains
 nearly constant for every valid solution at each targeted speed condition and for every diffused mach design.
 This can be attributed the extremely sensitive nature of the inlet
 size when perturbed in either direction. Decreasing the inlet diameter adversely effects pod air intake more-so than it helps
-bypass air throughput; and increasing the inlet diameter harms the bypass area at a more than it improves
+bypass air throughput; and increasing the inlet diameter harms the bypass area more than it improves
 compressor intake. The inlet size is also somewhat governed by the
 necessary bearing flow requirements. This plot accounts for
 the pod compression system and is therefore shifted further right than if the intersection points from figure \ref{f:flowLIMIT}
@@ -267,6 +267,9 @@ with water and unpressurized tanks. Various systems involving alternate coolants
 Further discussion of heat exchanger sizing can be found in the heat exchanger section of the appendix.
 The calculations explore the possibility of multi-pass heat exchangers
 and the logarithmic mean temperature difference (LMTD) of the heat exchanger is considered.
+\cite{Cengal}
+\cite{Turns}
+
 
 \subsubsection{Equilibrium Tube Temperature}
 A high-level assessment of the overall steady-state heat transfer between the 300 mile Hyperloop tube and the ambient atmosphere is
@@ -336,7 +339,7 @@ where  $\epsilon$ is the emissivity factor and  $\sigma$ is the Stefan-Boltzmann
 
 Multiplying by the surface area of the tube, the total heating rate can be found,
 \begin{equation*}
-P_{rad} =  \frac{P_{rad}}{A} * \pi L_{tube} OD_{tube}
+Q_{rad} =  \frac{P_{rad}}{A} * \pi L_{tube} OD_{tube}
 \end{equation*}
 
 Assuming the worst case scenario of no cross wind, convection is primarily driven by temperature gradients. The non-dimensional relation
@@ -532,22 +535,30 @@ treated as a single variable for the purposes of converging the model, but remai
 \subsection{Outputs}
 There are a number of output values that are of interest
 
-\begin{description}
-  \item[Overall pod radius] \hfill \\
-  \texttt{pod.radius\_inlet\_outer}
-  \item[Total mass flow through the compression system] \hfill \\
-  \texttt{compress.W\_in}
-  \item[Total power required to drive the compression system] \hfill \\
-  \texttt{compress.pwr\_req}
-  \item[Total energy needed to power the compression system for one trip] \hfill \\
-  \texttt{mission.energy}
-  \item[Travel time for one trip] \hfill \\
-  \texttt{mission.time}
-  \item[Maximum speed] \hfill \\
-  \texttt{compress.speed\_max}
-  \item[Equilibrium tube temperature] \hfill \\
-  \texttt{tube\_wall\_temp.temp}
-\end{description}
+\begin{table} [H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Variable & Description  \\ 
+\hline 
+\texttt{pod.radius\_inlet\_outer} & Overall pod radius \\ 
+\hline 
+\texttt{compress.W\_in} & Total mass flow through the compression system\\ 
+\hline 
+\texttt{compress.pwr\_req} & Total power required to drive the compression system  \\ 
+\hline 
+\texttt{mission.energy} & Total energy needed to power the compression system for one trip  \\ 
+\hline 
+\texttt{mission.time} & Travel time for one trip  \\ 
+\hline 
+\texttt{compress.speed\_max} & Maximum speed  \\ 
+\hline 
+\texttt{tube\_wall\_temp.temp} & Equilibrium tube temperature \\ 
+\hline 
+\end{tabular} 
+ \caption[Model Outputs]{Top-level model outputs}
+\end{table}
+
 
 Note: For a more complete design process, the values of the design variables would be optimized to minimize a combination of total power
 consumption and travel time. However, the model does not currently calculate some key values needed to get a useful answer. In particular,

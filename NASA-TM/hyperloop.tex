@@ -3,19 +3,36 @@
 
 \section{Introduction}
 
-The Hyperloop is a conceptual transportation system aimed to lower costs and travel times relative to California's current high speed
- rail project. \cite{Musk} The idea was released in August 2013 as an open design concept to be vetted and further designed through public contribution.
- Despite receiving significant media attention, no further publications have yet been published on the subject.
- The design consists of a passenger pod traveling in a tube under partial vacuum at ground level and near sonic
-speeds. The pod is supported by a set of air bearings with air provided by a battery powered compression system and propulsion maintained
-by a set of linear actuators mounted to the tube. Even with the tube largely evacuated, the speed of the pod is limited by the ability of air to
-escape around the sides of the vehicle. This limitation is governed by the size of the pod relative to the tube and is alleviated by redirecting some air
-through an inlet and compression system. Drawing sufficient airflow through the vehicle to support the bearings and achieve higher speeds results
-in a fairly large air intake at the nose of the pod, shown in figure \ref{f:hyperloopCAD}. The ratio between the diameter of this inlet and the diameter of the
-tube is strongly tied to the maximum travel speed of the pod. This coupling between the maximum velocity and
-tube diameter cascades into multiple subsystems and needs to be accounted for upfront in the design process. 
-All of the sub-system interactions make it necessary to take a more integrated approach to the design of the Hyperloop concept. The intention of
-this paper is to explore some of the most significant trade-offs between sub-systems and provide a starting point for more refined modeling.
+Hyperloop is a conceptual transportation system designed to lower costs and travel times relative to California’s current high-speed rail project.
+\cite{Musk} Elon Musk and a team of engineers from Tesla Motors and the Space Exploration Technologies Corporation (SpaceX)
+proposed the idea in August 2013, as an open design to be vetted and further refined through public contribution.
+The concept deviates from existing high-speed rail designs by eliminating the rails,  enclosing the passenger pod in a tube under a partial vacuum,
+and supporting the passenger pod on air bearings. Propulsion is handled by a set of linear electromagnetic accelerators mounted to the tube,
+with the entire system being held above ground on concrete columns maintaining a straight trajectory.
+Although Hyperloop is similar to other vacuum tube train (VacTrain) concepts \cite{ET3}, the soft vacuum represents a distinct difference.
+It allows the train to run on air-bearings, thus removing the need for a magnetic levitation system used on the other VacTrain concepts.
+The air bearings require a source of pressurized air, which is provided by an electric compressor system powered by on-board batteries.
+The compression system also helps the pod approach sonic speeds, by reducing the amount of air being forced around the sides of the vehicle.
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=\textwidth]{images/hyperloopAlphaSketch.jpg}
+ \caption[Hyperloop Concept Sketch]{Hyperloop-alpha concept sketch of the passenger pod.}
+\label{f:hyperloopSketch}
+\end{figure}
+
+
+Musk’s original Hyperloop proposal included individual high-level analyses of many major subsystems including the pod compression system,
+elevated support structure, and propulsion system. While this demonstrated the basic viability of the concept, it did not address
+significant system level trade-offs that cascade into multiple subsystems. The thermal management and aerodynamic constraints need
+to be better understood before ultimately approaching the problem with the dual objectives of minimizing ticket cost and travel time.
+The modeling approach described in this paper relies on the notion that the compression subsystem on the passenger pod is similar to the
+compressors on a turbine engine. They both operate at higher Mach numbers and low-pressure conditions. Therefore, experiences drawn
+from aircraft engine design were adapted to address three overarching system challenges omitted from the original proposal.
+The first section addresses the requirements driven by thermal interactions, the second identifies a more stringent coupling between
+passenger pod geometry and tube size, and the final section revisits compressor analysis and battery sizing. The results show that
+the Hyperloop concept is feasible, but certain estimates from the original proposal may be been overly optimistic due to each discipline
+being approached independently.
 
 \begin{figure}[hbtp]
 \centering
@@ -23,34 +40,6 @@ this paper is to explore some of the most significant trade-offs between sub-sys
  \caption[Hyperloop geometry assembled in OpenCSM]{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a pod speed of Mach 0.8. Geometry rendered in OpenCSM, a parametric solid modeling tool.}
 \label{f:hyperloopCAD}
 \end{figure}
-
-The physical limitations of the system and the underlying design space needs to be better understood before ultimately approaching the
-problem with the dual objectives of minimizing ticket cost and travel time. By identifying key interactions and defining rigid interfaces between
-different competencies the problem can
-be kept tractable and development can be performed in parallel. The Hyperloop concept straddles a unique combination of disciplines
-compared to many existing monolithic systems, falling ambiguously between the purview of
-traditional aircraft and rail transportation systems. The modeling
-approach described in this paper relies on the notion that the inlet, nozzle, and compression cycle within the passenger pod are similar to those
-found in aircraft concepts involving electric propulsion. They both operate at high speeds and low pressure conditions with an electric motor
-driving turbo-machinery in a highly volume constrained vehicle. Therefore, experiences drawn from systems level aircraft engine
-design are adapted for the pod compressor analysis, heat estimates and pod geometry. The full source code is provided in
- \cref{app:2} and external contribution is encouraged to expand, refine or replace models with higher fidelity analyses. The models solely rely on
-free and easily accessible tool-sets with the Python programming language and OpenMDAO \nomenclature{MDAO}{Multidisciplinary Design, Analysis, and Optimization} framework serving as the backbone for continued expansion.  
-
-\subsection{Modeling Platform: OpenMDAO}
-
-
-The presented Hyperloop models were built exclusively using open-source tools including OpenCSM
-\nomenclature{CSM}{Constructive Solid Modeler} and
-Cantera. These models were subsequently connected and operated using the OpenMDAO framework. OpenMDAO is a Python based
-integration environment that facilitates the application of advanced Multidisciplinary Design Analysis and Optimization (MDAO) methods.
-The framework leverages the extensive scientific community already backing Python development and provides further tailored functionality
-to more easily facilitate large and complex engineering problems. The development of this software is being led out of the NASA Glenn Research
-Center, stemming from demands of unconventional aircraft concepts. Although NASA's
-focus is centered on analyzing aerospace applications, the framework itself is extremely general and not specific to any field. As the
-Hyperloop design evolves, an ever increasing number of design variables will need to be managed and optimized. OpenMDAO can provide
-the means to manage this rapidly growing complexity in an efficient and flexible manner that will allow the model to grow as the necessary
-refinements are made.
 
 \section{Baseline Design and Subsystem Modeling Theory}
 

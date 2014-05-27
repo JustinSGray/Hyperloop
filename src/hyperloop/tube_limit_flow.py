@@ -4,6 +4,7 @@ import numpy as np
 import pylab as p
 
 from openmdao.main.api import Component
+from openmdao.main.api import convert_units as cu
 from openmdao.lib.datatypes.api import Float
 
 from pycycle.flowstation import FlowStation, secant
@@ -29,34 +30,35 @@ class TubeLimitFlow(Component):
 
     	fs_tube = self.fs_tube = FlowStation()
 
-        tube_rad = self.radius_tube*0.0328084 #convert to ft
-        inlet_rad = self.radius_inlet*0.0328084
-
+        tube_rad = cu(self.radius_tube,'cm','ft') #convert to ft
+        inlet_rad = cu(self.radius_inlet,'cm','ft')
+        #A = pi(r^2) 
         self._tube_area  = pi*(tube_rad**2) #ft**2
-        self._bypass_area = pi*(tube_rad**2-inlet_rad**2)
+        self._inlet_area  = pi*(inlet_rad**2) #ft**2
+        self._bypass_area = self._tube_area - self._inlet_area
 
-        self._Ts = self.Ts_tube*1.8 #convert to R
-        self._Ps = self.Ps_tube*0.000145037738 #convert to psi
-
+        self._Ts = cu(self.Ts_tube,'degK','degR') #convert to R
+        self._Ps = cu(self.Ps_tube,'Pa','psi') #convert to psi
 
         area_ratio_target = self._tube_area/self._bypass_area
 
+        #iterate over pod speed until the area ratio = A_tube / A_bypass
         def f(m_guess): 
-            fs_tube.setStaticTsPsMN(self._Ts, self._Ps , m_guess)
+            fs_tube.setStaticTsPsMN(self._Ts, self._Ps , m_guess) #set the static conditions iteratively until correct (Ts, Ps are known)
             gam = fs_tube.gamt
             g_exp = (gam+1)/(2*(gam-1))
             ar = ((gam+1)/2)**(-1*g_exp)*((1+ (gam-1)/2*m_guess**2)**g_exp)/m_guess
             return ar - area_ratio_target
-
-        self.limit_Mach = secant(f, .3, x_min=0, x_max=1)
-        self.limit_speed = fs_tube.Vflow*0.3048 #convert to meters
+        #Solve for Mach where AR = AR_target
+        self.limit_Mach = secant(f, .3, x_min=0, x_max=1) #value not actually needed, fs_tube contains necessary flow information
+        self.limit_speed = cu(fs_tube.Vflow,'ft','m') #convert to meters/second
         
         #excess mass flow calculation
         fs_tube.setStaticTsPsMN(self._Ts, self._Ps, self.Mach_pod)
-        self.W_tube = fs_tube.rhos*fs_tube.Vflow*self._tube_area*0.45359
+        self.W_tube = cu(fs_tube.rhos*fs_tube.Vflow*self._tube_area,'lbm','kg') #convert to kg/sec
 
         fs_tube.Mach = self.Mach_bypass #Kantrowitz flow is at these total conditions, but with Mach 1
-        self.W_kant = fs_tube.rhos*fs_tube.Vflow*self._bypass_area*0.45359
+        self.W_kant = cu(fs_tube.rhos*fs_tube.Vflow*self._bypass_area,'lbm','kg') #convert to kg/sec
         #print "test", fs_tube.rhos, fs_tube.Vflow, self._bypass_area, self.W_kant
 
         self.W_excess = self.W_tube - self.W_kant
@@ -66,7 +68,6 @@ class TubeLimitFlow(Component):
 
 def plot_data(comp, c='b'):
     """utility function to make the Kantrowitz Limit Plot""" 
-
 
     MN = []
     W_tube = []
@@ -81,19 +82,17 @@ def plot_data(comp, c='b'):
         W_kant.append(comp.W_kant)
         W_tube.append(comp.W_tube)
 
-    fig = p.plot(MN,W_tube, '-', label="R=%d Req. Flow"%comp.radius_tube, lw=3, c=c)
-    p.plot(MN,W_kant, '--', label="R=%d Limit Flow"%comp.radius_tube,   lw=3, c=c)
+    fig = p.plot(MN,W_tube, '-', label="%3.1f Req."%(comp._tube_area/comp._inlet_area), lw=3, c=c)
+    p.plot(MN,W_kant, '--', label="%3.1f Limit"%(comp._tube_area/comp._inlet_area),   lw=3, c=c)
     #p.legend(loc="best")
-    p.xlabel('Pod Mach Number')
-    p.ylabel('Flow Rate (kg/sec)')
-    p.title('Tube Limit Flow')
+    p.tick_params(axis='both', which='major', labelsize=15)
+    p.xlabel('Pod Mach Number', fontsize=18)
+    p.ylabel('Flow Rate (kg/sec)', fontsize=18)
+    p.title('Tube Flow Limits for Three Area Ratios', fontsize=20)
 
     return fig
 
-
     #print np.array(W_tube)- np.array(W_kant)
-
-        
 
 
 if __name__ == "__main__": 
@@ -115,4 +114,7 @@ if __name__ == "__main__":
     plot_data(comp,c='r')
 
     p.legend(loc="best")
+    
+    p.gcf().set_size_inches(11,5.5)
+    p.gcf().savefig('test2png.png',dpi=130)
     p.show()

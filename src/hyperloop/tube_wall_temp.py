@@ -42,11 +42,11 @@ class TubeWallTemp(Component):
     area_rad = Float(337486.1, units = 'm**2', iotype='out', desc='Tube Radiating Area') #    
     #Required for Natural Convection Calcs
     GrDelTL3 = Float(1946216.7, units = '1/((ft**3)*F)', iotype='out', desc='Heat Radiated to the outside') #
-    Pr = Float(0.707, iotype='out', desc='Heat Radiated to the outside') #
-    Gr = Float(12730351223., iotype='out', desc='Heat Radiated to the outside') #
-    Ra = Float(8996312085., iotype='out', desc='Heat Radiated to the outside') #
-    Nu = Float(232.4543713, iotype='out', desc='Heat Radiated to the outside') #
-    k = Float(0.02655, units = 'W/(m*K)', iotype='out', desc='Heat Radiated to the outside') #
+    Pr = Float(0.707, iotype='out', desc='Prandtl') #
+    Gr = Float(12730351223., iotype='out', desc='Grashof #') #
+    Ra = Float(8996312085., iotype='out', desc='Rayleigh #') #
+    Nu = Float(232.4543713, iotype='out', desc='Nusselt #') #
+    k = Float(0.02655, units = 'W/(m*K)', iotype='out', desc='Thermal conductivity') #
     h = Float(0.845464094, units = 'W/((m**2)*K)', iotype='out', desc='Heat Radiated to the outside') #
     area_convection = Float(3374876.115, units = 'W', iotype='out', desc='Convection Area') #
     #Natural Convection
@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
         def configure(self):
 
-            tm = self.add('tm', TubeWall())
+            tm = self.add('tm', TubeWallTemp())
             #tm.bearing_air.setTotalTP()
             driver = self.add('driver',BroydenSolver())
             driver.add_parameter('tm.temp_boundary',low=0.,high=10000.)

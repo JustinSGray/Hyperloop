@@ -1,0 +1,53 @@
+\begin{thebibliography}{1}
+
+\bibitem{Musk}
+Elon Musk.
+\newblock (2013, August 12).
+\newblock {\em Hyperloop Alpha}.
+\newblock SpaceX.
+\newblock Retrieved from \\*
+\newblock \url{http://www.spacex.com/sites/spacex/files/hyperloop\_alpha.pdf}
+
+\bibitem{ET3}
+Daryl Oster, Masayuki Kumada, and Yaoping Zhang.
+\newblock Evacuated tube transport technologies (ET3): a maximum value global
+  transportation network for passengers and cargo.
+\newblock {\em Journal of Modern Transportation}, 19(1):42--50, 2011.
+
+\bibitem{Rouleau}
+Guy {Rouleau} \& Matt {Brauer}.
+\newblock (2013, November 11).
+\newblock {\em Hyperloop: Not so fast!}
+\newblock MatlabCentral.
+\newblock Retrieved from \\*
+\newblock \url{http://blogs.mathworks.com/seth/2013/11/22/hyperloop-not-so-fast/} \\*
+\newblock Repository available  \\*
+\newblock \url{http://www.mathworks.com/matlabcentral/fileexchange/44878-hyperloop-model--systems-architecture-}
+
+\bibitem{Cengal}
+Cengel, Y., Turner, R., \& Cimbala, J.
+\newblock (2008).
+\newblock {\em Fundamentals of Thermal-Fluid Sciences}.:
+\newblock McGraw-Hill Companies.
+
+\bibitem{Turns}
+Turns, S.
+\newblock (2006).
+\newblock {\em Thermal-fluid sciences: An integrated approach}.
+\newblock Cambridge University Press.
+
+\bibitem{Berton}
+Jeffrey Berton.
+\newblock {\em An experimental investigation of natural and combined convection from
+  an isothermal horizontal plate}.
+\newblock Master's thesis, University of Illinois at Urbana-Champaign, 1986.
+\newblock Retrieved from \\*
+\newblock \url{https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf}
+
+\bibitem{Incropera}
+Bergman, T.,  Lavine, A. Incropera, F.,\& DeWitt, D.
+\newblock (2011).
+\newblock {\em Introduction to Heat Transfer}.
+\newblock John Wiley \& Sons, Inc., third edition.
+
+\end{thebibliography}

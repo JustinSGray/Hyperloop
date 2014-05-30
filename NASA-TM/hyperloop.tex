@@ -44,16 +44,18 @@ being approached independently.
 
 \section{Integrated System Design and Tube Diameter}
 
-The tube and passenger pod subsystems contain variables pertinent to other disciplines, resulting in a large interdependence between components.
-This coupling requires a workflow with numerous sub-iterations in order to arrive at a physically valid state for the entire system.
+A large interdependence between the various Hyperloop subsystems stem
+from design variables dictated by the tube and passenger pod systems.
+This coupling, along with other feedback relationships discussed later, require an
+iterative numerical workflow to arrive at a physically valid state for the entire system.
 The full Hyperloop model can be viewed as a collection of five major assemblies as described below.
 
 \begin{enumerate}
   \item Compression System: Performance and power consumption of the compressors.
   \item Mission Analysis: Estimate of travel time and velocity profile.
-  \item Pod Geometry: Physical dimensions of the pod.
-  \item Tube Flow Limitations: Pod speed limitations based on choked flow restrictions between the pod and the tube.
-  \item Tube Wall Temperature: Equilibrium temperature of the tube wall.
+  \item Pod Geometry: Physical dimensions of the passenger pod.
+  \item Tube Flow Limitations: Pod speed limitations based on choked flow restrictions.
+  \item Tube Wall Temperature: Equilibrium temperature of the tube.
 \end{enumerate}
 
 \begin{figure}[hbtp]
@@ -85,7 +87,7 @@ which can be explained with a closer examination of the coupled geometries and m
 Figure \ref{f:ClosedPod} shows the most simplified case of an enclosed pod with no inlet.
 In this scenario, the air reaches the pod at a relative velocity equal to the pod speed
 and accelerates as it is forced through the smaller bypass area around the pod.
-Assuming a circular cross section for both the pod and tube, then the bypass air must travel through an area given by
+Assuming a circular cross section for both the pod and tube, the bypass air must travel through an area given by
 
 \nomenclature{A}{Area (m^{2})}
 \nomenclature{r}{Radius (m)}
@@ -95,8 +97,8 @@ A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
 \nomenclature{\rho_}{Density (\frac{kg}{m^{3}})}
 \nomenclature{\dot{W}, \dot{m}}{Mass Flow Rate (kg/s)}
 
-Since $A_{tube}$ and the air density $\rho_{air}$ within the tube are both constant for given tube size, temperature and pressure,
-the mass flow rate of the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
+Since $A_{tube}$ and the air density $\rho_{air}$ are both constant for given tube size, then the mass
+flow rate of the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
 
 \nomenclature{V}{Velocity ($\frac{m}{s}$)}
 \begin{equation*}
@@ -120,16 +122,18 @@ For a given area ratio, the limiting pod speed can be determined based on isentr
 \label{f:flowLIMIT}
 \end{figure}
 
-This limiting pod speed for various area ratios can be visualized in figure \ref{f:flowLIMIT}.
+This limiting pod speed, for family of various area ratios, can be visualized by the intersecting lines in figure \ref{f:flowLIMIT}.
 The solid lines represent the required bypass flow rates necessary for a given speed,
 and the dashed lines signify the flow limit, which is bounded by a sonic condition around the sides of the pod.
+
+
 To further increase speeds, an inlet and compression system is needed to help draw additional air through the pod.
 The vertical distances between the dashed lines and solid lines of figure \ref{f:flowLIMIT} correlates to the
 minimum compressor flow rates necessary to achieve a given speed. 
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/openCapsule.png}
+\includegraphics[width=0.85\textwidth]{images/openCapsule.png}
 \caption{Longitudinal view of a passenger pod with a simplified inlet and compression system.}
 \label{f:OpenPod}
 \end{figure}
@@ -143,16 +147,17 @@ Additional non-linearity is introduced when considering the limitations of the c
 Increased speeds either necessitate a larger compressor diameter to sufficiently diffuse incoming air,
 or the compressor needs to be designed to handle increased flow demands.
 Increased speeds also necessitates a larger tube to pod area ratio as depicted earlier.
-The compounding relationship of a growing pod area, and a growing area ratio is shown in figure \ref{f:machRAD}.
 
 \nomenclature{c1MN}{Mach number at the front face of the first compressor}
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{images/mach_vs_rad4.png}
-\caption[Tube and Pod Radius vs Mach]{Exponential relationship between pod speed and required tube radius, for three diffused mach numbers}
+\caption[Tube and Pod Radius vs Mach]{Exponential relationship between pod speed and required tube radius, for three diffused mach numbers.
+Converged pod radius also show underneath. }
 \label{f:machRAD}
 \end{figure}
 
+The compounding relationship of a growing pod area, and a growing area ratio is shown in figure \ref{f:machRAD}.
 For each point on this graph, the full system model converges on the minimal possible tube diameter, given a desired pod Mach number.
 This graph also accounts for compressor performance limitations and the steady-state operating tube temperature
 that reaches quiescence above ambient conditions.
@@ -190,7 +195,7 @@ and appropriately enforcing conservation equations across the entire system.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/compressor_schematic.png}
+\includegraphics[width=0.9\textwidth]{images/compressor_schematic.png}
 \caption{Schematic flow diagram of the modeled compressor system}
 \label{f:comp}
 \end{figure}
@@ -209,7 +214,7 @@ Combined with the mission profile described below, these requirements impact bat
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/velocity_profile.png}
+\includegraphics[width=0.7\textwidth]{images/velocity_profile.png}
 \caption{Velocity profile described in the original proposal}
 \label{f:velocity}
 \end{figure}
@@ -223,7 +228,7 @@ Multiplying this time by the average compressor power consumption and a 30\% saf
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/mach_vs_energy.png}
+\includegraphics[width=0.8\textwidth]{images/mach_vs_energy.png}
 \caption[Battery requirements as a function of pod speed]{Battery requirements as a function of pod speed. Note: the y-axis begins at 340kW-hr.}
 \label{f:battery}
 \end{figure}

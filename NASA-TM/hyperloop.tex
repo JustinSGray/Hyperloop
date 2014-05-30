@@ -203,9 +203,9 @@ and appropriately enforcing conservation equations across the entire system.
 
 The simulation leverages the Numerical Propulsion System Simulation (NPSS) code,which
  was created as a joint effort between United States engine manufacturers and NASA
- for the purpose of simulating and analyzing thermodynamic processes, particularly turbomachinery cycles. [ref] 
+ for the purpose of simulating and analyzing thermodynamic processes, particularly turbomachinery cycles. \cite{Lytle}
 The model was then adapted to pyCycle, an open-source cycle analysis tool that employs Cantera for thermodynamic calculations.
-Further information on these tools can be found in the appendix and online documentation. [ref]
+Further information on these tools can be found in the appendix and online documentation. \cite{Cantera}
 
 These models predict the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.
@@ -243,7 +243,7 @@ It should also be noted that the Y-axis of figure \ref{f:battery} begins at 340k
 The overall reduction in battery size is on the order of 25\%, if speed is increased from Mach 0.7 to Mach 0.9.
 Additional mission analysis details can be found in \cref{app:route} and work done by Mathworks \cite{Rouleau}.
 These estimates are in agreement with Musk’s work, and equate to roughly 3 to 5 battery packs from a Tesla Model-S.
-These estimates are still optimistic since no work has been done to estimate battery cooling requirements,
+However, the estimates are still optimistic since no work has been done to estimate battery cooling requirements,
 and based on the assertion that the compression cycle does not need to be cooled.
 The system-level thermal interactions and heat exchangers are analyzed next.
 
@@ -251,7 +251,7 @@ The system-level thermal interactions and heat exchangers are analyzed next.
 
 As each pod passes through the tube, it adds energy to the air in the form of heat.
 Following the proposed frequency of launching a pod every six minutes,
-the continuous operating cycle could potentially heat the overall tube to excessive temperature.
+the continuous operating cycle could potentially heat the overall tube to excessive temperatures.
 To combat this effect, the original proposal recommends a heat exchanger that would be integrated into the compression system.
 These intercoolers would use water stored in on-board tanks to cool the air and assist secondary compression.
 The resulting steam could then be stored in a tank and offloaded once the pod reached its destination.
@@ -308,7 +308,7 @@ Water & 4.186 kJ/kg-K & 288.15 & 416.6 K  & 0.45 kg/s & 242 & 247.9 \\
 
 With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$ of standard temperature/pressure water would need to be carried 
 with steam tanks over a hundred meters in length. This doesn't even account for the second stage heat exchanger, making the system nearly infeasible
-with water and unpressurized tanks. Various systems involving alternate coolants such as liquid air or pressurized tanks could be explored.
+with water and unpressurized tanks. Various systems involving partial cooling, alternate coolants (such as liquid air), or pressurized tanks could be explored.
 
 Further discussion of heat exchanger sizing can be found in the heat exchanger section of \cref{app:heatX}.
 The calculations explore the possibility of multi-pass heat exchangers
@@ -321,7 +321,7 @@ and the logarithmic mean temperature difference (LMTD) of the heat exchanger is 
 A high-level assessment of the overall steady-state heat transfer between the 300 mile Hyperloop tube and the ambient atmosphere is
 also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the pod exhaust
 air and solar flux are considered the primary drivers for heat absorption into the tube. Conversely, heat released from the tube is modeled by means of
-ambient natural convection and radiation out from the stainless-steel surface. The thermal interaction between the rarified internal air and
+ambient natural convection and radiation out from a stainless-steel surface. The thermal interaction between the rarified internal air and
 tube is not modeled.
 
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
@@ -449,7 +449,7 @@ This result suggests that there is no need for on-board cooling, however many ba
 
 \section{Conclusions}
 
-The presented models were built exclusively using open-source tools, with the full source code provided in appendix B.
+The presented models were built exclusively using open-source tools, with the references to the full source code provided in appendix B.
 The fully integrated system model was constructed using the Python programming language
 with the OpenMDAO framework serving as the backbone for subsystem integration and workflow management.
 As the Hyperloop design evolves, an ever increasing number of design variables will need to be managed and optimized.

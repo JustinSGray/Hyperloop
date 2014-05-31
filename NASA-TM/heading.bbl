@@ -14,14 +14,26 @@ Daryl Oster, Masayuki Kumada, and Yaoping Zhang.
   transportation network for passengers and cargo.
 \newblock {\em Journal of Modern Transportation}, 19(1):42--50, 2011.
 
+\bibitem{Lytle}
+John Lytle.
+\newblock (2000, June).
+\newblock The Numerical Propulsion System Simulation: An Overview.
+\newblock NASA/TM-209915, NASA Glenn Research Center.
+
+\bibitem{Cantera}
+D.~{Goodwin} and G.~{Cantera}.
+\newblock Suite of Object-Oriented Software Tools for Problems Involving
+  Chemical Kinetics, Thermodynamics, and/or Transport Processes.
+\newblock Repository available: \url{http://cantera.github.io/docs/sphinx/html/index.html}
+
 \bibitem{Rouleau}
 Guy {Rouleau} \& Matt {Brauer}.
 \newblock (2013, November 11).
 \newblock {\em Hyperloop: Not so fast!}
 \newblock MatlabCentral.
-\newblock Retrieved from \\*
+\newblock Retrieved from: \\*
 \newblock \url{http://blogs.mathworks.com/seth/2013/11/22/hyperloop-not-so-fast/} \\*
-\newblock Repository available  \\*
+\newblock Repository available:  \\*
 \newblock \url{http://www.mathworks.com/matlabcentral/fileexchange/44878-hyperloop-model--systems-architecture-}
 
 \bibitem{Cengal}

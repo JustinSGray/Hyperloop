@@ -2,64 +2,49 @@
 
 \bibitem{Musk}
 Elon Musk.
-\newblock (2013, August 12).
-\newblock {\em Hyperloop Alpha}.
-\newblock SpaceX.
-\newblock Retrieved from \\*
-\newblock \url{http://www.spacex.com/sites/spacex/files/hyperloop\_alpha.pdf}
+\newblock Hyperloop alpha.
+\newblock Website, August 2013.
 
 \bibitem{ET3}
 Daryl Oster, Masayuki Kumada, and Yaoping Zhang.
-\newblock Evacuated tube transport technologies (ET3): a maximum value global
+\newblock Evacuated tube transport technologies (et3)tm: a maximum value global
   transportation network for passengers and cargo.
 \newblock {\em Journal of Modern Transportation}, 19(1):42--50, 2011.
 
 \bibitem{Lytle}
 John Lytle.
-\newblock (2000, June).
-\newblock The Numerical Propulsion System Simulation: An Overview.
-\newblock NASA/TM-209915, NASA Glenn Research Center.
+\newblock The numerical propulsion system simulation: An overview.
+\newblock Technical report, NASA Glenn Research Center, June 2000.
 
 \bibitem{Cantera}
 D.~{Goodwin} and G.~{Cantera}.
-\newblock Suite of Object-Oriented Software Tools for Problems Involving
-  Chemical Kinetics, Thermodynamics, and/or Transport Processes.
-\newblock Repository available: \url{http://cantera.github.io/docs/sphinx/html/index.html}
+\newblock Suite of object-oriented software tools for problems involving
+  chemical kinetics, thermodynamics, and/or transport processes.
+\newblock Technical report.
 
 \bibitem{Rouleau}
-Guy {Rouleau} \& Matt {Brauer}.
-\newblock (2013, November 11).
-\newblock {\em Hyperloop: Not so fast!}
-\newblock MatlabCentral.
-\newblock Retrieved from: \\*
-\newblock \url{http://blogs.mathworks.com/seth/2013/11/22/hyperloop-not-so-fast/} \\*
-\newblock Repository available:  \\*
-\newblock \url{http://www.mathworks.com/matlabcentral/fileexchange/44878-hyperloop-model--systems-architecture-}
+Guy {Rouleau} and Matt {Brauer}.
+\newblock Hyperloop: Not so fast!
+\newblock Website, November 2013.
 
 \bibitem{Cengal}
-Cengel, Y., Turner, R., \& Cimbala, J.
-\newblock (2008).
-\newblock {\em Fundamentals of Thermal-Fluid Sciences}.:
-\newblock McGraw-Hill Companies.
+Y.~{Cengal}, R.~{Turner}, and J.~{Cimbala}.
+\newblock {\em Fundamentals of thermal-fluid sciences}.
+\newblock McGraw-Hill Companies, 2008.
 
 \bibitem{Turns}
-Turns, S.
-\newblock (2006).
+S.~{Turns}.
 \newblock {\em Thermal-fluid sciences: An integrated approach}.
-\newblock Cambridge University Press.
+\newblock Cambridge University Press, 2006.
 
 \bibitem{Berton}
 Jeffrey Berton.
-\newblock {\em An experimental investigation of natural and combined convection from
-  an isothermal horizontal plate}.
+\newblock An experimental investigation of natural and combined convection from
+  an isothermal horizontal plate.
 \newblock Master's thesis, University of Illinois at Urbana-Champaign, 1986.
-\newblock Retrieved from \\*
-\newblock \url{https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf}
 
 \bibitem{Incropera}
-Bergman, T.,  Lavine, A. Incropera, F.,\& DeWitt, D.
-\newblock (2011).
-\newblock {\em Introduction to Heat Transfer}.
-\newblock John Wiley \& Sons, Inc., third edition.
+{\em Introduction to Heat Transfer}.
+\newblock Wiley, third edition.
 
 \end{thebibliography}

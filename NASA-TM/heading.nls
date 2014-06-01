@@ -7,20 +7,20 @@
   \item [{\dot{m}}]\begingroup Mass flow rate\nomeqref {0}
 		\nompageref{11}
   \item [{\dot{W}, \dot{m}}]\begingroup Mass Flow Rate (kg/s)\nomeqref {0}
-		\nompageref{5}
+		\nompageref{6}
   \item [{\epsilon}]\begingroup Emissivity Factor\nomeqref {0}
 		\nompageref{13}
   \item [{\gamma}]\begingroup Heat Capacity Ratio\nomeqref {0}
 		\nompageref{6}
   \item [{\rho_}]\begingroup Density (\frac{kg}{m^{3}})\nomeqref {0}
-		\nompageref{5}
+		\nompageref{6}
   \item [{\sigma}]\begingroup Stefan-Boltzmann constant ($\frac{W}{m-K}$)\nomeqref {0}
 		\nompageref{13}
   \item [{\upsilon}]\begingroup Kinematic Viscosity ($\frac{m^{2}}{s}$)\nomeqref {0}
 		\nompageref{13}
-  \item [{A}]\begingroup Area (m^{2})\nomeqref {0}\nompageref{5}
+  \item [{A}]\begingroup Area (m^{2})\nomeqref {0}\nompageref{6}
   \item [{c1MN}]\begingroup Mach number at the front face of the first compressor\nomeqref {0}
-		\nompageref{7}
+		\nompageref{8}
   \item [{C_{p}}]\begingroup Heat capacity at constant pressure ($\frac{J}{kg-K}$) \nomeqref {0}
 		\nompageref{11}
   \item [{g}]\begingroup Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)\nomeqref {0}
@@ -46,7 +46,7 @@
   \item [{Pr}]\begingroup Prandtl Number, $\frac{\upsilon}{\alpha}$\nomeqref {0}
 		\nompageref{13}
   \item [{Q}]\begingroup Heat flow rate (W)\nomeqref {0}\nompageref{11}
-  \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{5}
+  \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{6}
   \item [{Ra}]\begingroup Rayleigh Number, $\frac{\rho U_{\infty} L}{\mu}$\nomeqref {0}
 		\nompageref{13}
   \item [{SIF}]\begingroup Solar Insulation Factor\nomeqref {0}
@@ -55,7 +55,7 @@
 		\nompageref{13}
   \item [{T}]\begingroup Temperature (K)\nomeqref {0}\nompageref{11}
   \item [{V}]\begingroup Velocity ($\frac{m}{s}$)\nomeqref {0}
-		\nompageref{5}
+		\nompageref{6}
   \item [{{\eta}_{adiabatic}}]\begingroup Adiabatic Efficiency\nomeqref {0}
 		\nompageref{12}
   \item [{{\theta}_{nni}}]\begingroup Non-normal Incidence factor (rad)\nomeqref {0}

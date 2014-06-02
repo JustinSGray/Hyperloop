@@ -6,8 +6,10 @@
 Hyperloop is a conceptual transportation system designed to lower costs and travel times relative to California’s current high-speed rail project.
 \cite{Musk} Elon Musk and a team of engineers from Tesla Motors and the Space Exploration Technologies Corporation (SpaceX)
 proposed the idea in August 2013, as an open design to be vetted and further refined through public contribution.
-The concept deviates from existing high-speed rail designs by eliminating the rails, enclosing the passenger pod in a tube under a partial vacuum, and suspending the pod on air bearings. Propulsion is handled by a set of linear electromagnetic accelerators mounted to the tube,
-with the entire system being held above ground on concrete columns maintaining a straight trajectory.
+The concept deviates from existing high-speed rail designs by eliminating the rails, enclosing the passenger pod in a 
+tube under a partial vacuum, and suspending the pod on air bearings. Propulsion is handled by a set of linear 
+electromagnetic accelerators mounted to the tube, with the entire system being held above ground on concrete 
+columns maintaining a straight trajectory.
 
 Although Hyperloop is similar to other vacuum tube train (VacTrain) concepts \cite{ET3}, the soft vacuum represents a distinct difference.
 It allows the train to run on air-bearings, thus removing the need for a magnetic levitation system used on the other VacTrain concepts.
@@ -16,26 +18,41 @@ The compression system also helps the pod approach sonic speeds, by reducing the
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/hyperloopAlphaSketch.png}
+\includegraphics[width=.75\textwidth]{images/hyperloopAlphaSketch.png}
  \caption[Hyperloop Concept Sketch]{Hyperloop-alpha concept sketch of the passenger pod. \cite{Musk}}
 \label{f:hyperloopSketch}
 \end{figure}
 
+Because Hyperloop operates in an atmosphere, it has many unique issues that need to be modeled as part of its sizing analysis. 
+The modeling approach applied here is inspired heavily by methods for aircraft sizing and turbine engine cycle analysis. Because Hyperloop 
+operates at a transonic Mach number in a low pressure environment it is fairly strait forward to make the analogy to traditional aircraft. 
+The compression subsystem on the passenger pod is similar to the compressors on an aircraft engine. The aerodynamic concerns  
+regarding the flow through the travel tube are essentially the same as those for the inlet of an aircraft engine. 
 
 Musk’s original Hyperloop proposal includes individual high-level analyses of many major subsystems including the pod compression system,
 elevated support structure, and propulsion system. While this demonstrates the basic viability of the concept, it does not address
 significant interdisciplinary couplings inherent in the Hyperloop system. These couplings introduce certain constraints which limit the total 
 degrees of freedom available in the design space. The major contribution of this work was to identify the key couplings that constrain the sizing 
-process and develop models to enable an formal conceptual design process that accounts for them. This sizing process was a necessary preliminary 
-step to performing a design optimization of Hyperloop with the dual objectives of minimizing ticket cost and travel time.
+process and adapt modeling tools from aircraft design to enable a formal conceptual design process that accounts for them. The most significant 
+interdisciplinary coupling arose between passenger pod size and travel tube size. Because of aerodynamic concerns it was not possible to vary 
+both pod size and tube size independently of each other. An additional, though less severe, coupling arose between the compression system and 
+the thermal management system. All of the interdisciplinary coupling demanded the use of an iterative sizing procedure that balanced 
+all the various systems to provide a feasible design for any given set of design variables. The results of this sizing process show that
+the Hyperloop concept is feasible, but certain estimates from the original proposal may have been overly optimistic. 
 
-The modeling approach described in this paper relies on the notion that the compression subsystem on the passenger pod is similar to the
-compressors on an aircraft engine. They both operate at higher Mach numbers and low-pressure conditions. Therefore, experiences drawn
-from aircraft engine design were adapted to address three overarching system challenges omitted from the original proposal.
-The first section identifies a more stringent coupling between passenger pod geometry and tube size, the second revisits compressor
-analysis and battery sizing, and the final section addresses the requirements driven by thermal interactions. The results show that
-the Hyperloop concept is feasible, but certain estimates from the original proposal may have been overly optimistic due to each discipline
-being approached independently.
+This sizing process presented here was a necessary precursor step before ultimately performing a design optimization of 
+Hyperloop with the dual objectives of minimizing ticket cost and travel time. Performing this optimization 
+was outside the scope of this work and is reserved for future investigation. 
+The fully integrated system model was constructed using OpenMDAO, a Python based framework for 
+the design and optimization of complex systems\cite{GrayBenmarking2013}. The models presented 
+in this work represent very basic analyses which rely heavily on simplifying assumptions. A realistic design 
+optimization will require more detailed models of the investigated systems and additional analyses for economic models and 
+structural models. Adding all of this will result in significant growth in complexity of the Hyperloop model. 
+OpenMDAO could provide the means to manage growing model complexity 
+in an efficient and flexible manner. Musks original work was released with the stated goal of jump starting
+a crowd sourced design effort. In that spirit all the analyses used in this work have been released under
+the Apache V2.0 open source license so that they could potentially serve as a foundation for future work.
+
 
 \begin{figure}[hbtp]
 \centering
@@ -80,12 +97,6 @@ The compression system and pod geometry analyses were each further subdivided in
 system was primarily responsible for computing important areas throughout the passenger pod. Figure \ref{f:podXDSM} shows the 
 pod geometry breakdown into 5 subsystems. Most of these calculations were based on simple geometric relationships. The 
 modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones. 
-The compressor cycle performed calculations related to the thermodynamic processes associated with compressing, cooling, and exhausting air. 
-The modeling approach for the compressor cycle was heavily influenced by techniques developed in the Numerical Propulsion System Simulation (NPSS) code. 
-NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
-simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
-where cycles get broken down into individual thermodynamic processes and then connected together. This modularity was adopted for pyCycle, 
-the cycle modeling tool used in this work. 
 
 \begin{figure}[hbtp]
 \centering
@@ -94,17 +105,12 @@ the cycle modeling tool used in this work.
 \label{f:podXDSM}
 \end{figure}
 
-All analysis models used for this work were built exclusively using open-source tools. 
-The fully integrated system model was constructed using OpenMDAO, a Python based framework for 
-the design and optimization of complex systems\cite{GrayBenmarking2013}. The models presented 
-in this work represent very basic analyses which rely heavily on simplifying assumptions. As
-the Hyperloop concept evolves and the design process matures, more complex and detailed models 
-will need to be employed to resolve finer details in the overall system. 
-OpenMDAO could provide the means to manage growing model complexity in an efficient and flexible manner. 
-Musks original work was released as an open design concept with the stated goal of jump starting
-a crowd sourced design effort. In that spirit all the analyses used in this work were released 
-the Apache V2.0 open source license so that they could potentially serve as a foundation for further 
-work. 
+The compressor cycle performed calculations related to the thermodynamic processes associated with compressing, cooling, and exhausting air. 
+The modeling approach for the compressor cycle was heavily influenced by techniques developed in the Numerical Propulsion System Simulation (NPSS) code. 
+NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
+simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
+where cycles get broken down into individual thermodynamic processes and then connected together. This modularity was adopted for pyCycle, 
+the cycle modeling tool used in this work. 
 
 \begin{figure}[H]
 \centering
@@ -112,6 +118,8 @@ work.
 \caption{Expanded \texttt{compress} assembly XDSM}
 \label{f:compressorXDSM}
 \end{figure}
+
+
 
 
 \section{Pod and Tube Sizing}

@@ -3,62 +3,62 @@
  \nomgroup{A}
 
   \item [{\beta}]\begingroup Volume coefficient of expansion (K)\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{\dot{m}}]\begingroup Mass flow rate\nomeqref {0}
-		\nompageref{11}
+		\nompageref{13}
   \item [{\dot{W}, \dot{m}}]\begingroup Mass Flow Rate (kg/s)\nomeqref {0}
-		\nompageref{6}
+		\nompageref{7}
   \item [{\epsilon}]\begingroup Emissivity Factor\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{\gamma}]\begingroup Heat Capacity Ratio\nomeqref {0}
-		\nompageref{6}
+		\nompageref{8}
   \item [{\rho_}]\begingroup Density (\frac{kg}{m^{3}})\nomeqref {0}
-		\nompageref{6}
+		\nompageref{7}
   \item [{\sigma}]\begingroup Stefan-Boltzmann constant ($\frac{W}{m-K}$)\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{\upsilon}]\begingroup Kinematic Viscosity ($\frac{m^{2}}{s}$)\nomeqref {0}
-		\nompageref{13}
-  \item [{A}]\begingroup Area (m^{2})\nomeqref {0}\nompageref{6}
+		\nompageref{15}
+  \item [{A}]\begingroup Area (m^{2})\nomeqref {0}\nompageref{7}
   \item [{c1MN}]\begingroup Mach number at the front face of the first compressor\nomeqref {0}
 		\nompageref{8}
   \item [{C_{p}}]\begingroup Heat capacity at constant pressure ($\frac{J}{kg-K}$) \nomeqref {0}
-		\nompageref{11}
+		\nompageref{13}
   \item [{g}]\begingroup Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{Gr}]\begingroup Grashof Number, $\frac{ g \beta \delta TL^{3}}{v^{2}}$\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{h}]\begingroup Heat transfer coefficient ($\frac{W}{m^{2}-K}$)\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{k}]\begingroup Thermal Conductivity ($\frac{W}{m-K}$) \nomeqref {0}
-		\nompageref{13}
-  \item [{L}]\begingroup Length (m)\nomeqref {0}\nompageref{13}
-  \item [{L}]\begingroup Length\nomeqref {0}\nompageref{13}
-  \item [{MN}]\begingroup Mach Number\nomeqref {0}\nompageref{6}
+		\nompageref{15}
+  \item [{L}]\begingroup Length (m)\nomeqref {0}\nompageref{15}
+  \item [{L}]\begingroup Length\nomeqref {0}\nompageref{15}
+  \item [{MN}]\begingroup Mach Number\nomeqref {0}\nompageref{8}
   \item [{Nu}]\begingroup Nusselt Number, $\frac{hL}{k}$\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{OD}]\begingroup Outer diameter (m)\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{P}]\begingroup Pressure ($\frac{N}{m^{2}}$)\nomeqref {0}
-		\nompageref{12}
+		\nompageref{14}
   \item [{P_{rad}}]\begingroup Radiated Power (W)\nomeqref {0}
-		\nompageref{13}
-  \item [{PR}]\begingroup Pressure Ratio\nomeqref {0}\nompageref{12}
+		\nompageref{15}
+  \item [{PR}]\begingroup Pressure Ratio\nomeqref {0}\nompageref{14}
   \item [{Pr}]\begingroup Prandtl Number, $\frac{\upsilon}{\alpha}$\nomeqref {0}
-		\nompageref{13}
-  \item [{Q}]\begingroup Heat flow rate (W)\nomeqref {0}\nompageref{11}
-  \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{6}
+		\nompageref{15}
+  \item [{Q}]\begingroup Heat flow rate (W)\nomeqref {0}\nompageref{13}
+  \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{7}
   \item [{Ra}]\begingroup Rayleigh Number, $\frac{\rho U_{\infty} L}{\mu}$\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{SIF}]\begingroup Solar Insulation Factor\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
   \item [{SRI}]\begingroup Solar Reflectance Index\nomeqref {0}
-		\nompageref{13}
-  \item [{T}]\begingroup Temperature (K)\nomeqref {0}\nompageref{11}
+		\nompageref{15}
+  \item [{T}]\begingroup Temperature (K)\nomeqref {0}\nompageref{13}
   \item [{V}]\begingroup Velocity ($\frac{m}{s}$)\nomeqref {0}
-		\nompageref{6}
+		\nompageref{8}
   \item [{{\eta}_{adiabatic}}]\begingroup Adiabatic Efficiency\nomeqref {0}
-		\nompageref{12}
+		\nompageref{14}
   \item [{{\theta}_{nni}}]\begingroup Non-normal Incidence factor (rad)\nomeqref {0}
-		\nompageref{13}
+		\nompageref{15}
 
 \end{thenomenclature}

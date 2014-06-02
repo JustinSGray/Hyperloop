@@ -45,14 +45,14 @@ being approached independently.
 \label{f:hyperloopCAD}
 \end{figure}
 
-\section{Pod and Tube Sizing}
 
+\section{Hyperloop Model Structure}
 
 % A large interdependence between the various Hyperloop subsystems stem
 % from design variables dictated by the tube and passenger pod systems.
 % This coupling, along with other feedback relationships discussed later, require an
 % iterative approach to arrive at a physically valid state for the entire system.
-The Hyperloop passenger pod was decomposed into 5 primary analyses which were connected to 
+The Hyperloop passenger pod was decomposed into 5 primary analyses that were connected to 
 form the conceptual sizing model. 
 
 \begin{enumerate}
@@ -67,8 +67,8 @@ The relationship between the systems is illustrated in figure \ref{f:hyperloopXD
 are represented as the blue arrows in the upper right side of the diagram. For example, the Compressor Cycle 
 passes data to the Mission Analysis, Pod Geometry, and and Tube Temperature analyses. In the lower left 
 side of the diagram red arrows represent feed back connections which establish coupling between different 
-analyses. This 
-The compression system and pod geometry analyses were further subdivided into a number of subsystems. 
+analyses. All feed backs pass through the Compressor Cycle, which indicates that this system is of central importance
+in the overall sizing process. 
 
 \begin{figure}[hbtp]
 \centering
@@ -77,6 +77,35 @@ The compression system and pod geometry analyses were further subdivided into a 
 \label{f:hyperloopXDSM}
 \end{figure}
 
+The compression system and pod geometry analyses were each further subdivided into a number of subsystems. The pod geometry 
+system was primarily responsible for computing important areas throughout the passenger pod. Figure \ref{f:podXDSM} shows the 
+pod geometry breakdown into 5 subsystem. Most of these calculations were based on simple geometric relationships. The 
+modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones. 
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.7\textwidth]{images/pod_assembly_xdsm.png}
+\caption{Expanded \texttt{pod} assembly XDSM}
+\label{f:podXDSM}
+\end{figure}
+
+The compressor cycle performed calculations related to the thermodynamic processes associated with compressing, cooling, and exhausting air. 
+The approach taken for modeling system was based heavily on existing techniques developed in the Numerical Propulsion System Simulation (NPSS) code. 
+NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
+simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
+where cycles get broken down into individual thermodynamic processes and then connected together. 
+These methods were adopted for pyCycle, the cycle modeling tool used in this work.  pyCycle is an open-source cycle analysis 
+tool that employs Cantera for thermodynamic calculations. Further information on these tools can be found in the appendix and online documentation. \cite{Cantera}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/compress_assembly_xdsm.png}
+\caption{Expanded \texttt{compress} assembly XDSM}
+\label{f:compressorXDSM}
+\end{figure}
+
+
+\section{Pod and Tube Sizing}
 
 These couplings enforce a set of equality constraints that must be satisfied for any physically valid Hyperloop design.
 A solver is necessary to perturb numerous design and state variables to characterize the system of equations and drive
@@ -192,6 +221,7 @@ it still provides a compelling case when compared to high speed rail.
 The compressor system necessary to achieve this performance is analyzed next.
 
 \section{Compressor Power and Battery Sizing}
+\label{sec:compressor-and-battery}
 
 The on-board compression system serves dual purposes.
 It provides a means of exceeding the nominal Kantrowitz limit and also supplies pressurized air to support the air bearing system.
@@ -213,9 +243,9 @@ and appropriately enforcing conservation equations across the entire system.
 \label{f:comp}
 \end{figure}
 
-The simulation leverages the Numerical Propulsion System Simulation (NPSS) code,which
- was created as a joint effort between United States engine manufacturers and NASA
- for the purpose of simulating and analyzing thermodynamic processes, particularly turbomachinery cycles. \cite{Lytle}
+The simulation leverages the Numerical Propulsion System Simulation (NPSS) code, which
+was created as a joint effort between United States engine manufacturers and NASA
+for the purpose of simulating and analyzing thermodynamic processes, particularly turbomachinery cycles. \cite{Lytle}
 The model was then adapted to pyCycle, an open-source cycle analysis tool that employs Cantera for thermodynamic calculations.
 Further information on these tools can be found in the appendix and online documentation. \cite{Cantera}
 

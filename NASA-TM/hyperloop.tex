@@ -6,8 +6,7 @@
 Hyperloop is a conceptual transportation system designed to lower costs and travel times relative to California’s current high-speed rail project.
 \cite{Musk} Elon Musk and a team of engineers from Tesla Motors and the Space Exploration Technologies Corporation (SpaceX)
 proposed the idea in August 2013, as an open design to be vetted and further refined through public contribution.
-The concept deviates from existing high-speed rail designs by eliminating the rails,  enclosing the passenger pod in a tube under a partial vacuum,
-with the pod suspended on air bearings. Propulsion is handled by a set of linear electromagnetic accelerators mounted to the tube,
+The concept deviates from existing high-speed rail designs by eliminating the rails, enclosing the passenger pod in a tube under a partial vacuum, and suspending the pod on air bearings. Propulsion is handled by a set of linear electromagnetic accelerators mounted to the tube,
 with the entire system being held above ground on concrete columns maintaining a straight trajectory.
 
 Although Hyperloop is similar to other vacuum tube train (VacTrain) concepts \cite{ET3}, the soft vacuum represents a distinct difference.
@@ -17,7 +16,7 @@ The compression system also helps the pod approach sonic speeds, by reducing the
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/hyperloopAlphaSketch.jpg}
+\includegraphics[width=\textwidth]{images/hyperloopAlphaSketch.png}
  \caption[Hyperloop Concept Sketch]{Hyperloop-alpha concept sketch of the passenger pod. \cite{Musk}}
 \label{f:hyperloopSketch}
 \end{figure}
@@ -299,10 +298,13 @@ product is used to determine the maximum heat transfer. In order to satisfy the 
 \end{equation*}
 
 where the $T_{out}$  of each fluid is unknown. With assumed mass-flow rates and initial temperatures, a valid combination of Tout‘s of
-each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be estimated based on the E- NTU
-method. The effectiveness for a counter flow heat exchanger with a $\frac{C_{min}}{C_{max}}$ of ~0.25 was chosen with air and water as the working fluids. 
-The following conditions satisfied an energy balance with an extremely optimistically assumed effectiveness of 0.9765, and the proposed requirement to fully
-cool the air back down to inlet temperatures.
+each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be estimated based on the
+Effectiveness - Number of Transfer Units (NTU) method. 
+The effectiveness for a counter flow heat exchanger with a $\frac{C_{p,min}}{C_{p,max}}$ of ~0.25 was chosen with air and water as the working fluids. 
+The following conditions satisfied an energy balance with an extremely optimistically assumed effectiveness of 0.9765,
+and the proposed requirement to fully cool the air back down to inlet temperatures.
+
+\nomenclature{NTU}{Number of Transfer Units}
 
 \begin{table} [H]
 \centering

@@ -27,6 +27,7 @@
     \nompageref{11}
   \item [{L}]\begingroup Length (m)\nomeqref {0}\nompageref{10}
   \item [{MN}]\begingroup Mach number\nomeqref {0}\nompageref{5}
+  \item [{NTU}]\begingroup Number of Transfer Units\nomeqref {0}\nompageref{12}
   \item [{Nu}]\begingroup Nusselt number, $\frac{hL}{k}$\nomeqref {0}\nompageref{11}
   \item [{OD}]\begingroup Outer diameter (m)\nomeqref {0}\nompageref{10}
   \item [{CSM}]\begingroup Constructive Solid Modeler\nomeqref {0}

@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{Musk}
 Elon Musk.
@@ -16,11 +16,17 @@ John Lytle.
 \newblock The numerical propulsion system simulation: An overview.
 \newblock Technical report, NASA Glenn Research Center, June 2000.
 
-\bibitem{Cantera}
-D.~{Goodwin} and G.~{Cantera}.
-\newblock Suite of object-oriented software tools for problems involving
-  chemical kinetics, thermodynamics, and/or transport processes.
-\newblock Technical report.
+\bibitem{GrayBenmarking2013}
+Justin Gray, Kenneth~T. Moore, Tristan~A. Hearn, and Bret~A. Naylor.
+\newblock Standard platform for benchmarking multidisciplinary design analysis
+  and optimization architectures.
+\newblock {\em AIAA Journal}, 51(10):2380--2394, Oct 2013.
+
+\bibitem{goodwin2009cantera}
+D~Goodwin, N~Malaya, H~Moffat, and R~Speth.
+\newblock Cantera: An object-oriented software toolkit for chemical kinetics,
+  thermodynamics, and transport processes.
+\newblock {\em Caltech, Pasadena}, 2009.
 
 \bibitem{Rouleau}
 Guy {Rouleau} and Matt {Brauer}.

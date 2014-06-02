@@ -27,11 +27,7 @@ elevated support structure, and propulsion system. While this demonstrates the b
 significant interdisciplinary couplings inherent in the Hyperloop system. These couplings introduce certain constraints which limit the total 
 degrees of freedom available in the design space. The major contribution of this work was to identify the key couplings that constrain the sizing 
 process and develop models to enable an formal conceptual design process that accounts for them. This sizing process was a necessary preliminary 
-<<<<<<< HEAD
 step to performing a design optimization of Hyperloop with the dual objectives of minimizing ticket cost and travel time.
-=======
-step to performing a design optimziation of Hyperloop with the dual objectives of minimizing ticket cost and travel time.
->>>>>>> b8539a66e8ef87560e8e716ec262d7bb51cf4ebc
 
 The modeling approach described in this paper relies on the notion that the compression subsystem on the passenger pod is similar to the
 compressors on an aircraft engine. They both operate at higher Mach numbers and low-pressure conditions. Therefore, experiences drawn
@@ -82,14 +78,14 @@ analyses.
 
 The compression system and pod geometry analyses were each further subdivided into a number of subsystems. The pod geometry 
 system was primarily responsible for computing important areas throughout the passenger pod. Figure \ref{f:podXDSM} shows the 
-pod geometry breakdown into 5 subsystem. Most of these calculations were based on simple geometric relationships. The 
+pod geometry breakdown into 5 subsystems. Most of these calculations were based on simple geometric relationships. The 
 modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones. 
 The compressor cycle performed calculations related to the thermodynamic processes associated with compressing, cooling, and exhausting air. 
 The modeling approach for the compressor cycle was heavily influenced by techniques developed in the Numerical Propulsion System Simulation (NPSS) code. 
 NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
 simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
-where cycles get broken down into individual thermodynamic processes and then connected together. The modularity in NPSS naturally translated 
-into the subassembly structure for the compressor cycle. 
+where cycles get broken down into individual thermodynamic processes and then connected together. This modularity was adopted for pyCycle, 
+the cycle modeling tool used in this work. 
 
 \begin{figure}[hbtp]
 \centering
@@ -98,17 +94,17 @@ into the subassembly structure for the compressor cycle.
 \label{f:podXDSM}
 \end{figure}
 
-
 All analysis models used for this work were built exclusively using open-source tools. 
 The fully integrated system model was constructed using OpenMDAO, a Python based framework for 
-the design and optimization of complex systems\cite{GrayBenmarking2013}. 
-As the Hyperloop design evolves, an ever increasing number of design variables will need to be managed and optimized.
-OpenMDAO can provide the means to manage this rapidly growing complexity in an efficient and flexible manner
-that will allow the model to grow as the necessary refinements are made.
-External contribution is encouraged to expand, refine or replace models with higher fidelity analyses. 
-
-These methods were adopted for pyCycle, the cycle modeling tool used in this work.  PyCycle is an open-source cycle analysis 
-tool that employs Cantera\cite{goodwin2009cantera} for thermodynamic calculations. 
+the design and optimization of complex systems\cite{GrayBenmarking2013}. The models presented 
+in this work represent very basic analyses which rely heavily on simplifying assumptions. As
+the Hyperloop concept evolves and the design process matures, more complex and detailed models 
+will need to be employed to resolve finer details in the overall system. 
+OpenMDAO could provide the means to manage growing model complexity in an efficient and flexible manner. 
+Musks original work was released as an open design concept with the stated goal of jump starting
+a crowd sourced design effort. In that spirit all the analyses used in this work were released 
+the Apache V2.0 open source license so that they could potentially serve as a foundation for further 
+work. 
 
 \begin{figure}[H]
 \centering
@@ -234,10 +230,7 @@ it still provides a compelling case when compared to high speed rail.
 The compressor system necessary to achieve this performance is analyzed next.
 
 \section{Compressor Power and Battery Sizing}
-<<<<<<< HEAD
 \label{sec:compressor-and-battery}
-=======
->>>>>>> b8539a66e8ef87560e8e716ec262d7bb51cf4ebc
 
 The on-board compression system serves dual purposes.
 It provides a means of exceeding the nominal Kantrowitz limit and also supplies pressurized air to support the air bearing system.
@@ -263,7 +256,7 @@ The simulation leverages the Numerical Propulsion System Simulation (NPSS) code,
 was created as a joint effort between United States engine manufacturers and NASA
 for the purpose of simulating and analyzing thermodynamic processes, particularly turbomachinery cycles. \cite{Lytle}
 The model was then adapted to pyCycle, an open-source cycle analysis tool that employs Cantera for thermodynamic calculations.
-Further information on these tools can be found in the appendix and online documentation. \cite{Cantera}
+Further information on these tools can be found in the appendix and online documentation. \cite{goodwin2009cantera}
 
 These models predict the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.

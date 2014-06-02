@@ -67,6 +67,7 @@ class HyperloopPod(Assembly):
         #Inter-component Connections
         #Compress -> Mission
         self.connect('compress.speed_max', 'mission.speed_max')
+        self.connect('compress.pwr_req', 'mission.pwr_req')
         #Compress -> Pod
         self.connect('compress.area_c1_in', 'pod.area_inlet_out')
         self.connect('compress.area_inlet_in', 'pod.area_inlet_in')
@@ -147,8 +148,8 @@ if __name__=="__main__":
         hl.Mach_pod_max = m
         hl.run()
         machs.append(m)
-        batt.append(hl.pod.energy)
-        compE.append(hl.compress.pwr_req)
+        batt.append(hl.mission.energy)
+        compE.append(hl.mission.pwr_req)
         timeT.append(hl.mission.time)
         print machs
         print batt

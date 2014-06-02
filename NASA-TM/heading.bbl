@@ -11,16 +11,16 @@ Daryl Oster, Masayuki Kumada, and Yaoping Zhang.
   transportation network for passengers and cargo.
 \newblock {\em Journal of Modern Transportation}, 19(1):42--50, 2011.
 
-\bibitem{Lytle}
-John Lytle.
-\newblock The numerical propulsion system simulation: An overview.
-\newblock Technical report, NASA Glenn Research Center, June 2000.
-
 \bibitem{GrayBenmarking2013}
 Justin Gray, Kenneth~T. Moore, Tristan~A. Hearn, and Bret~A. Naylor.
 \newblock Standard platform for benchmarking multidisciplinary design analysis
   and optimization architectures.
 \newblock {\em AIAA Journal}, 51(10):2380--2394, Oct 2013.
+
+\bibitem{Lytle}
+John Lytle.
+\newblock The numerical propulsion system simulation: An overview.
+\newblock Technical report, NASA Glenn Research Center, June 2000.
 
 \bibitem{goodwin2009cantera}
 D~Goodwin, N~Malaya, H~Moffat, and R~Speth.

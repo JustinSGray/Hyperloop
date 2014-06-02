@@ -51,14 +51,13 @@ class Mission(Component):
 
         self.time = middleTime + 435+t3 + t3+100+t2+400+t1
 
-        print "total mission time: ", self.time / 60 , " minutes"
-        print self.speed_max
         self.energy = (self.pwr_req*self.time/3600.)*(1+self.pwr_marg) #convert to hours
 
         print self.itername 
-        #print " W_inssbfds: ", self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
-        #print " R_tube:  ", self.parent.pod.radius_tube_inner, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
-        #print " Bearing_Ps:  ", self.parent.compress.c2_PR_des, self.parent.compress.Ps_bearing_residual
+        print " W_i: ", self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
+        print "total mission time: ", self.time / 60 , " minutes"
+        print " R_tube:  ", self.parent.pod.radius_tube_inner, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
+        print " Bearing_Ps:  ", self.parent.compress.c2_PR_des, self.parent.compress.Ps_bearing_residual
         print 
 
 if __name__ == "__main__": 

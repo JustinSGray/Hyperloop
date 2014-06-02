@@ -112,7 +112,7 @@ if __name__=="__main__":
     #design variables
     hl.Mach_bypass = .95
     hl.Mach_pod_max = .90
-    hl.Mach_c1_in = .75
+    hl.Mach_c1_in = .65
     hl.c1_PR_des = 13
 
     #initial guesses
@@ -121,20 +121,37 @@ if __name__=="__main__":
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 
     hl.compress.c2_PR_des = 5 
 
-    machs = []
-    tube_r = []
-    capsule_r = []
+    #machs = []
+    #tube_r = []
+    #capsule_r = []
 
-    for m in np.arange(.781,.95, .01):
+    #for m in np.arange(.781,.95, .01):
+    #    hl.Mach_pod_max = m
+    #    hl.run()
+    #    machs.append(m)
+    #    tube_r.append(hl.pod.radius_inlet_back_outer)
+    #    capsule_r.append(hl.flow_limit.radius_tube)
+
+    #    print machs
+    #    print tube_r
+    #    print capsule_r
+
+    machs = []
+    batt = []
+    compE = []
+    timeT = []
+
+    for m in np.arange(.7,.95, .01):
         hl.Mach_pod_max = m
         hl.run()
         machs.append(m)
-        tube_r.append(hl.pod.radius_inlet_back_outer)
-        capsule_r.append(hl.flow_limit.radius_tube)
-
+        batt.append(hl.pod.energy)
+        compE.append(hl.compress.pwr_req)
+        timeT.append(hl.mission.time)
         print machs
-        print tube_r
-        print capsule_r
+        print batt
+        print compE
+        print timeT
 
     design_data = OrderedDict([
         ('Mach bypass', hl.Mach_bypass), 

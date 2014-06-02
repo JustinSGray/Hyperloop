@@ -27,36 +27,38 @@ class Mission(Component):
         t3 = (self.speed_max-555)*1609/(9.81*0.5)/3600; #time needed to accelerate
 
         #speed profile data from hyperloop alpha proposal, pg 43
-        dataStart = np.array([[0,0],
+        dataStart = np.array([
+            [0,0],
             [t1, 300*1.609],#(300[miles/hour]*1609[meters/mile])/(9.81[meters/second]*0.5)/3600[seconds/hr]
             [167, 300*1.609],
             [167+t2, 555*1.609],#(555-300[miles/hour]*1609[meters/mile])/(9.81[meters/second]*0.5)/3600[seconds/hr]
-            [435, 555*1.609]])
-        startUp = np.trapz(dataStart[:,1]/3600, dataStart[:,0]) #miles covered during start up  Los Angeles Grapevine
+            [435, 555*1.609],
+            [435+t3, self.speed_max]])
+        startUp = np.trapz(dataStart[:,1]/3600, dataStart[:,0])*1000 #km covered during start up  Los Angeles Grapevine
 
-        dataEnd = np.array([[0,self.speed_max],
+        dataEnd = np.array([
+            [0,self.speed_max],
             [t3, 555*1.609],
             [t3+100, 555*1.609],
             [t3+100+t2, 300*1.609],
             [t3+100+t2+400, 300*1.609],
             [t3+100+t2+400+t1, 0]])
 
-        windDown = np.trapz(dataEnd[:,1]/3600, dataEnd[:,0]) #miles covered during wind down along I-580 to SF
+        windDown = np.trapz(dataEnd[:,1]/3600, dataEnd[:,0])*1000 #km covered during wind down along I-580 to SF
         
         middleLength = self.tube_length - (startUp + windDown)
-        middleTime = middleLength / self.speed_max
+        middleTime = middleLength / (self.speed_max)
 
-        print middleTime
+        self.time = middleTime + 435+t3 + t3+100+t2+400+t1
 
-        self.time = middleTime + 435 + t3+100+t2+400+t1
-
-        print self.time
+        print "total mission time: ", self.time / 60 , " minutes"
+        print self.speed_max
         self.energy = (self.pwr_req*self.time/3600.)*(1+self.pwr_marg) #convert to hours
 
         print self.itername 
-        print " W_inssbfds: ", self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
-        print " R_tube:  ", self.parent.pod.radius_tube_inner, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
-        print " Bearing_Ps:  ", self.parent.compress.c2_PR_des, self.parent.compress.Ps_bearing_residual
+        #print " W_inssbfds: ", self.parent.compress.W_in, 10*(self.parent.compress.W_in-self.parent.flow_limit.W_excess)
+        #print " R_tube:  ", self.parent.pod.radius_tube_inner, .01*(self.parent.pod.area_compressor_bypass-self.parent.compress.area_c1_out)
+        #print " Bearing_Ps:  ", self.parent.compress.c2_PR_des, self.parent.compress.Ps_bearing_residual
         print 
 
 if __name__ == "__main__": 

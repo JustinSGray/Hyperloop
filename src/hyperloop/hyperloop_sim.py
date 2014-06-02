@@ -5,7 +5,9 @@ from openmdao.lib.casehandlers.api import CSVCaseRecorder
 
 
 from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
-    Pod, Mission)
+    Pod)
+
+from mission import Mission
 
 
 class HyperloopPod(Assembly): 

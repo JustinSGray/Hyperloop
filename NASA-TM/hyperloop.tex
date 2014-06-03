@@ -66,7 +66,7 @@ travel tube to provide a means of sizing the thermal management system.
 % \end{figure}
 
 
-\section{Hyperloop Model Structure}
+\section{Hyperloop Model Overview}
 \label{s:struct}
 % A large interdependence between the various Hyperloop subsystems stem
 % from design variables dictated by the tube and passenger pod systems.
@@ -84,11 +84,31 @@ form the conceptual sizing model.
   \item Tube Wall Temperature: Equilibrium temperature of the tube.
 \end{enumerate}
 
-The relationship between the systems is illustrated in figure \ref{f:hyperloopXDSM}. Feed forward connections 
+The relationship between the systems is illustrated in Fig.~\ref{f:hyperloopXDSM}. Feed forward connections 
 are represented as the blue arrows in the upper right side of the diagram. For example, the Compressor Cycle 
 passes data to the Mission Analysis, Pod Geometry, and and Tube Temperature analyses. In the lower left 
 side of the diagram red arrows represent feed back connections which establish coupling between different 
-analyses. 
+analyses. The upper most left hand corner of Fig.~\ref{f:podXDSM} shows design variables that affect 
+different systems. Table~\ref{tab:desvars} summarizes the baseline values as well as ranges selected 
+to provide a reasonably large design space. Notably both Pod radius and travel tube radius are missing 
+from the list of variables in Tab.~\ref{tab:desvars}. These variables could not be freely varied 
+due to the assumption of a fixed cross section for where passengers would sit combined with the couplings 
+shown in Fig.~\ref{f:hyperloopXDSM}. This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
+
+\begin{table}
+    \centering
+    \caption{Hyperloop passenger pod design variables}
+    \label{tab:desvars}
+    \begin{tabular}{l  c  c  c} 
+        \hline
+        Variable & Baseline Value & Min. & Max. \\ \hline 
+        Max. Pod Mach & .9 & .3 & 1.0 \\ 
+        Pod Bypass Mach & .95 & .5 & .99 \\
+        Compressor 1 Inlet Mach & .6 & .5 & .8 \\ 
+        Compressor 1 Pressure Ratio & 12.47 & 10 & 20 \\ 
+        Tube Static Pressure (Pa) & 99 & 50 & 500 \\ \hline
+    \end{tabular}
+\end{table}
 
 \begin{figure}[hbtp]
 \centering
@@ -97,10 +117,12 @@ analyses.
 \label{f:hyperloopXDSM}
 \end{figure}
 
-The compression system and pod geometry analyses were each further subdivided into a number of subsystems. The pod geometry 
-system was primarily responsible for computing important areas throughout the passenger pod. Figure \ref{f:podXDSM} shows the 
+The compression system and pod geometry analyses were each further subdivided into a number of subsystems. For this work the pod geometry 
+system was primarily responsible for computing important areas throughout the passenger pod. Figure~\ref{f:podXDSM} shows the 
 pod geometry breakdown into 5 subsystems. Most of these calculations were based on simple geometric relationships. The 
-modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones. 
+modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones.
+The pod geometry system is the place to include structural and weight estimation models for the passenger pod in future work,
+though these analyses were outside the scope of this work. 
 
 \begin{figure}[hbtp]
 \centering
@@ -109,12 +131,16 @@ modeling was broken down to enhance modularity so that future work could replace
 \label{f:podXDSM}
 \end{figure}
 
-The compressor cycle performed calculations related to the thermodynamic processes associated with compressing, cooling, and exhausting air. 
+The compressor cycle performed calculations related to the thermodynamic processes of compressing, cooling, and exhausting air. 
 The modeling approach for the compressor cycle was heavily influenced by techniques developed in the Numerical Propulsion System Simulation (NPSS) code. 
 NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
 simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
 where cycles get broken down into individual thermodynamic processes and then connected together. This modularity was adopted for pyCycle, 
-the cycle modeling tool used in this work. 
+the cycle modeling tool used in this work. PyCycle was used to predicted the mass flow and power consumption of the entire compression system. 
+In the original hyperloop proposal, the air bearings were specified to work with a static pressure of 11 kPa. The compression system is made of 
+of two stages, with the second stage providing additional pressure to reach the required 11 kPa. The required pressure ratio for the second stage
+is a function of the maximum pod travel Mach number and the first stage compressor pressure ratio. In Fig~\ref{f:compressorXDSM} this relationship 
+shows up as a feedback connection between the performance and the compressor 2 subsystems. 
 
 \begin{figure}[H]
 \centering
@@ -122,6 +148,7 @@ the cycle modeling tool used in this work.
 \caption{Expanded \texttt{compress} assembly XDSM}
 \label{f:compressorXDSM}
 \end{figure}
+
 
 \section{Pod and Tube Sizing}
 \label{s:sizing}
@@ -131,7 +158,7 @@ A solver is necessary to perturb numerous design and state variables to characte
 each variable towards a specified valid criteria. The first equality constraint requires agreement between the pod geometry
 calculations and the computed compression system areas. The second constraint ensures the pod compressor achieves the
 necessary flow intake given a maximum bypass flow, and the final feedback loop drives the operating tube temperature to
-balanced conditions. Figure \ref{f:hyperloopXDSM} only shows the highest level assembly connections;
+balanced conditions. Figure~\ref{f:hyperloopXDSM} only shows the highest level assembly connections;
 the compression system and pod geometry system are further expanded into sub-assemblies in \cref{app:model}.
 The feedback loop between the tube and inlet diameter is more severe than described in the original proposal,
 which can be explained with a closer examination of the coupled geometries and mass flow rates.

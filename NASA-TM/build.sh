@@ -8,4 +8,4 @@ makeindex heading.nlo  -s nomencl.ist -o heading.nls
 
 mv heading.pdf hyperloop.pdf
 
-. clean.sh
+#. clean.sh

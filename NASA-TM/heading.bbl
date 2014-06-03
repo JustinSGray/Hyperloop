@@ -1,56 +1,48 @@
 \begin{thebibliography}{10}
+\newcommand{\enquote}[1]{``#1''}
 
 \bibitem{Musk}
-Elon Musk.
-\newblock Hyperloop alpha.
-\newblock Website, August 2013.
+Musk, E., \enquote{Hyperloop Alpha,} Website, August 2013.
 
 \bibitem{ET3}
-Daryl Oster, Masayuki Kumada, and Yaoping Zhang.
-\newblock Evacuated tube transport technologies (et3)tm: a maximum value global
-  transportation network for passengers and cargo.
-\newblock {\em Journal of Modern Transportation}, 19(1):42--50, 2011.
+Oster, D., Kumada, M., and Zhang, Y., \enquote{Evacuated tube transport
+  technologies (ET3)tm: a maximum value global transportation network for
+  passengers and cargo,} {\em Journal of Modern Transportation\/}, Vol.~19,
+  No.~1, 2011, pp.~42--50.
 
 \bibitem{GrayBenmarking2013}
-Justin Gray, Kenneth~T. Moore, Tristan~A. Hearn, and Bret~A. Naylor.
-\newblock Standard platform for benchmarking multidisciplinary design analysis
-  and optimization architectures.
-\newblock {\em AIAA Journal}, 51(10):2380--2394, Oct 2013.
+Gray, J., Moore, K.~T., Hearn, T.~A., and Naylor, B.~A., \enquote{Standard
+  Platform for Benchmarking Multidisciplinary Design Analysis and Optimization
+  Architectures,} {\em AIAA Journal\/}, Vol.~51, No.~10, Oct 2013,
+  pp.~2380--2394.
 
 \bibitem{Lytle}
-John Lytle.
-\newblock The numerical propulsion system simulation: An overview.
-\newblock Technical report, NASA Glenn Research Center, June 2000.
+Lytle, J., \enquote{The Numerical Propulsion System Simulation: An Overview,}
+  Tech. rep., NASA Glenn Research Center, June 2000.
 
 \bibitem{goodwin2009cantera}
-D~Goodwin, N~Malaya, H~Moffat, and R~Speth.
-\newblock Cantera: An object-oriented software toolkit for chemical kinetics,
-  thermodynamics, and transport processes.
-\newblock {\em Caltech, Pasadena}, 2009.
+Goodwin, D., Malaya, N., Moffat, H., and Speth, R., \enquote{Cantera: An
+  object-oriented software toolkit for chemical kinetics, thermodynamics, and
+  transport processes,} {\em Caltech, Pasadena\/}, 2009.
 
 \bibitem{Rouleau}
-Guy {Rouleau} and Matt {Brauer}.
-\newblock Hyperloop: Not so fast!
-\newblock Website, November 2013.
+{Rouleau}, G. and {Brauer}, M., \enquote{Hyperloop: Not so fast!} Website,
+  November 2013.
 
 \bibitem{Cengal}
-Y.~{Cengal}, R.~{Turner}, and J.~{Cimbala}.
-\newblock {\em Fundamentals of thermal-fluid sciences}.
-\newblock McGraw-Hill Companies, 2008.
+{Cengal}, Y., {Turner}, R., and {Cimbala}, J., {\em Fundamentals of
+  thermal-fluid sciences\/}, McGraw-Hill Companies, 2008.
 
 \bibitem{Turns}
-S.~{Turns}.
-\newblock {\em Thermal-fluid sciences: An integrated approach}.
-\newblock Cambridge University Press, 2006.
+{Turns}, S., {\em Thermal-fluid sciences: An integrated approach\/}, Cambridge
+  University Press, 2006.
 
 \bibitem{Berton}
-Jeffrey Berton.
-\newblock An experimental investigation of natural and combined convection from
-  an isothermal horizontal plate.
-\newblock Master's thesis, University of Illinois at Urbana-Champaign, 1986.
+Berton, J., {\em An Experimental Investigation of Natural and Combined
+  Convection from an Isothermal Horizontal Plate\/}, Master's thesis,
+  University of Illinois at Urbana-Champaign, 1986.
 
 \bibitem{Incropera}
-{\em Introduction to Heat Transfer}.
-\newblock Wiley, third edition.
+{\em Introduction to Heat Transfer\/}, Wiley, 3rd ed.
 
 \end{thebibliography}

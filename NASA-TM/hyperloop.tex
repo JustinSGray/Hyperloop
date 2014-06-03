@@ -51,17 +51,23 @@ in an efficient and flexible manner. Musks original work was released with the s
 a crowd sourced design effort. In that spirit all the analyses used in this work have been released under
 the Apache V2.0 open source license so that they could potentially serve as a foundation for future work.
 
+The rest of this paper is organized as follows. In section \ref{s:struct} we describe the structure of the Hyperloop 
+model. Section \ref{s:sizing} covers the details of the coupling between the primary systems and the impact these have 
+on the passenger pod dimensions and performance. Next section \ref{sec:compressor-and-battery}
+investigates the battery requirements for the proposed Los Angeles to Sanfrancisco routes considering the effects 
+of maximum travel speed. Last, section \ref{s:heatex} investigates the natural thermal equilibrium of the passenger pod and
+travel tube to provide a means of sizing the thermal management system. 
 
-\begin{figure}[hbtp]
-\centering
-\includegraphics[width=\textwidth]{images/hyperloop_cad.png}
- \caption[Hyperloop geometry assembled in OpenCSM]{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a pod speed of Mach 0.8. Geometry rendered in OpenCSM, a parametric solid modeling tool.}
-\label{f:hyperloopCAD}
-\end{figure}
+% \begin{figure}[hbtp]
+% \centering
+% \includegraphics[width=\textwidth]{images/hyperloop_cad.png}
+%  \caption[Hyperloop geometry assembled in OpenCSM]{Calculated baseline inlet (left), nozzle (right), and full assembly (bottom) for a pod speed of Mach 0.8. Geometry rendered in OpenCSM, a parametric solid modeling tool.}
+% \label{f:hyperloopCAD}
+% \end{figure}
 
 
 \section{Hyperloop Model Structure}
-
+\label{s:struct}
 % A large interdependence between the various Hyperloop subsystems stem
 % from design variables dictated by the tube and passenger pod systems.
 % This coupling, along with other feedback relationships discussed later, require an
@@ -118,6 +124,7 @@ the cycle modeling tool used in this work.
 \end{figure}
 
 \section{Pod and Tube Sizing}
+\label{s:sizing}
 
 These couplings enforce a set of equality constraints that must be satisfied for any physically valid Hyperloop design.
 A solver is necessary to perturb numerous design and state variables to characterize the system of equations and drive
@@ -302,7 +309,7 @@ and based on the assertion that the compression cycle does not need to be cooled
 The system-level thermal interactions and heat exchangers are analyzed next.
 
 \section{Heat Exchanger and Tube Thermal Analysis}
-
+\label{s:heatex}
 As each pod passes through the tube, it adds energy to the air in the form of heat.
 Following the proposed frequency of launching a pod every six minutes,
 the continuous operating cycle could potentially heat the overall tube to excessive temperatures.

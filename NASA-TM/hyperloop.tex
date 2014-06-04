@@ -153,15 +153,38 @@ shows up as a feedback connection between the performance and the compressor 2 s
 \section{Pod and Tube Sizing}
 \label{s:sizing}
 
-These couplings enforce a set of equality constraints that must be satisfied for any physically valid Hyperloop design.
-A solver is necessary to perturb numerous design and state variables to characterize the system of equations and drive
-each variable towards a specified valid criteria. The first equality constraint requires agreement between the pod geometry
-calculations and the computed compression system areas. The second constraint ensures the pod compressor achieves the
-necessary flow intake given a maximum bypass flow, and the final feedback loop drives the operating tube temperature to
-balanced conditions. Figure~\ref{f:hyperloopXDSM} only shows the highest level assembly connections;
-the compression system and pod geometry system are further expanded into sub-assemblies in \cref{app:model}.
-The feedback loop between the tube and inlet diameter is more severe than described in the original proposal,
-which can be explained with a closer examination of the coupled geometries and mass flow rates.
+In the original Hyperloop proposal, The size of the passenger pod and the travel tube were treated as design variables, 
+free to vary withing reasonable ranges independent of each other. Two different configurations were proposed: a smaller 
+pod for passengers and a larger pod cargo. Each configuration, with overall dimensions summarized 
+in Table~\ref{t:hyperbase}, had a slightly different ratio of tube area to pod area. 
+
+\begin{table}
+  \centering
+  \caption{Dimensions of the passenger and cargo hyperloop designs from the original proposal. }
+  \label{t:hyperbase}
+  \begin{tabular}{l c c}
+    \hline
+                        &  Passenger       & Passenger + Cargo \\ \hline
+    $r_{pod}$ ($m$)     &        1.11      &     1.65  \\
+    $A_{tube}$  ($m^2$) &        3.87      &     8.55  \\
+    $A_{pod}$ ($m^2$)   &        1.4       &     4.0   \\ 
+    Area Ratio          &        2.76      &     2.14  \\
+    Max Travel Mach     &        .95       &     .95   \\
+    \hline
+  \end{tabular}
+\end{table}
+
+In the original work it was stated that the tube dimensions were selected to keep the speed of the air bypassing around 
+the pod below Mach 1.0. Air traveling at Mach 1.0 through a confined space has a unique property: it moves with the
+maximum amount of mass flow per unit area possible. In other words, it is physically impossible to move more air through 
+a tube than can be moved when the air travels at Mach 1.0. This situation, called choked flow, is the motivation for limiting 
+the Mach number of the bypass air. In this section we show why this phenomenon occurs and how it results in a coupling between 
+the size of the tube and the size of the pod, so that it is not possible to have both as independent design variables. 
+
+Let us start by assuming that the pod is sealed and does not have a compression system. 
+This notional situation is depicted in Fig.~\ref{f:ClosedPod}. Here $A_{bypass}$ is obviously the 
+smallest area that the flow must pass through, so the amount of choked flow that can pass through 
+this area represents the theoretical maximum possible. 
 
 \begin{figure}[hbtp]
 \centering
@@ -170,36 +193,63 @@ which can be explained with a closer examination of the coupled geometries and m
 \label{f:ClosedPod}
 \end{figure}
 
-Figure \ref{f:ClosedPod} shows the most simplified case of an enclosed pod with no inlet.
-In this scenario, the air reaches the pod at a relative velocity equal to the pod speed
-and accelerates as it is forced through the smaller bypass area around the pod.
-Assuming a circular cross section for both the pod and tube, the bypass air must travel through an area given by
 
-\nomenclature{A}{Area (m^{2})}
-\nomenclature{r}{Radius (m)}
-\begin{equation*}
-A_{bypass} = \pi(r_{tube}^2-r_{pod}^2)
-\end{equation*}
-\nomenclature{\rho_}{Density (\frac{kg}{m^{3}})}
-\nomenclature{\dot{W}, \dot{m}}{Mass Flow Rate (kg/s)}
+As a hyperloop pod travels down the tube, air moves toward it (or it moves toward the air) with a relative velocity equal to its
+own speed. The creates an effective mass flow rate of air around the pod which is a function of the travel speed of the pod.  
 
-Since $A_{tube}$ and the air density $\rho_{air}$ are both constant for given tube size, then the mass
-flow rate of the air traveling around the pod ($\dot{W}_{bypass}$) grows linearly with the velocity of the pod.
+\begin{equation}
+\dot{W} = \rho_{air} A_{tube} V_{pod}
+\label{e:w-tube}
+\end{equation}
 
-\nomenclature{V}{Velocity ($\frac{m}{s}$)}
-\begin{equation*}
-\dot{W}_{bypass} = \rho_{air} A_{tube} V_{pod}
-\end{equation*}
-
-However, the flow reaches a physical limitation as it approaches the speed of sound. At this point, no additional flow can escape
-around the sides of the vehicle without increasing the density of the air.
-For a given area ratio, the limiting pod speed can be determined based on isentropic flow relations, where $\gamma$ is the heat capacity ratio.
+Thus the travel speed is limited by the situation where the relative mass flow rate, $\dot{W}$, is 
+equal to the choked flow limit imposed by a given $A_bypass$. By applying isentropic flow relationships, 
+we can find the required area ratio between $A_{tube}$ and $A_{bypass}$. 
 
 \nomenclature{\gamma}{Heat Capacity Ratio}
 \nomenclature{MN}{Mach Number}
-\begin{equation*}
+\begin{equation}
 \frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}MN^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{MN}
-\end{equation*}
+\label{e:a-over-astar}
+\end{equation}
+
+It is more natural to think in terms of the ratio between $A_{tube}$ and $A_{pod}$, so eqn.~\ref{e:a-over-astar} can be converted 
+into those quantities as follows. 
+
+\begin{equation}
+\frac{A_{tube}}{A_{pod}} = \frac{1}{\left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}MN^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{MN} - 1}
+\label{e:atube-to-apod}
+\end{equation}
+
+By setting Mach number to be 1.0 in eqn.~\ref{e:atube-to-apod}, we can compute the area ratio that will yield choked bypass flow. Call 
+the area ratio where this occurs, $\frac{A^*_{tube}}{A_{pod}}$. Any area ratio smaller than this (i.e. $A_{pod}$ grows relative to $A_{tube}$) 
+would result in the required mass flow rate being greater than the allowable mass flow rate, hence some amount of air would get 
+trapped in front of the pod and dragged along with it through the tube. In this situation, the pod acts somewhat like a piston, 
+causing a build up of pressure in front of it. To avoid this, for any given pod size we must pick a suitable tube radius such that 
+the following constraint is satisfied. 
+
+\begin{equation}
+\frac{A_{tube}}{A_{pod}} \ge \frac{A^*_{tube}}{A_{pod}}
+\label{e:tube-size-constraint}
+\end{equation}
+
+Given a certain size for the pod and its maximum travel speed we can now compute the required size of the tube via 
+equations \ref{e:w-tube}, \ref{e:atube-to-apod}, and \ref{e:tube-size-constraint}. In other words the size of the pod and the size of the tube and 
+the pod travel mach number are all coupled together. Specify any two of these quantities and the third will be determined. 
+For example if you took the pod size and the tube size as design variables, this would then limit the 
+achievable travel speed of your design. Fig.~\ref{f:flowLIMIT} illustrates this situation for range of $\frac{A_{tube}}{A_{pod}}$ values.
+This graph compares the choked flow limit (dashed lines) with the actual required mass flow rate (solid lines) given an area ratio and pod travel Mach number. 
+At lower speeds the dashed lines sit above their respective solid lines, indicating some flow rate margin. At some speed, dependent on the 
+area ratio, the dashed and solid lines intersect indicating the maximum travel Mach number achievable. 
+
+Note that at the area ratios from the baseline design, around 2-3, the maximum travel speed for a sealed design 
+without any compression system would be around Mach .35. So for this notional concept of a sealed passenger pod, 
+to reach the transonic speeds specified, the area ratio would need to be increased dramatically. 
+This is where the on-board compression system comes into play, by providing a means of compressing some of the air and 
+moving it through the passenger pod so that it does not need to go around it. Essentially, the compression systems job
+in this regard, is to provide a means of getting around the choked flow limit without growing the size of the tube so 
+dramatically. Having established the fundamental coupling between pod size, tube size, and travel speed, we no move on to 
+consider this more complex scenario. 
 
 \begin{figure}[hbtp]
 \centering
@@ -208,14 +258,7 @@ For a given area ratio, the limiting pod speed can be determined based on isentr
 \label{f:flowLIMIT}
 \end{figure}
 
-This limiting pod speed can be visualized by the intersecting lines in figure \ref{f:flowLIMIT} for three different area ratios.
-The solid lines represent the required bypass flow rates necessary for a given speed,
-and the dashed lines signify the flow limit, which is bounded by a sonic condition around the sides of the pod.
 
-
-To further increase speeds, an inlet and compression system is needed to help draw additional air through the pod.
-The vertical distances between the dashed lines and solid lines of figure \ref{f:flowLIMIT} correlates to the
-minimum compressor flow rates necessary to achieve a given speed. 
 
 \begin{figure}[hbtp]
 \centering
@@ -359,9 +402,9 @@ The limits and requirements of a hypothetical on-board heat exchanger can be est
 effectiveness of a heat exchanger can be described as the ratio of actual heat transfer over the maximum possible heat transfer.
 
 \nomenclature{Q}{Heat flow rate (W)}
-\begin{equation*}
+\begin{equation}
 {Q}_{released}  = effectiveness * {Q}_{max}
-\end{equation*}
+\end{equation}
 
 
 with $Qmax=\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where each fluid has a $\dot{m} C_{p}$ and the fluid with the lowest
@@ -370,9 +413,9 @@ product is used to determine the maximum heat transfer. In order to satisfy the 
 \nomenclature{\dot{m}}{Mass flow rate}
 \nomenclature{T}{Temperature (K)}
 \nomenclature{C_{p}}{Heat capacity at constant pressure ($\frac{J}{kg-K}$) }
-\begin{equation*}
+\begin{equation}
 \dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
-\end{equation*}
+\end{equation}
 
 where the $T_{out}$  of each fluid is unknown. With assumed mass-flow rates and initial temperatures, a valid combination of Tout‘s of
 each fluid can be found through solver iteration. Valid effectiveness levels for heat exchangers can be estimated based on the
@@ -422,31 +465,31 @@ flow relations.
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{{\eta}_{adiabatic}}{Adiabatic Efficiency}
-\begin{equation*}
+\begin{equation}
 T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} MN^2]
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}
 P_{t} = P_{s} * (\frac{ T_{t}}{T_{s}})^(\frac{\gamma}{\gamma -1})
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}
 P_{t,exit} = P_{t,inlet} * PR
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}
 T_{t,exit} = T_{t,inlet} + \frac{([T_{t,inlet}*PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,inlet})}  {{\eta}_{adiabatic}}
-\end{equation*}
+\end{equation}
 
 Where PR is the compressor pressure ratio, MN is the mach number,  $\gamma$ is the specific heat ratio, and  ${\eta}_{adiabatic}$ is the
 adiabatic efficiency.
 
 With the air flow rate known, the heat flow rate per pod is obtained,
 
-\begin{equation*}
+\begin{equation}
 {Q}_{pod}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube})
-\end{equation*}
+\end{equation}
 The peak heating rate from the pods scales linearly.
-\begin{equation*}
+\begin{equation}
 {Q}_{peak}= Q_{pod} (\# ofpods)
-\end{equation*}
+\end{equation}
 The solar heat flow per unit area can be approximated, given the solar reflectance index (SRI) of stainless steel, non-normal incidence factor
 of the cylinder and solar insulation (SIF).
 
@@ -460,24 +503,24 @@ of the cylinder and solar insulation (SIF).
 \nomenclature{P_{rad}}{Radiated Power (W)}
 \nomenclature{L}{Length}
 
-\begin{equation*}
+\begin{equation}
 Solar = (1-SRI) {\theta}_{nni} SIF
-\end{equation*}
+\end{equation}
 Multiplying this by the viewing area of the tube (assuming no shade and constant sun)
-\begin{equation*}
+\begin{equation}
 Q_{solar} = Solar * A_{view} = Solar * L_{tube} * OD_{tube}
-\end{equation*}
+\end{equation}
 Tube cooling can be attributed to two general mechanisms, radiation and natural convection. Radiation power per unit area can be
 approximated to
-\begin{equation*}
+\begin{equation}
 \frac{P_{rad}}{A} = \epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)
-\end{equation*}
+\end{equation}
 where  $\epsilon$ is the emissivity factor and  $\sigma$ is the Stefan-Boltzmann constant.
 
 Multiplying by the surface area of the tube, the total heating rate can be found,
-\begin{equation*}
+\begin{equation}
 Q_{rad} =  \frac{P_{rad}}{A} * \pi L_{tube} OD_{tube}
-\end{equation*}
+\end{equation}
 
 Assuming the worst case scenario of no cross wind, convection is primarily driven by temperature gradients. The non-dimensional relation
 between buoyancy and viscosity driven flows is parameterized using the following empirical constants. \cite{Berton} \cite{Incropera}
@@ -494,44 +537,44 @@ if 150 K $<  T_{amb} <$ 400 K:
 \nomenclature{h}{Heat transfer coefficient ($\frac{W}{m^{2}-K}$)}
 \nomenclature{k}{Thermal Conductivity ($\frac{W}{m-K}$) }
 
-\begin{equation*}
+\begin{equation}
 \frac{g \beta T} {\upsilon^2} =  4.178\times10^{19} \times T_{amb}^{-4.639}
-\end{equation*}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
 Pr = 1.23 T_{amb}^{-0.09685}
-\end{equation*}
+\end{equation}
 
 if 400 K $<  T_{amb}  <$ 2100 K:
 
 
-\begin{equation*}
+\begin{equation}
 \frac{g \beta T} {\upsilon^2}  = 4.985\times10^{18} \times T_{amb}^{-4.284}
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}
 Pr = 0.59 T_{amb}^{0.0239}
-\end{equation*}
+\end{equation}
 The Grashof Number can then be approximated,
 
 
-\begin{equation*}
+\begin{equation}
 Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {OD}_{tube}^3
-\end{equation*}
+\end{equation}
 The non-dimensional Rayleigh number can then be calculated to estimate buoyancy effects, leading to the Nusselt number.
 
 
-\begin{equation*}
+\begin{equation}
 Ra = Gr * Pr
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}
 Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16}}]^{\frac{8}{27}}}\Bigg)^2
-\end{equation*}
+\end{equation}
 
 From this point the total heat transfer from natural convection can be obtained,
 
-\begin{equation*}
+\begin{equation}
 Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tube} (T_{tube}-T_{amb})
-\end{equation*}
+\end{equation}
 
 The steady state tube temperature can be found by varying the tube temperature until the rate of heat being released from the tube
 matches the rate of heat being absorbed by the tube.

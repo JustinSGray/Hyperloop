@@ -101,10 +101,6 @@ class CompressionSystem(Assembly):
         #Input -> C1
         self.connect('Mach_c1_in', 'comp1.MNexit_des')
 
-        #Input-> int_duct
-        #Input-> bypass_duct
-
-
         #Outputs
         self.connect('tube.Fl_O.area','A_tube') 
         self.connect('split.Fl_O2.area','A_tubeB') 
@@ -131,6 +127,7 @@ class CompressionSystem(Assembly):
         solver.add_parameter('W_in',low=-1e15,high=1e15)
         solver.add_parameter('split.BPR', low=5, high=10)
 
+        solver.add_constraint('split.BPR = 5')
         solver.add_constraint('A_diff - A_compressed = A_pax')
         solver.add_constraint('A_tubeB + A_tubeC = A_byp + A_pod')
 
@@ -172,7 +169,6 @@ if __name__ == "__main__":
     print ""
     print "A_pod * blockage_factor = A_diff"
     print hlc.A_pod * hlc.blockage_factor, " = ", hlc.A_diff
-
 
     #print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 
 

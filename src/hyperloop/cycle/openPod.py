@@ -8,6 +8,7 @@ from openmdao.lib.datatypes.api import Float
 from pycycle.api import (FlowStartStatic, SplitterBPR, Inlet, Compressor, Duct,
     Nozzle, CycleComponent, HeatExchanger, FlowStationVar, FlowStation)
 
+import numpy as np
 
 #class AreaCalc(Component):
 #BPR can't be equal to 2
@@ -24,8 +25,8 @@ class CompressionSystem(Assembly):
     #BPR = Float(1, iotype="in", desc="bypass ratio")
 
     PR_des = Float(12.47, iotype="in", desc="pressure ratio of the compressor at design conditions")
-    blockage_factor = Float(1, iotype="in", desc="ratio of the diffused area to the pod area")
-    Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the compressor at design conditions")
+    blockage_factor = Float(0.9, iotype="in", desc="ratio of the diffused area to the pod area")
+    Mach_c1_in = Float(.65, iotype="in", desc="Mach number at entrance to the compressor at design conditions")
 
     #Mach_throat = Float(1.0, iotype="in", desc="throat Mach in the bypass duct")
     #A_diff = Float(iotype="out", desc="flow area required for the input to the first compressor", units="cm**2")
@@ -41,7 +42,7 @@ class CompressionSystem(Assembly):
 
         #Add Compressor Cycle Components
         start = self.add('start', FlowStartStatic())
-        start.W = 10.
+        start.W = 2.65451
         #start.Ps = 0.01436
         #start.Ts = 525.6
 
@@ -111,7 +112,7 @@ class CompressionSystem(Assembly):
         self.connect('inlet.Fl_O.area/ blockage_factor','A_pod')
 
         #driver setup
-        design = self.driver
+        design = self.add('driver',BroydenSolver())
         comp_list = ['start','tube','split','inlet','comp1',
             'bypass_duct', 'int_duct']
 
@@ -121,59 +122,82 @@ class CompressionSystem(Assembly):
 
 
         #Add Solver
-        solver = self.add('solver',BroydenSolver())
-        solver.itmax = 50 #max iterations
-        solver.tol = .001
+        #solver = self.add('solver',BroydenSolver())
+        design.itmax = 50 #max iterations
+        design.tol = .001
 
-        design.workflow.add('solver')  
+        #design.workflow.add('solver')  
 
-        solver.add_parameter('start.W',low=0.001,high=100)
-        solver.add_parameter('split.BPR', low=.1, high=10)
+        design.add_parameter('start.W',low=0.001,high=100)
+        design.add_parameter('split.BPR', low=.1, high=10)
+        #design.add_parameter('start')
 
-        #solver.add_constraint('W_in = 0.1')
-        solver.add_constraint('A_diff - A_compressed = A_pax')
-        solver.add_constraint('A_tubeB + A_tubeC = A_byp + A_pod')
+        #design.add_constraint('split.BPR = 1.69752/0.95698')
+        design.add_constraint('(inlet.Fl_O.area - comp1.Fl_O.area-2170.00434)/10000 = 0')
+        design.add_constraint('(split.Fl_O2.area + split.Fl_O1.area -(bypass_duct.Fl_O.area + inlet.Fl_O.area/ blockage_factor))/1000= 0')
 
 
 if __name__ == "__main__": 
     from math import pi
     from openmdao.main.api import set_as_top
 
+    tube_A = []
+    m_pod = []
+
+
     hlc = set_as_top(CompressionSystem())
-    hlc.Mach_pod = 0.7;
-    hlc.run()
+    
+    for mn in np.arange( 0.6, .92, 0.02 ):
+        hlc.Mach_pod = mn
 
-    print "A_tube = ", hlc.A_tube
-    print "A_tubeB  = ", hlc.A_tubeB 
-    print "A_tubeC = ", hlc.A_tubeC
-    print "A_byp = ", hlc.A_byp
-    print "hlc.A_diff/hlc.blockage_factor = ", hlc.A_diff/hlc.blockage_factor
-    print "A_compressed = ", hlc.A_compressed
-    print "A_pod = ", hlc.A_pod
-    print "A_pax = ", hlc.A_pax
-    print "BPR = ", hlc.split.BPR
-    print "W = ", hlc.W_in, start.W
+        if mn < hlc.Mach_c1_in:
+            hlc.Mach_c1_in = mn
+        hlc.run()
+        tube_A.append(hlc.tube.Fl_O.area)
+        m_pod.append(hlc.Mach_pod)
 
-    print "tube Mach = ", hlc.tube.Fl_O.Mach
-    print "split1 Mach = ", hlc.split.Fl_O1.Mach
-    print "split2 Mach = ", hlc.split.Fl_O2.Mach
-    print "inlet Mach = ", hlc.inlet.Fl_O.Mach
-    print "comp1 Mach = ", hlc.comp1.Fl_O.Mach
-    print "bypass_duct Mach = ", hlc.bypass_duct.Fl_O.Mach
+    print tube_A
+    print m_pod    
+    #print ""
+    #print "Tube Ps = ", hlc.start.Ps
+    #print "Tube Ts = ", hlc.start.Ts 
+    #print "W = ", hlc.start.W
+    #print "split W1 = ", hlc.split.Fl_O1.W
+    #print "split W2 = ", hlc.split.Fl_O2.W
+    #print "comp1.W = ", hlc.comp1.Fl_O.W
+    #print ""
 
-    print "--- Test ---"
-    print "A_tube = A_tubeC + A_tubeB"
-    print hlc.A_tube, " = ", hlc.A_tubeC + hlc.A_tubeB
-    print ""
-    print "A_byp + A_pod =  A_tube"
-    print hlc.A_byp + hlc.A_pod, " = ", hlc.A_tube
-    print ""
-    print "A_pax + A_compressed = A_diff"
-    print hlc.A_pax + hlc.A_compressed, " = ", hlc.A_diff
-    print ""
-    print "A_pod * blockage_factor = A_diff"
-    print hlc.A_pod * hlc.blockage_factor, " = ", hlc.A_diff
+    #print "A_tube = ", hlc.A_tube
+    #print "A_tubeB  = ", hlc.A_tubeB
+    #print "A_tubeC = ", hlc.A_tubeC
+    #print "A_byp = ", hlc.A_byp
+    #print "hlc.A_diff/hlc.blockage_factor = ", (hlc.A_diff/hlc.blockage_factor)
+    #print "A_compressed = ", hlc.A_compressed
+    #print "A_pod = ", hlc.A_pod
+    #print "A_pax = ", hlc.A_pax
+    #print "BPR = ", hlc.split.BPR 
+    
 
+    #print "tube Mach = ", hlc.tube.Fl_O.Mach
+    #print "split1 Mach = ", hlc.split.Fl_O1.Mach
+    #print "split2 Mach = ", hlc.split.Fl_O2.Mach
+    #print "inlet Mach = ", hlc.inlet.Fl_O.Mach
+    #print "comp1 Mach = ", hlc.comp1.Fl_O.Mach
+    #print "bypass_duct Mach = ", hlc.bypass_duct.Fl_O.Mach
+
+    #print "--- Test ---"
+    #print "A_tube = A_tubeC + A_tubeB"
+    #print hlc.A_tube, " = ", hlc.A_tubeC + hlc.A_tubeB
+    #print ""
+    #print "A_byp + A_pod =  A_tube"
+    #print hlc.A_byp + hlc.A_pod, " = ", hlc.A_tube
+    #print ""
+    #print "A_pax + A_compressed = A_diff"
+    #print hlc.A_pax + hlc.A_compressed, " = ", hlc.A_diff
+    #print ""
+    #print "A_pod * blockage_factor = A_diff"
+    #print hlc.A_pod * hlc.blockage_factor, " = ", hlc.A_diff
+    #print ""
     #print "pwr: ", hlc.comp1.pwr+hlc.comp2.pwr,hlc.comp1.pwr,hlc.comp2.pwr 
 
 

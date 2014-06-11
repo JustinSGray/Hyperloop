@@ -41,7 +41,7 @@ class CompressionSystem(Assembly):
 
         #Add Compressor Cycle Components
         start = self.add('start', FlowStartStatic())
-        #start.W = 10.
+        start.W = 10.
         #start.Ps = 0.01436
         #start.Ts = 525.6
 
@@ -86,7 +86,7 @@ class CompressionSystem(Assembly):
 
         #Input variable pass_throughs to the assembly boundary
         #Input -> start
-        self.connect('W_in', 'start.W')
+        #self.connect('W_in', 'start.W')
         self.connect('Ts_tube','start.Ts')
         self.connect('Ps_tube', 'start.Ps')
         self.connect('Mach_pod', 'start.Mach')
@@ -119,15 +119,18 @@ class CompressionSystem(Assembly):
         for comp_name in comp_list: #need to put everything in design mode
             design.add_event('%s.design'%comp_name)
 
+
         #Add Solver
         solver = self.add('solver',BroydenSolver())
         solver.itmax = 50 #max iterations
         solver.tol = .001
 
-        solver.add_parameter('W_in',low=-1e15,high=1e15)
-        solver.add_parameter('split.BPR', low=5, high=10)
+        design.workflow.add('solver')  
 
-        solver.add_constraint('split.BPR = 5')
+        solver.add_parameter('start.W',low=0.001,high=100)
+        solver.add_parameter('split.BPR', low=.1, high=10)
+
+        #solver.add_constraint('W_in = 0.1')
         solver.add_constraint('A_diff - A_compressed = A_pax')
         solver.add_constraint('A_tubeB + A_tubeC = A_byp + A_pod')
 
@@ -149,6 +152,7 @@ if __name__ == "__main__":
     print "A_pod = ", hlc.A_pod
     print "A_pax = ", hlc.A_pax
     print "BPR = ", hlc.split.BPR
+    print "W = ", hlc.W_in, start.W
 
     print "tube Mach = ", hlc.tube.Fl_O.Mach
     print "split1 Mach = ", hlc.split.Fl_O1.Mach

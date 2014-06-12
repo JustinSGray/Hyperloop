@@ -195,8 +195,9 @@ $M_{pod}$ and $M_{bypass}$ that defines $\frac{A_{bypass}}{A_{tube}}$.
 \nomenclature{\gamma}{Heat Capacity Ratio}
 \nomenclature{MN}{Mach Number}
 \begin{equation}
-\frac{A_{bypass}}{A_{tube}} = \frac{M_{bypass}\sqrt{\gamma}\left(1+ \frac{\gamma-1}{2} M_{bypass}^2\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}}
-{M_{pod}\sqrt{\gamma}\left(1+ \frac{\gamma-1}{2} M_{pod}^2\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}}
+\frac{A_{bypass}}{A_{tube}} = \frac{M_{bypass}}{M_{tube}}
+\left(\frac{1+ \frac{\gamma-1}{2} M_{bypass}^2}
+{1+ \frac{\gamma-1}{2} M_{pod\ \ \ }^2}\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}
 \label{e:a-over-astar}
 \end{equation}
 %\left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M_{pod}^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M_{pod}}
@@ -225,7 +226,7 @@ which would then yield a maximum $M_{pod}$ of about .35.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=.85\textwidth]{images/closedCapsule}
+\includegraphics[width=.85\textwidth]{images/hollowCapsule}
 \caption{Longitudinal view of a hollow passenger pod that lets mass flow pass through it.}
 \label{f:hollowPod}
 \end{figure}

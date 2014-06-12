@@ -139,7 +139,7 @@ where cycles get broken down into individual thermodynamic processes and then co
 the cycle modeling tool used in this work. PyCycle was used to predicted the mass flow and power consumption of the entire compression system. 
 In the original hyperloop proposal, the air bearings were specified to work with a static pressure of 11 kPa. The compression system is made of 
 of two stages, with the second stage providing additional pressure to reach the required 11 kPa. The required pressure ratio for the second stage
-is a function of the maximum pod travel Mach number and the first stage compressor pressure ratio. In Fig~\ref{f:compressorXDSM} this relationship 
+is a function of the maximum pod Mach number and the first stage compressor pressure ratio. In Fig~\ref{f:compressorXDSM} this relationship 
 shows up as a feedback connection between the performance and the compressor 2 subsystems. 
 
 \begin{figure}[H]
@@ -164,117 +164,99 @@ in Table~\ref{t:hyperbase}, had a slightly different ratio of tube area to pod a
   \label{t:hyperbase}
   \begin{tabular}{l c c}
     \hline
-                        &  Passenger       & Passenger + Cargo \\ \hline
-    $r_{pod}$ ($m$)     &        1.11      &     1.65  \\
-    $A_{tube}$  ($m^2$) &        3.87      &     8.55  \\
-    $A_{pod}$ ($m^2$)   &        1.4       &     4.0   \\ 
-    Area Ratio          &        2.76      &     2.14  \\
-    Max Travel Mach     &        .95       &     .95   \\
+                                  &  Passenger       & Passenger + Cargo \\ \hline
+    $r_{tube}$ ($m$)              &        1.11      &     1.65  \\
+    $A_{tube}$  ($m^2$)           &        3.87      &     8.55  \\
+    $A_{pod}$ ($m^2$)             &        1.4       &     4.0   \\ 
+    $A_{bypass}$ ($m^2$)          &        2.47      &     4.55  \\ 
+    $\frac{A_{tube}}{A_{bypass}}$ &        .64       &     .53   \\
+    Max Mach                      &        .95       &     .95   \\
     \hline
   \end{tabular}
 \end{table}
 
-In the original work it was stated that the tube dimensions were selected to keep the speed of the air bypassing around 
-the pod below Mach 1.0. Air traveling at Mach 1.0 through a confined space has a unique property: it moves with the
-maximum amount of mass flow per unit area possible. In other words, it is physically impossible to move more air through 
-a tube than can be moved when the air travels at Mach 1.0. This situation, called choked flow, is the motivation for limiting 
-the Mach number of the bypass air. In this section we show why this phenomenon occurs and how it results in a coupling between 
-the size of the tube and the size of the pod, so that it is not possible to have both as independent design variables. 
-
-Let us start by assuming that the pod is sealed and does not have a compression system. 
-This notional situation is depicted in Fig.~\ref{f:ClosedPod}. Here $A_{bypass}$ is obviously the 
-smallest area that the flow must pass through, so the amount of choked flow that can pass through 
-this area represents the theoretical maximum possible. 
-
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/closedCapsule.png}
-\caption{Longitudinal view of a passenger pod with no inlet and compression system.}
+\includegraphics[width=.85\textwidth]{images/closedCapsule}
+\caption{Longitudinal view of a passenger pod with no inlet and no compression system.}
 \label{f:ClosedPod}
 \end{figure}
 
-
-As a hyperloop pod travels down the tube, air moves toward it (or it moves toward the air) with a relative velocity equal to its
-own speed. The creates an effective mass flow rate of air around the pod which is a function of the travel speed of the pod.  
-
-\begin{equation}
-\dot{W} = \rho_{air} A_{tube} V_{pod}
-\label{e:w-tube}
-\end{equation}
-
-Thus the travel speed is limited by the situation where the relative mass flow rate, $\dot{W}$, is 
-equal to the choked flow limit imposed by a given $A_bypass$. By applying isentropic flow relationships, 
-we can find the required area ratio between $A_{tube}$ and $A_{bypass}$. 
+Smaller tube sizes are preferable because they provide lower construction costs. However, it can be shown that 
+the tube size is coupled to the speed of the air as it passes around the pod size. 
+To understand this coupling consider the following simplified situation: assume that a sealed pod
+is traveling through a frictionless tube from right to left, at some $M_{pod}$ less than 1, through a stationary mass of air. 
+Fig.~\ref{f:ClosedPod} depicts this situation. For the purposes of analysis it is more convenient to consider the opposite perspective, 
+where the pod is stationary and the air is moving from left to right with some relative Mach number, $M_{pod}$. 
+As the air moves around the pod, it must fit into the smaller space available to it, $A_{bypass}$, which causes the air 
+to accelerate to some higher Mach number, $M_{bypass}$. Thermodynamics dictates a relationship between 
+$M_{pod}$ and $M_{bypass}$ that defines $\frac{A_{bypass}}{A_{tube}}$.
 
 \nomenclature{\gamma}{Heat Capacity Ratio}
 \nomenclature{MN}{Mach Number}
 \begin{equation}
-\frac{A_{tube}}{A_{bypass}} = \left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}MN^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{MN}
+\frac{A_{bypass}}{A_{tube}} = \frac{M_{bypass}\sqrt{\gamma}\left(1+ \frac{\gamma-1}{2} M_{bypass}^2\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}}
+{M_{pod}\sqrt{\gamma}\left(1+ \frac{\gamma-1}{2} M_{pod}^2\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}}
 \label{e:a-over-astar}
 \end{equation}
+%\left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M_{pod}^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M_{pod}}
 
-It is more natural to think in terms of the ratio between $A_{tube}$ and $A_{pod}$, so eqn.~\ref{e:a-over-astar} can be converted 
-into those quantities as follows. 
-
-\begin{equation}
-\frac{A_{tube}}{A_{pod}} = \frac{1}{\left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}MN^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{MN} - 1}
-\label{e:atube-to-apod}
-\end{equation}
-
-By setting Mach number to be 1.0 in eqn.~\ref{e:atube-to-apod}, we can compute the area ratio that will yield choked bypass flow. Call 
-the area ratio where this occurs, $\frac{A^*_{tube}}{A_{pod}}$. Any area ratio smaller than this (i.e. $A_{pod}$ grows relative to $A_{tube}$) 
-would result in the required mass flow rate being greater than the allowable mass flow rate, hence some amount of air would get 
-trapped in front of the pod and dragged along with it through the tube. In this situation, the pod acts somewhat like a piston, 
-causing a build up of pressure in front of it. To avoid this, for any given pod size we must pick a suitable tube radius such that 
-the following constraint is satisfied. 
-
-\begin{equation}
-\frac{A_{tube}}{A_{pod}} \ge \frac{A^*_{tube}}{A_{pod}}
-\label{e:tube-size-constraint}
-\end{equation}
-
-Given a certain size for the pod and its maximum travel speed we can now compute the required size of the tube via 
-equations \ref{e:w-tube}, \ref{e:atube-to-apod}, and \ref{e:tube-size-constraint}. In other words the size of the pod and the size of the tube and 
-the pod travel mach number are all coupled together. Specify any two of these quantities and the third will be determined. 
-For example if you took the pod size and the tube size as design variables, this would then limit the 
-achievable travel speed of your design. Fig.~\ref{f:flowLIMIT} illustrates this situation for range of $\frac{A_{tube}}{A_{pod}}$ values.
-This graph compares the choked flow limit (dashed lines) with the actual required mass flow rate (solid lines) given an area ratio and pod travel Mach number. 
-At lower speeds the dashed lines sit above their respective solid lines, indicating some flow rate margin. At some speed, dependent on the 
-area ratio, the dashed and solid lines intersect indicating the maximum travel Mach number achievable. 
-
-\begin{figure}[hbtp]
-\centering
-\includegraphics[width=\textwidth]{images/tube_flow_limit3.png}
-\caption{Hyperloop speed limits as a function of three different area ratios}
-\label{f:flowLIMIT}
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=.9\textwidth]{images/choked-flow}
+  \caption{The area ratio required reaches a minimum value at $M_{bypass}=1$ for all values of $M_{pod}$}
+  \label{f:choked-flow}
 \end{figure}
 
-Note that at the area ratios from the baseline design, around 2-3, the maximum travel speed for a sealed design 
-without any compression system would be around Mach .35. So for this notional concept of a sealed passenger pod, 
-to reach the transonic speeds specified, the area ratio would need to be increased dramatically. 
-This is where the on-board compression system comes into play, by providing a means of compressing some of the air and 
-moving it through the passenger pod so that it does not need to go around it. Essentially, the compression systems job
-in this regard, is to provide a means of getting around the choked flow limit without growing the size of the tube so 
-dramatically. Having established the fundamental coupling between pod size, tube size, and travel speed, we no move on to 
-consider this more complex scenario. 
+Figure~\ref{f:choked-flow} depicts an investigation of Eqn.~\ref{e:a-over-astar} over a range of values for $M_{pod}$ and $M_{bypass}$. 
+For all values of $M_{pod}$, the minimum required $\frac{A_{bypass}}{A_{tube}}$ occurs exactly at $M_{bypass}=1$. In other words, 
+$M_{bypass}=1$ will always give the smallest possible $A_{bypass}$ (and hence $A_{tube}$) for a given 
+$M_{pod}$ and $A_{pod}$. Thus $A_{tube}$ can not be treated as an independent design variable. If you forced $A_{tube}$ to be
+smaller than this minimum value, then not all the relative mass flow could pass freely around the pod. This excess 
+flow would accumulate in the left of Fig.~\ref{f:ClosedPod}), with the pod acting like a piston pressurizing the 
+air in front of it. 
+
+Furthermore, Fig.~\ref{f:choked-flow} also shows that the required $\frac{A_{bypass}}{A_{tube}}$ 
+increases with increasing $M_{pod}$. So the faster the pod travels, the larger $A_bypass$ 
+must become to accommodate the relative mass flow around it. For $M_{pod}$ equal to 1, $\frac{A_{bypass}}{A_{tube}}$ must 
+equal 1 as well, forcing $A_{pod}$ to be 0. So it is physically impossible for a closed pod to travel through a 
+tube with $M_{pod}$ at the speed of sound. Note that the Tab.~\ref{hyperbase} gives area ratios around .6, 
+which would then yield a maximum $M_{pod}$ of about .35. 
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=.85\textwidth]{images/closedCapsule}
+\caption{Longitudinal view of a hollow passenger pod that lets mass flow pass through it.}
+\label{f:hollowPod}
+\end{figure}
+
+To get around this limitation Hyperloop allows some mass flow to pass through the pod itself, thereby increasing
+the maximum achievable speed. This effectively splits the relative mass flow in $A_{tube}$ into two streams, 
+$A_{tube\ B}$ and  $A_{tube\ C}$, as showin in Fig~\ref{f:hollowPod}. If we neglect the small thickness of the walls of
+the passenger pod itself, and assume that $A_{tube\ C}$ is equal to the $A_{pod}$, then it follows that $A_{tube\ B}$ 
+will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass would not accelerate, staying 
+at $M_{pod}$. The challenge is that the pod can not be perfectly hollow. It must provide some space for the passengers
+to sit in, causing some blockage in the flow. This problem can be handled by adding a compression system to the 
+pod that will force the air into a smaller area $A_{compressed\ C}$, to move around the passengers. This would 
+seem to solve all of the challenges associated with high travel speeds inside a tube discussed above and decouple 
+$\frac{A_{bypass}}{A_{tube}}$ and ${M_pod}$.
 
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.85\textwidth]{images/openCapsule.png}
-\caption{Longitudinal view of a passenger pod with a simplified inlet and compression system.}
+\includegraphics[width=0.85\textwidth]{images/inletCapsule.png}
+\caption{Longitudinal view of a hollow passenger pod with a necessary diffuser to restrict the Mach number of the flow into the compressor.}
 \label{f:OpenPod}
 \end{figure}
 
-By integrating a ducted compression system into the passenger pod, as shown in figure \ref{f:OpenPod},
-higher mass flows can be passed through the vehicle than can be forced around the sides.
-This system would require an inlet that diffuses air before reaching the compressor fan face,
-further increasing the cross sectional area of the pod.
-Part of the compressed air would support the air bearings, with the remainder accelerated out a nozzle aft of the pod.
-Additional non-linearity is introduced when considering the limitations of the compressor system.
-Increased speeds either necessitate a larger compressor diameter to sufficiently diffuse incoming air,
-or the compressor needs to be designed to handle increased flow demands.
-Increased speeds also necessitates a larger tube to pod area ratio as depicted earlier.
+In order to achieve reasonable efficiency from the compression system, the Mach number of the flow at the compressor face
+must be limited to less than about .65. So for $M_{pod}$ greater than .65, an diffuser must be added to the Hyperloop 
+which will slow the air down before it enters the compressor. As depicted in Fig.~\ref{f:OpenPod}, diffusing the flow 
+requires expanding it; $A_{diffuser}$ must be less than $A_{compressor}$. Unfortunately this means that
+$A_{bypass}$ must be smaller than $A_{tube\ B}$, and some acceleration of the flow through the 
+bypass will occur again. Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
+system this is now much less restrictive than if the pod was sealed. 
+
 
 \nomenclature{c1MN}{Mach number at the front face of the first compressor}
 \begin{figure}[H]
@@ -285,28 +267,6 @@ Converged pod radius also show underneath. }
 \label{f:machRAD}
 \end{figure}
 
-The compounding relationship of a growing pod area, and a growing area ratio is
-shown in figure \ref{f:machRAD}, for three diffused mach numbers at the entrance of the first compressor(c1MN).
-For each point on each curve, the full system model converges on the minimal possible tube diameter, given a desired pod Mach number.
-This graph also accounts for compressor performance limitations and the steady-state operating tube temperature
-that reaches quiescence above ambient conditions.
-The absolute tube radius is charted rather than an area ratio as a more direct indicator of total system cost.
-It's worth noting that the pod size is also free to vary at each point and is plotted on the cyan line.
-Surprisingly, the pod radius remains nearly constant for every targeted speed condition.
-This can be attributed to the sensitive nature of the inlet size when perturbed in either direction.
-Decreasing the inlet diameter prohibits airflow through the capsule to a greater extent than it improves bypass air around the capsule,
-due to the squared radius term determining the areas.
-The inlet area is also bounded by necessary flow requirements for the bearings and volume requirements of the passenger cabin.
-
-Without a ducted capsule, the proposed pod and tube dimensions would allow a max speed of around 120 $\frac{m}{s}$, or Mach 0.3.
-Such low speeds would not allow the Hyperloop concept to significantly reduce travel times between Los Angeles
-and San Francisco relative to high speed rail.
-Adding a compression system and doubling the diameter of the tube would allow the pod to reach speeds closer to Mach 0.8.
-At these speeds, the estimated travel time is closer to 40 minutes, following the velocity profile
-necessary to reduce acceleration around banked turns.
-Although this performance is much less favorable than that described in the original proposal,
-it still provides a compelling case when compared to high speed rail. 
-The compressor system necessary to achieve this performance is analyzed next.
 
 \section{Compressor Power and Battery Sizing}
 \label{sec:compressor-and-battery}

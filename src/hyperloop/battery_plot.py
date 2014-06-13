@@ -43,9 +43,9 @@ fig, ax = p.subplots()
 # Twin the x-axis twice to make independent y-axes.
 axes = [ax, ax.twinx(), ax.twinx()]
 # Make some space on the right side for the extra y-axis.
-fig.subplots_adjust(right=0.75)
+fig.subplots_adjust(right=0.6)
 # Move the last y-axis spine over to the right by 20% of the width of the axes
-axes[-1].spines['right'].set_position(('axes', 1.2))
+axes[-1].spines['right'].set_position(('axes', 1.15))
 # To make the border of the right-most axis visible, we need to turn the frame
 # on. This hides the other plots, however, so we need to turn its fill off.
 axes[-1].set_frame_on(True)
@@ -82,7 +82,6 @@ axes[0].set_xlabel('Max Pod Mach', fontsize=18)
 #ax2.plot(data[0],data[3], label="Tube", lw=3)
 #ax2.set_ylabel('Total time')
 p.legend(loc="best")
-    
-#p.gcf().set_size_inches(11,5.5)
+p.gcf().set_size_inches(10,8)
 #p.gcf().savefig('test2png.png',dpi=130)
 p.show()

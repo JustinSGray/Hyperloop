@@ -26,7 +26,7 @@ class CompressionSystem(Assembly):
 
     PR_des = Float(12.47, iotype="in", desc="pressure ratio of the compressor at design conditions")
     blockage_factor = Float(0.9, iotype="in", desc="ratio of the diffused area to the pod area")
-    Mach_c1_in = Float(.65, iotype="in", desc="Mach number at entrance to the compressor at design conditions")
+    Mach_c1_in = Float(.7, iotype="in", desc="Mach number at entrance to the compressor at design conditions")
 
     #Mach_throat = Float(1.0, iotype="in", desc="throat Mach in the bypass duct")
     #A_diff = Float(iotype="out", desc="flow area required for the input to the first compressor", units="cm**2")
@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
     hlc = set_as_top(CompressionSystem())
     
-    for mn in np.arange( 0.6, .92, 0.02 ):
+    for mn in np.arange( 0.6, .92, 0.01 ):
         hlc.Mach_pod = mn
 
         if mn < hlc.Mach_c1_in:

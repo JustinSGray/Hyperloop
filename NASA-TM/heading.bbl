@@ -6,11 +6,11 @@ Musk, E., \enquote{Hyperloop Alpha,} Website, August 2013.
 
 \bibitem{ET3}
 Oster, D., Kumada, M., and Zhang, Y., \enquote{Evacuated tube transport
-  technologies (ET3)tm: a maximum value global transportation network for
+  technologies (ET3): a maximum value global transportation network for
   passengers and cargo,} {\em Journal of Modern Transportation\/}, Vol.~19,
   No.~1, 2011, pp.~42--50.
 
-\bibitem{GrayBenmarking2013}
+\bibitem{GrayBenchmarking2013}
 Gray, J., Moore, K.~T., Hearn, T.~A., and Naylor, B.~A., \enquote{Standard
   Platform for Benchmarking Multidisciplinary Design Analysis and Optimization
   Architectures,} {\em AIAA Journal\/}, Vol.~51, No.~10, Oct 2013,
@@ -43,6 +43,8 @@ Berton, J., {\em An Experimental Investigation of Natural and Combined
   University of Illinois at Urbana-Champaign, 1986.
 
 \bibitem{Incropera}
+Bergman, T.,  Lavine, A. Incropera, F.,\& DeWitt, D.
 {\em Introduction to Heat Transfer\/}, Wiley, 3rd ed.
+\newblock 2011.
 
 \end{thebibliography}

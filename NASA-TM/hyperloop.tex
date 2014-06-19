@@ -167,7 +167,7 @@ in Table \ref{t:hyperbase}, had a slightly different ratios of tube area to pod 
     $A_{tube}$  ($m^2$)           &        3.87      &     8.55  \\
     $A_{pod}$ ($m^2$)             &        1.4       &     4.0   \\ 
     $A_{bypass}$ ($m^2$)          &        2.47      &     4.55  \\ 
-    $\frac{A_{tube}}{A_{bypass}}$ &        .64       &     .53   \\
+    $\frac{A_{bypass}}{A_{tube}}$ &        .64       &     .53   \\
     Max Mach                      &        .95       &     .95   \\
     \hline
   \end{tabular}
@@ -193,9 +193,9 @@ $M_{pod}$ and $M_{bypass}$ that defines $\frac{A_{bypass}}{A_{tube}}$.
 \nomenclature{\gamma}{Heat Capacity Ratio}
 \nomenclature{MN}{Mach Number}
 \begin{equation}
-\frac{A_{bypass}}{A_{tube}} = \frac{M_{bypass}}{M_{tube}}
-\left(\frac{1+ \frac{\gamma-1}{2} M_{bypass}^2}
-{1+ \frac{\gamma-1}{2} M_{pod\ \ \ }^2}\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}
+\frac{A_{bypass}}{A_{tube}} = \frac{M_{pod}}{M_{bypass}}
+\left(\frac{1+ \frac{\gamma-1}{2} M_{pod\ \ \ }^2}
+{1+ \frac{\gamma-1}{2} M_{bypass}^2}\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}
 \label{e:a-over-astar}
 \end{equation}
 %\left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M_{pod}^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M_{pod}}

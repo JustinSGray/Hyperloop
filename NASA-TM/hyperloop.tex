@@ -384,18 +384,16 @@ and the proposed requirement to fully cool the air back down to inlet temperatur
 
 \nomenclature{NTU}{Number of Transfer Units}
 
-\begin{table} [H]
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline 
-Fluid & Cp & Tin & Tout & mdot & Q (kJ/s) & Qmax \\ 
-\hline 
-Air & 1.006 kJ/kh-K & 791 K & 300 K & 0.49 kg/s & -242 & 247.9 \\ 
-\hline 
-Water & 4.186 kJ/kg-K & 288.15 & 416.6 K  & 0.45 kg/s & 242 & 247.9 \\ 
-\hline 
-\end{tabular} 
- \caption{Heat Exchanger Fluid Properties}
+\begin{table}
+    \centering
+    \caption{Heat Exchanger Fluid Properties}
+    \label{tab:HeatEx}
+    \begin{tabular}{l  c  c  c  c  c  c} 
+        \hline
+        Fluid & $C_{p}$ ($\frac{kJ}{kg-K}$)& $T_{in}$ (K) & $T_{out}$ (K) & $\dot{m}$ ($\frac{kg}{s}$) & Q ($\frac{kJ}{s}$) & $Q_{max}$\\ \hline 
+        Air & 1.006 & 791 & 300 & 0.49 & -242 & 247.9\\ 
+        Water & 4.186 & 288.15 & 416.6 &0.45 & 242 & 247.9\\ \hline
+    \end{tabular}
 \end{table}
 
 With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$ of standard temperature/pressure water would need to be carried 

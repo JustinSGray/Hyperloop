@@ -38,18 +38,19 @@ the thermal management system. The interdisciplinary coupling demanded the use o
 all the various systems to provide a feasible design for any given set of design variables. The results of this sizing process show that
 the Hyperloop concept is feasible, but certain estimates from the original proposal may have been overly optimistic. 
 
-This sizing process presented here was a necessary precursor step before ultimately performing a design optimization of 
+The sizing process is a necessary precursor before ultimately performing a design optimization of 
 Hyperloop with the dual objectives of minimizing ticket cost and travel time. Performing this optimization 
 was outside the scope of this work and is reserved for future investigation. 
-The fully integrated system model was constructed using OpenMDAO, a Python based framework for 
-the design and optimization of complex systems\cite{GrayBenmarking2013}. The models presented 
+The fully integrated system model was constructed using OpenMDAO, a Python-based framework for 
+the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. The models presented 
 in this work represent very basic analyses which rely heavily on simplifying assumptions. A realistic design 
 optimization will require more detailed models of the investigated systems and additional analyses for economic models and 
 structural models. Adding all of this will result in significant growth in complexity of the Hyperloop model. 
 OpenMDAO could provide the means to manage growing model complexity 
-in an efficient and flexible manner. Musks original work was released with the stated goal of jump starting
+in an efficient and flexible manner. Musk's original work was released with the stated goal of jump starting
 a crowd sourced design effort. In that spirit all the analyses used in this work have been released under
-the Apache V2.0 open source license so that they could potentially serve as a foundation for future work.
+the Apache V2.0 open source license so that they could potentially serve as a foundation for future work. 
+Links to the source code can be found in \cref{app:Github}
 
 The rest of this paper is organized as follows. In section \ref{s:struct} we describe the structure of the Hyperloop 
 model. Section \ref{s:sizing} covers the details of the coupling between the primary systems and the impact these have 

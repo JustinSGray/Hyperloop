@@ -88,12 +88,10 @@ The relationship between the systems is illustrated in Fig.~\ref{f:hyperloopXDSM
 are represented as the blue arrows in the upper right side of the diagram. For example, the Compressor Cycle 
 passes data to the Mission Analysis, Pod Geometry, and and Tube Temperature analyses. In the lower left 
 side of the diagram red arrows represent feed back connections which establish coupling between different 
-analyses. The upper most left hand corner of Fig.~\ref{f:podXDSM} shows design variables that affect 
+analyses. The uppermost left hand corner of Fig.~\ref{f:podXDSM} shows design variables that affect 
 different systems. Table~\ref{tab:desvars} summarizes the baseline values as well as ranges selected 
-to provide a reasonably large design space. Notably both Pod radius and travel tube radius are missing 
-from the list of variables in Tab.~\ref{tab:desvars}. These variables could not be freely varied 
-due to the assumption of a fixed cross section for where passengers would sit combined with the couplings 
-shown in Fig.~\ref{f:hyperloopXDSM}. This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
+to provide a reasonably large design space. Notably, both Pod radius and travel tube radius are missing 
+from the list of variables in Tab.~\ref{tab:desvars}. These variables could not be freely varied. Instead, the assumption of a fixed area for a passenger compartment was made which, combined with the couplings shown in Fig.~\ref{f:hyperloopXDSM}, removed these variables as design inputs. This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
 
 \begin{table}
     \centering
@@ -136,9 +134,8 @@ The modeling approach for the compressor cycle was heavily influenced by techniq
 NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
 simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
 where cycles get broken down into individual thermodynamic processes and then connected together. This modularity was adopted for pyCycle, 
-the cycle modeling tool used in this work. PyCycle was used to predicted the mass flow and power consumption of the entire compression system. 
-In the original hyperloop proposal, the air bearings were specified to work with a static pressure of 11 kPa. The compression system is made of 
-of two stages, with the second stage providing additional pressure to reach the required 11 kPa. The required pressure ratio for the second stage
+the cycle modeling tool used in this work. PyCycle was used to predict the mass flow and power consumption of the entire compression system. 
+In the original hyperloop proposal, the air bearings were specified to work with a static pressure of 11 kPa. The compression system is modeled as two separate compressors, with the first compressing the air to bypass the pod internal structure and passenger compartment and the second providing additional pressure to reach the required 11 kPa. The required pressure ratio for the second stage
 is a function of the maximum pod Mach number and the first stage compressor pressure ratio. In Fig~\ref{f:compressorXDSM} this relationship 
 shows up as a feedback connection between the performance and the compressor 2 subsystems. 
 
@@ -153,10 +150,10 @@ shows up as a feedback connection between the performance and the compressor 2 s
 \section{Pod and Tube Sizing}
 \label{s:sizing}
 
-In the original Hyperloop proposal, The size of the passenger pod and the travel tube were treated as design variables, 
-free to vary withing reasonable ranges independent of each other. Two different configurations were proposed: a smaller 
-pod for passengers and a larger pod cargo. Each configuration, with overall dimensions summarized 
-in Table~\ref{t:hyperbase}, had a slightly different ratio of tube area to pod area. 
+In the original Hyperloop proposal, the size of the passenger pod and the travel tube were treated as design variables, 
+free to vary within reasonable ranges independent of each other. Two different configurations were proposed: a smaller 
+pod for passengers and a larger pod for cargo. The two configurations, with overall dimensions summarized 
+in Table~\ref{t:hyperbase}, had a slightly different ratios of tube area to pod area. 
 
 \begin{table}
   \centering
@@ -183,13 +180,13 @@ in Table~\ref{t:hyperbase}, had a slightly different ratio of tube area to pod a
 \end{figure}
 
 Smaller tube sizes are preferable because they provide lower construction costs. However, it can be shown that 
-the tube size is coupled to the speed of the air as it passes around the pod size. 
+the tube size is coupled to the speed of the air as it passes around the pod of a given size. 
 To understand this coupling consider the following simplified situation: assume that a sealed pod
 is traveling through a frictionless tube from right to left, at some $M_{pod}$ less than 1, through a stationary mass of air. 
 Fig.~\ref{f:ClosedPod} depicts this situation. For the purposes of analysis it is more convenient to consider the opposite perspective, 
 where the pod is stationary and the air is moving from left to right with some relative Mach number, $M_{pod}$. 
 As the air moves around the pod, it must fit into the smaller space available to it, $A_{bypass}$, which causes the air 
-to accelerate to some higher Mach number, $M_{bypass}$. Thermodynamics dictates a relationship between 
+to accelerate to some higher Mach number, $M_{bypass}$. From thermodynamics, there is a relationship between 
 $M_{pod}$ and $M_{bypass}$ that defines $\frac{A_{bypass}}{A_{tube}}$.
 
 \nomenclature{\gamma}{Heat Capacity Ratio}
@@ -251,12 +248,15 @@ $\frac{A_{bypass}}{A_{tube}}$ and ${M_pod}$.
 \end{figure}
 
 In order to achieve reasonable efficiency from the compression system, the Mach number of the flow at the compressor face
-must be limited to less than about .65. So for $M_{pod}$ greater than .65, an diffuser must be added to the Hyperloop 
+must be limited to less than about .65. So for $M_{pod}$ greater than .65, a diffuser must be added to the Hyperloop 
 which will slow the air down before it enters the compressor. As depicted in Fig.~\ref{f:OpenPod}, diffusing the flow 
-requires expanding it; $A_{diffuser}$ must be less than $A_{compressor}$. Unfortunately this means that
+requires expanding it; $A_{diffuser}$ must be greater than $A_{compressor}$. Unfortunately this means that
 $A_{bypass}$ must be smaller than $A_{tube\ B}$, and some acceleration of the flow through the 
-bypass will occur again. Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
+bypass will occur. Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
 system this is now much less restrictive than if the pod was sealed. 
+
+Figure 9 shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod. For a nominal tube diameter of ?m, the maximum pod Mach increases from x to y. This increase is strongly dependent on the amount of "blockage" assumed and slightly dependent on the compressor face Mach number. Changing the compressor face Mach number by +-0.05 changes the maximum pod Mach number by roughly +-0.01.
+A final note: all of these results are unaffected by the tube pressure. But Ps affects massflow and power discussed next.
 
 
 \nomenclature{c1MN}{Mach number at the front face of the first compressor}
@@ -273,14 +273,13 @@ Converged pod radius also show underneath. }
 \label{sec:compressor-and-battery}
 
 The on-board compression system serves dual purposes.
-It provides a means of exceeding the nominal Kantrowitz limit and also supplies pressurized air to support the air bearing system.
-Each of these functions requires a minimum airflow to rise to a specified pressure gain,
-and combine to define the total airflow requirements of the subsystem.
-The subsequent thermodynamic analysis of the compressor system is also necessary to
+
+It provides a means of increasing the maximum pod speed over a closed pod, and also supplies pressurized air to the air bearing system. This second function requires a minimum airflow to provide the pressure force necessary to support the vehicle mass.
+A thermodynamic analysis of the compressor system is also necessary to
 estimate on-board power requirements and overall heat rise of each pod.
 The compression cycle is comprised of an inlet, two compressors, a nozzle, and multiple ducts leading to air bearings.
 The design deviates from the original proposal by removing two heat exchangers for reasons explained in the following section.
-The system, shown in figure \ref{f:comp} is modeled as a one dimensional cycle,
+The system, shown in figure \ref{f:comp} is modeled as a one-dimensional cycle,
 representing components as thermodynamic processes that are subsequently chained together.
 Each component is responsible for calculating gas properties across its boundaries
 and appropriately enforcing conservation equations across the entire system.
@@ -288,17 +287,15 @@ and appropriately enforcing conservation equations across the entire system.
 \begin{figure}[hbtp]
 \centering
 \includegraphics[width=0.9\textwidth]{images/compressor_schematic.png}
-\caption{Schematic flow diagram of the modeled compressor system}
+\caption{Schematic of the Hyperloop compression system, showing flow connections between components.}
 \label{f:comp}
 \end{figure}
 
-The simulation leverages the Numerical Propulsion System Simulation (NPSS) code, which
-was created as a joint effort between United States engine manufacturers and NASA
-for the purpose of simulating and analyzing thermodynamic processes, particularly turbomachinery cycles. \cite{Lytle}
-The model was then adapted to pyCycle, an open-source cycle analysis tool that employs Cantera for thermodynamic calculations.
-Further information on these tools can be found in the appendix and online documentation. \cite{goodwin2009cantera}
 
-These models predict the instantaneous power consumption of the compressors, temperature and pressure rises,
+The simulation uses PyCycle, an open-source cycle analysis tool that employs Cantera [ref] for thermodynamic calculations. The design of PyCycle was heavily influenced by NPSS;
+further information on these tools can be found in the appendix and online documentation. \cite{goodwin2009cantera}
+
+The model predicts the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.
 These power requirements are a function of the chosen cycle and are both affected by
 and contribute to the thermal conditions, creating the feedback loop “C” in figure \ref{f:flowLIMIT}.

@@ -372,7 +372,7 @@ product is used to determine the maximum heat transfer. In order to satisfy the 
 \nomenclature{T}{Temperature (K)}
 \nomenclature{C_{p}}{Heat capacity at constant pressure ($\frac{J}{kg-K}$) }
 \begin{equation}
-\dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air}) = {Q}_{released} = {Q}_{absorbed}= \dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})
+\underbrace{\dot{m}_{air} C_{p, air} (T_{out, air} - T_{in, air})}_{{Q}_{released}}  = \underbrace{\dot{m}_{water} C_{p,water} (T_{out, water} - T_{in, water})}_{{Q}_{absorbed}}
 \end{equation}
 
 where the $T_{out}$  of each fluid is unknown. With assumed mass-flow rates and initial temperatures, a valid combination of Tout‘s of
@@ -437,17 +437,16 @@ T_{t,exit} = T_{t,inlet} + \frac{([T_{t,inlet}*PR^{(\frac{\gamma-1}{\gamma})}] -
 Where PR is the compressor pressure ratio, MN is the mach number,  $\gamma$ is the specific heat ratio, and  ${\eta}_{adiabatic}$ is the
 adiabatic efficiency.
 
-With the air flow rate known, the heat flow rate per pod is obtained,
+With the air flow rate known, the heat flow rate per pod is obtained, 
+and the peak heating rate scales linearly with number of pods in the tube at a given time
 
 \begin{equation}
-{Q}_{pod}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube})
+{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube}) * (\#  of pods)
 \end{equation}
-The peak heating rate from the pods scales linearly.
-\begin{equation}
-{Q}_{peak}= Q_{pod} (\# ofpods)
-\end{equation}
+
 The solar heat flow per unit area can be approximated, given the solar reflectance index (SRI) of stainless steel, non-normal incidence factor
 of the cylinder and solar insulation (SIF).
+Multiplying this by the viewing area of the tube (assuming no shade and constant sun)
 
 \nomenclature{SRI}{Solar Reflectance Index}
 \nomenclature{SIF}{Solar Insulation Factor}
@@ -460,28 +459,17 @@ of the cylinder and solar insulation (SIF).
 \nomenclature{L}{Length}
 
 \begin{equation}
-Solar = (1-SRI) {\theta}_{nni} SIF
-\end{equation}
-Multiplying this by the viewing area of the tube (assuming no shade and constant sun)
-\begin{equation}
-Q_{solar} = Solar * A_{view} = Solar * L_{tube} * OD_{tube}
+Q_{solar} = \underbrace{ (1-SRI)  {\theta}_{nni}  SIF}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  OD_{tube}}_\text{Effective Area}
 \end{equation}
 Tube cooling can be attributed to two general mechanisms, radiation and natural convection. Radiation power per unit area can be
-approximated to
+approximated and multiplied by the surface area of the tube to find the total heating rate.
 \begin{equation}
-\frac{P_{rad}}{A} = \epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)
+Q_{rad} = \underbrace{\epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)}_\text{Radiated Power per unit Area}\underbrace{\pi L_{tube} OD_{tube}}_\text{Surface Area}
 \end{equation}
 where  $\epsilon$ is the emissivity factor and  $\sigma$ is the Stefan-Boltzmann constant.
 
-Multiplying by the surface area of the tube, the total heating rate can be found,
-\begin{equation}
-Q_{rad} =  \frac{P_{rad}}{A} * \pi L_{tube} OD_{tube}
-\end{equation}
-
 Assuming the worst case scenario of no cross wind, convection is primarily driven by temperature gradients. The non-dimensional relation
-between buoyancy and viscosity driven flows is parameterized using the following empirical constants. \cite{Berton} \cite{Incropera}
-
-if 150 K $<  T_{amb} <$ 400 K:
+between buoyancy and viscosity driven flows is parameterized using the following empirical constants shown in Table \ref{tab:NonDim}. \cite{Berton} \cite{Incropera}
 
 \nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}
@@ -493,31 +481,27 @@ if 150 K $<  T_{amb} <$ 400 K:
 \nomenclature{h}{Heat transfer coefficient ($\frac{W}{m^{2}-K}$)}
 \nomenclature{k}{Thermal Conductivity ($\frac{W}{m-K}$) }
 
-\begin{equation}
-\frac{g \beta T} {\upsilon^2} =  4.178\times10^{19} \times T_{amb}^{-4.639}
-\end{equation}
+\begin{table}
+    \centering
+    \caption{Non-dimensional values for two temperature regimes}
+    \label{tab:NonDim}
+    \begin{tabular}{ c  |  c |  c} 
+        \hline
+        & 150K$<T_{amb}<$400K & 400K$< T_{amb}<$2100K \\ \hline 
+        &&\\
+       $\frac{g \beta T} {\upsilon^2} $ & $4.178\times10^{19} \times T_{amb}^{-4.639}$ & $4.985\times10^{18} \times T_{amb}^{-4.284}$\\
+       &&\\ 
+        $Pr $ & $1.23 T_{amb}^{-0.09685}$ & $0.59 T_{amb}^{0.0239}$ \\
+        &&\\  \hline
+    \end{tabular}
+\end{table}
 
-\begin{equation}
-Pr = 1.23 T_{amb}^{-0.09685}
-\end{equation}
-
-if 400 K $<  T_{amb}  <$ 2100 K:
-
-
-\begin{equation}
-\frac{g \beta T} {\upsilon^2}  = 4.985\times10^{18} \times T_{amb}^{-4.284}
-\end{equation}
-\begin{equation}
-Pr = 0.59 T_{amb}^{0.0239}
-\end{equation}
 The Grashof Number can then be approximated,
-
 
 \begin{equation}
 Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {OD}_{tube}^3
 \end{equation}
 The non-dimensional Rayleigh number can then be calculated to estimate buoyancy effects, leading to the Nusselt number.
-
 
 \begin{equation}
 Ra = Gr * Pr

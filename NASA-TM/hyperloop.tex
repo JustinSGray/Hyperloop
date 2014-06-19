@@ -74,7 +74,7 @@ travel tube to provide a means of sizing the thermal management system.
 % This coupling, along with other feedback relationships discussed later, require an
 % iterative approach to arrive at a physically valid state for the entire system.
 
-The Hyperloop passenger pod was decomposed into 5 primary analyses that were connected to 
+The Hyperloop passenger pod was decomposed into five primary analyses that were connected to 
 form the conceptual sizing model. 
 
 \begin{enumerate}
@@ -85,14 +85,14 @@ form the conceptual sizing model.
   \item Tube Wall Temperature: Equilibrium temperature of the tube.
 \end{enumerate}
 
-The relationship between the systems is illustrated in Fig.~\ref{f:hyperloopXDSM}. Feed forward connections 
-are represented as the blue arrows in the upper right side of the diagram. For example, the Compressor Cycle 
-passes data to the Mission Analysis, Pod Geometry, and and Tube Temperature analyses. In the lower left 
+The relationship between the systems is illustrated in Fig. \ref{f:hyperloopXDSM}. Feed forward connections 
+are represented as the blue arrows in the upper right side of the diagram. For example, the \textit{Compressor Cycle} 
+passes data to the \textit{Mission Analysis}, \textit{Pod Geometry}, and \textit{Tube Temperature} analyses. In the lower left 
 side of the diagram red arrows represent feed back connections which establish coupling between different 
-analyses. The uppermost left hand corner of Fig.~\ref{f:podXDSM} shows design variables that affect 
-different systems. Table~\ref{tab:desvars} summarizes the baseline values as well as ranges selected 
+analyses. The top left block of Fig. \ref{f:podXDSM} shows design variables that affect 
+different systems. Table \ref{tab:desvars} summarizes the baseline values as well as ranges selected 
 to provide a reasonably large design space. Notably, both Pod radius and travel tube radius are missing 
-from the list of variables in Tab.~\ref{tab:desvars}. These variables could not be freely varied. Instead, the assumption of a fixed area for a passenger compartment was made which, combined with the couplings shown in Fig.~\ref{f:hyperloopXDSM}, removed these variables as design inputs. This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
+from the list of variables in Table \ref{tab:desvars}. These variables could not be freely varied. Instead, the assumption of a fixed area for a passenger compartment was made which, combined with the couplings shown in Fig. \ref{f:hyperloopXDSM}, removed these variables as design inputs. This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
 
 \begin{table}
     \centering
@@ -117,7 +117,7 @@ from the list of variables in Tab.~\ref{tab:desvars}. These variables could not 
 \end{figure}
 
 The compression system and pod geometry analyses were each further subdivided into a number of subsystems. For this work the pod geometry 
-system was primarily responsible for computing important areas throughout the passenger pod. Figure~\ref{f:podXDSM} shows the 
+system was primarily responsible for computing important areas throughout the passenger pod. Figure \ref{f:podXDSM} shows the 
 pod geometry breakdown into 5 subsystems. Most of these calculations were based on simple geometric relationships. The 
 modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones.
 The pod geometry system is the place to include structural and weight estimation models for the passenger pod in future work,
@@ -137,7 +137,7 @@ simulating and analyzing turbomachinery cycles for aircraft applications\cite{Ly
 where cycles get broken down into individual thermodynamic processes and then connected together. This modularity was adopted for pyCycle, 
 the cycle modeling tool used in this work. PyCycle was used to predict the mass flow and power consumption of the entire compression system. 
 In the original hyperloop proposal, the air bearings were specified to work with a static pressure of 11 kPa. The compression system is modeled as two separate compressors, with the first compressing the air to bypass the pod internal structure and passenger compartment and the second providing additional pressure to reach the required 11 kPa. The required pressure ratio for the second stage
-is a function of the maximum pod Mach number and the first stage compressor pressure ratio. In Fig~\ref{f:compressorXDSM} this relationship 
+is a function of the maximum pod Mach number and the first stage compressor pressure ratio. In Fig. \ref{f:compressorXDSM} this relationship 
 shows up as a feedback connection between the performance and the compressor 2 subsystems. 
 
 \begin{figure}[H]
@@ -154,7 +154,7 @@ shows up as a feedback connection between the performance and the compressor 2 s
 In the original Hyperloop proposal, the size of the passenger pod and the travel tube were treated as design variables, 
 free to vary within reasonable ranges independent of each other. Two different configurations were proposed: a smaller 
 pod for passengers and a larger pod for cargo. The two configurations, with overall dimensions summarized 
-in Table~\ref{t:hyperbase}, had a slightly different ratios of tube area to pod area. 
+in Table \ref{t:hyperbase}, had a slightly different ratios of tube area to pod area. 
 
 \begin{table}
   \centering
@@ -184,7 +184,7 @@ Smaller tube sizes are preferable because they provide lower construction costs.
 the tube size is coupled to the speed of the air as it passes around the pod of a given size. 
 To understand this coupling consider the following simplified situation: assume that a sealed pod
 is traveling through a frictionless tube from right to left, at some $M_{pod}$ less than 1, through a stationary mass of air. 
-Fig.~\ref{f:ClosedPod} depicts this situation. For the purposes of analysis it is more convenient to consider the opposite perspective, 
+Figure \ref{f:ClosedPod} depicts this situation. For the purposes of analysis it is more convenient to consider the opposite perspective, 
 where the pod is stationary and the air is moving from left to right with some relative Mach number, $M_{pod}$. 
 As the air moves around the pod, it must fit into the smaller space available to it, $A_{bypass}$, which causes the air 
 to accelerate to some higher Mach number, $M_{bypass}$. From thermodynamics, there is a relationship between 
@@ -207,19 +207,19 @@ $M_{pod}$ and $M_{bypass}$ that defines $\frac{A_{bypass}}{A_{tube}}$.
   \label{f:choked-flow}
 \end{figure}
 
-Figure~\ref{f:choked-flow} depicts an investigation of Eqn.~\ref{e:a-over-astar} over a range of values for $M_{pod}$ and $M_{bypass}$. 
+Figure \ref{f:choked-flow} depicts an investigation of Eqn.~(\ref{e:a-over-astar}) over a range of values for $M_{pod}$ and $M_{bypass}$. 
 For all values of $M_{pod}$, the minimum required $\frac{A_{bypass}}{A_{tube}}$ occurs exactly at $M_{bypass}=1$. In other words, 
 $M_{bypass}=1$ will always give the smallest possible $A_{bypass}$ (and hence $A_{tube}$) for a given 
 $M_{pod}$ and $A_{pod}$. Thus $A_{tube}$ can not be treated as an independent design variable. If you forced $A_{tube}$ to be
 smaller than this minimum value, then not all the relative mass flow could pass freely around the pod. This excess 
-flow would accumulate in the left of Fig.~\ref{f:ClosedPod}), with the pod acting like a piston pressurizing the 
+flow would accumulate in the left of Fig. \ref{f:ClosedPod}), with the pod acting like a piston pressurizing the 
 air in front of it. 
 
-Furthermore, Fig.~\ref{f:choked-flow} also shows that the required $\frac{A_{bypass}}{A_{tube}}$ 
+Furthermore, Fig. \ref{f:choked-flow} also shows that the required $\frac{A_{bypass}}{A_{tube}}$ 
 increases with increasing $M_{pod}$. So the faster the pod travels, the larger $A_bypass$ 
 must become to accommodate the relative mass flow around it. For $M_{pod}$ equal to 1, $\frac{A_{bypass}}{A_{tube}}$ must 
 equal 1 as well, forcing $A_{pod}$ to be 0. So it is physically impossible for a closed pod to travel through a 
-tube with $M_{pod}$ at the speed of sound. Note that the Tab.~\ref{hyperbase} gives area ratios around .6, 
+tube with $M_{pod}$ at the speed of sound. Note that the Table \ref{t:hyperbase} gives area ratios around .6, 
 which would then yield a maximum $M_{pod}$ of about .35. 
 
 \begin{figure}[hbtp]
@@ -231,7 +231,7 @@ which would then yield a maximum $M_{pod}$ of about .35.
 
 To get around this limitation Hyperloop allows some mass flow to pass through the pod itself, thereby increasing
 the maximum achievable speed. This effectively splits the relative mass flow in $A_{tube}$ into two streams, 
-$A_{tube\ B}$ and  $A_{tube\ C}$, as showin in Fig~\ref{f:hollowPod}. If we neglect the small thickness of the walls of
+$A_{tube\ B}$ and  $A_{tube\ C}$, as shown in Fig. \ref{f:hollowPod}. If we neglect the small thickness of the walls of
 the passenger pod itself, and assume that $A_{tube\ C}$ is equal to the $A_{pod}$, then it follows that $A_{tube\ B}$ 
 will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass would not accelerate, staying 
 at $M_{pod}$. The challenge is that the pod can not be perfectly hollow. It must provide some space for the passengers
@@ -250,13 +250,13 @@ $\frac{A_{bypass}}{A_{tube}}$ and ${M_pod}$.
 
 In order to achieve reasonable efficiency from the compression system, the Mach number of the flow at the compressor face
 must be limited to less than about .65. So for $M_{pod}$ greater than .65, a diffuser must be added to the Hyperloop 
-which will slow the air down before it enters the compressor. As depicted in Fig.~\ref{f:OpenPod}, diffusing the flow 
+which will slow the air down before it enters the compressor. As depicted in Fig. \ref{f:OpenPod}, diffusing the flow 
 requires expanding it; $A_{diffuser}$ must be greater than $A_{compressor}$. Unfortunately this means that
 $A_{bypass}$ must be smaller than $A_{tube\ B}$, and some acceleration of the flow through the 
 bypass will occur. Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
 system this is now much less restrictive than if the pod was sealed. 
 
-Figure 9 shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod. For a nominal tube diameter of ?m, the maximum pod Mach increases from x to y. This increase is strongly dependent on the amount of "blockage" assumed and slightly dependent on the compressor face Mach number. Changing the compressor face Mach number by +-0.05 changes the maximum pod Mach number by roughly +-0.01.
+Figure \ref{f:machRAD} shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod. For a nominal tube diameter of ?m, the maximum pod Mach increases from x to y. This increase is strongly dependent on the amount of "blockage" assumed and slightly dependent on the compressor face Mach number. Changing the compressor face Mach number by +-0.05 changes the maximum pod Mach number by roughly +-0.01.
 A final note: all of these results are unaffected by the tube pressure. But Ps affects massflow and power discussed next.
 
 
@@ -280,7 +280,7 @@ A thermodynamic analysis of the compressor system is also necessary to
 estimate on-board power requirements and overall heat rise of each pod.
 The compression cycle is comprised of an inlet, two compressors, a nozzle, and multiple ducts leading to air bearings.
 The design deviates from the original proposal by removing two heat exchangers for reasons explained in the following section.
-The system, shown in figure \ref{f:comp} is modeled as a one-dimensional cycle,
+The system, shown in Fig. \ref{f:comp} is modeled as a one-dimensional cycle,
 representing components as thermodynamic processes that are subsequently chained together.
 Each component is responsible for calculating gas properties across its boundaries
 and appropriately enforcing conservation equations across the entire system.
@@ -299,7 +299,7 @@ further information on these tools can be found in the appendix and online docum
 The model predicts the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.
 These power requirements are a function of the chosen cycle and are both affected by
-and contribute to the thermal conditions, creating the feedback loop “C” in figure \ref{f:flowLIMIT}.
+and contribute to the thermal conditions, creating the feedback loop “C” in Fig. \ref{f:flowLIMIT}.
 Combined with the mission profile described below, these requirements impact battery sizing.
 
 \begin{figure}[hbtp]
@@ -309,7 +309,7 @@ Combined with the mission profile described below, these requirements impact bat
 \label{f:velocity}
 \end{figure}
 
-Using the notional velocity profile described in the original proposal, and shown in figure {ref},
+Using the notional velocity profile described in the original proposal, and shown in Fig. \ref{f:velocity},
 a speed factor can be estimated by normalizing the profile then scaling it based on the maximum
 attainable velocity calculated in the previously discussed subsystems.
 From the resulting speed factor, or ratio of average speed to maximum speed,
@@ -323,12 +323,12 @@ Multiplying this time by the average compressor power consumption and a 30\% saf
 \label{f:battery}
 \end{figure}
 
-The necessary on-board battery size was found to be inversely related to the max pod speed, as shown in figure \ref{f:battery}.
+The necessary on-board battery size was found to be inversely related to the max pod speed, as shown in Fig. \ref{f:battery}.
 This indicates that compressor power requirements are less sensitive to increased speeds than total trip time.
 Although traveling at higher speeds draws more energy, the system is operated for a shorter period of time.
 This sensitivity is highly dependent on the velocity profile.
 Therefore, reducing time spent at max speed could result in a positive correlation between battery size and pod speed.
-It should also be noted that the Y-axis of figure \ref{f:battery} begins at 340kW to emphasize the downward trend.
+It should also be noted that the Y-axis of Fig. \ref{f:battery} begins at 340kW to emphasize the downward trend.
 The overall reduction in battery size is on the order of 25\%, if speed is increased from Mach 0.7 to Mach 0.9.
 Additional mission analysis details can be found in \cref{app:route} and work done by Mathworks \cite{Rouleau}.
 These estimates are in agreement with Musk’s work, and equate to roughly 3 to 5 battery packs from a Tesla Model-S.

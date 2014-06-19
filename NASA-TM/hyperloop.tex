@@ -175,7 +175,7 @@ in Table \ref{t:hyperbase}, had a slightly different ratios of tube area to pod 
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=.85\textwidth]{images/closedCapsule}
+\includegraphics[width=.85\textwidth]{images/podA}
 \caption{Longitudinal view of a passenger pod with no inlet and no compression system.}
 \label{f:ClosedPod}
 \end{figure}
@@ -187,7 +187,7 @@ is traveling through a frictionless tube from right to left, at some $M_{pod}$ l
 Figure \ref{f:ClosedPod} depicts this situation. For the purposes of analysis it is more convenient to consider the opposite perspective, 
 where the pod is stationary and the air is moving from left to right with some relative Mach number, $M_{pod}$. 
 As the air moves around the pod, it must fit into the smaller space available to it, $A_{bypass}$, which causes the air 
-to accelerate to some higher Mach number, $M_{bypass}$. From thermodynamics, there is a relationship between 
+to accelerate to some higher Mach number, $M_{bypass}$. From isentropic flow equations, there is a relationship between 
 $M_{pod}$ and $M_{bypass}$ that defines $\frac{A_{bypass}}{A_{tube}}$.
 
 \nomenclature{\gamma}{Heat Capacity Ratio}
@@ -224,7 +224,7 @@ which would then yield a maximum $M_{pod}$ of about .35.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=.85\textwidth]{images/hollowCapsule}
+\includegraphics[width=.85\textwidth]{images/podB}
 \caption{Longitudinal view of a hollow passenger pod that lets mass flow pass through it.}
 \label{f:hollowPod}
 \end{figure}
@@ -243,7 +243,7 @@ $\frac{A_{bypass}}{A_{tube}}$ and ${M_pod}$.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.85\textwidth]{images/inletCapsule.png}
+\includegraphics[width=0.85\textwidth]{images/podC.png}
 \caption{Longitudinal view of a hollow passenger pod with a necessary diffuser to restrict the Mach number of the flow into the compressor.}
 \label{f:OpenPod}
 \end{figure}
@@ -274,8 +274,8 @@ Converged pod radius also show underneath. }
 \label{sec:compressor-and-battery}
 
 The on-board compression system serves dual purposes.
-
-It provides a means of increasing the maximum pod speed over a closed pod, and also supplies pressurized air to the air bearing system. This second function requires a minimum airflow to provide the pressure force necessary to support the vehicle mass.
+It provides a means of increasing the maximum pod speed over a closed pod, and also supplies pressurized air to the air bearing system.
+This second function requires a minimum airflow to provide the pressure force necessary to support the vehicle mass.
 A thermodynamic analysis of the compressor system is also necessary to
 estimate on-board power requirements and overall heat rise of each pod.
 The compression cycle is comprised of an inlet, two compressors, a nozzle, and multiple ducts leading to air bearings.
@@ -299,7 +299,7 @@ further information on these tools can be found in the appendix and online docum
 The model predicts the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.
 These power requirements are a function of the chosen cycle and are both affected by
-and contribute to the thermal conditions, creating the feedback loop “C” in Fig. \ref{f:flowLIMIT}.
+and contribute to the thermal conditions, creating the feedback loop “C” in Fig. \ref{f:hyperloopXDSM}.
 Combined with the mission profile described below, these requirements impact battery sizing.
 
 \begin{figure}[hbtp]

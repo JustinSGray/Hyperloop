@@ -15,7 +15,7 @@
     \nompageref{10}
   \item [{$\upsilon$}]\begingroup Kinematic viscosity ($\frac{m^{2}}{s}$)\nomeqref {0}\nompageref{11}
   \item [{A}]\begingroup Area ($m^{2}$)\nomeqref {0}\nompageref{10}
-  \item [{c1MN}]\begingroup Mach number at the front face of the first compressor\nomeqref {0}
+  \item [$MN_{c1}$}]\begingroup Mach number at the front face of the first compressor\nomeqref {0}
     \nompageref{7}
   \item [{$C_{p}$}]\begingroup Heat capacity at constant pressure ($\frac{J}{kg-K}$)\nomeqref {0}
     \nompageref{9}
@@ -47,7 +47,7 @@
     \nompageref{10}
   \item [{T}]\begingroup Temperature (K)\nomeqref {0}\nompageref{9}
   \item [{V}]\begingroup Velocity ($\frac{m}{s}$)\nomeqref {0}\nompageref{4}
-  \item [{${\eta}_{adiabatic}$}]\begingroup Adiabatic Efficiency\nomeqref {0}
+  \item [{${\eta}_{ad}$}]\begingroup Adiabatic Efficiency\nomeqref {0}
     \nompageref{10}
   \item [{${\theta}_{nni}$}]\begingroup Non-normal Incidence factor (radians)\nomeqref {0}
     \nompageref{10}

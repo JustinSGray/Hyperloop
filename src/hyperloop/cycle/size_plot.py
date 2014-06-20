@@ -20,16 +20,29 @@ axes = [ 0.00, 1.2001, 0.0, 1.0 ]
 
 pylab.axis( axes )
 pylab.yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+pylab.tick_params(axis='both', which='major', labelsize=16)
 
-pylab.ylabel('Area Ratio (Bypass/Tube)')
-pylab.xlabel('Bypass Mach Number')
+pylab.ylabel('Area Ratio (Bypass/Tube)', fontsize=18)
+pylab.xlabel('Bypass Mach Number', fontsize=18)
 pylab.grid(b=True, which='major', color='grey', linestyle='--')
 #pylab.title( 'hyperloop' )
 pylab.legend(loc="best")
 
 CS = pylab.tricontour( MNbyp, AR, MNpod, MN, colors = ['darkblue','red','darkgreen','purple', 'grey','darkorange',  'black', 'lightblue'] )
-pylab.clabel( CS, inline=1, fontsize=10 )
 
+fmt = {} #tricontour labels
+strs = [ 'Pod MN=0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9' ]
+for l,s in zip( CS.levels, strs ):
+    fmt[l] = s
+pylab.clabel( CS, inline=1,fontsize=14, fmt = fmt )
+
+pylab.annotate("     Available pod area \ndecreasing relative to tube", fontsize=16, xy=(1.09, 0.486), xycoords='data', xytext=(0., 0),
+        rotation=90, textcoords='offset points', bbox=dict(boxstyle="square", facecolor='lightgrey') )
+ 
+#              x,    y,   dx,   dy,
+pylab.arrow( 1.121, 0.441, 0.0, 0.10, fc='lightgrey', ec='k', head_width=0.16, head_length=0.070 )
+
+pylab.vlines(1.0, 0, 1.0, colors='darkgrey', linestyles='dashed',lw= 3)#, label="limit")
 
 pylab.show()
 

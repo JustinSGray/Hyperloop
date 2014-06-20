@@ -215,12 +215,12 @@ smaller than this minimum value, then not all the relative mass flow could pass 
 flow would accumulate in the left of Fig. \ref{f:ClosedPod}), with the pod acting like a piston pressurizing the 
 air in front of it. 
 
-Furthermore, Fig. \ref{f:choked-flow} also shows that the required $\frac{A_{bypass}}{A_{tube}}$ 
+Furthermore, Fig. \ref{f:choked-flow} also shows that $\frac{A_{bypass}}{A_{tube}}$ 
 increases with increasing $M_{pod}$. So the faster the pod travels, the larger $A_bypass$ 
-must become to accommodate the relative mass flow around it. For $M_{pod}$ equal to 1, $\frac{A_{bypass}}{A_{tube}}$ must 
+must become relative to the tube area, leaving less area for the pod. For $M_{pod}$ equal to 1, $\frac{A_{bypass}}{A_{tube}}$ must 
 equal 1 as well, forcing $A_{pod}$ to be 0. So it is physically impossible for a closed pod to travel through a 
-tube with $M_{pod}$ at the speed of sound. Note that the Table \ref{t:hyperbase} gives area ratios around .6, 
-which would then yield a maximum $M_{pod}$ of about .35. 
+tube with $M_{pod}$ at the speed of sound. Note that the values from Table \ref{t:hyperbase} gives area ratios around .6, 
+which yields a maximum $M_{pod}$ of about .3-.4 for a closed pod. 
 
 \begin{figure}[hbtp]
 \centering
@@ -234,7 +234,7 @@ the maximum achievable speed. This effectively splits the relative mass flow in 
 $A_{tube\ B}$ and  $A_{tube\ C}$, as shown in Fig. \ref{f:hollowPod}. If we neglect the small thickness of the walls of
 the passenger pod itself, and assume that $A_{tube\ C}$ is equal to the $A_{pod}$, then it follows that $A_{tube\ B}$ 
 will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass would not accelerate, staying 
-at $M_{pod}$. The challenge is that the pod can not be perfectly hollow. It must provide some space for the passengers
+at $M_{pod}$. The challenge is that the pod cannot be perfectly hollow. It must provide some space for the passengers
 to sit in, causing some blockage in the flow. This problem can be handled by adding a compression system to the 
 pod that will force the air into a smaller area $A_{compressed\ C}$, to move around the passengers. This would 
 seem to solve all of the challenges associated with high travel speeds inside a tube discussed above and decouple 
@@ -293,7 +293,8 @@ and appropriately enforcing conservation equations across the entire system.
 \end{figure}
 
 
-The simulation uses PyCycle, an open-source cycle analysis tool that employs Cantera [ref] for thermodynamic calculations. The design of PyCycle was heavily influenced by NPSS;
+The simulation uses PyCycle, an open-source cycle analysis tool that employs Cantera [ref] for thermodynamic calculations.
+The design of PyCycle was heavily influenced by NPSS;
 further information on these tools can be found in the appendix and online documentation. \cite{goodwin2009cantera}
 
 The model predicts the instantaneous power consumption of the compressors, temperature and pressure rises,
@@ -522,8 +523,6 @@ Assuming numerous state variables provided in the source code, a steady state te
 This result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
 
 \section{Conclusions}
-
-
 
 For the most part, the ideas and numbers given in the original Hyperloop proposal hold up using this analysis. However, the data shows that
 there are two major changes to the design that need to be considered.

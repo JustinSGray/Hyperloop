@@ -37,10 +37,10 @@ for l,s in zip( CS.levels, strs ):
 pylab.clabel( CS, inline=1,fontsize=14, fmt = fmt )
 
 pylab.annotate("     Available pod area \ndecreasing relative to tube", fontsize=16, xy=(1.09, 0.486), xycoords='data', xytext=(0., 0),
-        rotation=90, textcoords='offset points', bbox=dict(boxstyle="square", facecolor='lightgrey') )
+        rotation=90, textcoords='offset points', bbox=dict(boxstyle="square", edgecolor='lightgrey',facecolor='lightgrey') )
  
 #              x,    y,   dx,   dy,
-pylab.arrow( 1.121, 0.458, 0.0, 0.10, fc='lightgrey', ec='k', head_width=0.16, head_length=0.070 )
+pylab.arrow( 1.121, 0.458, 0.0, 0.10, fc='lightgrey', ec='lightgrey', head_width=0.16, head_length=0.070 )
 
 pylab.vlines(1.0, 0, 1.0, colors='darkgrey', linestyles='dashed',lw= 3)#, label="limit")
 

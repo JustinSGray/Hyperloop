@@ -25,15 +25,15 @@ Since Hyperloop operates in a partial atmosphere, additional considerations need
 The modeling approach applied here is inspired heavily by methods for aircraft sizing and turbine engine cycle analysis. Hyperloop 
 operates at transonic Mach numbers in a low pressure environment, so it is straightforward to make the analogy to aircraft. 
 The compression subsystem on the passenger pod is similar to the compressors on aircraft turbomachinery. Furthermore, the aerodynamic concerns  
-arising from constricted flow through the travel tube are prevalent in the design of inlets for aircraft engines. 
+arising from constricted flow through the travel tube are prevalent in the design of inlets and nozzles on aircraft engines. 
 
 Musk's original Hyperloop proposal included individual high-level analyses of many major subsystems including the pod compression system,
 elevated support structure, and propulsion system. While this demonstrated the basic viability of the concept, it did not address
 significant interdisciplinary couplings inherent in the Hyperloop system. These couplings introduce certain constraints which limit the 
-degrees of freedom available in the design space. The major contribution of this work was to identify the key couplings that constrain the design space
+degrees of freedom available in the design space. The major contribution of this work is to identify the key couplings that constrain the design space
 and adapt methods from aircraft design to construct a conceptual design process that accounts for them. The most significant 
-interdisciplinary coupling arose between passenger pod size and travel tube size. Aerodynamic concerns make it impossible to vary 
-both pod size and tube size independently of each other. An additional, though less severe, coupling arose between the compression system and 
+interdisciplinary coupling arose between the passenger pod size and travel tube size. Aerodynamic concerns make it impossible to vary 
+both pod size and tube size independently of each other. An additional less severe coupling also exists between the compression system and 
 the thermal management system. The interdisciplinary coupling demanded the use of an iterative sizing procedure that balanced 
 all the various systems to provide a feasible design for any given set of design variables. The results of this sizing process show that
 the Hyperloop concept is feasible, but certain estimates from the original proposal may have been overly optimistic. 
@@ -44,7 +44,7 @@ was outside the scope of this work and is reserved for future investigation.
 The fully integrated system model was constructed using OpenMDAO, a Python-based framework for 
 the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. The models presented 
 in this work represent very basic analyses which rely heavily on simplifying assumptions. A realistic design 
-optimization will require more detailed models of the investigated systems and additional analyses for economic models and 
+optimization will require more detailed models of the investigated systems and additional analyses for economic and 
 structural models. Adding all of this will result in significant growth in complexity of the Hyperloop model. 
 OpenMDAO could provide the means to manage growing model complexity 
 in an efficient and flexible manner. Musk's original work was released with the stated goal of jump starting

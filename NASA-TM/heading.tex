@@ -1,7 +1,3 @@
-%  sample input file for using the NASA.cls LaTeX class
-%  this distribution is handy for formatting TM, TP, CR, etc.
-%
-%  $Id: sample.tex,v 1.18 2009/08/10 17:22:22 wawood Exp $
 
 %  next 2 lines pull in the NASA.cls file, put options between []
 \documentclass[]             % options: RDPonly, coveronly, nocover
@@ -32,43 +28,6 @@
 \setlength{\abovecaptionskip}{0pt}
 \setlength{\belowcaptionskip}{0pt}
 
-\usepackage{setspace}
-
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage{caption}
-\usepackage{amsmath}
-\usepackage{lscape}
-\usepackage{hyperref}
-\usepackage{minted}
-\usepackage{color}
-\usepackage{appendix}
-\usepackage{listings}
-\usepackage[section]{placeins}
-\usepackage[superscript]{cite}
-\usepackage{esdiff}
-\usepackage{bm}
-\usepackage{booktabs}
-\usepackage{nomencl} %nomenclature
-
-\lstset{frame=single}
-\newcommand{\txt}{\textrm}
-
-\newcommand{\cent}{{\mathrm{c}\mkern-6.5mu{\mid}}}
-
-
-\captionsetup[figure]{margin=5pt,font=small,labelfont=bf,textfont=bf,justification=justified,}
-%\captionsetup[wrapfigure]{margin=5pt,font=small,labelfont=bf,justification=justified,singlelinecheck=off}
-\captionsetup[table]{margin=5pt,font=small,labelfont=bf,textfont=bf,justification=justified,position=top}
-
-\bibliographystyle{aiaa}
-
-\usepackage{lettrine}
-\usepackage{verbatim}
-
-
- % suggested 200 words max
-
 \usepackage{minted} %syntax highlighting
 \usepackage{color} %syntax highlighting
 \usepackage{graphicx}
@@ -79,6 +38,34 @@
 \usepackage{courier} %courier font for variable names
 \usepackage{cleveref} %section references
 \usepackage[all]{hypcap} %figure references point to top of figure (must come after hyperref)
+\usepackage{nomencl} %nomenclature
+\usepackage{subfiles} %split sections into separate docs
+
+\usepackage{setspace} %Pro­vides sup­port for set­ting the spac­ing be­tween lines in a doc­u­ment
+\usepackage{wrapfig} %Al­lows fig­ures or ta­bles to have text wrapped around them.
+\usepackage{caption} %The cap­tion pack­age pro­vides many ways to cus­tomise the cap­tions in float­ing en­vi­ron­ments like fig­ure and ta­ble
+\usepackage{lscape} %Mod­i­fies the mar­gins and ro­tates the page con­tents but not the page num­ber.
+\usepackage{appendix}
+\usepackage{listings} %Code
+\usepackage[section]{placeins} %De­fines a \FloatBar­rier com­mand, be­yond which floats may not pass; 
+\usepackage[superscript]{cite} %The pack­age sup­ports com­pressed, sorted lists of nu­mer­i­cal ci­ta­tions
+\usepackage{esdiff} %The pack­age makes writ­ing deriva­tives very easy.
+\usepackage{bm} %The bm pack­age de­fines a com­mand \bm which makes its ar­gu­ment bold. (math)
+\usepackage{booktabs} % en­hances the qual­ity of ta­bles
+
+\lstset{frame=single}
+\newcommand{\txt}{\textrm}
+
+\newcommand{\cent}{{\mathrm{c}\mkern-6.5mu{\mid}}}
+
+\captionsetup[figure]{margin=5pt,font=small,labelfont=bf,textfont=bf,justification=justified,}
+%\captionsetup[wrapfigure]{margin=5pt,font=small,labelfont=bf,justification=justified,singlelinecheck=off}
+\captionsetup[table]{margin=5pt,font=small,labelfont=bf,textfont=bf,justification=justified,position=top}
+
+\bibliographystyle{aiaa}
+
+\usepackage{lettrine} %The let­trine pack­age sup­ports var­i­ous dropped cap­i­tals styles
+\usepackage{verbatim} %reimplements verbatim, block comments
 
 %nomenclature
 \makenomenclature

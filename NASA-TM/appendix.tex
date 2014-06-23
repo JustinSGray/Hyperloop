@@ -36,15 +36,16 @@ consumption by reducing vacuum pump effort more than it increases power requirem
 diameter coupled with a slightly higher pressure provide superior performance?
 
 \subsection{Geometry}
-This model makes some simple geometric calculations, however a real parametric geometry model needs to be included. This model is
-necessary to properly consider the layout and packaging issues involved in the design, but it also needed to do more complete structural
-analyses on the pressurized containers as well as to do an aerodynamic shape optimization of the outer shape.
+This model makes some simple geometric calculations, however a real parametric geometry model needs to be included in the optimization.
+This model is necessary to properly consider the layout and packaging issues involved in the design, but it also needed to do more 
+complete structural analyses on the pressurized containers as well as to do an aerodynamic shape optimization of the outer shape.
 
 Some alternate configurations could possibly considered as well. Although the length of the capsule would grow by a factor of 2, it
 might be possible to put the seats in a single file layout to reduce the overall tube dimensions. The effect of this change on the overall
 system is not obvious and needs to be studied.
 
-The geometry model needs to be built in an open source geometry system so that it can be freely shared with the rest of the model.
+Following the other analyses used thus far, the geometry model needs to be built in an freely available,
+open-source geometry system so that it can be freely shared with the rest of the model.
 
 \subsection{Battery and Motors}
 The initial estimates of battery size and weight rely on elementary calculations. As noted, the power requirements amount to roughly
@@ -67,10 +68,9 @@ The original proposal also mentioned the use of aircraft landing gear at substan
 
 \subsection{Vacuum Pumps}
 The current model indicates that a tube with around a 4 meter diameter will be needed to reach the high velocities to keep the travel time
-to around 35 minutes. The size of the tubes will impact to key power requirements for the vacuum pumps:
-
-The peak power requirements to pump the tubes down in a reasonable time
-The steady state power requirements to maintain the high vacuum in the tube
+to around 35 minutes. The size of the tubes will impact the key power requirements for the vacuum pumps.
+The size will impact the peak power requirements to pump the tubes down in a reasonable time,
+and the steady state power requirements to maintain the high vacuum in the tube.
 Both of these aspects need to be modeled and incorporated into the system models.
 
 
@@ -96,12 +96,9 @@ The current model does not include any significant weight estimation. Every part
 These are not considered at all currently. However, they will obviously need to be modeled as part of the mission analysis work.
 
 \subsection{Route Optimization} \label{app:route}
-The current mission analysis takes the velocity profile in the original proposal as a given. We normalize this profile in both time and velocity,
-then integrate it. As modeled, the average velocity would be about 80\% of the calculated max speed.
-
-While this simple method provides some basic dependence of travel time on overall speed and tube length it is not really sufficient. A more
-advanced analysis needs to be constructed which accounts for actual passenger G-load constraints and can derive an optimal route and
-speed profile for a given design.
+The current mission analysis takes the velocity profile in the original proposal as a given. A more
+advanced analysis needs to be constructed which accounts for actual passenger G-load constraints based on an optimal route and
+speed profile given existing California infrastructure .
 
 \subsection{Heat Exchanger Design} \label{app:heatX}
 
@@ -176,12 +173,11 @@ Further calculations for the multipass heat exchanger can be found in the source
 
 \subsection{Github}
 
-The entire source code can be found on github at:
+The entire source code for both the analysis and the generated figures can be found on github at:
 \url{<https://github.com/OpenMDAO-Plugins/Hyperloop>}
 
 Online documentation can be found at:
 \url{<http://openmdao-plugins.github.io/Hyperloop>}
-
 This plugin is designed to be a jumping off point for community contributions to help crowd source the development of the hyperloop
 concept. The readme on the github repository walks through basic installation steps, further support can be found through the main
 OpenMDAO docs. The basic structure of an assembly is explained in the usage section of these docs.

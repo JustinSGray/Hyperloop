@@ -1,0 +1,477 @@
+// 
+// hyperloop capsule area model
+//
+
+setThermoPackage( "Janaf" );
+
+
+//------------------------------------------------------------------------
+//                           Explicit Calculation
+//------------------------------------------------------------------------
+/*
+// area ratio between a stream which changes Mach number from M1 to M2
+real areaRatio( real M1, real M2 ) {
+   real FM1, FM2, A1, A2, AR;
+
+   // isentropic calculations
+   // real g = 1.4;
+   // FM1 = M1*sqrt(g)*( 1. + ((g-1.)/2.)*M1**2. )**((g+1)/(2.-2.*g));
+   // FM2 = M2*sqrt(g)*( 1. + ((g-1.)/2.)*M2**2. )**((g+1)/(2.-2.*g));
+   // A1/A2 = FM2/FM1;  // not necessary
+   // AR = FM2 / FM1;
+
+
+   FlowStation FS;
+   FS.W = 10.;
+   FS.setTotalTP( 525., 15. );
+   FS.MN = M1;
+   A1 = FS.Aphy;
+   FS.MN = M2;
+   A2 = FS.Aphy;
+   AR = A1/A2;
+
+   return AR;
+}
+
+
+
+// podMach = capsule or pod Mach number
+// cmpMach = compressor face Mach number
+// Apod = capsule or pod area
+// bFactor = blockage factor, ratio of compressor face area to total pod area
+void hyperloopX( real podMach, real cmpMach, real Apod, real bFactor ) {
+
+   real Atube, AtubeB, AtubeC, Abyp, Adiff;
+   real Abyp_q_AtubeB, Adiff_q_Apod, Adiff_q_AtubeC;
+
+   // ratio of bypass to tube MN
+   Abyp_q_AtubeB  = areaRatio( 1., podMach );
+
+   // ratio of compressor face to tube MN
+   Adiff_q_AtubeC = areaRatio( cmpMach, podMach );
+
+   // ratio of compressor face to pod area
+   Adiff_q_Apod = bFactor;
+
+
+   Adiff = Adiff_q_Apod * Apod;
+   AtubeC = Adiff / Adiff_q_AtubeC;
+   AtubeB = ( AtubeC - Apod ) / ( Abyp_q_AtubeB - 1. );
+
+   Abyp = Abyp_q_AtubeB * AtubeB;
+   Atube = AtubeB + AtubeC;
+
+   // print results
+   cout.precision=5; cout.showpoint = TRUE;
+   cout << Atube << "    " << AtubeB << "    " << AtubeC << "          "
+        << Abyp  << "    " << Apod   << "    " << Adiff << "    " 
+        << Adiff/Apod << endl;
+
+}
+
+//hyperloopX( 0.71, 0.65, 1.40, 0.90 );
+//hyperloopX( 0.80, 0.65, 1.40, 1.00 );
+
+
+void hyperloop( real podMach, real cmpMach, real Apax, real bFactor, real PR ) {
+
+   real Atube, AtubeB, AtubeC, Abyp, Adiff, Acmp, Apod;
+   real Abyp_q_AtubeB, Adiff_q_Apod, Adiff_q_AtubeC;
+   real Acmp_q_Adiff, Apax_q_Adiff;
+
+   // ratio of bypass to tube MN
+   Abyp_q_AtubeB  = areaRatio( 1., podMach );
+
+   // ratio of compressor face to tube MN
+   Adiff_q_AtubeC = areaRatio( cmpMach, podMach );
+
+   // ratio of compressor face to pod area
+   Adiff_q_Apod = bFactor;
+
+
+   // ratio of compressor exit area to compressor face area
+   // 0.90 is efficiency, 1.0085 is estimate of gamma-related term
+   Acmp_q_Adiff = 1.0085/(0.90*PR)*(PR**0.278 - 1.);
+   
+   //ratio of passenger area to compressor face area
+   Apax_q_Adiff = 1. - Acmp_q_Adiff;
+
+
+   Adiff = Apax / Apax_q_Adiff;
+   Apod = Adiff / Adiff_q_Apod;
+   Acmp = Acmp_q_Adiff * Adiff;
+   AtubeC = Adiff / Adiff_q_AtubeC;
+   AtubeB = ( AtubeC - Apod ) / ( Abyp_q_AtubeB - 1. );
+
+   Abyp = Abyp_q_AtubeB * AtubeB;
+   Atube = AtubeB + AtubeC;
+
+   // print results
+   cout.precision=5; cout.showpoint = TRUE;
+   cout << Atube << "    " << AtubeB << "    " << AtubeC << "          "
+        << Abyp  << "    " << Apod   << "    " << Adiff << "    "
+        << Acmp  << "    " << Apax   << "    "
+        << Adiff/Apod << endl;
+
+}
+
+hyperloop( 0.60, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.62, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.64, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.66, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.68, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.70, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.72, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.74, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.76, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.78, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.80, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.82, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.84, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.86, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.88, 0.65, 1.40, 0.90, 12.47 );
+hyperloop( 0.90, 0.65, 1.40, 0.90, 12.47 );
+
+//hyperloop( 0.71, 0.65, 1.40, 0.90, 12.47 );
+//hyperloop( 0.80, 0.65, 1.40, 0.90, 12.47 );
+
+*/
+//------------------------------------------------------------------------
+//                         End Explicit Calculation
+//------------------------------------------------------------------------
+
+
+
+
+
+//------------------------------------------------------------------------
+//                           Output Data Viewers 
+//------------------------------------------------------------------------
+#include <area.view_page>  
+
+real C_IN2toM2 = 144.*(3.281**2.);
+page {
+   SimpleBlock areas { 
+      
+      body =   "tube diameter:???.??? m \n\n " +
+         "AREAS  \n" +
+         "Tube:????.??? m2    Tube B:????.??? m2    bypass throat:????.??? m2 \n" +
+         "                    Tube C:????.??? m2    capsule:      ????.??? m2    blockage:     ????.??? m2 \n" +
+         "                                                                       comp. face:   ????.??? m2    comp. exit:????.??? m2 \n" +
+         "                                                                                                    passenger :????.??? m2   ";
+      vars = { "sqrt((start.Fl_O.Aphy/C_IN2toM2)*4./PI)",
+          "start.Fl_O.Aphy/C_IN2toM2", "split.Fl_02.Aphy/C_IN2toM2", "bypass.Fl_O.Aphy/C_IN2toM2",
+          "split.Fl_01.Aphy/C_IN2toM2", "(start.Fl_O.Aphy-bypass.Fl_O.Aphy)/C_IN2toM2", "(start.Fl_O.Aphy-bypass.Fl_O.Aphy)*(1.-blockage)/C_IN2toM2",
+          "intake.Fl_O.Aphy/C_IN2toM2", "cmp25.Fl_O.Aphy/C_IN2toM2", "(intake.Fl_O.Aphy-cmp25.Fl_O.Aphy)/C_IN2toM2" }
+   } 
+   inputs.bottom = "areas"; 
+}
+
+
+real vehicleMach = 0.71;
+real cmpMach = 0.65;
+real PsTube = 0.014359;  // 99 Pa
+real TsTube = 524.0;
+real Atube, Dtube, AtubeB, AtubeC;
+real Apod, Abypass, Dpod, blockage = 0.90;
+real Apax, Adiff, Acmprssd;
+
+
+Element FlowStart start {
+   W = 3.;
+   Pt = 0.02;
+   Tt = 550.;
+   void preexecute() { 
+      Fl_O.MN = vehicleMach;
+   }
+}
+
+
+Element Duct tube {
+   void preexecute() { 
+      Fl_O.MN = vehicleMach;
+      Atube = Fl_O.Aphy/(3.281**2.)/(144.);
+   }
+}
+
+
+Element Splitter split {
+   BPR = 1.0;
+
+   void preexecute() {
+      Fl_01.MN = Fl_I.MN;
+      Fl_02.MN = Fl_I.MN;
+   } 
+
+   void postexecute() {
+      AtubeC = Fl_01.Aphy/(3.281**2.)/(144.);
+      AtubeB = Fl_02.Aphy/(3.281**2.)/(144.);
+   }
+}
+
+
+Element Duct intake {
+
+   void preexecute() {
+      Fl_O.MN = cmpMach;
+      if ( cmpMach > vehicleMach ) { Fl_O.MN = vehicleMach; }
+   } 
+
+   void postexecute() {
+      Adiff = Fl_O.Aphy/(3.281**2.)/(144.);
+      Apod  = Fl_O.Aphy/(3.281**2.)/(144.)/blockage;   // Adiff/blockage
+   }
+}
+
+Element Compressor cmp25 {
+   PRdes = 12.47;
+   effDes = 0.90;
+
+   // in reality this must be slower but the internal duct can accel the flow
+   void preexecute() {
+      Fl_O.MN = cmpMach;
+      if ( cmpMach > vehicleMach ) { Fl_O.MN = vehicleMach; }
+   } 
+
+   // N = 10000.;
+}
+
+Element Shaft shaft {
+   ShaftInputPort Sh_cmp;
+   Nmech = 10000.;
+}
+
+Element Duct intDuct {
+
+   void preexecute() {
+      Fl_O.MN = cmpMach;
+      if ( cmpMach > vehicleMach ) { Fl_O.MN = vehicleMach; }
+   } 
+
+   void postexecute() {
+      Acmprssd = Fl_O.Aphy/(3.281**2.)/(144.);
+      Apax = Adiff - Acmprssd;
+   }
+}
+
+
+Element Duct bypass {
+   Fl_O.MN = 1.;
+   
+   void postexecute() {
+      Abypass = Fl_O.Aphy/(3.281**2.)/(144.);
+   }
+}
+
+
+Element FlowEnd endB {
+}
+
+Element FlowEnd endC {
+}
+
+
+
+//------------------------------------------------------------------------
+//                           Component Linkages
+//------------------------------------------------------------------------
+linkPorts( "start.Fl_O"      , "tube.Fl_I"        , "FS_0"     ) ;
+linkPorts( "tube.Fl_O"       , "split.Fl_I"       , "FStube"   ) ;
+linkPorts( "split.Fl_01"     , "intake.Fl_I"      , "FStubeC"  ) ;
+linkPorts( "split.Fl_02"     , "bypass.Fl_I"      , "FStubeB"  ) ;
+linkPorts( "bypass.Fl_O"     , "endB.Fl_I"        , "FSbypass" ) ;
+//linkPorts( "intake.Fl_O"     , "endC.Fl_I"        , "FSdiffused" ) ;
+linkPorts( "intake.Fl_O"     , "cmp25.Fl_I"       , "FSdiffused" ) ;
+linkPorts( "cmp25.Fl_O"      , "intDuct.Fl_I"     , "FScompressed" ) ;
+linkPorts( "intDuct.Fl_O"    , "endC.Fl_I"        , "FSintduct" ) ;
+
+linkPorts( "cmp25.Sh_O"      , "shaft.Sh_cmp"     , "CMPwork" ) ;
+
+
+
+Independent ind_Pt {
+   varName = "start.Pt";
+   autoSetup = TRUE;
+}
+
+Independent ind_Tt {
+   varName = "start.Tt";
+   autoSetup = TRUE;
+}
+
+Independent ind_W {
+   varName = "start.W";
+   autoSetup = TRUE;
+}
+
+Independent ind_BPR {
+   varName = "split.BPR";
+   autoSetup = TRUE;
+}
+
+
+Dependent dep_Ps {
+   eq_rhs = "start.Fl_O.Ps";
+   eq_lhs = "PsTube";
+   autoSetup = TRUE;
+}
+
+Dependent dep_Ts {
+   eq_rhs = "start.Fl_O.Ts";
+   eq_lhs = "TsTube";
+   autoSetup = TRUE;
+}
+
+Dependent dep_Apod {
+   eq_rhs = "Apax"; // "start.Fl_O.Aphy";
+   eq_lhs = "1.40"; // "3.618*(3.281**2.)*(144.)";
+   autoSetup = TRUE;
+}
+
+Dependent dep_Amatch {
+   eq_rhs = "AtubeB + AtubeC";
+   eq_lhs = "Abypass + Apod";
+   autoSetup = TRUE;
+}
+
+
+//------------------------------------------------------------------
+//     Run cases
+//------------------------------------------------------------------
+setOption( "switchDes", "DESIGN" );
+solver.maxJacobians = 100;
+solver.maxIterations = 100;
+
+autoSolverSetup();
+solver.removeDependent( "shaft.integrate_Nmech" );
+run();
+page.display();
+
+
+
+// Atube   AtubeB  AtubeC    Abypass    Apod    Adiff    Ablk    Acmp    Apax
+void printStuff() {
+   cout.precision=5; cout.showpoint = TRUE;
+   cout << vehicleMach << "     ";
+   cout << Atube << "    " << AtubeB << "    " << AtubeC << "          "
+        << Abypass  << "    " << Apod   << "    " << Adiff << "    "
+        << (Apod - Adiff ) << "    " << Acmprssd  << "    " << Apax << endl;
+
+}
+
+
+void runCases() { 
+   for ( vehicleMach = 0.60; vehicleMach <= 0.91; vehicleMach +=0.02 ) {
+      run();
+      page.display();
+      printStuff();
+   } 
+} 
+
+//cmpMach = 0.60; runCases(); cout << endl;
+cmpMach = 0.65; runCases(); cout << endl;
+//cmpMach = 0.70; runCases(); cout << endl;
+
+
+// ==========================================================================
+//                            BEGIN NEW MODEL
+// ==========================================================================
+/*
+real flowMN = 0.10;
+real ductMN = 0.10;
+real Atube, Abyp, Apod;
+
+Element FlowStart start {
+   W = 10.;
+   Pt = 0.02;
+   Tt = 550.;
+   void preexecute() { 
+      Fl_O.MN = flowMN;
+   }
+}
+
+Element Duct duct {
+   void preexecute() { 
+      Fl_O.MN = ductMN;
+   }
+   
+   void postexecute() {
+      Atube = Fl_I.Aphy /(3.281**2.)/(144.);
+      Abyp  = Fl_O.Aphy /(3.281**2.)/(144.);
+      Apod  = (Fl_I.Aphy - Fl_O.Aphy) /(3.281**2.)/(144.);
+   }
+}
+
+Element FlowEnd end {
+}
+
+linkPorts( "start.Fl_O"     , "duct.Fl_I"      , "FS_1"  ) ;
+linkPorts( "duct.Fl_O"      , "end.Fl_I"       , "FS_2"  ) ;
+
+
+Independent ind_Pt {
+   varName = "start.Pt";
+   autoSetup = TRUE;
+}
+
+Independent ind_Tt {
+   varName = "start.Tt";
+   autoSetup = TRUE;
+}
+
+Dependent dep_Ps {
+   eq_rhs = "start.Fl_O.Ps";
+   eq_lhs = "0.014359";
+   autoSetup = TRUE;
+}
+
+Dependent dep_Ts {
+   eq_rhs = "start.Fl_O.Ts";
+   eq_lhs = "524.";
+   autoSetup = TRUE;
+}
+
+
+setOption( "switchDes", "DESIGN" );
+solver.maxJacobians = 100;
+solver.maxIterations = 100;
+
+autoSolverSetup();
+run();
+page.display();
+//Aduct = duct.Fl_O.Aphy;
+
+
+void printStuff() {
+   cout.precision=5; cout.showpoint = TRUE;
+   cout << start.Fl_O.MN << "    " << start.Fl_O.Aphy << "    " 
+        << duct.Fl_O.MN  << "    " << duct.Fl_O.Aphy << "    " 
+        << duct.Fl_O.Aphy/start.Fl_O.Aphy << "    " << mchk << endl;
+
+}
+
+// Ps, Ts constant
+// flow initial MN increasing
+// determine ratio of flow initial area to throat area
+
+start.W = 5.;
+void runCases() { 
+   //for ( ductMN = flowMN; ductMN <= 1.21; ductMN +=0.02 ) {
+      ductMN = 1.00;
+      run();
+      mchk = start.Fl_O.rhos*start.Fl_O.V*start.Fl_O.Aphy/144.;
+      printStuff();
+      page.display();
+   //}
+} 
+
+flowMN = 0.10; runCases();
+flowMN = 0.20; runCases();
+flowMN = 0.30; runCases();
+flowMN = 0.40; runCases();
+flowMN = 0.50; runCases();
+flowMN = 0.60; runCases();
+flowMN = 0.70; runCases();
+flowMN = 0.80; runCases();
+flowMN = 0.90; runCases();
+*/

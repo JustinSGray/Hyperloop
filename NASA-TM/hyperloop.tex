@@ -118,7 +118,7 @@ This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.6\textwidth]{images/TopAssembly.png}
+\includegraphics[width=0.65\textwidth]{images/TopAssembly.png}
 \caption{Workflow and dependencies between the major Hyperloop subsystems.}
 \label{f:hyperloopXDSM}
 \end{figure}
@@ -131,7 +131,7 @@ This breakdown enhanced modularity so that future work could replace these simpl
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.6\textwidth]{images/podAssembly.png}
+\includegraphics[width=0.65\textwidth]{images/podAssembly.png}
 \caption{Expanded \texttt{pod} assembly diagram}
 \label{f:podXDSM}
 \end{figure}
@@ -155,7 +155,7 @@ the overall performance and second compressor subsystems.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textwidth]{images/compAssembly.png}
+\includegraphics[width=0.7\textwidth]{images/compAssembly.png}
 \caption{Expanded \texttt{compression} assembly diagram}
 \label{f:compressorXDSM}
 \end{figure}
@@ -313,8 +313,7 @@ and appropriately enforcing conservation equations across the entire system.
 PyCycle was built within the openMDAO framework and leverages Cantera \cite{goodwin2009cantera} for thermodynamic calculations.
 The model predicts the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.
-These power requirements are a function of the chosen cycle and are both affected by
-and contribute to the thermal conditions, creating the feedback loop “C” in Fig. \ref{f:hyperloopXDSM}.
+These power requirements are a function of the chosen geometry, creating the feedback loop “B” in Fig. \ref{f:hyperloopXDSM}.
 Combined with the mission profile described below, these requirements impact battery sizing.
 
 \begin{figure}[hbtp]
@@ -423,9 +422,10 @@ and the proposed requirement to fully cool the air back down to inlet temperatur
     \end{tabular}
 \end{table}
 
-With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$ of standard temperature/pressure water would need to be carried 
-with steam tanks over a hundred meters in length. This doesn't even account for the second stage heat exchanger, making the system nearly infeasible
-with water and unpressurized tanks. Various systems involving partial cooling, alternate coolants (such as liquid air), or pressurized tanks could be explored.
+With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$
+of standard temperature/pressure water would need to be carried with steam tanks over a hundred meters in length.
+This doesn't even account for the second stage heat exchanger, making the system nearly infeasible with water and unpressurized tanks.
+Various systems involving partial cooling, alternate coolants (such as liquid air), or pressurized tanks could be explored.
 
 Further discussion of heat exchanger sizing can be found in the heat exchanger section of \cref{app:heatX}.
 The calculations explore the possibility of multi-pass heat exchangers
@@ -543,17 +543,21 @@ From this point the total heat transfer from natural convection can be obtained,
 Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tube} (T_{tube}-T_{amb})
 \end{equation}
 
-The steady state tube temperature can be found by varying the tube temperature until the rate of heat being released from the tube
-matches the rate of heat being absorbed by the tube.
-Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat
-rate added from pod compression systems.
-This result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
-The analysis simply recognizes the dominant heating factors on the large tube structure, with profound benefits if the tube is shielded with solar panels.
+The steady state tube temperature can be found by varying the tube temperature until the
+rate of heat being released from the tube matches the rate of heat being absorbed by the tube.
+Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of
+magnitude larger than the heat rate added from pod compression systems.
+This result suggests that there is no need for on-board cooling, since the marginal temperature
+rises would result in higher convection and radiation rates, quickly bringing the system back to steady-state.
 Assuming a 90 degF day in addition to other nominal values for typical heat transfer variables,
-radiation and convection out of the tube would lead to a manageable steady state tube wall temperature of 120 degF. 
-Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat rate added from pod compression systems.
+radiation and convection out of the tube would lead to a manageable steady-state tube wall temperature of 120 degF.
+This sub-iteration then feeds back into the overall hyperloop convergence loop, both affected by
+and contributing to the compression cycle, creating feedback “C” in Fig. \ref{f:hyperloopXDSM}.
+The analysis suggests that the dominant heating factors are a direct result of the massive tube structure,
+with relatively low coupling with the pod design.
+The thermal management should therefore be incorporated into the tube design, rather than integrated into the pod design.
+Solutions such as solar panel sheilding would produce even more optimistic results.
 
-State why intercoolers are impractical
 
 \section{Conclusions}
 

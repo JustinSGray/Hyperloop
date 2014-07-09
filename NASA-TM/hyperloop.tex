@@ -18,12 +18,12 @@ columns maintaining a straight trajectory.
 \label{f:hyperloopSketch}
 \end{figure}
 
-Although Hyperloop is similar to other vacuum tube train (VacTrain) concepts \cite{ET3}, the soft vacuum represents a distinct difference.
-It allows the train to run on air-bearings, thus removing the need for a magnetic levitation system used on the other VacTrain designs.
-The air bearings require a source of pressurized air, which is provided by an electric compressor system powered by on-board batteries.
-Since Hyperloop operates in a partial atmosphere, additional considerations need to be modeled as part of the sizing and thermal analyses. 
-The modeling approach applied here is inspired heavily by methods for aircraft sizing and turbine engine cycle analysis. Hyperloop 
-operates at transonic Mach numbers in a low pressure environment, so it is straightforward to make the analogy to aircraft. 
+Although Hyperloop is similar to other vacuum tube train (VacTrain) concepts \cite{ET3},
+the soft vacuum means that the system operates in a partial atmosphere, requiring additional engineering considerations.
+The presence of an atmosphere allows the train to run on air-bearings,
+thus removing the need for a magnetic levitation system used on the other VacTrain designs.
+The air bearings require a source of pressurized air, which is provided by a compressor powered by on-board batteries. 
+The modeling approach applied here is inspired heavily by methods for aircraft sizing and turbine engine cycle analysis. 
 The compression subsystem on the passenger pod is similar to the compressors on aircraft turbomachinery. Furthermore, the aerodynamic concerns  
 arising from constricted flow through the travel tube are prevalent in the design of inlets and nozzles on aircraft engines. 
 
@@ -42,9 +42,10 @@ The sizing process is a necessary precursor before ultimately performing a desig
 Hyperloop with the dual objectives of minimizing ticket cost and travel time. Performing this optimization 
 was outside the scope of this work and is reserved for future investigation. 
 The fully integrated system model was constructed using OpenMDAO, a Python-based framework for 
-the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. The models presented 
-in this work represent very basic analyses which rely heavily on simplifying assumptions. A realistic design 
-optimization will require more detailed models of the investigated systems and additional analyses for economic and 
+the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. 
+This work focused on the aerodynamics and thermodynamics of the passenger pod itself.
+As such, it ignored many additional key sub-systems which will also have a large impact on the final design.
+A more realistic design optimization will require more detailed models of the investigated systems and additional analyses for economic and 
 structural models. Adding all of this will result in significant growth in complexity of the Hyperloop model. 
 OpenMDAO could provide the means to manage growing model complexity 
 in an efficient and flexible manner. Musk's original work was released with the stated goal of jump starting
@@ -76,7 +77,7 @@ travel tube to provide a means of sizing the thermal management system.
 % This coupling, along with other feedback relationships discussed later, require an
 % iterative approach to arrive at a physically valid state for the entire system.
 
-The Hyperloop passenger pod was decomposed into five primary analyses that were connected to 
+The Hyperloop passenger pod was decomposed into five analyses that were connected to 
 form the conceptual sizing model. 
 
 \begin{enumerate}
@@ -94,8 +95,7 @@ For example, the \textit{Compressor Cycle} passes data to the \textit{Mission An
 \textit{Pod Geometry}, and \textit{Tube Temperature} analyses.
 In the lower-left side of the diagram red arrows represent feedback connections which establish cyclical coupling between different analyses.
 %The top-left block of Fig. \ref{f:podXDSM} shows system-level design variables that affect numerous components. 
-Table \ref{tab:desvars} summarizes the baseline values from the original proposal as well as ranges selected 
-to cover a reasonably large design space. 
+Table \ref{tab:desvars} summarizes the baseline values from the original proposal which were used in this analysis.
 Notably, both pod radius and travel tube radius are omitted, since these variables could not be freely varied.
 Instead, the assumption of a fixed area for a passenger compartment was made which,
 combined with the couplings shown in Fig. \ref{f:hyperloopXDSM}, removed these variables as design inputs.
@@ -107,32 +107,31 @@ This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
     \label{tab:desvars}
     \begin{tabular}{l  c  c  c} 
         \hline
-        Variable & Baseline Value & Min. & Max. \\ \hline 
-        Max. Pod Mach & .9 & .3 & 1.0 \\ 
-        Pod Bypass Mach & .95 & .5 & .99 \\
-        Compressor 1 Inlet Mach & .6 & .5 & .8 \\ 
-        Compressor 1 Pressure Ratio & 12.47 & 10 & 20 \\ 
-        Tube Static Pressure (Pa) & 99 & 50 & 500 \\ \hline
+        Design Variable &  Value\\ \hline 
+        Max. Pod Mach & .9 \\ 
+        Pod Bypass Mach & .95\\
+        Compressor 1 Inlet Mach & .6\\ 
+        Compressor 1 Pressure Ratio & 12.47\\ 
+        Tube Static Pressure (Pa) & 99 \\ \hline
     \end{tabular}
 \end{table}
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/TopAssembly.png}
+\includegraphics[width=0.6\textwidth]{images/TopAssembly.png}
 \caption{Workflow and dependencies between the major Hyperloop subsystems.}
 \label{f:hyperloopXDSM}
 \end{figure}
 
 The compression system and pod geometry analyses were each further subdivided into a number of subsystems. For this work the pod geometry 
-system was primarily responsible for computing important areas throughout the passenger pod. Figure \ref{f:podXDSM} shows the 
-pod geometry breakdown into 5 subsystems. Most of these calculations were based on simple geometric relationships. The 
-modeling was broken down to enhance modularity so that future work could replace these simple analyses with more advanced ones.
-The pod geometry system provides a basic platform for pod structural and weight estimation models in future expansion,
-although these analyses were outside the scope of this work. 
+system was primarily responsible for computing physical areas of different parts of the system using geometric relationships.
+ Figure \ref{f:podXDSM} shows the pod geometry breakdown into 5 subsystems.
+This breakdown enhanced modularity so that future work could replace these simple analyses with more advanced ones
+(e.g. structural analyses and weight estimation for the various subsystems).
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=\textwidth]{images/podAssembly.png}
+\includegraphics[width=0.6\textwidth]{images/podAssembly.png}
 \caption{Expanded \texttt{pod} assembly diagram}
 \label{f:podXDSM}
 \end{figure}
@@ -156,7 +155,7 @@ the overall performance and second compressor subsystems.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{images/compAssembly.png}
+\includegraphics[width=0.6\textwidth]{images/compAssembly.png}
 \caption{Expanded \texttt{compression} assembly diagram}
 \label{f:compressorXDSM}
 \end{figure}
@@ -546,21 +545,35 @@ Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tub
 
 The steady state tube temperature can be found by varying the tube temperature until the rate of heat being released from the tube
 matches the rate of heat being absorbed by the tube.
-Assuming numerous state variables provided in the source code, a steady state temperature of 120 F was reached.
+Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat
+rate added from pod compression systems.
 This result suggests that there is no need for on-board cooling, however many baseline assumptions have yet to be validated or even defined.
-The analysis simply recognizes the dominant heating factors on the large tube structure, with profound benefits if the tube is shielded with solar panels. 
+The analysis simply recognizes the dominant heating factors on the large tube structure, with profound benefits if the tube is shielded with solar panels.
+Assuming a 90 degF day in addition to other nominal values for typical heat transfer variables,
+radiation and convection out of the tube would lead to a manageable steady state tube wall temperature of 120 degF. 
+Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat rate added from pod compression systems.
+
+State why intercoolers are impractical
 
 \section{Conclusions}
 
-For the most part, the ideas and numbers given in the original Hyperloop proposal hold up using this analysis. However, the data shows that
-there are two major changes to the design that need to be considered.
-The tube cross section will need to be significantly larger than the original proposal. In the original proposal, the tube was sized with a diameter 2.23
-meters. However, it appears that it will need to have a diameter closer to 4 meters to reach speeds maximum speeds of Mach 0.8.
-On-board water based inter-coolers also seem impractical due to both volume and weight constraints. This may prove to be a non-issue since
-temperature rise due to compression is significant less than originally estimated and only leads to a modest rise in steady-state tube
-temperature. Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of magnitude larger than the heat
-rate added from pod compression systems. Further assuming a 90 degF day, radiation and convection out of the tube would lead to a
-manageable steady state tube wall temperature of 120 degF. 
+Using openMDAO and pyCycle, a publicly extensible model of the Hyperloop concept was created.
+This model was then used investigate features and assertions made about the original design. 
+The refined analysis presented in the current work illuminates several
+interdisciplinary couplings that alter two major aspects of the final design.
+First, the pod travel speed and the tube cross sectional area are linked, forcing 
+the tube size to be to be closer to 4 meters in diameter versus the original 2.23 meters in order for the 
+pod to travel at Mach .8. Second, the original work indicated a need to use two heat exchangers for thermal management within the pod.
+The current analysis showed that the steady-state tube temperature was dominated by thermal interactions between
+the ambient environment and the tube, rather than the heat originating from the pod compression system.
+As a result, the need for on-board water-based intercoolers was eliminated.
+In any event, such intercoolers would be impractical due to both volume and weight constraints. 
+Although this work identified some necessary refinements to the Hyperloop design, the core 
+concept remains feasible and warrants continued investigation. 
+The system models used for this work were built in OpenMDAO in a modular fashion. 
+This modularity will enable expansion of these results to include other important analyses 
+while still maintaining a system level multidisciplinary approach to designing the Hyperloop.  
+
 Current tool-sets provide sufficient complexity management, however a larger breadth of disciplines need to be modeled before ultimately
 understanding the feasibility of this unique multidisciplinary problem.
 

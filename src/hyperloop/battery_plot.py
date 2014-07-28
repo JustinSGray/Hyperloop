@@ -70,6 +70,9 @@ for i, ax, color in zip(index, axes, colors):
 		ax.set_yticks([0.5+.05, 0.5+(0.055*1)+.05, 0.5+(0.055*2)+.05, 0.5+(0.055*3)+.05, 0.5+(0.055*4)+.05, 0.5+(0.055*5)+.05, 0.5+(0.055*6)+.05, 0.5+(0.055*7)+.05])
     ax.tick_params(axis='y', colors=color)
 axes[0].set_xlabel('Max Pod Mach', fontsize=18)
+fig.text(0.5,0.82,"Power (kW)", color='Red')
+fig.text(0.5,0.37,"Battery (kW-hrs)", color='Green')
+fig.text(0.5,0.2,"Time (hrs)", color='Blue')
 
 #p.tick_params(axis='both', which='major', labelsize=15)
 

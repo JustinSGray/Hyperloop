@@ -8,7 +8,7 @@ Hyperloop is a conceptual transportation system designed to lower costs and trav
 proposed the idea in August 2013 as an open design to be vetted and further refined through public contribution.
 The concept deviates from existing high-speed rail designs by eliminating the rails, enclosing the passenger pod in a 
 tube under a partial vacuum, and suspending the pod on air bearings. Propulsion is handled by a set of linear 
-electromagnetic accelerators mounted to the tube and the entire system being held above ground on concrete 
+electromagnetic accelerators mounted to the tube with the entire system held above ground on concrete 
 columns maintaining a straight trajectory.
 
 \begin{figure}[hbtp]
@@ -19,37 +19,38 @@ columns maintaining a straight trajectory.
 \end{figure}
 
 Although Hyperloop is similar to other vacuum tube train (VacTrain) concepts \cite{ET3},
-the soft vacuum means that the system operates in a partial atmosphere, requiring additional engineering considerations.
-The presence of an atmosphere allows the train to run on air-bearings,
-thus removing the need for a magnetic levitation system used on the other VacTrain designs.
+the soft vacuum represents a distinct difference.
+It allows the pod to run on air-bearings, thus removing the need for a magnetic levitation system used on other VacTrain designs.
 The air bearings require a source of pressurized air, which is provided by a compressor powered by on-board batteries. 
-The modeling approach applied here is inspired heavily by methods for aircraft sizing and turbine engine cycle analysis. 
-The compression subsystem on the passenger pod is similar to the compressors on aircraft turbomachinery. Furthermore, the aerodynamic concerns  
-arising from constricted flow through the travel tube are prevalent in the design of inlets and nozzles on aircraft engines. 
+Since Hyperloop operates at transonic speeds and a low pressure environment, 
+the design of the pod compression system can be likened to the compressor design for aircraft turbomachinery.
+Furthermore, the aerodynamic concerns arising from constricted flow through a tube
+are prevalent in the design of inlets and nozzles on aircraft engines and the entire system faces similar weight and volume constraints. 
+For these reasons, the modeling approach applied here is inspired heavily by methods for aircraft sizing and turbine engine cycle analysis. 
 
 Musk's original Hyperloop proposal includes individual high-level analyses of many major subsystems such as the pod compression system,
-elevated support structure, and propulsion system. While this demonstrated the basic viability of the concept, it did not address
+elevated support structure, and propulsion system. While this demonstrates the basic viability of the concept, it does not address
 significant interdisciplinary couplings inherent in the Hyperloop system. These couplings introduce certain constraints which limit the 
 degrees of freedom available in the design space. The major contribution of this work is to identify the key couplings that constrain the design space
 and adapt methods from aircraft design to construct a conceptual design process that accounts for them. The most significant 
-interdisciplinary coupling arose between the passenger pod size and travel tube size. Aerodynamic concerns make it impossible to vary 
+interdisciplinary coupling arises between the passenger pod size and travel tube size. Aerodynamic concerns make it impossible to vary 
 both pod size and tube size independently of each other. An additional less severe coupling also exists between the compression system and 
-the thermal management system. The interdisciplinary coupling demanded the use of an iterative sizing procedure that balanced 
-all the various systems to provide a feasible design for any given set of design variables. The results of this sizing process show that
+the thermal management system. The interdisciplinary coupling demands the use of an iterative sizing procedure that balances 
+the various systems to provide a feasible design for any given set of design variables. The results of this sizing process show that
 the Hyperloop concept is feasible, but certain estimates from the original proposal may have been overly optimistic due to each discipline being approached independently. 
 
 The sizing process is a necessary precursor before ultimately performing a design optimization of 
 Hyperloop with the dual objectives of minimizing ticket cost and travel time. Performing this optimization 
-was outside the scope of this work and is reserved for future investigation. 
-The fully integrated system model was constructed using OpenMDAO, a Python-based framework for 
+is outside the scope of this work and is reserved for future investigation. 
+The fully integrated system model is constructed using OpenMDAO, a Python-based framework for 
 the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. 
-This work focused on the aerodynamics and thermodynamics of the passenger pod itself.
+This work focuses on the aerodynamics and thermodynamics of the passenger pod itself.
 As such, it ignored many additional key sub-systems which will also have a large impact on the final design.
 A more realistic design optimization will require more detailed models of the investigated systems and additional analyses for economic and 
 structural models. Adding all of this will result in significant growth in complexity of the Hyperloop model. 
 OpenMDAO can provide the means to manage growing model complexity 
 in an efficient and flexible manner. Musk's original work was released with the stated goal of jump starting
-a crowd sourced design effort. In that spirit, all of the analyses used in this work have been released under
+a crowd sourced design effort. In that spirit, all of the analyses used in this work are released under
 the Apache V2.0 open source license so that they can potentially serve as a foundation for future work. 
 Links to the source code can be found in \cref{app:Github}
 
@@ -95,11 +96,11 @@ For example, the \textit{Compressor Cycle} passes data to the \textit{Mission An
 \textit{Pod Geometry}, and \textit{Tube Temperature} analyses.
 In the lower-left side of the diagram, red arrows represent feedback connections which establish cyclical coupling between different analyses.
 %The top-left block of Fig. \ref{f:podXDSM} shows system-level design variables that affect numerous components. 
-Table \ref{tab:desvars} summarizes the baseline values from the original proposal which were used in this analysis.
-Notably, both pod radius and travel tube radius are omitted, since these variables could not be freely varied.
+Table \ref{tab:desvars} summarizes the baseline values from the original proposal which are as design variables used in this analysis.
+Notably, both pod radius and travel tube radius are omitted, since these variables cannot be freely varied.
 Instead, the assumption of a fixed area for a passenger compartment was made which,
 combined with the couplings shown in Fig. \ref{f:hyperloopXDSM}, removed these variables as design inputs.
-This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
+This issue is discussed in much greater detail in Section~\ref{s:sizing}.
 
 \begin{table}
     \centering
@@ -123,10 +124,10 @@ This issue will be discussed in much greater detail in Section~\ref{s:sizing}.
 \label{f:hyperloopXDSM}
 \end{figure}
 
-The compression system and pod geometry analyses were each further subdivided into a number of subsystems. For this work the pod geometry 
-system was primarily responsible for computing physical areas of different parts of the system using geometric relationships.
+The compression system and pod geometry analyses are each further subdivided into a number of subsystems. For this work, the pod geometry 
+system is primarily responsible for computing physical areas of different parts of the system using geometric relationships.
  Figure \ref{f:podXDSM} shows the pod geometry breakdown into 5 subsystems.
-This breakdown enhanced modularity so that future work could replace these simple analyses with more advanced ones
+This breakdown enhances modularity so that future work can replace these simple analyses with more advanced ones
 (e.g. structural analyses and weight estimation for the various subsystems).
 
 \begin{figure}[hbtp]
@@ -136,8 +137,8 @@ This breakdown enhanced modularity so that future work could replace these simpl
 \label{f:podXDSM}
 \end{figure}
 
-The compressor cycle performed calculations related to the thermodynamic processes of compressing, cooling, and exhausting air. 
-The modeling approach for the compressor cycle was heavily influenced by
+The compressor cycle performs calculations related to the thermodynamic processes of compressing, cooling, and exhausting air. 
+The modeling approach for the compressor cycle is heavily influenced by
 techniques developed for the Numerical Propulsion System Simulation (NPSS) framework. 
 NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
 simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
@@ -164,10 +165,11 @@ the overall performance and second compressor subsystems.
 \section{Pod and Tube Sizing}
 \label{s:sizing}
 
-In the original Hyperloop proposal, the size of the passenger pod and the travel tube were treated as design variables, 
-free to vary within reasonable ranges independent of each other. Two different configurations were proposed: a smaller 
-pod for passengers and a larger pod for cargo. The two configurations, with overall dimensions summarized 
-in Table \ref{t:hyperbase}, had a slightly different ratios of tube area to pod area. 
+In the original Hyperloop proposal, the size of the passenger pod and the travel tube are treated as design variables, 
+free to vary within reasonable ranges independent of each other. Two different configurations are proposed:
+a smaller pod for passengers and a larger pod for cargo.
+The two configurations had slightly different ratios of tube area to pod area with overall dimensions summarized 
+in Table \ref{t:hyperbase} . 
 
 \begin{table}
   \centering
@@ -218,7 +220,7 @@ $M_{pod}$ and $M_{bypass}$ that defines an area ratio, $\frac{A_{bypass}}{A_{tub
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=.9\textwidth]{images/areaPlot.png}
-  \caption{The required area ratio reaches a minimum value at $M_{bypass}=1$ for all values of $M_{pod}$}
+  \caption{The required area ratio reaches a minimum value at $M_{bypass}=1$ for all values of $M_{pod}$, given the closed pod configuration illustrated in Figure 5.}
   \label{f:choked-flow}
 \end{figure}
 
@@ -227,7 +229,7 @@ For all values of $M_{pod}$, shown as a family of curves, the minimum required $
 In other words, 
 $M_{bypass}=1$ will always give the smallest possible $A_{bypass}$ (and hence $A_{tube}$) for a given 
 $M_{pod}$ and $A_{pod}$. Thus $A_{tube}$ can not be treated as an independent design variable without over-constraining the problem.
-If you forced $A_{tube}$ to be smaller than this minimum value, then not all the relative mass flow could pass freely around the pod. This excess 
+If $A_{tube}$ is forced to be smaller than this minimum value, then not all the relative mass flow can pass freely around the pod. This excess 
 flow would accumulate in the left of Fig. \ref{f:ClosedPod}, with the pod acting like a piston pressurizing the 
 air in front of it. 
 
@@ -235,7 +237,7 @@ Furthermore, Fig. \ref{f:choked-flow} also shows that $\frac{A_{bypass}}{A_{tube
 increases with increasing $M_{pod}$. So the faster the pod travels, the larger $A_{bypass}$ 
 must become relative to the tube area, leaving less area for the pod. For $M_{pod} = 1$ , $\frac{A_{bypass}}{A_{tube}}$ must 
 equal 1 as well, forcing $A_{pod}$ to be 0. Note that the values from Table \ref{t:hyperbase} gives area ratios around .6, 
-which would yield a much lower maximum pod speed of about Mach .3-.4 for a pod without an inlet and compression system. 
+which yields a much lower maximum pod speed of about Mach .3-.4 for a pod without an inlet and compression system. 
 
 \begin{figure}[hbtp]
 \centering
@@ -248,7 +250,7 @@ To get around this limitation, Hyperloop allows some mass flow to pass through t
 the maximum achievable speed. This effectively splits the relative mass flow in $A_{tube}$ into two streams, 
 $A_{tube\ B}$ and  $A_{tube\ C}$, as shown in Fig. \ref{f:hollowPod}. If we neglect the small thickness of the walls of
 the passenger pod itself and assume that $A_{tube\ C}$ is equal to the $A_{pod}$, then it follows that $A_{tube\ B}$ 
-will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass would not accelerate, staying 
+will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass will not accelerate, staying 
 equal to $M_{pod}$. The challenge is that the pod cannot be perfectly hollow. It must provide some space for the passengers
 to sit in, causing blockage in the flow. This problem can be handled by adding a compression system to the 
 pod that will force the air into a smaller area $A_{compressed\ C}$, to move around the passengers. This would 
@@ -267,14 +269,17 @@ However, in order to achieve reasonable efficiency from the compression system, 
 must be limited to less than about .65. For $M_{pod}$ greater than .65, a diffuser must be added to the Hyperloop 
 which will slow the air down before it enters the compressor. As depicted in Fig. \ref{f:OpenPod}, diffusing the flow 
 requires expanding the area; $A_{diffused}$ must be greater than $A_{tube,c}$. Unfortunately this means that
-$A_{bypass}$ must be smaller than $A_{tube\ B}$, and some acceleration of the flow through the 
-bypass will occur. Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
+$A_{bypass}$ must be smaller than $A_{tube\ B}$, and some acceleration of the flow around the pod will occur.
+Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
 system this is now much less restrictive than if the pod was sealed. 
 
 Figure \ref{f:machRAD} shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod.
-For a nominal tube diameter of ?m, the maximum pod Mach increases from x to y.
-This increase is strongly dependent on the amount of "blockage" assumed and is also slightly dependent on the compressor face Mach number.
-Changing the compressor face Mach number by $\pm$ 0.05 changes the maximum pod Mach number by roughly $\pm$ 0.01.
+For a nominal tube diameter of 4 meters, the maximum pod Mach increases from 0.66 to 0.82.
+This increase is dependent on the amount of space taken up by passengers and cargo, which is described in Fig. \ref{f:OpenPod}
+as a non-dimensional "blockage factor" equal to $\frac{A_{diffused C}}{A_{pod}}$.
+To a lesser extent, the max speed is also dependent on the compressor entrance Mach number.
+Changing the compressor entrance Mach number by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.01$. 
+Modifying the blockage factor by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.03$.
 It should be noted that all of these trends are unaffected by the tube pressure,
 however, static pressure affects the compressor flow and power requirements discussed next.
 

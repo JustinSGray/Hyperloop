@@ -55,10 +55,10 @@ data8 = np.array([
 p.tick_params(axis='both', which='major', labelsize=15)
 p.ylabel('Tube Diameter (m)', fontsize=18)
 p.xlabel('Pod Mach Number', fontsize=18)
-p.title('Tube Diameter vs Pod MN', fontsize=20)
+#p.title('Tube Diameter vs Pod MN', fontsize=20)
 p.plot(data6[1],((data6[0]/pi)**0.5)*2, label="BF = 0.9", ls="--", lw=3)
 p.plot(data7[1],((data7[0]/pi)**0.5)*2, label="BF = 0.85", lw=3)
-p.plot(data8[1],((data8[0]/pi)**0.5)*2, label="BF = 0.8", ls=":", lw=3)
+p.plot(data8[1],((data8[0]/pi)**0.5)*2, label="BF = 0.8", ls="-.", lw=3)
 #p.plot(data6b[1],((data6b[0]/pi)**0.5)*2, label="c1mn= 0.7", lw=3)
 #p.plot(data5[1],data5[0]/(100*pi), label="BF = 0.7", lw=3)
 

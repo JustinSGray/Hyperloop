@@ -15,7 +15,7 @@
     \nompageref{10}
   \item [{$\upsilon$}]\begingroup Kinematic viscosity ($\frac{m^{2}}{s}$)\nomeqref {0}\nompageref{11}
   \item [{A}]\begingroup Area ($m^{2}$)\nomeqref {0}\nompageref{10}
-  \item [{BF}]\begingroup Blockage Factor, $\frac{A_{diffused C}}{A_{pod}}$\nomeqref {0}\nompageref{10}
+  \item [{BF}]\begingroup Blockage Factor, $\frac{A_{diffused}}{A_{pod}}$\nomeqref {0}\nompageref{10}
   \item [{$MN_{c1}$}]\begingroup Mach number at the front face of the first compressor\nomeqref {0}
     \nompageref{7}
   \item [{$C_{p}$}]\begingroup Heat capacity at constant pressure ($\frac{J}{kg-K}$)\nomeqref {0}

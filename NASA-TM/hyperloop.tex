@@ -276,7 +276,7 @@ system this is now much less restrictive than if the pod is sealed.
 Figure \ref{f:machRAD} shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod.
 For a nominal tube diameter of 4 meters, the maximum pod Mach increases from 0.66 to 0.82.
 This increase is dependent on the amount of space taken up by the pod outer structure, which is described in Fig. \ref{f:OpenPod}
-as a non-dimensional "blockage factor" equal to $\frac{A_{diffused C}}{A_{pod}}$.
+as a non-dimensional "blockage factor" equal to $\frac{A_{diffused}}{A_{pod}}$.
 To a lesser extent, the max speed is also dependent on the compressor entrance Mach number.
 Changing the compressor entrance Mach number by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.01$. 
 Modifying the blockage factor by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.03$.
@@ -289,7 +289,7 @@ however, static pressure affects the compressor flow and power requirements disc
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{images/mach_vs_rad5.png}
-\caption[Tube and Pod Radius vs Mach]{Exponential relationship between pod speed and required tube diameter, for three blockage factors $\frac{A_{diffused C}}{A_{pod}}$.}
+\caption[Tube and Pod Radius vs Mach]{Exponential relationship between pod speed and required tube diameter, for three blockage factors $\frac{A_{diffused}}{A_{pod}}$.}
 \label{f:machRAD}
 \end{figure}
 
@@ -351,8 +351,8 @@ results in an overall battery storage requirement.
 The necessary on-board battery size was found to be negatively correlated to the max pod speed, as shown by the green curve in Fig. \ref{f:battery}.
 The maximum instantaneous compressor requirements and total mission time
 are also directly overlayed in red and blue respectively. 
-The units are scaled such that the slopes of each curve can be directly related to each other.
-If the slopes were exactly inverted, the battery requirement would be constant for any given speed.
+The units are approximately scaled such that the slopes of each curve can be directly related to each other.
+If the slopes were perfectly inverted, the battery requirement would be constant for any given speed.
 The negative slope of the green battery curve indicates that total mission time falls faster than the compressor power requirements increase.
 Although traveling at higher speeds draws more energy, the system is operated for a shorter period of time.
 At higher travel speeds, the total battery requirements start to flatten and the trend starts to reverse.

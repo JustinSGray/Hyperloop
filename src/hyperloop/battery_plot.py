@@ -58,6 +58,7 @@ for i, ax, color in zip(index, axes, colors):
     if i == 1:
 		ax.plot(data[0],data[1], color=color, lw=3)
 		ax.set_ylabel('Battery Size (kW-hr)', color=color, fontsize = 18)
+		ax.set_xlim([0.7,0.93])
 		ax.set_ylim([250,400])
     if i == 2:
 		ax.plot(data[0],data[2], color=color, ls= "--", lw=3)

@@ -271,7 +271,7 @@ which will slow the air down before it enters the compressor. As depicted in Fig
 requires expanding the area; $A_{diffused}$ must be greater than $A_{tube,c}$. Unfortunately this means that
 $A_{bypass}$ must be smaller than $A_{tube\ B}$, and some acceleration of the flow around the pod will occur.
 Once again, $\frac{A_{bypass}}{A_{tube}}$ becomes coupled to $M_{pod}$, although thanks to the compression 
-system this is now much less restrictive than if the pod was sealed. 
+system this is now much less restrictive than if the pod is sealed. 
 
 Figure \ref{f:machRAD} shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod.
 For a nominal tube diameter of 4 meters, the maximum pod Mach increases from 0.66 to 0.82.
@@ -329,7 +329,7 @@ Combined with the mission profile described below, these requirements impact bat
 \end{figure}
 
 The notional velocity profile described in the original proposal, shown by the solid line in Fig. \ref{f:velocity},
-was programatically modified based on the recomputed maximum velocity of the pod. The starting and final velocities of the
+is programatically modified based on the recomputed maximum velocity of the pod. The starting and final velocities of the
 mission profile are dictated by maximum allowable acceleration loads, while the highest plateau is governed by the
 choked flow limit. Therefore, the fastest portion of the trip, illustrated in red, is modified as the simulation runs and re-computes pod speed.
 Reducing the maximum speed also increases the total mission time,
@@ -392,12 +392,12 @@ effectiveness of a heat exchanger can be described as the ratio of actual heat t
 
 \nomenclature{Q}{Heat flow rate (W)}
 \begin{equation}
-{Q}_{released}  = effectiveness * {Q}_{max}
+{Q}_{released}  = effectiveness *\underbrace{\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}}_\text{${Q}_{max}$}
 \end{equation}
 
 
-with $Qmax=\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}$ where each fluid has a $\dot{m} C_{p}$ and the fluid with the lowest
-product is used to determine the maximum heat transfer. In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
+were ${Q}_{max}$ is determined by the fluid with the lowest $\dot{m} C_{p}$, which dictates the maximum possible heat transfer.
+In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
 \nomenclature{\dot{m}}{Mass flow rate}
 \nomenclature{T}{Temperature (K)}
@@ -550,7 +550,7 @@ Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tub
 
 The steady state tube temperature can be found by varying the tube temperature until the
 rate of heat being released from the tube matches the rate of heat being absorbed by the tube.
-Assuming the tube was left uncovered, the heat rate from solar radiation would be an order of
+Assuming the tube is left uncovered, the heat rate from solar radiation would be an order of
 magnitude larger than the heat rate added from pod compression systems.
 This result suggests that there is no need for on-board cooling, since the marginal temperature
 rises would result in higher convection and radiation rates, quickly bringing the system back to steady-state.
@@ -572,14 +572,14 @@ The refined analysis presented in the current work illuminates several
 interdisciplinary couplings that alter two major aspects of the final design.
 First, the pod travel speed and the tube cross sectional area are linked, forcing 
 the tube size to be to be closer to 4 meters in diameter versus the original 2.23 meters in order for the 
-pod to travel at Mach .8. Second, the original work indicated a need to use two heat exchangers for thermal management within the pod.
-The current analysis showed that the steady-state tube temperature was dominated by thermal interactions between
+pod to travel at Mach .8. Second, the original work indicates a need to use two heat exchangers for thermal management within the pod.
+The current analysis showed that the steady-state tube temperature is dominated by thermal interactions between
 the ambient environment and the tube, rather than the heat originating from the pod compression system.
-As a result, the need for on-board water-based intercoolers was eliminated.
+As a result, the need for on-board water-based intercoolers is eliminated.
 In any event, such intercoolers would be impractical due to both volume and weight constraints. 
-Although this work identified some necessary refinements to the Hyperloop design, the core 
+Although this work identifies some necessary refinements to the Hyperloop design, the core 
 concept remains feasible and warrants continued investigation. 
-The system models used for this work were built in OpenMDAO in a modular fashion. 
+The system models used for this work are built in OpenMDAO in a modular fashion. 
 This modularity will enable expansion of these results to include other important analyses 
 while still maintaining a system level multidisciplinary approach to designing the Hyperloop.  
 

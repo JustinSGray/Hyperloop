@@ -125,15 +125,15 @@ This issue is discussed in much greater detail in Section~\ref{s:sizing}.
 \end{figure}
 
 The compression system and pod geometry analyses are each further subdivided into a number of subsystems. For this work, the pod geometry 
-system is primarily responsible for computing physical areas of different parts of the system using geometric relationships.
- Figure \ref{f:podXDSM} shows the pod geometry breakdown into 5 subsystems.
-This breakdown enhances modularity so that future work can replace these simple analyses with more advanced ones
+subsystem is primarily responsible for computing physical dimensions using high-level geometric relationships.
+ Figure \ref{f:podXDSM} shows the pod geometry breakdown into five further nested subsystems.
+This subdivision enhances modularity so that future work can replace these simple analyses with more advanced models
 (e.g. structural analyses and weight estimation for the various subsystems).
 
 \begin{figure}[hbtp]
 \centering
 \includegraphics[width=0.65\textwidth]{images/podAssembly.png}
-\caption{Expanded pod assembly diagram}
+\caption{Expanded pod geometry assembly}
 \label{f:podXDSM}
 \end{figure}
 
@@ -143,12 +143,12 @@ techniques developed for the Numerical Propulsion System Simulation (NPSS) frame
 NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
 simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
 where cycles get broken down into individual thermodynamic processes and then connected together. 
-This modularity was adopted for pyCycle,
+This object-oriented approach was adopted for pyCycle,
 an open-source adaption of the tool used to predict the fluid properties and power consumption of each component in the cycle. 
 %  the air bearings were specified to work with a static pressure of 11 kPa.
-As outlined in the original hyperloop proposal, the compression system is modeled as two separate compressors.
+As outlined in the original Hyperloop proposal, the compression system is modeled as two separate compressors.
 The first compresses the air to bypass the internal structure and passenger compartment
-and the second provides additional pressure to reach the necessary air bearing pressure of 11 kPa. 
+and the second provides an additional pressure rise to reach the necessary air bearing pressure of 11 kPa. 
 Subsequently, the required pressure ratio for the second stage is a function of the maximum pod Mach number
 and the first stage compressor pressure ratio.
 In Fig. \ref{f:compressorXDSM} this relationship shows up as a feedback connection between
@@ -157,7 +157,7 @@ the overall performance and second compressor subsystems.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{images/compAssembly.png}
-\caption{Expanded compressor assembly diagram}
+\caption{Expanded compressor cycle assembly}
 \label{f:compressorXDSM}
 \end{figure}
 
@@ -165,9 +165,9 @@ the overall performance and second compressor subsystems.
 \section{Pod and Tube Sizing}
 \label{s:sizing}
 
-In the original Hyperloop proposal, the size of the passenger pod and the travel tube are treated as design variables, 
-free to vary within reasonable ranges independent of each other. Two different configurations are proposed:
-a smaller pod for passengers and a larger pod for cargo.
+In the original Hyperloop proposal, the size of the passenger pod and the travel tube are treated as independent design variables, 
+free to vary within reasonable ranges of each other. Two different configurations are proposed:
+a smaller pod for passengers and a larger pod for both passengers and cargo.
 The two configurations had slightly different ratios of tube area to pod area with overall dimensions summarized 
 in Table \ref{t:hyperbase} . 
 
@@ -195,13 +195,13 @@ in Table \ref{t:hyperbase} .
 \label{f:ClosedPod}
 \end{figure}
 
-Smaller tube sizes are preferable because they provide lower construction costs. However, it can be shown that 
-the tube size is coupled to the speed of the air as it passes around the pod of a given size. 
-To understand this coupling consider the following simplified situation: assume that a sealed pod
-is traveling through a frictionless tube from right to left, at some Mach number less than 1, through a stationary mass of air. 
+Smaller tube sizes are preferable because they provide lower construction costs. However, 
+the tube size is coupled to the speed of the air as it passes around a pod of a given size. 
+To understand this coupling consider the following simplified situation: assume that the passenger pod is sealed with a fairing
+instead of an inlet. Figure \ref{f:ClosedPod} depicts this situation with the pod
+traveling through a frictionless tube from right to left, at some Mach number less than 1, through a stationary mass of air. 
 For the purposes of analysis it is more convenient to consider the air speed relative to the pod, 
 where the pod is stationary and the air is moving from left to right with some relative Mach number, $M_{pod}$. 
-Figure \ref{f:ClosedPod} depicts this situation.
 As the air moves around the pod, it must fit into the smaller space available to it, $A_{bypass}$.
 This causes the air to accelerate to some higher Mach number, $M_{bypass}$.
 From isentropic flow equations, there is a relationship between 
@@ -229,7 +229,7 @@ For all values of $M_{pod}$, shown as a family of curves, the minimum required $
 In other words, 
 $M_{bypass}=1$ will always give the smallest possible $A_{bypass}$ (and hence $A_{tube}$) for a given 
 $M_{pod}$ and $A_{pod}$. Thus $A_{tube}$ can not be treated as an independent design variable without over-constraining the problem.
-If $A_{tube}$ is forced to be smaller than this minimum value, then not all the relative mass flow can pass freely around the pod. This excess 
+If $A_{tube}$ is forced to be smaller than this minimum value, not all the relative mass flow can pass freely around the pod. This excess 
 flow would accumulate in the left of Fig. \ref{f:ClosedPod}, with the pod acting like a piston pressurizing the 
 air in front of it. 
 
@@ -252,7 +252,7 @@ $A_{tube\ B}$ and  $A_{tube\ C}$, as shown in Fig. \ref{f:hollowPod}. If we negl
 the passenger pod itself and assume that $A_{tube\ C}$ is equal to the $A_{pod}$, then it follows that $A_{tube\ B}$ 
 will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass will not accelerate, staying 
 equal to $M_{pod}$. The challenge is that the pod cannot be perfectly hollow. It must provide some space for the passengers
-to sit in, causing blockage in the flow. This problem can be handled by adding a compression system to the 
+to sit, causing blockage in the flow. This problem can be handled by adding a compression system to the 
 pod that will force the air into a smaller area $A_{compressed\ C}$, to move around the passengers. This would 
 seem to solve all of the challenges associated with high travel speeds inside a tube discussed above and decouple 
 $\frac{A_{bypass}}{A_{tube}}$ and ${M_{pod}}$.
@@ -566,24 +566,20 @@ Solutions such as solar panel sheilding would produce even more optimistic resul
 
 \section{Conclusions}
 
-Using openMDAO and pyCycle, a publicly extensible model of the Hyperloop concept was created.
-This model was then used investigate features and assertions made about the original design. 
-The refined analysis presented in the current work illuminates several
-interdisciplinary couplings that alter two major aspects of the final design.
+Using openMDAO and pyCycle, a publicly extensible model of the Hyperloop concept was created 
+to investigate the features and assertions of the original design. 
+The refined analysis illuminates several
+interdisciplinary couplings that alter two major aspects of the initial concept.
 First, the pod travel speed and the tube cross sectional area are linked, forcing 
-the tube size to be to be closer to 4 meters in diameter versus the original 2.23 meters in order for the 
-pod to travel at Mach .8. Second, the original work indicates a need to use two heat exchangers for thermal management within the pod.
-The current analysis showed that the steady-state tube temperature is dominated by thermal interactions between
-the ambient environment and the tube, rather than the heat originating from the pod compression system.
-As a result, the need for on-board water-based intercoolers is eliminated.
-In any event, such intercoolers would be impractical due to both volume and weight constraints. 
+the tube size to be to be roughly twice the diameter of the original specification, in order for the 
+pod to reach Mach 0.8. Second, the steady-state tube temperature is dominated by ambient thermal interactions
+unrelated to the heat generated by the pod compression system.
+As a result, the two heat exchangers originally prescribed for thermal management are eliminated.
 Although this work identifies some necessary refinements to the Hyperloop design, the core 
 concept remains feasible and warrants continued investigation. 
-The system models used for this work are built in OpenMDAO in a modular fashion. 
-This modularity will enable expansion of these results to include other important analyses 
-while still maintaining a system level multidisciplinary approach to designing the Hyperloop.  
-
-Current tool-sets provide sufficient complexity management, however a larger breadth of disciplines need to be modeled before ultimately
-understanding the feasibility of this unique multidisciplinary problem.
+This work emphasizes the importance of maintaining a systems-level approach
+and provides tool-sets capable of manging the growing complexity.
+The modeling platform is intended to serve as an easily accessible baseline that is straightforward to
+expand and delve deeper into this unique multidisciplinary endeavor.
 
 \end{document}

@@ -43,9 +43,9 @@ fig, ax = p.subplots()
 # Twin the x-axis twice to make independent y-axes.
 axes = [ax, ax.twinx(), ax.twinx()]
 # Make some space on the right side for the extra y-axis.
-fig.subplots_adjust(right=0.75)
+fig.subplots_adjust(right=0.6)
 # Move the last y-axis spine over to the right by 20% of the width of the axes
-axes[-1].spines['right'].set_position(('axes', 1.2))
+axes[-1].spines['right'].set_position(('axes', 1.15))
 # To make the border of the right-most axis visible, we need to turn the frame
 # on. This hides the other plots, however, so we need to turn its fill off.
 axes[-1].set_frame_on(True)
@@ -58,22 +58,27 @@ for i, ax, color in zip(index, axes, colors):
     if i == 1:
 		ax.plot(data[0],data[1], color=color, lw=3)
 		ax.set_ylabel('Battery Size (kW-hr)', color=color, fontsize = 18)
-		ax.set_ylim([100,450])
+		ax.set_xlim([0.7,0.93])
+		ax.set_ylim([250,400])
     if i == 2:
-		ax.plot(data[0],data[2], color=color, lw=3)
+		ax.plot(data[0],data[2], color=color, ls= "--", lw=3)
 		ax.set_ylabel('Max Compressor Pwr Req (kW)', color=color, fontsize = 18)
-		ax.set_ylim([100,450])
+		ax.set_ylim([250,400])
     if i == 3:
-		ax.plot(data[0],data[3]/3600, color=color, lw=3)
+		ax.plot(data[0],data[3]/3600, color=color, ls= "--", lw=3)
 		ax.set_ylabel('Total Mission Time (hrs)', color=color, fontsize = 18)
-		ax.set_ylim([0,1])
+		ax.set_ylim([0.5+(0.025),0.9375])
+		ax.set_yticks([0.5+.05, 0.5+(0.055*1)+.05, 0.5+(0.055*2)+.05, 0.5+(0.055*3)+.05, 0.5+(0.055*4)+.05, 0.5+(0.055*5)+.05, 0.5+(0.055*6)+.05, 0.5+(0.055*7)+.05])
     ax.tick_params(axis='y', colors=color)
 axes[0].set_xlabel('Max Pod Mach', fontsize=18)
+fig.text(0.5,0.82,"Power (kW)", color='Red')
+fig.text(0.5,0.37,"Battery (kW-hrs)", color='Green')
+fig.text(0.5,0.2,"Time (hrs)", color='Blue')
 
 #p.tick_params(axis='both', which='major', labelsize=15)
 
 #p.ylabel('Battery', fontsize=18)
-#p.title('Battery vs Max Pod Mach', fontsize=20)
+#p.title('Battery size as a product of power and mission time over varying speeds', fontsize=18)
 #p.plot(data[0],data[1], label="Tube (c1MN = .65)", lw=3)
 #p.xlim([0.65,0.95])
 #p.ylim([0,450])
@@ -81,7 +86,6 @@ axes[0].set_xlabel('Max Pod Mach', fontsize=18)
 #ax2.plot(data[0],data[3], label="Tube", lw=3)
 #ax2.set_ylabel('Total time')
 p.legend(loc="best")
-    
-#p.gcf().set_size_inches(11,5.5)
+p.gcf().set_size_inches(10,8)
 #p.gcf().savefig('test2png.png',dpi=130)
 p.show()

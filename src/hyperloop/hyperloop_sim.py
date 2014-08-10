@@ -4,10 +4,14 @@ from openmdao.lib.drivers.api import BroydenSolver
 from openmdao.lib.casehandlers.api import CSVCaseRecorder
 
 
-from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp,
-    Pod)
-
+#from hyperloop.api import (TubeLimitFlow, CompressionSystem, TubeWallTemp, Pod)
+from cycle.compression_system import CompressionSystem
+from tube_wall_temp import TubeWallTemp
+from geometry.pod import Pod
+from aero import Aero
+from tube_limit_flow import TubeLimitFlow
 from mission import Mission
+from run_cases import mva, mvr, mvb
 
 
 class HyperloopPod(Assembly): 
@@ -98,11 +102,11 @@ class HyperloopPod(Assembly):
 
         driver = self.driver
         driver.workflow.add('solver')
-        driver.recorders = [CSVCaseRecorder(filename="hyperloop_data.csv")] #record only converged
-        driver.printvars = ['Mach_bypass', 'Mach_pod_max', 'Mach_c1_in', 'c1_PR_des', 'pod.radius_inlet_back_outer',
-                            'pod.inlet.radius_back_inner', 'flow_limit.radius_tube', 'compress.W_in', 'compress.c2_PR_des',
-                            'pod.net_force', 'compress.F_net', 'compress.pwr_req', 'pod.energy', 'mission.time',
-                            'compress.speed_max', 'tube_wall_temp.temp_boundary']
+        #driver.recorders = [CSVCaseRecorder(filename="hyperloop_data.csv")] #record only converged
+        #driver.printvars = ['Mach_bypass', 'Mach_pod_max', 'Mach_c1_in', 'c1_PR_des', 'pod.radius_inlet_back_outer',
+        #                    'pod.inlet.radius_back_inner', 'flow_limit.radius_tube', 'compress.W_in', 'compress.c2_PR_des',
+        #                    'pod.net_force', 'compress.F_net', 'compress.pwr_req', 'pod.energy', 'mission.time',
+        #                    'compress.speed_max', 'tube_wall_temp.temp_boundary']
 
         #Declare Solver Workflow
         solver.workflow.add(['compress','mission','pod','flow_limit','tube_wall_temp'])
@@ -124,37 +128,11 @@ if __name__=="__main__":
     hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 
     hl.compress.c2_PR_des = 5 
 
-    #machs = []
-    #tube_r = []
-    #capsule_r = []
+    #mvr(hl) #mach vs radius
 
-    #for m in np.arange(.781,.95, .01):
-    #    hl.Mach_pod_max = m
-    #    hl.run()
-    #    machs.append(m)
-    #    tube_r.append(hl.pod.radius_inlet_back_outer)
-    #    capsule_r.append(hl.flow_limit.radius_tube)
+    #mva(hl) #mach vs area ratio
 
-    #    print machs
-    #    print tube_r
-    #    print capsule_r
-
-    machs = []
-    batt = []
-    compE = []
-    timeT = []
-
-    for m in np.arange(.7,.95, .01):
-        hl.Mach_pod_max = m
-        hl.run()
-        machs.append(m)
-        batt.append(hl.mission.energy)
-        compE.append(hl.mission.pwr_req)
-        timeT.append(hl.mission.time)
-        print machs
-        print batt
-        print compE
-        print timeT
+    #mvb(hl) #mach vs battery/comp/missionTime
 
     design_data = OrderedDict([
         ('Mach bypass', hl.Mach_bypass), 

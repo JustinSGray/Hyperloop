@@ -18,8 +18,9 @@ Gray, J., Moore, K.~T., Hearn, T.~A., and Naylor, B.~A., \enquote{Standard
   pp.~2380--2394.
 
 \bibitem{Lytle}
-Lytle, J., \enquote{The Numerical Propulsion System Simulation: An Overview,}
-  Tech. rep., NASA Glenn Research Center, June 2000.
+Claus, R.~W., Evans, A.~L., Lytle, J.~K., and Nichols, L.~D.,
+  \enquote{Numerical Propulsion System Simulation,} {\em Computing Systems in
+  Engineering\/}, Vol.~2, No.~4, 1991.
 
 \bibitem{goodwin2009cantera}
 Goodwin, D., Malaya, N., Moffat, H., and Speth, R., \enquote{Cantera: An

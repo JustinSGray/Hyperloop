@@ -68,7 +68,12 @@
 \usepackage{verbatim} %reimplements verbatim, block comments
 
 %nomenclature
+\RequirePackage{ifthen}
+\renewcommand{\nomgroup}[1]{%
+\ifthenelse{\equal{#1}{G}}{\item[\textbf{Greek Symbols}]}{
+\ifthenelse{\equal{#1}{S}}{\item[\textbf{Subscripts}]}{}}}
 \makenomenclature
+
 %these seemed to be necessary with minted... not sure what they do..
 \makeatletter
 \color{black}

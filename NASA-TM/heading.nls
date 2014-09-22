@@ -42,15 +42,15 @@
   \item [{Q}]\begingroup Heat flow rate (W)\nomeqref {0}\nompageref{9}
   \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{4}
   \item [{Ra}]\begingroup Rayleigh number ($\frac{\rho U_{\infty} L}{\mu}$)\nomeqref {0}\nompageref{11}
-  \item [{SIF}]\begingroup Solar Insulation Factor\nomeqref {0}
+  \item [{$I_{S}$}]\begingroup Solar Insolation Factor\nomeqref {0}
     \nompageref{10}
-  \item [{SRI}]\begingroup Solar Reflectance Index\nomeqref {0}
+  \item [{$R_{S}}]\begingroup Solar Reflectance Index\nomeqref {0}
     \nompageref{10}
   \item [{T}]\begingroup Temperature (K)\nomeqref {0}\nompageref{9}
   \item [{V}]\begingroup Velocity ($\frac{m}{s}$)\nomeqref {0}\nompageref{4}
   \item [{${\eta}_{ad}$}]\begingroup Adiabatic Efficiency\nomeqref {0}
     \nompageref{10}
-  \item [{${\theta}_{nni}$}]\begingroup Non-normal Incidence factor (radians)\nomeqref {0}
+  \item [{${\theta}_{nni}$}]\begingroup Non-normal Incidence factor \nomeqref {0}
     \nompageref{10}
 
 \end{thenomenclature}

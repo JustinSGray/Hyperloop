@@ -470,14 +470,14 @@ Where PR is the compressor pressure ratio, MN is the mach number,  $\gamma$ is t
 adiabatic efficiency.
 
 With the air flow rate known, the heat flow rate per pod is obtained, 
-and the peak heating rate scales linearly with number of pods in the tube at a given time
+and the peak heating rate scales linearly with number of pods ($n$) in the tube at a given time
 
 \begin{equation}
-{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube}) * (\#  of pods)
+{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube}) * n
 \end{equation}
 
-The solar heat flow per unit area can be approximated, given the solar reflectance index (SRI) of stainless steel, non-normal incidence factor
-of the cylinder and solar insulation factor (SIF).
+The solar heat flow per unit area can be approximated, given the solar reflectance index ($R_{S}$) of stainless steel, non-normal incidence factor
+of the cylinder and solar insulation factor ($I_{S}$).
 Multiplying this by the viewing area of the tube (assuming no shade and constant sun) gives:
 
 \nomenclature{SRI}{Solar Reflectance Index}
@@ -488,10 +488,9 @@ Multiplying this by the viewing area of the tube (assuming no shade and constant
 \nomenclature{\epsilon}{Emissivity Factor}
 \nomenclature{\sigma}{Stefan-Boltzmann constant ($\frac{W}{m-K}$)}
 \nomenclature{P_{rad}}{Radiated Power (W)}
-\nomenclature{L}{Length}
 
 \begin{equation}
-Q_{solar} = \underbrace{ (1-SRI)  {\theta}_{nni}  SIF}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  OD_{tube}}_\text{Effective Area}
+Q_{solar} = \underbrace{ (1-R_{S})  {\theta}_{nni}  I_{S}}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  OD_{tube}}_\text{Effective Area}
 \end{equation}
 Tube cooling can be attributed to two general mechanisms, radiation and natural convection. Radiation power per unit area can be
 approximated and multiplied by the surface area of the tube to find the total heating rate.

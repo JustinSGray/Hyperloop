@@ -13,6 +13,8 @@
      %\thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
   \ Scott M. Jones\footnotemark[\value{footnote}] ,%
      %\thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
+  \ Jeffrey J. Berton\footnotemark[\value{footnote}]%
+    %\thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
    \\
   {\normalsize\itshape
   NASA Glenn Research Center, Cleveland, OH}
@@ -68,11 +70,30 @@
 \usepackage{verbatim} %reimplements verbatim, block comments
 
 %nomenclature
-\RequirePackage{ifthen}
-\renewcommand{\nomgroup}[1]{%
-\ifthenelse{\equal{#1}{G}}{\item[\textbf{Greek Symbols}]}{
-\ifthenelse{\equal{#1}{S}}{\item[\textbf{Subscripts}]}{}}}
 \makenomenclature
+\usepackage{multicol}
+\makeatletter
+\@ifundefined{chapter}
+  {\def\wilh@nomsection{section}}
+  {\def\wilh@nomsection{chapter}}
+
+\def\thenomenclature{%
+  \begin{multicols}{2}[%
+    \csname\wilh@nomsection\endcsname*{\nomname}
+    \if@intoc\addcontentsline{toc}{\wilh@nomsection}{\nomname}\fi
+    \nompreamble]
+  \list{}{%
+    \labelwidth\nom@tempdim
+    \leftmargin\labelwidth
+    \advance\leftmargin\labelsep
+    \itemsep\nomitemsep
+    \let\makelabel\nomlabel}%
+}
+\def\endthenomenclature{%
+  \endlist
+  \end{multicols}
+  \nompostamble}
+\makeatother
 
 %these seemed to be necessary with minted... not sure what they do..
 \makeatletter

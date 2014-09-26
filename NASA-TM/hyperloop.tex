@@ -40,7 +40,7 @@ the various systems to provide a feasible design for any given set of design var
 Hyperloop remains plausible, but certain estimates from the original proposal may have been overly optimistic due to each discipline being approached independently. 
 
 The sizing process is a necessary precursor before ultimately performing a design optimization of 
-Hyperloop with the dual objectives of minimizing ticket cost and travel time. Performing this optimization 
+Hyperloop with the overall objectives such as cost and travel time. Performing this optimization 
 is outside the scope of this work and is reserved for future investigation. 
 The fully integrated system model is constructed using OpenMDAO, a Python-based framework for 
 the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. 
@@ -211,8 +211,8 @@ $M_{pod}$ and $M_{bypass}$ that defines an area ratio, $\frac{A_{bypass}}{A_{tub
 \nomenclature{MN}{Mach Number}
 \begin{equation}
 \frac{A_{bypass}}{A_{tube}} = \frac{M_{pod}}{M_{bypass}}
-\left(\frac{1+ \frac{\gamma-1}{2} M_{pod\ \ \ }^2}
-{1+ \frac{\gamma-1}{2} M_{bypass}^2}\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}
+\left(\frac{1+ \frac{\gamma-1}{2} M_{bypass}^2}
+{1+ \frac{\gamma-1}{2} M_{pod}^2}\right)^{\frac{\gamma+1}{2\left(1-\gamma\right)}}
 \label{e:a-over-astar}
 \end{equation}
 %\left(\frac{\gamma+1}{2}\right)^{-\frac{\gamma+1}{2\left(\gamma-1\right)}}\frac{\left(1+\frac{\gamma-1}{2}M_{pod}^{2}\right)^{\frac{\gamma+1}{2\left(\gamma-1\right)}}}{M_{pod}}
@@ -454,7 +454,7 @@ flow relations.
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{{\eta}_{ad}}{Adiabatic Efficiency}
 \begin{equation}
-T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} MN^2]
+T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} M^2]
 \end{equation}
 \begin{equation}
 P_{t} = P_{s} * (\frac{ T_{t}}{T_{s}})^(\frac{\gamma}{\gamma -1})

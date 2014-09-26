@@ -31,10 +31,15 @@ pylab.legend(loc="best")
 CS = pylab.tricontour( MNbyp, AR, MNpod, MN, colors = ['darkblue','red','darkgreen','purple', 'grey','darkorange',  'black', 'lightblue'] )
 
 fmt = {} #tricontour labels
-strs = [ 'Pod MN=0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9' ]
+strs = [ 'Pod M=0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9' ]
 for l,s in zip( CS.levels, strs ):
     fmt[l] = s
-pylab.clabel( CS, inline=1,fontsize=14, fmt = fmt )
+
+xx = [0.928, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97]
+yy = [0.18, 0.34, 0.49, 0.62, 0.75, 0.83, 0.92, 0.96, 0.985]
+labelpts = zip(xx,yy)
+
+pylab.clabel( CS, inline=1,fontsize=14, fmt = fmt , manual=labelpts )
 
 pylab.annotate("     Available pod area \ndecreasing relative to tube", fontsize=16, xy=(1.09, 0.486), xycoords='data', xytext=(0., 0),
         rotation=90, textcoords='offset points', bbox=dict(boxstyle="square", edgecolor='lightgrey',facecolor='lightgrey') )

@@ -78,14 +78,14 @@
   {\def\wilh@nomsection{chapter}}
 
 \def\thenomenclature{%
-  \begin{multicols}{2}[%
+  \begin{multicols}{2}[% 2 column layout
     \csname\wilh@nomsection\endcsname*{\nomname}
     \if@intoc\addcontentsline{toc}{\wilh@nomsection}{\nomname}\fi
     \nompreamble]
   \list{}{%
     \labelwidth\nom@tempdim
-    \leftmargin\labelwidth
-    \advance\leftmargin\labelsep
+    \leftmargin\leftmargini
+    \advance\leftmargin\leftmargini
     \itemsep\nomitemsep
     \let\makelabel\nomlabel}%
 }

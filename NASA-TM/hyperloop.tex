@@ -253,7 +253,7 @@ the passenger pod itself and assume that $A_{tube\ C}$ is equal to the $A_{pod}$
 will be equal to $A_{bypass}$. Without any area contraction the flow in the bypass will not accelerate, staying 
 equal to $M_{pod}$. The challenge is that the pod cannot be perfectly hollow. It must provide some space for the passengers
 to sit, causing blockage in the flow. This problem can be handled by adding a compression system to the 
-pod that will force the air into a smaller area $A_{compressed\ C}$, to move around the passengers. This would 
+pod that will force the air into a smaller area $A_{compressed}$, to move around the passengers. This would 
 seem to solve all of the challenges associated with high travel speeds inside a tube discussed above and decouple 
 $\frac{A_{bypass}}{A_{tube}}$ and ${M_{pod}}$.
 
@@ -276,7 +276,7 @@ system this is now much less restrictive than if the pod is sealed.
 Figure \ref{f:machRAD} shows the increase in pod Mach number achievable for the hollow pod compared to the closed pod.
 For a nominal tube diameter of 4 meters, the maximum pod Mach increases from 0.66 to 0.82.
 This increase is dependent on the amount of space taken up by the pod outer structure, which is described in Fig. \ref{f:OpenPod}
-as a non-dimensional "blockage factor" equal to $\frac{A_{diffused}}{A_{pod}}$.
+as a non-dimensional ``blockage factor'' equal to $\frac{A_{diffused}}{A_{pod}}$.
 To a lesser extent, the max speed is also dependent on the compressor entrance Mach number.
 Changing the compressor entrance Mach number by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.01$. 
 Modifying the blockage factor by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.03$.
@@ -297,9 +297,10 @@ however, static pressure affects the compressor flow and power requirements disc
 \section{Compressor Power and Battery Sizing}
 \label{sec:compressor-and-battery}
 
-The on-board compression system serves dual purposes.
-It provides a means of increasing the maximum pod speed over a closed pod and also supplies pressurized air to the air bearing system.
-This second function requires a minimum airflow to provide the fluid pressure necessary to support the vehicle mass.
+The on-board compression system serves three purposes.
+It provides a means of increasing the maximum pod speed over a closed pod, supplies pressurized air to the air bearing system,
+and provides a small amount of thrust.
+The second function requires a minimum airflow to provide the fluid pressure necessary to support the vehicle weight.
 A thermodynamic analysis of the compressor system is also necessary to
 estimate on-board power requirements and overall heat rise of each pod.
 The compression cycle is comprised of an inlet, two compressors, a nozzle, and multiple ducts leading to air bearings.
@@ -396,7 +397,7 @@ effectiveness of a heat exchanger can be described as the ratio of actual heat t
 \end{equation}
 
 
-were ${Q}_{max}$ is determined by the fluid with the lowest $\dot{m} C_{p}$, which dictates the maximum possible heat transfer.
+where ${Q}_{max}$ is determined by the fluid with the lowest $\dot{m} C_{p}$, which dictates the maximum possible heat transfer.
 In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
 \nomenclature{\dot{m}}{Mass flow rate}
@@ -435,7 +436,7 @@ Various systems involving partial cooling, alternate coolants (such as liquid ai
 Further discussion of heat exchanger sizing can be found in the heat exchanger section of \cref{app:heatX}.
 The calculations explore the possibility of multi-pass heat exchangers
 and the logarithmic mean temperature difference (LMTD) of the heat exchanger is considered.
-\cite{Cengal}
+\cite{Cengal}\textsuperscript{,}
 \cite{Turns}
 
 

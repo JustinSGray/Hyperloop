@@ -444,7 +444,7 @@ and the logarithmic mean temperature difference (LMTD) of the heat exchanger is 
 A high-level assessment of the overall steady-state heat transfer between the 300 mile Hyperloop tube and the ambient atmosphere is
 also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the pod exhaust
 air and solar flux are considered the primary drivers for heat absorption into the tube. Conversely, heat released from the tube is modeled by means of
-ambient natural convection and radiation out from a stainless-steel surface. The thermal interaction between the rarified internal air and
+ambient natural convection and radiation out from a steel surface. The thermal interaction between the rarified internal air and
 tube is not modeled.
 
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
@@ -467,8 +467,8 @@ P_{t,exit} = P_{t,inlet} * PR
 T_{t,exit} = T_{t,inlet} + \frac{([T_{t,inlet}*PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,inlet})}  {{\eta}_{adiabatic}}
 \end{equation}
 
-Where PR is the compressor pressure ratio, MN is the mach number,  $\gamma$ is the specific heat ratio, and  ${\eta}_{adiabatic}$ is the
-adiabatic efficiency.
+Where PR is the compressor pressure ratio, MN is the mach number, 
+$\gamma$ is the specific heat ratio, and  ${\eta}_{adiabatic}$ is the adiabatic efficiency.
 
 With the air flow rate known, the heat flow rate per pod is obtained, 
 and the peak heating rate scales linearly with number of pods ($n$) in the tube at a given time
@@ -477,12 +477,14 @@ and the peak heating rate scales linearly with number of pods ($n$) in the tube 
 {Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube}) * n
 \end{equation}
 
-The solar heat flow per unit area can be approximated, given the solar reflectance index ($R_{S}$) of stainless steel, non-normal incidence factor
-of the cylinder and solar insulation factor ($I_{S}$).
-Multiplying this by the viewing area of the tube (assuming no shade and constant sun) gives:
+The solar heat flow per unit area can be approximated,
+given the surface reflectance index ($R_{S}$) of steel, non-normal incidence factor
+of the cylinder and solar insolation ($I_{S}$).
+Multiplying this by the viewing area of the tube
+(assuming no shade and constant sun) gives:
 
-\nomenclature{SRI}{Solar Reflectance Index}
-\nomenclature{SIF}{Solar Insulation Factor}
+\nomenclature{SRI}{Surface Reflectance Index}
+\nomenclature{SIF}{Solar Insolation Factor}
 \nomenclature{{\theta}_{nni}}{Non-normal Incidence factor (rad)}
 \nomenclature{L}{Length (m)}
 \nomenclature{OD}{Outer diameter (m)}
@@ -493,15 +495,18 @@ Multiplying this by the viewing area of the tube (assuming no shade and constant
 \begin{equation}
 Q_{solar} = \underbrace{ (1-R_{S})  {\theta}_{nni}  I_{S}}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  OD_{tube}}_\text{Effective Area}
 \end{equation}
-Tube cooling can be attributed to two general mechanisms, radiation and natural convection. Radiation power per unit area can be
+Tube cooling can be attributed to two general mechanisms, radiation and natural convection.
+Radiation power per unit area can be
 approximated and multiplied by the surface area of the tube to find the total heating rate.
 \begin{equation}
 Q_{rad} = \underbrace{\epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)}_\text{Radiated Power per unit Area}\underbrace{\pi L_{tube} OD_{tube}}_\text{Surface Area}
 \end{equation}
-where  $\epsilon$ is the emissivity factor and  $\sigma$ is the Stefan-Boltzmann constant.
+where  $\epsilon$ is the total hemispherical emissivity and
+$\sigma$ is the Stefan-Boltzmann constant.
 
-Assuming the worst case scenario of no cross wind, convection is primarily driven by temperature gradients. The non-dimensional relation
-between buoyancy and viscosity driven flows is parameterized using the following empirical constants shown in Table \ref{tab:NonDim}. \cite{Berton} \cite{Incropera}
+Assuming the worst case scenario of no cross wind, convection is primarily driven by temperature gradients.
+The non-dimensional relation between buoyancy and viscosity driven flows is parameterized using the 
+following empirical constants shown in Table \ref{tab:NonDim}. \cite{Berton} \cite{Incropera}
 
 \nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}

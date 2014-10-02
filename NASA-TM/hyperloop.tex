@@ -464,13 +464,13 @@ flow relations.
 T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} M^2]
 \end{equation}
 \begin{equation}
-P_{t} = P_{s} * (\frac{ T_{t}}{T_{s}})^(\frac{\gamma}{\gamma -1})
+P_{t} = P_{s} * \left(\frac{ T_{t}}{T_{s}}\right)^{(\frac{\gamma}{\gamma -1})}
 \end{equation}
 \begin{equation}
-P_{t,exit} = P_{t,inlet} * PR
+P_{t,exit} = P_{t,tube} * PR
 \end{equation}
 \begin{equation}
-T_{t,exit} = T_{t,inlet} + \frac{([T_{t,inlet}*PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,inlet})}  {{\eta}_{adiabatic}}
+T_{t,exit} = T_{t,tube} + \frac{([T_{t,tube}*PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,tube})}  {{\eta}_{adiabatic}}
 \end{equation}
 
 Where PR is the compressor pressure ratio, MN is the mach number, 
@@ -480,7 +480,7 @@ With the air flow rate known, the heat flow rate per pod is obtained,
 and the peak heating rate scales linearly with number of pods ($n$) in the tube at a given time
 
 \begin{equation}
-{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{out, air} - T_{tube}) * n
+{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{t,exit} - T_{t,tube}) * n
 \end{equation}
 
 The solar heat flow per unit area can be approximated,

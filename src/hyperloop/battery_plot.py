@@ -1,6 +1,8 @@
 import numpy as np
 import pylab as p
 
+#creates figure 11
+
 #design variables
 #    hl.Mach_bypass = .95
 #    hl.Mach_pod_max = .90
@@ -57,23 +59,28 @@ index = [1, 2, 3]
 for i, ax, color in zip(index, axes, colors):
     if i == 1:
 		ax.plot(data[0],data[1], color=color, lw=3)
-		ax.set_ylabel('Battery Size (kW-hr)', color=color, fontsize = 18)
+		ax.set_ylabel('Battery Energy, kW-h', color=color, fontsize = 18)
 		ax.set_xlim([0.7,0.93])
-		ax.set_ylim([250,400])
+		ax.set_ylim([280,280*1.5])
     if i == 2:
 		ax.plot(data[0],data[2], color=color, ls= "--", lw=3)
-		ax.set_ylabel('Max Compressor Pwr Req (kW)', color=color, fontsize = 18)
-		ax.set_ylim([250,400])
+		#ax.plot(data[0],(-.7*data[2])+345.34+259, color="red", lw=1)
+		ax.set_ylabel('Max Compressor Pwr Req, kW', color=color, fontsize = 18)
+		ax.set_ylim([280,280*1.5])
     if i == 3:
-		ax.plot(data[0],data[3]/3600, color=color, ls= "--", lw=3)
-		ax.set_ylabel('Total Mission Time (hrs)', color=color, fontsize = 18)
-		ax.set_ylim([0.5+(0.025),0.9375])
-		ax.set_yticks([0.5+.05, 0.5+(0.055*1)+.05, 0.5+(0.055*2)+.05, 0.5+(0.055*3)+.05, 0.5+(0.055*4)+.05, 0.5+(0.055*5)+.05, 0.5+(0.055*6)+.05, 0.5+(0.055*7)+.05])
+		ax.plot(data[0],data[3]/3600, color=color, lw=3)
+		ax.set_ylabel('Total Mission Time, h', color=color, fontsize = 18)
+		a = 0.48
+		b = 0.04
+		ax.set_ylim([a,a*1.5])
+		ax.set_yticks([a+(b*0), a+(b*1), a+(b*2), a+(b*3), a+(b*4), a+(b*5), a+(b*6), a+(b*7)])
+    	#ax.set_ylim([0.5+(0.025),0.84])
+		#ax.set_yticks([0.5+.05, 0.5+(0.055*1)+.05, 0.5+(0.055*2)+.05, 0.5+(0.055*3)+.05, 0.5+(0.055*4)+.05, 0.5+(0.055*5)+.05, 0.5+(0.055*6)+.05, 0.5+(0.055*7)+.05])
     ax.tick_params(axis='y', colors=color)
 axes[0].set_xlabel('Max Pod Mach', fontsize=18)
-fig.text(0.5,0.82,"Power (kW)", color='Red')
-fig.text(0.5,0.37,"Battery (kW-hrs)", color='Green')
-fig.text(0.5,0.2,"Time (hrs)", color='Blue')
+fig.text(0.51,0.7,"Power, kW", color='Red')
+fig.text(0.495,0.22,"Battery, kW-h", color='Green')
+fig.text(0.52,0.4,"Time, h", color='Blue')
 
 #p.tick_params(axis='both', which='major', labelsize=15)
 
@@ -86,6 +93,7 @@ fig.text(0.5,0.2,"Time (hrs)", color='Blue')
 #ax2.plot(data[0],data[3], label="Tube", lw=3)
 #ax2.set_ylabel('Total time')
 p.legend(loc="best")
-p.gcf().set_size_inches(10,8)
-#p.gcf().savefig('test2png.png',dpi=130)
-p.show()
+p.gcf().set_size_inches(10,6)
+p.subplots_adjust(left=0.07, right=0.65, top=0.95)
+p.gcf().savefig('test2.png', dpi="160")
+#p.show()

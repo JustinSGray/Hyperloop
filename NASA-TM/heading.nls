@@ -7,7 +7,7 @@
   \item [{$C_{p}$}]\begingroup Heat Capacity, Constant Pressure ($\frac{J}{kg-K}$)\nomeqref {0}
     \nompageref{9}
   \item [{g}]\begingroup Acceleration of Gravity ($\frac{m}{s^{2}}$)\nomeqref {0}\nompageref{11}
-  \item [{Gr}]\begingroup Grashof Number ($\frac{ g \beta \Delta TL^{3}}{v^{2}}$)\nomeqref {0}\nompageref{11}
+  \item [{Gr}]\begingroup Grashof Number ($\frac{ g \beta \Delta TD^{3}}{v^{2}}$)\nomeqref {0}\nompageref{11}
   \item [{h}]\begingroup Heat Transfer Coefficient ($\frac{W}{m^{2}-K}$)\nomeqref {0}
     \nompageref{11}
   \item [{ID}]\begingroup Inner Diameter ($m$) \nomeqref {0}\nompageref{11}
@@ -20,7 +20,7 @@
   \item [{$\dot{m}$}]\begingroup Mass Flow Rate ($\frac{kg}{s}$) \nomeqref {0}
     \nompageref{10}
   \item [{n}]\begingroup Number of Pods \nomeqref {0}\nompageref{11}
-  \item [{Nu}]\begingroup Nusselt Number ($\frac{hL}{k}$)\nomeqref {0}\nompageref{11}
+  \item [{Nu}]\begingroup Nusselt Number ($\frac{hD}{k}$)\nomeqref {0}\nompageref{11}
   \item [{OD}]\begingroup Outer Diameter ($m$) \nomeqref {0}\nompageref{11}
   \item [{P}]\begingroup Pressure ($\frac{N}{m^{2}}$)\nomeqref {0}\nompageref{10}
   \item [{$P_{f}$}]\begingroup Wetted Perimeter ($m$)\nomeqref {0}\nompageref{10}

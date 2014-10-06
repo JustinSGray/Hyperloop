@@ -40,12 +40,13 @@ the various systems to provide a feasible design for any given set of design var
 Hyperloop remains plausible, but certain estimates from the original proposal may have been overly optimistic due to each discipline being approached independently. 
 
 The sizing process is a necessary precursor before ultimately performing a design optimization of 
-Hyperloop with the overall objectives such as cost and travel time. Performing this optimization 
+Hyperloop with the overall objectives such as reducing construction costs, operational costs, and travel time.
+Performing this broader optimization 
 is outside the scope of this work and is reserved for future investigation. 
 The fully integrated system model is constructed using OpenMDAO, a Python-based framework for 
 the design and optimization of highly coupled systems\cite{GrayBenchmarking2013}. 
 This work focuses on the aerodynamics and thermodynamics of the passenger pod itself.
-As such, it ignored many additional key sub-systems which will also have a large impact on the final design.
+As such, it ignores many additional key sub-systems which will also have a large impact on the final design.
 A more realistic design optimization will require more detailed models of the investigated systems and additional analyses for economic and 
 structural models. Adding all of this will result in significant growth in complexity of the Hyperloop model. 
 OpenMDAO can provide the means to manage growing model complexity 
@@ -318,7 +319,8 @@ and appropriately enforcing conservation equations across the entire system.
 %\caption{Schematic of the Hyperloop compression system, showing flow connections between components.}
 %\label{f:comp}
 %\end{figure}
-PyCycle was built within the openMDAO framework and leverages Cantera \cite{goodwin2009cantera} for thermodynamic calculations.
+This tool, later named ``PyCycle'', was built within the openMDAO framework and leverages Cantera
+\cite{goodwin2009cantera} for thermodynamic calculations.
 The model predicts the instantaneous power consumption of the compressors, temperature and pressure rises,
 and upstream conditions necessary to supply sufficient airflow to the bearings.
 These power requirements are a function of the chosen geometry, creating the feedback loop “B” in Fig. \ref{f:hyperloopXDSM}.
@@ -360,8 +362,8 @@ faster than the compressor power requirements increase.
 Although traveling at higher speeds draws more energy, the system is operated for a shorter period of time.
 At higher travel speeds, the total battery requirements start to flatten and the trend starts to reverse.
 The units are scaled such that the slopes of each curve can be more easily related to each other spatially.
-By drawing a horizontal and tangent line on each of the power and time slopes at a given speed,
-if the two subsequent angles were perfectly inverted, the battery curve would have a zero slope at that speed.
+% By drawing a horizontal and tangent line on each of the power and time slopes at a given speed,
+% if the two subsequent angles were perfectly inverted, the battery curve would have a zero slope at that speed.
 The overall reduction in battery size is on the order of 7\%, if the speed is increased from Mach 0.7 to Mach 0.9, 
 however the analysis only considers the on-board energy requirements. It does not consider the increased power
 necessary for the linear accelerators to drive the pod to higher speeds. 
@@ -384,11 +386,12 @@ These intercoolers would use water stored in on-board tanks to cool the air and 
 The resulting steam could then be stored in a tank and offloaded once the pod reached its destination.
 However, initial calculations show that using water for cooling is not an ideal design for two reasons:
 
-1) The flow rate of water needed to remove the heat added by the compressors is very large, and the sheer volume constraints of storing
-the resulting steam would outweigh the benefits.
+1) The flow rate of water needed to remove the heat added by the compressors is very large,
+and the sheer volume constraints of storing the resulting steam would outweigh the benefits.
 
-2) The heat addition from each pod compressor cycle is fairly low relative to other heat transfer mechanisms occurring between the Hyperloop
-and the external environment. Even without an active on-board cooling solution, the tube temperature would be dominated by other factors.
+2) The heat addition from each pod compressor cycle is fairly low relative to other heat transfer mechanisms
+occurring between the Hyperloop tube and the external environment.
+Even without an active on-board cooling solution, the tube temperature would be dominated by other factors.
 
 The following two sections provide additional details about the engineering models used to draw these conclusions.
 
@@ -435,8 +438,12 @@ and the proposed requirement to fully cool the air back down to inlet temperatur
 \end{table}
 
 With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$
-of standard temperature/pressure water would need to be carried with steam tanks over a hundred meters in length.
-This doesn't even account for the second stage heat exchanger, making the system nearly infeasible with water and unpressurized tanks.
+of standard temperature/pressure water would need to be carried.
+Beyond weight concerns, the density of saturated steam at the given temperatures is on the order of 1-2$\frac{kg}{m^{3}}$
+meaning that the resulting volume necessary for 2-4 atm
+steam tanks would be infeasible given the less than 8$m^{2}$ cross-section.
+This doesn't even account for the second stage heat exchanger,
+making the system nearly infeasible with water and unpressurized tanks.
 Various systems involving partial cooling, alternate coolants (such as liquid air), or pressurized tanks could be explored.
 
 Further discussion of heat exchanger sizing can be found in the heat exchanger section of \cref{app:heatX}.

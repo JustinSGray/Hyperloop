@@ -402,7 +402,7 @@ effectiveness of a heat exchanger can be described as the ratio of actual heat t
 
 \nomenclature{Q}{Heat flow rate (W)}
 \begin{equation}
-{Q}_{released}  = effectiveness *\underbrace{\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}}_\text{${Q}_{max}$}
+{Q}_{released}  = effectiveness \cdot \underbrace{\left(T_{hot,in} - T_{cold,in}\right) [ \dot{m} C_{p} ]_{fluid}}_\text{${Q}_{max}$}
 \end{equation}
 
 
@@ -437,7 +437,7 @@ and the proposed requirement to fully cool the air back down to inlet temperatur
     \end{tabular}
 \end{table}
 
-With a 35 minute trip, $0.45 \frac{kg}{s} * 60 \frac{s}{min} * 35min = 945 kg$
+With a 35 minute trip, $0.45 \frac{kg}{s} \cdot 60 \frac{s}{min} \cdot 35min = 945 kg$
 of standard temperature/pressure water would need to be carried.
 Beyond weight concerns, the density of saturated steam at the given temperatures is on the order of 1-2$\frac{kg}{m^{3}}$
 meaning that the resulting volume necessary for 2-4 atm
@@ -468,16 +468,16 @@ flow relations.
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{{\eta}_{ad}}{Adiabatic Efficiency}
 \begin{equation}
-T_{t} = T_{s} * [1 + \frac{\gamma -1}{2} M^2]
+T_{t} = T_{s} [1 + \frac{\gamma -1}{2} M^2]
 \end{equation}
 \begin{equation}
-P_{t} = P_{s} * \left(\frac{ T_{t}}{T_{s}}\right)^{(\frac{\gamma}{\gamma -1})}
+P_{t} = P_{s} \left(\frac{ T_{t}}{T_{s}}\right)^{(\frac{\gamma}{\gamma -1})}
 \end{equation}
 \begin{equation}
-P_{t,exit} = P_{t,tube} * PR
+P_{t,exit} = P_{t,tube} \cdot PR
 \end{equation}
 \begin{equation}
-T_{t,exit} = T_{t,tube} + \frac{([T_{t,tube}*PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,tube})}  {{\eta}_{adiabatic}}
+T_{t,exit} = T_{t,tube} + \frac{([T_{t,tube}\cdot PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,tube})}  {{\eta}_{adiabatic}}
 \end{equation}
 
 Where PR is the compressor pressure ratio, MN is the mach number, 
@@ -487,7 +487,7 @@ With the air flow rate known, the heat flow rate per pod is obtained,
 and the peak heating rate scales linearly with number of pods ($n$) in the tube at a given time
 
 \begin{equation}
-{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{t,exit} - T_{t,tube}) * n
+{Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{t,exit} - T_{t,tube}) n
 \end{equation}
 
 The solar heat flow per unit area can be approximated,
@@ -554,7 +554,7 @@ Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {OD}_{tube}^3
 The non-dimensional Rayleigh number can then be calculated to estimate buoyancy effects, leading to the Nusselt number.
 \cite{Incropera}
 \begin{equation}
-Ra = Gr * Pr
+Ra = Gr\cdot Pr
 \end{equation}
 \begin{equation}
 Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16}}]^{\frac{8}{27}}}\Bigg)^2
@@ -563,7 +563,7 @@ Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16
 From this point the total heat transfer from natural convection can be obtained:
 
 \begin{equation}
-Q_{nat. conv} = hA \Delta T = \frac{k*Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tube} (T_{tube}-T_{amb})
+Q_{nat. conv} = hA \Delta T = \frac{k\cdot Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tube} (T_{tube}-T_{amb})
 \end{equation}
 
 The steady state tube temperature can be found by varying the tube temperature until the

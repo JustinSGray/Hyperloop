@@ -31,7 +31,7 @@
   \item [{q}]\begingroup Heat Flux ($\frac{W}{m^{2}}$)\nomeqref {0}\nompageref{9}
   \item [{Q}]\begingroup Heat Flow Rate (W)\nomeqref {0}\nompageref{9}
   \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{4}
-  \item [{Ra}]\begingroup Rayleigh Number
+  \item [{Ra}]\begingroup Rayleigh Number ($Gr\cdot Pr$)
   \item [{Re}]\begingroup Reynolds Number ($\frac{\rho U_{\infty} L}{\mu}$)\nomeqref {0}\nompageref{11}
   \item [{$R_{S}$}]\begingroup Solar Reflectance Index\nomeqref {0}
     \nompageref{10}
@@ -51,7 +51,7 @@
     \nompageref{10}
   \item [{$\rho$}]\begingroup Density ($\frac{kg}{m^{3}}$)\nomeqref {0}
     \nompageref{4}
-  \item [{$\sigma$}]\begingroup Stefan-Boltzmann Constant ($\frac{W}{m-K}$)\nomeqref {0}
+  \item [{$\sigma$}]\begingroup Stefan-Boltzmann Constant ($\frac{W}{m^{2}\cdot K^{4}}$)\nomeqref {0}
     \nompageref{10}
   \item [{$\upsilon$}]\begingroup Kinematic Viscosity ($\frac{m^{2}}{s}$)\nomeqref {0}\nompageref{11}
 

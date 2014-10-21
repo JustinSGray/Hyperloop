@@ -464,6 +464,28 @@ tube is not modeled.
 The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
 flow relations.
 
+The onboard water cooling and vapor collection system as proposed in Ref. 1
+appears infeasible and may be dismissed out of hand for reasons described above.
+Nevertheless some form of pod cabin cooling would be needed. 
+If the tube temperature is not excessive,
+pod occupants could be kept comfortable with a relatively simple cabin air conditioning system.
+Cabin heat could be rejected from the refrigerant to the tube environs via conventional heat
+exchangers. A simple quasi-steady equilibrium heat balance
+is performed to determine the approximate tube temperature.
+The analysis ignores heat transfer time lags and diurnal cycles.
+Heat is assumed to transfer and equilibrate rapidly between the pod compressor system,
+the rarified atmosphere inside the tube, the tube walls, and the outside environment.
+Further investigation is needed to determine the validity of this assumption.
+This assessment is intended to estimate a conservative
+equilibrium tube temperature at full sun during the maximum heat of the day.
+What in the real world would be a complex heat transfer problem
+is modeled here very simplistically.
+An analysis of this level of fidelity is hoped to be sufficient to determine if a simple cabin
+air conditioning system could manage pod heating.
+If the heat of the rarified atmosphere inside the tube exchanges rapidly with the tube wall,
+then the total temperature of the air entering the compressor inlet
+may be related to the tube wall temperature (Ttube) and the pod Mach number (M):
+
 \nomenclature{P}{Pressure ($\frac{N}{m^{2}}$)}
 \nomenclature{PR}{Pressure Ratio}
 \nomenclature{PR}{Pressure Ratio}
@@ -471,31 +493,34 @@ flow relations.
 \begin{equation}
 T_{t} = T_{s} [1 + \frac{\gamma -1}{2} M^2]
 \end{equation}
+
+Using additional isentropic relationships,
+the total temperature of the air exiting the pod nozzles may be written as a function
+of the compressor’s pressure ratio ($\pi_{c}$) and adiabatic efficiency ($\eta_{c}$):
+
 \begin{equation}
-P_{t} = P_{s} \left(\frac{ T_{t}}{T_{s}}\right)^{(\frac{\gamma}{\gamma -1})}
-\end{equation}
-\begin{equation}
-P_{t,exit} = P_{t,tube} \cdot PR
-\end{equation}
-\begin{equation}
-T_{t,exit} = T_{t,tube} + \frac{([T_{t,tube}\cdot PR^{(\frac{\gamma-1}{\gamma})}] - T_{t,tube})}  {{\eta}_{adiabatic}}
+T_{t,exit} = T_{t,tube} + \Bigg[ 1 + \frac{1}{\eta_{c}} \Big[ \pi_{c}^{\frac{\gamma-1}{\gamma}}- 1 \Big] \Bigg]
 \end{equation}
 
-Where PR is the compressor pressure ratio, MN is the mach number, 
-$\gamma$ is the specific heat ratio, and  ${\eta}_{adiabatic}$ is the adiabatic efficiency.
-
-With the air flow rate known, the heat flow rate per pod is obtained, 
-and the peak heating rate scales linearly with number of pods ($n$) in the tube at a given time
+The heating rate due to all of the pods operating in the tube may be estimated by
 
 \begin{equation}
 {Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{t,exit} - T_{t,tube}) n
 \end{equation}
 
-The solar heat flow per unit area can be approximated,
-given the surface reflectance index ($R_{S}$) of steel, non-normal incidence factor
-of the cylinder and solar insolation ($I_{S}$).
-Multiplying this by the viewing area of the tube
-(assuming no shade and constant sun) gives:
+where n is the number of pods in transit,
+$\dot{m}$ is the airflow per compressor determined by the cycle analysis,
+and cp is the specific heat of air given by the relations in Ref. XX. 
+
+The entire 300 mile length of the tube is assumed to be unshaded and exposed to sunlight.
+Only direct solar irradiance (G) is considered.
+At noon on a clear day at ground level, G may be as great as 1000W/m2,
+although it may be substantially attenuated on cloudy days.
+The heating rate due to solar irradiation is estimated by
+
+\begin{equation}
+Q_{solar} = \underbrace{ (1-R_{S})  {\theta}_{nni}  I_{S}}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  D_{o,tube}}_\text{Effective Area}
+\end{equation}
 
 \nomenclature{SRI}{Surface Reflectance Index}
 \nomenclature{SIF}{Solar Insolation Factor}
@@ -506,21 +531,33 @@ Multiplying this by the viewing area of the tube
 \nomenclature{\sigma}{Stefan-Boltzmann constant ($\frac{W}{m-K}$)}
 \nomenclature{P_{rad}}{Radiated Power (W)}
 
-\begin{equation}
-Q_{solar} = \underbrace{ (1-R_{S})  {\theta}_{nni}  I_{S}}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  OD_{tube}}_\text{Effective Area}
-\end{equation}
-Tube cooling can be attributed to two general mechanisms, radiation and convection.
-Radiation power per unit area can be
-approximated and multiplied by the surface area of the tube to find the total heating rate.
-\begin{equation}
-Q_{rad} = \underbrace{\epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)}_\text{Radiated Power per unit Area}\underbrace{\pi L_{tube} OD_{tube}}_\text{Surface Area}
-\end{equation}
-where  $\epsilon$ is the total hemispherical emissivity and
-$\sigma$ is the Stefan-Boltzmann constant.
+where $\rho$ is the total, hemispherical reflectivity of the tube’s exterior surface,
+$L_{tube}$ is the length of the tube, and $D_{o,tube}$ its outer diameter.
+$c_{solar}$ is a gross adjustment factor intended to account for diffuse
+scattered irradiance (causing $c_{solar}$ to increase), as well as shaded regions,
+non-normal incidence and other geometric peculiarities (causing $c_{solar}$ to decrease).
+Added together, Qpods and Qsolar represent the incoming heating rate on the tube.
+At this point an interesting observation may be made.
+Using representative values for each of the system parameters,
+it is estimated that the heat generated by the pods in transit
+amounts to a small fraction of the total heating rate.
+Insolation appears responsible for more than 95\% of tube heating.
+The impact of solar heating, of course, may be abated by coating, painting,
+or shading the tube’s steel surface with a highly reflective and emissive “cool material.”
+Radiation and convection heat transfer from the tube are assumed
+to be the primary heat loss mechanisms. The radiative heat transfer is estimated by
 
-Assuming the worst case scenario of no cross wind, convection is primarily driven by temperature gradients.
-The non-dimensional relation between buoyancy and viscosity driven flows is parameterized using the 
-following empirical constants shown in Table \ref{tab:NonDim}. \cite{Clausing} 
+\begin{equation}
+Q_{rad} = \underbrace{\epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)}_\text{Radiated Power per unit Area}\underbrace{\pi L_{tube} D_{o,tube}}_\text{Surface Area}
+\end{equation}
+
+where $\epsilon$ is the total, hemispherical emissivity of the tube’s exterior surface,
+$\sigma$ is the Stefan-Boltzmann constant, and $T_{amb}$ is the ambient temperature.
+The heat transfer surface is assumed to be gray,
+and the surroundings are assumed to be isothermal and black.
+Convection heat transfer from the tube to the surroundings is estimated using a
+correlation of the Nusselt number (Nu, defined as $\frac{hD_{o,tube}}{k}$ )
+proposed in Ref. YY, and reproduced in many foundational heat transfer textbooks:
 
 \nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}
@@ -532,40 +569,52 @@ following empirical constants shown in Table \ref{tab:NonDim}. \cite{Clausing}
 \nomenclature{h}{Heat transfer coefficient ($\frac{W}{m^{2}-K}$)}
 \nomenclature{k}{Thermal Conductivity ($\frac{W}{m-K}$) }
 
-\begin{table}
-    \centering
-    \caption{Non-dimensional values for two temperature regimes}
-    \label{tab:NonDim}
-    \begin{tabular}{ c  |  c |  c} 
-        \hline
-        & 150K$<T_{amb}<$400K & 400K$< T_{amb}<$2100K \\ \hline 
-        &&\\
-       $\frac{g \beta T} {\upsilon^2} $ & $4.178\times10^{19} \times T_{amb}^{-4.639}$ & $4.985\times10^{18} \times T_{amb}^{-4.284}$\\
-       &&\\ 
-        $Pr $ & $1.23 T_{amb}^{-0.09685}$ & $0.59 T_{amb}^{0.0239}$ \\
-        &&\\  \hline
-    \end{tabular}
-\end{table}
-
-The Grashof Number can then be approximated,
-
-\begin{equation}
-Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {OD}_{tube}^3
-\end{equation}
-The non-dimensional Rayleigh number can then be calculated to estimate buoyancy effects, leading to the Nusselt number.
-\cite{Incropera}
-\begin{equation}
-Ra = Gr\cdot Pr
-\end{equation}
 \begin{equation}
 Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16}}]^{\frac{8}{27}}}\Bigg)^2
 \end{equation}
 
-From this point the total heat transfer from natural convection can be obtained:
+where Ra is the Rayleigh number
+($Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {D}_{o,tube}^3$)
+and Pr is the Prandtl number ($\frac{\nu}{\alpha}$).
+The correlation is applicable for estimating free convection from long, horizontal cylinders.
+Properties for air ($h$, $k$, $\beta$, $\nu$ and $\alpha$) are based on the film temperature
+of the thermal boundary layer and are given by the regressions in Ref. XX.
+With the heat transfer coefficient h known from the Nusselt number,
+the heat lost to free convection (Qconv) may be estimated from the total tube surface area.
 
 \begin{equation}
-Q_{nat. conv} = hA \Delta T = \frac{k\cdot Nu}{ {OD}_{tube}} \pi {L}_{tube} {OD}_{tube} (T_{tube}-T_{amb})
+Q_{nat. conv} = hA \Delta T = \frac{k\cdot Nu}{ {D}_{o,tube}} \pi {L}_{tube} {D}_{o,tube} (T_{tube}-T_{amb})
 \end{equation}
+
+
+The equilibrium tube temperature is determined by varying $T_{tube}$ until the criterion
+$Q_{pods} + Q_{solar} = Q_{rad} + Q_{conv}$ is satisfied.
+Estimating a single deterministic tube temperature, however, is insufficient.
+The parameters of the problem have a strong influence over the resulting equilibrium
+temperature. For example, ambient temperature will vary substantially.
+A breeze can amplify convection rates by a factor of two or three.
+And it is not clear at this point what surface properties the tube may have.
+For these kinds of reasons, several parameters in the problem are set to vary in 
+a Monte Carlo probability experiment.
+The deterministic tube temperature model above is transformed into a stochastic model by
+replacing portions of its input with continuous random values.
+The random values are derived from probability distributions
+around the model’s nominal values as listed in Table XX.
+
+
+ttabvalsdjasd
+
+A histogram and a normal distribution of tube temperature
+based on 10,000 samples are shown in Fig. XX.
+The mean tube temperature is 105\degF with a standard deviation of 10\degF.
+Exceeding 130\degF is estimated to occur only 0.5 percent of the time.
+Based on this assessment,
+an ordinary air conditioning system may be sufficient to control cabin heating.
+
+
+Figure asdafsasef
+
+end
 
 The steady state tube temperature can be found by varying the tube temperature until the
 rate of heat being released from the tube matches the rate of heat being absorbed by the tube.

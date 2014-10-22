@@ -34,7 +34,10 @@ class HyperloopPod(Assembly):
     n_rows = Int(14, iotype="in", desc="number of rows of seats in the pod")
     length_row = Float(150, iotype="in", units="cm", desc="length of each row of seats")
 
-
+    #outputs
+    radius_tube_outer = Float(0, iotype="out", desc="final outer travel tube radius")
+    temp_boundary = Float(0, iotype="out", desc="final equilibirum tube wall temperature")
+   
     def configure(self):
 
         #Add Components
@@ -50,6 +53,8 @@ class HyperloopPod(Assembly):
         self.connect('Ps_tube', 'compress.Ps_tube')
         self.connect('Mach_c1_in','compress.Mach_c1_in') #Design Variable
         self.connect('c1_PR_des', 'compress.c1_PR_des') #Design Variable
+        self.create_passthrough('compress.compressor_adiabatic_eff')
+
         #Hyperloop -> Mission
         self.connect('tube_length', 'mission.tube_length')
         self.connect('pwr_marg','mission.pwr_marg')
@@ -64,9 +69,20 @@ class HyperloopPod(Assembly):
         self.connect('coef_drag','pod.coef_drag')
         self.connect('n_rows','pod.n_rows')
         self.connect('length_row','pod.length_row')
+        self.connect('pod.radius_tube_outer', 'radius_tube_outer')
+
+
         #Hyperloop -> TubeWallTemp
         self.connect('solar_heating_factor', 'tube_wall_temp.nn_incidence_factor')
         self.connect('tube_length', 'tube_wall_temp.length_tube')
+        self.create_passthrough('tube_wall_temp.temp_outside_ambient')
+        self.create_passthrough('tube_wall_temp.solar_insolation')
+        self.create_passthrough('tube_wall_temp.surface_reflectance')
+        self.create_passthrough('tube_wall_temp.num_pods')
+        self.create_passthrough('tube_wall_temp.emissivity_tube')
+        self.create_passthrough('tube_wall_temp.Nu_multiplier')
+        self.connect('tube_wall_temp.temp_boundary', 'temp_boundary')
+
 
         #Inter-component Connections
         #Compress -> Mission
@@ -84,6 +100,8 @@ class HyperloopPod(Assembly):
         #Mission -> Pod
         self.connect('mission.time','pod.time_mission')
         self.connect('mission.energy', 'pod.energy')
+        #Pod -> TubeWallTemp
+        #self.connect('pod.radius_tube_outer', 'tube_wall_temp.radius_outer_tube')
 
         #Add Solver
         solver = self.add('solver',BroydenSolver())
@@ -118,21 +136,33 @@ if __name__=="__main__":
     hl = HyperloopPod()
     #design variables
     hl.Mach_bypass = .95
-    hl.Mach_pod_max = .90
+    hl.Mach_pod_max = .8
     hl.Mach_c1_in = .65
     hl.c1_PR_des = 13
 
     #initial guesses
-    hl.compress.W_in = .35
-    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 178
-    hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 
-    hl.compress.c2_PR_des = 5 
+    # hl.compress.W_in = .35
+    # hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 178
+    # hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322 
+    # hl.compress.c2_PR_des = 5 
+
+    hl.compress.W_in = .38
+    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 243
+    hl.compress.Ts_tube = hl.flow_limit.Ts_tube = hl.tube_wall_temp.tubeWallTemp = 322.28
+    hl.compress.c2_PR_des = 8.72
 
     #mvr(hl) #mach vs radius
 
     #mva(hl) #mach vs area ratio
 
     #mvb(hl) #mach vs battery/comp/missionTime
+
+    hl.run()
+
+    def pretty_print(data): 
+        for label,value in data.iteritems(): 
+            print '%s: %.2f'%(label,value)
+
 
     design_data = OrderedDict([
         ('Mach bypass', hl.Mach_bypass), 
@@ -156,10 +186,42 @@ if __name__=="__main__":
         ('Equilibirum Tube Temp', hl.tube_wall_temp.temp_boundary)
     ])
 
-    def pretty_print(data): 
-        for label,value in data.iteritems(): 
-            print '%s: %.2f'%(label,value)
+    
 
+    print "======================"
+    print "Design"
+    print "======================"
+    pretty_print(design_data)
+
+    print "======================"
+    print "Performance"
+    print "======================"
+    pretty_print(output_data)
+
+    hl.flow_limit.radius_tube = hl.pod.radius_tube_inner = 242
+    hl.run()
+
+    design_data = OrderedDict([
+        ('Mach bypass', hl.Mach_bypass), 
+        ('Max Travel Mach', hl.Mach_pod_max), 
+        ('Fan Face Mach', hl.Mach_c1_in),
+        ('C1 PR', hl.c1_PR_des)
+    ])
+
+    output_data = OrderedDict([
+        ('Radius Inlet Outer',  hl.pod.radius_inlet_back_outer), 
+        ('Radius Inlet Inner',  hl.pod.inlet.radius_back_inner), 
+        ('Tube Inner Radius', hl.flow_limit.radius_tube),
+        ('Pod W', hl.compress.W_in),
+        ('Compressor C2 PR', hl.compress.c2_PR_des), 
+        ('Pod Net Force', hl.pod.net_force), 
+        ('Pod Thrust', hl.compress.F_net), 
+        ('Pod Power', hl.compress.pwr_req), 
+        ('Total Energy', hl.pod.energy), 
+        ('Travel time', hl.mission.time), 
+        ('Max Speed', hl.compress.speed_max), 
+        ('Equilibirum Tube Temp', hl.tube_wall_temp.temp_boundary)
+    ])
 
     print "======================"
     print "Design"

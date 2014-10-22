@@ -43,7 +43,7 @@ class CompressionSystem(Assembly):
     Mach_c1_in = Float(.6, iotype="in", desc="Mach number at entrance to the first compressor at design conditions")
     c1_PR_des = Float(12.47, iotype="in", desc="pressure ratio of first compressor at design conditions")
     Ps_bearing = Float(11000, iotype="in", desc="Static pressure of the bearing air", units="Pa")
-
+    compressor_adiabatic_eff = Float(.8, iotype="in", desc="adiabatic efficiency for the compressors")
 
     nozzle_Fl_O = FlowStationVar(iotype="out", desc="flow exiting the nozzle", copy=None)
     bearing_Fl_O = FlowStationVar(iotype="out", desc="flow exiting the bearings", copy=None)
@@ -106,6 +106,7 @@ class CompressionSystem(Assembly):
 
         perf = self.add('perf', Performance())
 
+
         #Inter Component Connections
         self.connect('tube.Fl_O', 'inlet.Fl_I')
         self.connect('inlet.Fl_O','comp1.Fl_I')
@@ -131,8 +132,10 @@ class CompressionSystem(Assembly):
         self.connect('Mach_c1_in', 'inlet.MNexit_des')
         #Compress -> C1
         self.connect('c1_PR_des','comp1.PR_des')
+        self.connect('compressor_adiabatic_eff', 'comp1.eff_des')
         #Compress -> C2
         self.connect('c2_PR_des','comp2.PR_des')
+        self.connect('compressor_adiabatic_eff', 'comp2.eff_des')
         #Compress -> Splitter
         self.connect('W_bearing_in', 'split.W1_des')
         #Compress -> Perf

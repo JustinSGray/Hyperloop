@@ -22,21 +22,23 @@ class TubeWallTemp(Component):
     """ Calculates Q released/absorbed by the hyperloop tube """
     #--Inputs--
     #Hyperloop Parameters/Design Variables
-    diameter_outer_tube = Float(2.23, units = 'm', iotype='in', desc='tube outer diameter') #7.3ft
+    radius_outer_tube = Float(1.115, units = 'm', iotype='in', desc='tube outer diameter') #7.3ft
     length_tube = Float(482803, units = 'm', iotype='in', desc='Length of entire Hyperloop') #300 miles, 1584000ft
     num_pods = Float(34, units = 'K', iotype='in', desc='Number of Pods in the Tube at a given time') #
     temp_boundary = Float(322.0, units = 'K', iotype='in', desc='Average Temperature of the tube wall') #
     temp_outside_ambient = Float(305.6, units = 'K', iotype='in', desc='Average Temperature of the outside air') #
     nozzle_air = FlowStationVar(iotype="in", desc="air exiting the pod nozzle", copy=None)
     bearing_air = FlowStationVar(iotype="in", desc="air exiting the air bearings", copy=None)
+
     #constants
     solar_insolation = Float(1000., iotype="in", units = 'W/m**2', desc='solar irradiation at sea level on a clear day') #
     nn_incidence_factor = Float(0.7, iotype="in", desc='Non-normal incidence factor') #
-    surface_reflectance = Float(0.5, desc='Solar Reflectance Index') #
+    surface_reflectance = Float(0.5, iotype="in", desc='Solar Reflectance Index') #
     q_per_area_solar = Float(350., units = 'W/m**2', desc='Solar Heat Rate Absorbed per Area') #
     q_total_solar = Float(375989751., iotype="in", units = 'W', desc='Solar Heat Absorbed by Tube') #
     emissivity_tube = Float(0.5, iotype="in", units = 'W', desc='Emmissivity of the Tube') #
     sb_constant = Float(0.00000005670373, iotype="in", units = 'W/((m**2)*(K**4))', desc='Stefan-Boltzmann Constant') #
+    Nu_multiplier = Float(1, iotype="in", desc="fudge factor on nusslet number to account for small breeze on tube")
 
     #--Outputs--
     area_rad = Float(337486.1, units = 'm**2', iotype='out', desc='Tube Radiating Area') #    
@@ -68,6 +70,8 @@ class TubeWallTemp(Component):
   
     def execute(self):
         """Calculate Various Paramters"""
+
+        self.diameter_outer_tube = 2*self.radius_outer_tube
         
         bearing_q = cu(self.bearing_air.W,'lbm/s','kg/s') * cu(self.bearing_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.bearing_air.Tt,'degR','degK') - self.temp_boundary)
         nozzle_q = cu(self.nozzle_air.W,'lbm/s','kg/s') * cu(self.nozzle_air.Cp,'Btu/(lbm*degR)','J/(kg*K)') * (cu(self.nozzle_air.Tt,'degR','degK') - self.temp_boundary)
@@ -94,14 +98,14 @@ class TubeWallTemp(Component):
         #Relationship between buoyancy and viscosity
         #Laminar = Gr < 10^8
         #Turbulent = Gr > 10^9
-        self.Gr = self.GrDelTL3*(self.temp_boundary-self.temp_outside_ambient)*(self.diameter_outer_tube**3)
+        self.Gr = self.GrDelTL3*abs(self.temp_boundary-self.temp_outside_ambient)*(self.diameter_outer_tube**3) #JSG: Added abs incase subtraction goes negative
         #Rayleigh Number 
         #Buoyancy driven flow (natural convection)
         self.Ra = self.Pr * self.Gr
         #Nusselt Number
         #Nu = convecive heat transfer / conductive heat transfer
         if (self.Ra<=10**12): #valid in specific flow regime
-            self.Nu = (0.6 + 0.387*self.Ra**(1./6.)/(1 + (0.559/self.Pr)**(9./16.))**(8./27.))**2 #3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465
+            self.Nu = self.Nu_multiplier*((0.6 + 0.387*self.Ra**(1./6.)/(1 + (0.559/self.Pr)**(9./16.))**(8./27.))**2) #3rd Ed. of Introduction to Heat Transfer by Incropera and DeWitt, equations (9.33) and (9.34) on page 465
         if(self.temp_outside_ambient < 400):
             self.k = 0.0001423*(self.temp_outside_ambient**(0.9138)) #SI units (https://mdao.grc.nasa.gov/publications/Berton-Thesis.pdf pg51)
         else:

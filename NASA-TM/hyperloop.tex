@@ -108,8 +108,8 @@ This issue is discussed in much greater detail in Section~\ref{s:sizing}.
     \caption{Hyperloop passenger pod design variables}
     \label{tab:desvars}
     \begin{tabular}{l  c  c  c} 
-        \hline
-        Design Variable &  Value\\ \hline 
+        \hline \hline
+        Design Variable &  Value\\ \hline \hline
         Max. Pod Mach & .9 \\ 
         Pod Bypass Mach & .95\\
         Compressor 1 Inlet Mach & .6\\ 
@@ -455,14 +455,6 @@ and the logarithmic mean temperature difference (LMTD) of the heat exchanger is 
 
 
 \subsubsection{Equilibrium Tube Temperature}
-A high-level assessment of the overall steady-state heat transfer between the 300 mile Hyperloop tube and the ambient atmosphere is
-also investigated. The outer diameter of the pipe is chosen as the control surface boundary used in the heat balance. Heat added from the pod exhaust
-air and solar flux are considered the primary drivers for heat absorption into the tube. Conversely, heat released from the tube is modeled by means of
-ambient natural convection and radiation out from a steel surface. The thermal interaction between the rarified internal air and
-tube is not modeled.
-
-The heat being added by the pods can be determined from the cycle analysis, or based purely on inlet total temperatures with isentropic
-flow relations.
 
 The onboard water cooling and vapor collection system as proposed in Ref. 1
 appears infeasible and may be dismissed out of hand for reasons described above.
@@ -470,7 +462,9 @@ Nevertheless some form of pod cabin cooling would be needed.
 If the tube temperature is not excessive,
 pod occupants could be kept comfortable with a relatively simple cabin air conditioning system.
 Cabin heat could be rejected from the refrigerant to the tube environs via conventional heat
-exchangers. A simple quasi-steady equilibrium heat balance
+exchangers.
+
+A simple quasi-steady equilibrium heat balance
 is performed to determine the approximate tube temperature.
 The analysis ignores heat transfer time lags and diurnal cycles.
 Heat is assumed to transfer and equilibrate rapidly between the pod compressor system,
@@ -482,6 +476,8 @@ What in the real world would be a complex heat transfer problem
 is modeled here very simplistically.
 An analysis of this level of fidelity is hoped to be sufficient to determine if a simple cabin
 air conditioning system could manage pod heating.
+
+
 If the heat of the rarified atmosphere inside the tube exchanges rapidly with the tube wall,
 then the total temperature of the air entering the compressor inlet
 may be related to the tube wall temperature (Ttube) and the pod Mach number (M):
@@ -508,9 +504,9 @@ The heating rate due to all of the pods operating in the tube may be estimated b
 {Q}_{pods}= \dot{m}_{air} C_{p,air} (T_{t,exit} - T_{t,tube}) n
 \end{equation}
 
-where n is the number of pods in transit,
+where $n$ is the number of pods in transit,
 $\dot{m}$ is the airflow per compressor determined by the cycle analysis,
-and cp is the specific heat of air given by the relations in Ref. XX. 
+and cp is the specific heat of air given by the relations in Ref. \cite{Clausing}. 
 
 The entire 300 mile length of the tube is assumed to be unshaded and exposed to sunlight.
 Only direct solar irradiance (G) is considered.
@@ -557,7 +553,7 @@ The heat transfer surface is assumed to be gray,
 and the surroundings are assumed to be isothermal and black.
 Convection heat transfer from the tube to the surroundings is estimated using a
 correlation of the Nusselt number (Nu, defined as $\frac{hD_{o,tube}}{k}$ )
-proposed in Ref. YY, and reproduced in many foundational heat transfer textbooks:
+proposed in Ref. \cite{Churchill}, and reproduced in many foundational heat transfer textbooks:
 
 \nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}
@@ -573,12 +569,13 @@ proposed in Ref. YY, and reproduced in many foundational heat transfer textbooks
 Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16}}]^{\frac{8}{27}}}\Bigg)^2
 \end{equation}
 
-where Ra is the Rayleigh number
+where $Ra$ is the Rayleigh number
 ($Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {D}_{o,tube}^3$)
 and Pr is the Prandtl number ($\frac{\nu}{\alpha}$).
-The correlation is applicable for estimating free convection from long, horizontal cylinders.
-Properties for air ($h$, $k$, $\beta$, $\nu$ and $\alpha$) are based on the film temperature
-of the thermal boundary layer and are given by the regressions in Ref. XX.
+The correlation is applicable for estimating free convection from long,
+horizontal cylinders. Properties for air ($h$, $k$, $\beta$, $\nu$ and $\alpha$)
+are based on the film temperature of the thermal boundary layer
+and are given by the regressions in Ref. \cite{Clausing}.
 With the heat transfer coefficient h known from the Nusselt number,
 the heat lost to free convection (Qconv) may be estimated from the total tube surface area.
 
@@ -599,22 +596,45 @@ a Monte Carlo probability experiment.
 The deterministic tube temperature model above is transformed into a stochastic model by
 replacing portions of its input with continuous random values.
 The random values are derived from probability distributions
-around the model’s nominal values as listed in Table XX.
+around the model’s nominal values as listed in Table \ref{tab:montecarlo}.
 
+\begin{table}[hbtp]
 
-ttabvalsdjasd
+    \centering
+    \caption{Uncertainty variables used in the Monte Carlo experiment.}
+    \label{tab:montecarlo}
+    \begin{tabulary}{1.0\textwidth}{l  c  c  c c c} 
+        \hline
+        Variable & Mode & Model & Min & Max & Std. Dev\\ \hline \hline
+        $T_{amb}$ & 90 \degree F & Normal & - & - & 8 \\ 
+        $G$ & $1000\frac{W}{m^2}$ & Triangular & $200\frac{W}{m^2}$ & $1000\frac{W}{m^2}$ & - \\
+        $\rho$ & 0.5 & Triangular & 0.4 & 0.9 & - \\
+        $\eta$ & 0.5 & Triangular & 0.4 & 0.9 & - \\
+        $\eta_{c}$ & 0.69 & Triangular & 0.6 & 0.8 & - \\
+        $n$ & 34 & Triangular & - & - & 2 \\
+        $D_{o,tube}$ & 7.3ft & Normal & 7.0ft & 7.6ft & - \\
+        $c_{solar}$ & 0.7 & Triangular & 0.5 & 1.0 & - \\
+        $c_{conv}$ 1.0 & Triangular & 0.9 & 3.0 & - \\
+        \hline
+    \end{tabulary}
+    
+\end{table}
+
 
 A histogram and a normal distribution of tube temperature
-based on 10,000 samples are shown in Fig. XX.
-The mean tube temperature is 105\degF with a standard deviation of 10\degF.
-Exceeding 130\degF is estimated to occur only 0.5 percent of the time.
+based on 10,000 samples are shown in Fig. \ref{f:montecarlo}.
+The mean tube temperature is 105 \degree F with a standard deviation of 10 \degree F.
+Exceeding 130 \degree F is estimated to occur only 0.5 percent of the time.
 Based on this assessment,
 an ordinary air conditioning system may be sufficient to control cabin heating.
 
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=.75\textwidth]{images/montecarlo.png}
+ \caption[MonteCarlo]{Monte Carlo uncertainty analysis of equilibrium tube temperature. Histograms and nomral distribution generated from 10,000 sampls using a bin span of 1 \degre F.}
+\label{f:montecarlo}
+\end{figure}
 
-Figure asdafsasef
-
-end
 
 The steady state tube temperature can be found by varying the tube temperature until the
 rate of heat being released from the tube matches the rate of heat being absorbed by the tube.
@@ -624,8 +644,8 @@ Assuming the tube is left uncovered, the heat transferred from solar radiation a
 magnitude larger than the heat rate added from pod compression systems.
 These results suggest that there is no need for on-board cooling, since the marginal temperature
 rises would result in higher convection and radiation rates, quickly bringing the system back to steady-state.
-Assuming a 90 degF day in addition to other nominal values for typical heat transfer variables,
-radiation and convection out of the tube would lead to a manageable steady-state tube wall temperature of 120 degF.
+Assuming a 90 \degree F day in addition to other nominal values for typical heat transfer variables,
+radiation and convection out of the tube would lead to a manageable steady-state tube wall temperature of 120 \degree F.
 This sub-iteration then feeds back into the overall hyperloop convergence loop, both affected by
 and contributing to the compression cycle, creating feedback “C” in Fig. \ref{f:hyperloopXDSM}.
 The analysis suggests that the dominant heating factors are a direct result of the massive tube structure,

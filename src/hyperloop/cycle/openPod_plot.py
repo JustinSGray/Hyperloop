@@ -2,6 +2,8 @@ import numpy as np
 import pylab as p
 from math import pi
 
+#creates figure 9
+
 #blockF = 0.9, c1mn = 0.65
 data = np.array([
 [4187.2783699596766, 4693.4506149399676, 5257.8163212921336, 5928.6634455696476, 6753.4854519004275, 7742.0325648426133, 8955.1520866150277, 10466.139296013384, 12380.735590998343, 14857.147886204295, 18054.538821734412, 22488.265757334048, 28764.152845157503, 37797.35230726139, 51914.168656159003, 75411.928178325295, 118480.16398087349],
@@ -53,7 +55,7 @@ data8 = np.array([
 
 
 p.tick_params(axis='both', which='major', labelsize=15)
-p.ylabel('Tube Diameter (m)', fontsize=18)
+p.ylabel('Tube Diameter, m', fontsize=18)
 p.xlabel('Pod Mach Number', fontsize=18)
 #p.title('Tube Diameter vs Pod MN', fontsize=20)
 p.plot(data6[1],((data6[0]/pi)**0.5)*2, label="BF = 0.9", ls="--", lw=3)

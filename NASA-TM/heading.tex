@@ -8,11 +8,13 @@
 
 \author{
   Jeffrey C. Chin%
-     \thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-11, AIAA Member},
-  \ Justin S. Gray,%
-     \thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
-  \ Scott M. Jones,%
-     \thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
+     \footnote{Aerospace Engineer, Propulsion Systems Analysis Branch, Mail Stop 5-10, AIAA Member},
+  \ Justin S. Gray\footnotemark[\value{footnote}] ,%
+     %\thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
+  \ Scott M. Jones\footnotemark[\value{footnote}] ,%
+     %\thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
+  \ Jeffrey J. Berton\footnotemark[\value{footnote}]%
+    %\thanks{Aerospace Engineer, MDAO Branch, Mail Stop 5-10, AIAA Member}
    \\
   {\normalsize\itshape
   NASA Glenn Research Center, Cleveland, OH}
@@ -51,6 +53,8 @@
 \usepackage[superscript]{cite} %The pack­age sup­ports com­pressed, sorted lists of nu­mer­i­cal ci­ta­tions
 \usepackage{esdiff} %The pack­age makes writ­ing deriva­tives very easy.
 \usepackage{bm} %The bm pack­age de­fines a com­mand \bm which makes its ar­gu­ment bold. (math)
+\usepackage{tabulary} %wider table
+\usepackage{gensymb} %degree symbol
 \usepackage{booktabs} % en­hances the qual­ity of ta­bles
 
 \lstset{frame=single}
@@ -69,6 +73,30 @@
 
 %nomenclature
 \makenomenclature
+\usepackage{multicol}
+\makeatletter
+\@ifundefined{chapter}
+  {\def\wilh@nomsection{section}}
+  {\def\wilh@nomsection{chapter}}
+
+\def\thenomenclature{%
+  \begin{multicols}{2}[% 2 column layout
+    \csname\wilh@nomsection\endcsname*{\nomname}
+    \if@intoc\addcontentsline{toc}{\wilh@nomsection}{\nomname}\fi
+    \nompreamble]
+  \list{}{%
+    \labelwidth\nom@tempdim
+    \leftmargin\leftmargini
+    \advance\leftmargin\leftmargini
+    \itemsep\nomitemsep
+    \let\makelabel\nomlabel}%
+}
+\def\endthenomenclature{%
+  \endlist
+  \end{multicols}
+  \nompostamble}
+\makeatother
+
 %these seemed to be necessary with minted... not sure what they do..
 \makeatletter
 \color{black}
@@ -85,19 +113,27 @@
 Hyperloop is a new mode of transportation proposed as an alternative to California's high speed rail project,
 with the intended benefits of higher performance at lower overall costs.
 It consists of a passenger pod traveling through a tube under a light vacuum and suspended on air bearings.
-The pod would travel at transonic speeds resulting in a 30 minute travel time between the proposed route from Los Angeles and San Francisco.
-Of the two variants outlined, the smaller system would consist of a 1.1 meter tall passenger capsule traveling through a 2.2 meter tube at 700 miles per hour.
-The passenger pod features water-based heat exchangers as well as an on-board compression system that reduces the aerodynamic drag as it moves through the tube.
-Although the initial analysis looks very promising,
-it assumes that tube and pod dimensions are independently sizable without acknowledging the constraints of the compressor system on the pod geometry.
-This work focuses on the aerodynamics and thermodynamic interactions between the two largest systems; the tube and the pod.
-A new sizing method is developed for Hyperloop based on one-dimensional thermodynamic relationships that accounts for the strong interactions between these sub-systems.
-These additional considerations require a tube nearly twice the size originally considered and limit the maximum pod travel speed to about 620 miles per hour.
+The pod travels up to transonic speeds resulting in a 35 minute travel time
+between the intended route from Los Angeles and San Francisco.
+Of the two variants outlined, the smaller system includes a 1.1 meter tall passenger
+capsule traveling through a 2.2 meter tube at 700 miles per hour.
+The passenger pod features water-based heat exchangers as well as an on-board compression
+system that reduces the aerodynamic drag as it moves through the tube.
+Although the original proposal looks very promising,
+it assumes that tube and pod dimensions are independently sizable without fully acknowledging
+the constraints of the compressor system on the pod geometry.
+This work focuses on the aerodynamic and thermodynamic interactions between the two largest systems; the tube and the pod.
+Using open-source toolsets, a new sizing method is developed based on one-dimensional thermodynamic relationships
+that accounts for the strong interactions between these sub-systems.
+These additional considerations require a tube nearly twice the size originally considered
+and limit the maximum pod travel speed to about 620 miles per hour.
 Although the results indicate that hyperloop will need to be larger and slightly slower than originally intended,
 the estimated travel time only increases by approximately five minutes, so the overall performance is not dramatically affected.
-In addition, an on-board heat exchanger system is not necessary to achieve reasonable equilibrium air temperatures in the tube.
+In addition, the proposed on-board heat exchanger is not an ideal solution
+to achieve reasonable equilibrium air temperatures within the tube.
 Removal of this subsystem represents a potential reduction in weight, energy requirements and complexity of the pod.
-The concept still appears viable and very attractive, although additional engineering and economic analyses are still needed before a more complete design can be developed.
+In light of these finding, the core concept still remains a compelling possibility,
+although additional engineering and economic analyses are markedly necessary before a more complete design can be developed.
 
 
 \end{abstract}  

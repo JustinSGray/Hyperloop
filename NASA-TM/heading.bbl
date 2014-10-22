@@ -3,6 +3,7 @@
 
 \bibitem{Musk}
 Musk, E., \enquote{Hyperloop Alpha,} Website, August 2013.
+Retrieved from, \url{<http://www.spacex.com/sites/spacex/files/hyperloop_alpha.pdf>}
 
 \bibitem{ET3}
 Oster, D., Kumada, M., and Zhang, Y., \enquote{Evacuated tube transport
@@ -17,8 +18,9 @@ Gray, J., Moore, K.~T., Hearn, T.~A., and Naylor, B.~A., \enquote{Standard
   pp.~2380--2394.
 
 \bibitem{Lytle}
-Lytle, J., \enquote{The Numerical Propulsion System Simulation: An Overview,}
-  Tech. rep., NASA Glenn Research Center, June 2000.
+Claus, R.~W., Evans, A.~L., Lytle, J.~K., and Nichols, L.~D.,
+  \enquote{Numerical Propulsion System Simulation,} {\em Computing Systems in
+  Engineering\/}, Vol.~2, No.~4, 1991. doi:10.1016/0956-0521(91)90003-N
 
 \bibitem{goodwin2009cantera}
 Goodwin, D., Malaya, N., Moffat, H., and Speth, R., \enquote{Cantera: An
@@ -41,6 +43,11 @@ Goodwin, D., Malaya, N., Moffat, H., and Speth, R., \enquote{Cantera: An
 Berton, J., {\em An Experimental Investigation of Natural and Combined
   Convection from an Isothermal Horizontal Plate\/}, Master's thesis,
   University of Illinois at Urbana-Champaign, 1986.
+
+\bibitem{Clausing}
+Clausing, A.M, {\em Simple Functional Representations for the Thermophysical
+  Properties of Gases at Standard Pressure\/}, ASHRAE Transactions,
+  Vol.88, Part 2, 1982, pp. 645-654.
 
 \bibitem{Incropera}
 Bergman, T.,  Lavine, A. Incropera, F.,\& DeWitt, D.

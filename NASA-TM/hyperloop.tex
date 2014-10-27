@@ -451,7 +451,7 @@ Various systems involving partial cooling, alternate coolants (such as liquid ai
 
 Further discussion of heat exchanger sizing can be found in the heat exchanger section of \cref{app:heatX}.
 The calculations explore the possibility of multi-pass heat exchangers
-and the logarithmic mean temperature difference (LMTD) of the heat exchanger is considered.
+and the logarithmic mean temperature difference (${\Delta}T_{LM}$) of the heat exchanger is considered.
 \cite{Cengal}\textsuperscript{,}
 \cite{Turns}
 
@@ -517,19 +517,18 @@ although it may be substantially attenuated on cloudy days.
 The heating rate due to solar irradiation is estimated by
 
 \begin{equation}
-Q_{solar} = \underbrace{ (1- \rho)  c_{solar}G}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  D_{o,tube}}_\text{Effective Area}
+Q_{solar} = \underbrace{ (1- \rho_{r})  c_{solar}G}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  D_{o,tube}}_\text{Effective Area}
 \end{equation}
 
-\nomenclature{SRI}{Surface Reflectance Index}
-\nomenclature{SIF}{Solar Insolation Factor}
-\nomenclature{{\theta}_{nni}}{Non-normal Incidence factor (rad)}
+\nomenclature{\rho}{Total, Hemispherical Reflectivity}
+\nomenclature{G}{Solar Irradiance}
+\nomenclature{c_{solar}}{Gross Irradiance Adjustment}
 \nomenclature{L}{Length (m)}
-\nomenclature{OD}{Outer diameter (m)}
 \nomenclature{\epsilon}{Emissivity Factor}
 \nomenclature{\sigma}{Stefan-Boltzmann constant ($\frac{W}{m-K}$)}
 \nomenclature{P_{rad}}{Radiated Power (W)}
 
-where $\rho$ is the total, hemispherical reflectivity of the tube’s exterior surface,
+where $\rho_{r}$ is the total, hemispherical reflectivity of the tube’s exterior surface,
 $L_{tube}$ is the length of the tube, and $D_{o,tube}$ its outer diameter.
 $c_{solar}$ is a gross adjustment factor intended to account for diffuse
 scattered irradiance (causing $c_{solar}$ to increase), as well as shaded regions,
@@ -557,8 +556,9 @@ $\sigma$ is the Stefan-Boltzmann constant, and $T_{amb}$ is the ambient temperat
 The heat transfer surface is assumed to be gray,
 and the surroundings are assumed to be isothermal and black.
 Convection heat transfer from the tube to the surroundings is estimated using a
-correlation of the Nusselt number (Nu, defined as $\frac{hD_{o,tube}}{k}$ )
-proposed in Ref. \cite{Churchill}, and reproduced in many foundational heat transfer textbooks:
+correlation of the Nusselt number: \cite{Churchill}
+(Nu, defined as $\frac{hD_{o,tube}}{k}$)
+
 
 \nomenclature{g}{Acceleration of gravity, 9.81 ($\frac{m}{s^{2}}$)}
 \nomenclature{\beta}{Volume coefficient of expansion (K)}
@@ -615,7 +615,7 @@ around the model’s nominal values as listed in Table \ref{tab:montecarlo}.
         $T_{amb}$ & 90 \degree F & Normal & - & - & 8 \\ 
         $G$ & $1000\frac{W}{m^2}$ & Triangular & $200\frac{W}{m^2}$ & $1000\frac{W}{m^2}$ & - \\
         $\rho$ & 0.5 & Triangular & 0.4 & 0.9 & - \\
-        $\eta$ & 0.5 & Triangular & 0.4 & 0.9 & - \\
+        $\epsilon$ & 0.5 & Triangular & 0.4 & 0.9 & - \\
         $\eta_{c}$ & 0.69 & Triangular & 0.6 & 0.8 & - \\
         $n$ & 34 & Triangular & - & - & 2 \\
         $D_{o,tube}$ & 7.3ft & Normal & 7.0ft & 7.6ft & - \\

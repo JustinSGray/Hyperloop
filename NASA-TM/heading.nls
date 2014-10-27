@@ -5,14 +5,14 @@
   \item [{A}]\begingroup Area ($m^{2}$)\nomeqref {0}\nompageref{10}
   \item [{BF}]\begingroup Blockage Factor, ($\frac{A_{diffused}}{A_{pod}}$)\nomeqref {0}\nompageref{10}
   \item [{$C_{p}$}]\begingroup Heat Capacity, Constant Pressure ($\frac{J}{kg-K}$)\nomeqref {0}
+  \item [{$C_{solar}$}]\begingroup Solar Irradiance Gross Adjustment\nomeqref {0}
     \nompageref{9}
   \item [{g}]\begingroup Acceleration of Gravity ($\frac{m}{s^{2}}$)\nomeqref {0}\nompageref{11}
+  \item [{G}]\begingroup Solar Irradiance\nomeqref {0}\nompageref{11}
   \item [{Gr}]\begingroup Grashof Number ($\frac{ g \beta \Delta TD^{3}}{v^{2}}$)\nomeqref {0}\nompageref{11}
   \item [{h}]\begingroup Heat Transfer Coefficient ($\frac{W}{m^{2}-K}$)\nomeqref {0}
     \nompageref{11}
   \item [{ID}]\begingroup Inner Diameter ($m$) \nomeqref {0}\nompageref{11}
-  \item [{$I_{S}$}]\begingroup Solar Insolation\nomeqref {0}
-    \nompageref{10}
   \item [{k}]\begingroup Thermal Conductivity ($\frac{W}{m-K}$)\nomeqref {0}
     \nompageref{11}
   \item [{L}]\begingroup Length (m)\nomeqref {0}\nompageref{10}
@@ -24,7 +24,6 @@
   \item [{OD}]\begingroup Outer Diameter ($m$) \nomeqref {0}\nompageref{11}
   \item [{P}]\begingroup Pressure ($\frac{N}{m^{2}}$)\nomeqref {0}\nompageref{10}
   \item [{$P_{f}$}]\begingroup Wetted Perimeter ($m$)\nomeqref {0}\nompageref{10}
-  \item [{PR}]\begingroup Pressure Ratio\nomeqref {0}\nompageref{10}
   \item [{Pr}]\begingroup Prandtl Number ($\frac{\upsilon}{\alpha}$)\nomeqref {0}\nompageref{11}
   \item [{$P_{rad}$}]\begingroup Radiated Power (W)\nomeqref {0}
     \nompageref{10}
@@ -33,8 +32,6 @@
   \item [{r}]\begingroup Radius (m)\nomeqref {0}\nompageref{4}
   \item [{Ra}]\begingroup Rayleigh Number ($Gr\cdot Pr$)
   \item [{Re}]\begingroup Reynolds Number ($\frac{\rho U_{\infty} L}{\mu}$)\nomeqref {0}\nompageref{11}
-  \item [{$R_{S}$}]\begingroup Solar Reflectance Index\nomeqref {0}
-    \nompageref{10}
   \item [{T}]\begingroup Temperature (K)\nomeqref {0}\nompageref{9}
   \item [{$U_{o}$}]\begingroup Overall Heat Transfer Coefficient
   \item [{V}]\begingroup Velocity ($\frac{m}{s}$)\nomeqref {0}\nompageref{4}
@@ -43,13 +40,14 @@
   \item [{$\gamma$}]\begingroup Heat Capacity Ratio\nomeqref {0}
     \nompageref{5}
   \item [{${\Delta}T_{LM}$}] Log Mean Temperature Difference \nomeqref {0}\nompageref{11}
-  \item [{$\epsilon$}]\begingroup Total Hemispherical Emissivity\nomeqref {0}
+  \item [{$\epsilon$}]\begingroup Total, Hemispherical Emissivity\nomeqref {0}
     \nompageref{10}  
-  \item [{${\eta}_{ad}$}]\begingroup Adiabatic Efficiency\nomeqref {0}
+  \item [{${\eta}_{c}$}]\begingroup Adiabatic Compressor Efficiency\nomeqref {0}
     \nompageref{10}
-  \item [{${\theta}_{nni}$}]\begingroup Non-Normal Incidence \nomeqref {0}
-    \nompageref{10}
+  \item [{\pi_{c}}]\begingroup Compressor Pressure Ratio\nomeqref {0}\nompageref{10}
   \item [{$\rho$}]\begingroup Density ($\frac{kg}{m^{3}}$)\nomeqref {0}
+    \nompageref{4}
+  \item [{$\rho_{r}$}]\begingroup Total, Hemispherical Reflectivity\nomeqref {0}
     \nompageref{4}
   \item [{$\sigma$}]\begingroup Stefan-Boltzmann Constant ($\frac{W}{m^{2}\cdot K^{4}}$)\nomeqref {0}
     \nompageref{10}

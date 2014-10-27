@@ -31,8 +31,8 @@ For these reasons, the modeling approach applied here is inspired heavily by met
 Musk's original Hyperloop proposal includes individual high-level analyses of many major subsystems such as the pod compression system,
 elevated support structure, and propulsion system. While this demonstrates the basic viability of the concept, it does not address
 significant interdisciplinary couplings inherent in the Hyperloop system. These couplings introduce certain constraints which limit the 
-degrees of freedom available in the design space. The major contribution of this work is to identify the key couplings that constrain the design space
-and adapt methods from aircraft design to construct a conceptual design process that accounts for them. The most significant 
+degrees of freedom available in the design space. The major contribution of this work is to identify the key couplings that constrain the system
+and adapt aircraft sizing methods to construct a conceptual design process that accounts for them. The most significant 
 interdisciplinary coupling arises between the passenger pod size and travel tube size. Aerodynamic concerns make it impossible to vary 
 both pod size and tube size independently of each other. An additional less severe coupling also exists between the compression system and 
 the thermal management system. The interdisciplinary coupling demands the use of an iterative sizing procedure that balances 
@@ -97,7 +97,7 @@ For example, the \textit{Compressor Cycle} passes data to the \textit{Mission An
 \textit{Pod Geometry}, and \textit{Tube Temperature} analyses.
 In the lower-left side of the diagram, red arrows represent feedback connections which establish cyclical coupling between different analyses.
 %The top-left block of Fig. \ref{f:podXDSM} shows system-level design variables that affect numerous components. 
-Table \ref{tab:desvars} summarizes the baseline values from the original proposal which are used as design variables used in this analysis.
+Table \ref{tab:desvars} summarizes the baseline values from the original proposal which are used as design variables in this analysis.
 Notably, both pod radius and travel tube radius are omitted, since these variables cannot be freely varied.
 Instead, the assumption of a fixed area for a passenger compartment was made which,
 combined with the couplings shown in Fig. \ref{f:hyperloopXDSM}, removed these variables as design inputs.
@@ -144,7 +144,7 @@ techniques developed for the Numerical Propulsion System Simulation (NPSS) frame
 NPSS was created as a joint effort between United States engine manufacturers and NASA Glenn Research Center for the purpose of 
 simulating and analyzing turbomachinery cycles for aircraft applications\cite{Lytle}. NPSS employs a highly modular model construction
 where cycles get broken down into individual thermodynamic processes, which are then subsequently connected together. 
-This object-oriented approach was adopted for pyCycle,
+This object-oriented approach was followed for
 an open-source adaption of the tool used to predict the fluid properties and power consumption of each component in the cycle. 
 %  the air bearings were specified to work with a static pressure of 11 kPa.
 As outlined in the original Hyperloop proposal, the compression system is modeled as two separate compressors.
@@ -152,8 +152,8 @@ The first compresses the air to bypass the internal structure and passenger comp
 and the second provides an additional pressure rise to reach the necessary air bearing pressure of 11 kPa. 
 Subsequently, the required pressure ratio for the second stage is a function of the maximum pod Mach number
 and the first stage compressor pressure ratio.
-In Fig. \ref{f:compressorXDSM} this relationship shows up as a feedback connection between
-the overall performance and second compressor subsystems. 
+In Fig. \ref{f:compressorXDSM} this relationship manifests as a feedback
+connection between the overall performance and second compressor subsystems. 
 
 \begin{figure}[H]
 \centering
@@ -231,8 +231,8 @@ In other words,
 $M_{bypass}=1$ will always give the smallest possible $A_{bypass}$ (and hence $A_{tube}$) for a given 
 $M_{pod}$ and $A_{pod}$. Thus $A_{tube}$ can not be treated as an independent design variable without over-constraining the problem.
 If $A_{tube}$ is forced to be smaller than this minimum value, not all the relative mass flow can pass freely around the pod. This excess 
-flow would accumulate in the left of Fig. \ref{f:ClosedPod}, with the pod acting like a piston pressurizing the 
-air in front of it. 
+flow would accumulate to the left of the pod in Fig. \ref{f:ClosedPod},
+with the pod acting like a piston: pressurizing the air in front of it. 
 
 Furthermore, Fig. \ref{f:choked-flow} also shows that $\frac{A_{bypass}}{A_{tube}}$ 
 increases with increasing $M_{pod}$. So the faster the pod travels, the larger $A_{bypass}$ 
@@ -278,10 +278,11 @@ Figure \ref{f:machRAD} shows the rise in achievable pod Mach number based on inc
 This increase is dependent on the amount of space taken up by the pod outer structure,
 which is a ratio of dimensions shown in Fig. \ref{f:OpenPod}
 as a non-dimensional ``blockage factor'' equal to $\frac{A_{diffused}}{A_{pod}}$.
+The higher the factor, the lower the blockage from the pod.
 For a nominal tube diameter of 4 meters, the maximum pod Mach increases from 0.66 for a closed pod (not shown)
 to 0.82 for a hollow pod with a blockage factor of 0.9.
 To a lesser extent, the max speed is also dependent on the compressor entrance Mach number.
-Changing the compressor entrance Mach number by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.01$. 
+Changing the allowable compressor entrance Mach number by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.01$. 
 Modifying the blockage factor by $\pm 0.05$ changes the maximum pod MN by roughly $\pm 0.03$.
 It should be noted that all of these trends are unaffected by the tube pressure,
 however, static pressure affects the compressor flow and power requirements discussed next.
@@ -342,6 +343,7 @@ pushing the final mission segment out further as shown by the dashed lines.
 The integrated area under the curve represents the total length of the tube, which remains constant as the max speed varies.
 The speed constraints outlined earlier increase total mission time on the order of five minutes,
 however this will ultimately depend on the chosen tube diameter.
+Despite the increased mission time, the slower speeds would also allow for more forigiving acceleration loads around turns.
 Multiplying the calculated mission time by the maximum instantaneous compressor power consumption (plus a 30\% safety margin)
 results in an overall battery storage requirement.
 
@@ -406,7 +408,7 @@ effectiveness of a heat exchanger can be described as the ratio of actual heat t
 \end{equation}
 
 
-where ${Q}_{max}$ is determined by the fluid with the lowest $\dot{m} C_{p}$, which dictates the maximum possible heat transfer.
+where ${Q}_{max}$ is determined by the fluid with the lowest $\dot{m} C_{p}$ product, which dictates the maximum possible heat transfer.
 In order to satisfy the energy balance $Q_{released}=Q_{absorbed}$ the following must be true,
 
 \nomenclature{\dot{m}}{Mass flow rate}
@@ -457,8 +459,8 @@ and the logarithmic mean temperature difference (LMTD) of the heat exchanger is 
 \subsubsection{Equilibrium Tube Temperature}
 
 The onboard water cooling and vapor collection system as proposed in Ref. 1
-appears infeasible and may be dismissed out of hand for reasons described above.
-Nevertheless some form of pod cabin cooling would be needed. 
+appears infeasible for reasons described above.
+Nevertheless some form of pod cabin cooling would be desired. 
 If the tube temperature is not excessive,
 pod occupants could be kept comfortable with a relatively simple cabin air conditioning system.
 Cabin heat could be rejected from the refrigerant to the tube environs via conventional heat
@@ -470,12 +472,12 @@ The analysis ignores heat transfer time lags and diurnal cycles.
 Heat is assumed to transfer and equilibrate rapidly between the pod compressor system,
 the rarified atmosphere inside the tube, the tube walls, and the outside environment.
 Further investigation is needed to determine the validity of this assumption.
+What in the real world would be a complex heat transfer problem
+is modeled here simplistically.
 This assessment is intended to estimate a conservative
 equilibrium tube temperature at full sun during the maximum heat of the day.
-What in the real world would be a complex heat transfer problem
-is modeled here very simplistically.
-An analysis of this level of fidelity is hoped to be sufficient to determine if a simple cabin
-air conditioning system could manage pod heating.
+An analysis of this level of fidelity is hoped to be sufficient to determine
+if tube would ever reach detrimental temperatures and if a simple pod air conditioning system could manage cabin cooling.
 
 
 If the heat of the rarified atmosphere inside the tube exchanges rapidly with the tube wall,
@@ -506,7 +508,7 @@ The heating rate due to all of the pods operating in the tube may be estimated b
 
 where $n$ is the number of pods in transit,
 $\dot{m}$ is the airflow per compressor determined by the cycle analysis,
-and cp is the specific heat of air given by the relations in Ref. \cite{Clausing}. 
+and $C_{p,air}$ is the specific heat of air given by the relations in Ref. \cite{Clausing}. 
 
 The entire 300 mile length of the tube is assumed to be unshaded and exposed to sunlight.
 Only direct solar irradiance (G) is considered.
@@ -515,7 +517,7 @@ although it may be substantially attenuated on cloudy days.
 The heating rate due to solar irradiation is estimated by
 
 \begin{equation}
-Q_{solar} = \underbrace{ (1-R_{S})  {\theta}_{nni}  I_{S}}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  D_{o,tube}}_\text{Effective Area}
+Q_{solar} = \underbrace{ (1- \rho)  c_{solar}G}_\text{Solar Heat per unit Area} \underbrace{L_{tube}  D_{o,tube}}_\text{Effective Area}
 \end{equation}
 
 \nomenclature{SRI}{Surface Reflectance Index}
@@ -532,19 +534,22 @@ $L_{tube}$ is the length of the tube, and $D_{o,tube}$ its outer diameter.
 $c_{solar}$ is a gross adjustment factor intended to account for diffuse
 scattered irradiance (causing $c_{solar}$ to increase), as well as shaded regions,
 non-normal incidence and other geometric peculiarities (causing $c_{solar}$ to decrease).
-Added together, Qpods and Qsolar represent the incoming heating rate on the tube.
+Added together,
+$Q_{pods}$ and $Q_{solar}$ represent the incoming heating rate on the tube.
 At this point an interesting observation may be made.
 Using representative values for each of the system parameters,
 it is estimated that the heat generated by the pods in transit
 amounts to a small fraction of the total heating rate.
 Insolation appears responsible for more than 95\% of tube heating.
-The impact of solar heating, of course, may be abated by coating, painting,
-or shading the tube’s steel surface with a highly reflective and emissive “cool material.”
-Radiation and convection heat transfer from the tube are assumed
+The impact of solar heating, of course, may be abated by coating
+or shading the tube’s steel surface with a highly reflective and emissive material.
+
+On the other side of the thermal balance,
+radiation and convection heat transfer from the tube are assumed
 to be the primary heat loss mechanisms. The radiative heat transfer is estimated by
 
 \begin{equation}
-Q_{rad} = \underbrace{\epsilon \sigma (T_{pipe}^4 - T_{ambient}^4)}_\text{Radiated Power per unit Area}\underbrace{\pi L_{tube} D_{o,tube}}_\text{Surface Area}
+Q_{rad} = \underbrace{\epsilon \sigma (T_{tube}^4 - T_{ambient}^4)}_\text{Radiated Power per unit Area}\underbrace{\pi L_{tube} D_{o,tube}}_\text{Surface Area}
 \end{equation}
 
 where $\epsilon$ is the total, hemispherical emissivity of the tube’s exterior surface,
@@ -570,14 +575,14 @@ Nu = \Bigg(0.6 + \frac{0.387Ra^{\frac{1}{6}}}{[1+(\frac{0.559}{Pr})^{\frac{9}{16
 \end{equation}
 
 where $Ra$ is the Rayleigh number
-($Gr = \frac{g \beta T} {\upsilon^2}  (T_{tube}-T_{amb}) {D}_{o,tube}^3$)
+($\frac{g \beta T} {\upsilon\alpha}  (T_{tube}-T_{amb}) {D}_{o,tube}^3$)
 and Pr is the Prandtl number ($\frac{\nu}{\alpha}$).
 The correlation is applicable for estimating free convection from long,
 horizontal cylinders. Properties for air ($h$, $k$, $\beta$, $\nu$ and $\alpha$)
 are based on the film temperature of the thermal boundary layer
 and are given by the regressions in Ref. \cite{Clausing}.
-With the heat transfer coefficient h known from the Nusselt number,
-the heat lost to free convection (Qconv) may be estimated from the total tube surface area.
+With the heat transfer coefficient $h$ known from the Nusselt number,
+the heat lost to free convection ($Q_{conv}$) may be estimated from the total tube surface area.
 
 \begin{equation}
 Q_{nat. conv} = hA \Delta T = \frac{k\cdot Nu}{ {D}_{o,tube}} \pi {L}_{tube} {D}_{o,tube} (T_{tube}-T_{amb})
@@ -589,8 +594,9 @@ $Q_{pods} + Q_{solar} = Q_{rad} + Q_{conv}$ is satisfied.
 Estimating a single deterministic tube temperature, however, is insufficient.
 The parameters of the problem have a strong influence over the resulting equilibrium
 temperature. For example, ambient temperature will vary substantially.
-A breeze can amplify convection rates by a factor of two or three.
-And it is not clear at this point what surface properties the tube may have.
+A breeze can amplify convection rates by a factor of two or three,
+and furthermore,
+it is not clear what surface properties the tube may have.
 For these kinds of reasons, several parameters in the problem are set to vary in 
 a Monte Carlo probability experiment.
 The deterministic tube temperature model above is transformed into a stochastic model by
@@ -614,7 +620,7 @@ around the model’s nominal values as listed in Table \ref{tab:montecarlo}.
         $n$ & 34 & Triangular & - & - & 2 \\
         $D_{o,tube}$ & 7.3ft & Normal & 7.0ft & 7.6ft & - \\
         $c_{solar}$ & 0.7 & Triangular & 0.5 & 1.0 & - \\
-        $c_{conv}$ 1.0 & Triangular & 0.9 & 3.0 & - \\
+        $c_{conv}$ & 1.0 & Triangular & 0.9 & 3.0 & - \\
         \hline
     \end{tabulary}
     
@@ -650,8 +656,8 @@ This sub-iteration then feeds back into the overall hyperloop convergence loop, 
 and contributing to the compression cycle, creating feedback “C” in Fig. \ref{f:hyperloopXDSM}.
 The analysis suggests that the dominant heating factors are a direct result of the massive tube structure,
 with relatively low coupling with the pod design.
-The thermal management should therefore be incorporated into the tube design, rather than integrated into the pod design.
-Solutions such as solar panel sheilding would produce even more optimistic results.
+The thermal management should therefore be incorporated into the tube design, rather than integrated into the volume and weight constrained pod design.
+Considerations for solar panel sheilding, as outlined in the original proposal, would produce even more optimistic results.
 
 
 \section{Conclusions}
